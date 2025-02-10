@@ -26,7 +26,6 @@
                         </div>
                         <!-- /Logo -->
                         <p class="mb-6">Nikmati layanan {{config('variables.templateName')}} setelah melakukan registrasi berikut !</p>
-
                         <form id="formAuthentication" class="mb-6" action="{{url('/')}}" method="GET">
                             <div class="mb-6">
                                 <label for="nama_lengkap" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
@@ -79,9 +78,10 @@
                         <p class="text-center">
                             <span>Sudah punya akun?</span>
                             <a href="{{ route('login') }}">
-                                <span>Kembali ke halaman Login</span>
+                                <span>Ke halaman Login</span>
                             </a>
                         </p>
+                        <a href="{{ url('/') }}" class="btn btn-sm btn-secondary"><i class="icon-base bx bx-arrow-back"></i>&nbsp;Kembali Landing Page</a>
                     </div>
                 </div>
                 <!-- Register Card -->

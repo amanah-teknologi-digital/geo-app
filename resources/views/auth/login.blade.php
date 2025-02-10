@@ -73,6 +73,7 @@
                                 <span>Buat akun baru</span>
                             </a>
                         </p>
+                        <a href="{{ url('/') }}" class="btn btn-sm btn-secondary"><i class="icon-base bx bx-arrow-back"></i>&nbsp;Kembali Landing Page</a>
                     </div>
                 </div>
             </div>
