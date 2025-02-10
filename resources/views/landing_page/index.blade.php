@@ -57,9 +57,9 @@
         </nav>
 
         <div class="d-flex align-content-center">
-            <a class="btn btn-sm btn-success" href="#"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a>
+            <a class="btn btn-sm btn-success" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a>
             <span class="px-1">|</span>
-            <a class="btn btn-sm btn-primary" style="background-color: var(--color-default)" href="#"><i class="bi bi-journal-bookmark-fill"></i>&nbsp;Registrasi</a>
+            <a class="btn btn-sm btn-primary" style="background-color: var(--color-default)" href="{{ route('register') }}"><i class="bi bi-journal-bookmark-fill"></i>&nbsp;Registrasi</a>
         </div>
 
     </div>
