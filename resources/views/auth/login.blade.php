@@ -68,7 +68,7 @@
                         </form>
 
                         <p class="text-center">
-                            <span>Baru di plaform kami?</span>
+                            <span>Registrasi baru di platform kami?</span>
                             <a href="{{ route('register') }}">
                                 <span>Buat akun baru</span>
                             </a>
