@@ -1,14 +1,14 @@
 <?php
 // Variables
 return [
-    "creatorName" => "ThemeSelection",
-    "creatorUrl" => "https://themeselection.com",
-    "templateName" => "sneat",
+    "creatorName" => "Geofisika Dev",
+    "creatorUrl" => "https://georeserve.net",
+    "templateName" => "GeoReserve",
     "templateSuffix" => "Bootstrap Dashboard FREE",
     "templateVersion" => "2.0.0",
     "templateFree" => true,
-    "templateDescription" => "Most Powerful & Comprehensive Bootstrap 5 HTML Admin Dashboard Template built for developers!",
-    "templateKeyword" => "dashboard, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5, bootstrap 5 free, free admin template",
+    "templateDescription" => "Sistem ini menyediakan layanan persuratan, peminjaman ruangan, dan peminjaman alat di Departemen Teknik Geofisika ITS",
+    "templateKeyword" => "Geofisika ITS, ITS, Teknik Geofisika ITS, Geo Letter, Geo Room, Geo Facility",
     "licenseUrl" => "https://themeselection.com/license/",
     "livePreview" => "https://demos.themeselection.com/sneat-bootstrap-html-laravel-admin-template-free/demo/",
     "productPage" => "https://themeselection.com/item/sneat-dashboard-free-laravel/",

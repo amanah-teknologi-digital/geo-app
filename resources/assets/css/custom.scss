@@ -1,0 +1,44 @@
+:root {
+    --tw-text-opacity: 1;
+    --background-color: #ffffff; /* Background color for the entire website, including individual sections */
+    --default-color: #212529; /* Default color used for the majority of the text content across the entire website */
+    --heading-color: #37373f; /* Color for headings, subheadings and title throughout the website */
+    --accent-color: #002448; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+    --surface-color: #ffffff; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
+    --contrast-color: #ffffff; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
+    --color-default: rgb(8 60 132 / var(--tw-text-opacity));
+    --color-secondary: rgb(238 112 30 / var(--tw-bg-opacity, 1));
+}
+
+/* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
+:root {
+    --nav-color: #000000;  /* The default color of the main navmenu links */
+    --nav-hover-color: #505050; /* Applied to main navmenu links when they are hovered over or active */
+    --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
+    --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
+    --nav-dropdown-color: #7f7f90; /* Used for navigation links of the dropdown items in the navigation menu. */
+    --nav-dropdown-hover-color: #505050; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+}
+
+.logo {
+    line-height: 1;
+}
+
+.logo img {
+    max-height: 36px;
+    margin-right: 8px;
+    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.3));
+}
+
+.logo h1 {
+    font-size: 30px;
+    margin: 0;
+    font-weight: 700;
+    color: var(--color-default);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.logo span {
+    color: var(--accent-color);
+    font-size: 36px;
+}
