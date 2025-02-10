@@ -46,7 +46,7 @@
                                             Remember Me
                                         </label>
                                     </div>
-                                    <a href="{{url('auth/forgot-password-basic')}}">
+                                    <a href="{{ route('password.request') }}">
                                         <span>Forgot Password?</span>
                                     </a>
                                 </div>
@@ -58,7 +58,7 @@
 
                         <p class="text-center">
                             <span>New on our platform?</span>
-                            <a href="{{url('auth/register-basic')}}">
+                            <a href="{{ route('register') }}">
                                 <span>Create an account</span>
                             </a>
                         </p>
