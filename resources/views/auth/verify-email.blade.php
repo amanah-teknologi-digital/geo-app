@@ -27,7 +27,7 @@
                         <div class="alert alert-primary alert-dismissible" role="alert">
                             <h4 class="alert-heading d-flex align-items-center gap-1"><span class="alert-icon rounded"><i class="icon-base bx bx-check-shield"></i></span>Verifikasi Email!</h4>
                             <hr>
-                            <p class="mb-0">Terima kasih <b>{{ \Illuminate\Support\Facades\Auth::user()->name }}</b> telah mendaftar layanan {{config('variables.templateName')}}. Sebelum memulai, setidaknya verifikasi alamat email anda <b>dengan klik pada link</b> yang sudah kami kirim ke email. jika belum menerima, <b>klik tombol dibawah</b> untuk mengirimkan link kembali.</p>
+                            <p class="mb-0">Terima kasih <b>{{ \Illuminate\Support\Facades\Auth::user()->name }}</b> telah mendaftar layanan {{config('variables.templateName')}}. Sebelum memulai, verifikasi alamat email anda <b>dengan klik pada link</b> yang sudah kami kirim ke email. jika belum menerima, <b>klik tombol dibawah</b> untuk mengirimkan link kembali.</p>
                         </div>
                         <!-- /Logo -->
                         @if ($errors->any())

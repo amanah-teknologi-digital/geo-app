@@ -1,6 +1,6 @@
 @extends('layouts/blankLayout')
 
-@section('title', 'Forgot Password Basic - Pages')
+@section('title', 'Lupa Password'.' • '.config('variables.templateName'))
 
 @section('page-style')
     @vite([
