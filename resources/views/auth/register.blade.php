@@ -44,7 +44,7 @@
                                 <input type="text" class="form-control" id="no_telepon" name="no_telepon" placeholder="contoh: 085924315876" required autocomplete="off">
                             </div>
                             <div class="mb-6">
-                                <label for="file_kartuid" class="form-label">Unggah Kartu ID (KTM/KTP) <span class="text-danger">*</span> <span class="text-muted"><i>(file dalam bentuk gambar <b>max 5 mb</b>)</i></span></label>
+                                <label for="file_kartuid" class="form-label">Unggah Kartu ID (KTM/KTP) <span class="text-danger">*</span> <span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
                                 <input type="file" class="form-control" id="file_kartuid" name="file_kartuid" accept="image/*" required>
                             </div>
                             <div class="mb-6 form-password-toggle">
@@ -53,6 +53,7 @@
                                     <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
                                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 </div>
+                                <div class="error-container" id="error-password"></div>
                             </div>
                             <div class="mb-6 form-password-toggle">
                                 <label class="form-label" for="password_confirmation">Konfirmasi Password <span class="text-danger">*</span></label>
@@ -60,6 +61,7 @@
                                     <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
                                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 </div>
+                                <div class="error-container" id="error-password_confirmation"></div>
                             </div>
                             <div class="my-8">
                                 <div class="form-check mb-0 ms-2">
@@ -69,6 +71,7 @@
                                         <a href="javascript:void(0);">privacy policy & terms <span class="text-danger">*</span></a>
                                     </label>
                                 </div>
+                                <div class="error-container" id="error-terms"></div>
                             </div>
                             <button class="btn btn-primary d-grid w-100">
                                 Daftar
@@ -88,4 +91,10 @@
             </div>
         </div>
     </div>
+@endsection
+@section('page-script')
+    @vite([
+        'resources/assets/vendor/libs/jquery-validation/jquery.validate.js',
+        'resources/views/auth/js/register.js',
+    ])
 @endsection
