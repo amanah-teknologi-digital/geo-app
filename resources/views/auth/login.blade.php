@@ -48,6 +48,7 @@
                                     <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" required autocomplete="off" />
                                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 </div>
+                                <div class="error-container" id="error-password"></div>
                             </div>
                             <div class="mb-8">
                                 <div class="d-flex justify-content-between mt-8">
@@ -80,4 +81,10 @@
             <!-- /Register -->
         </div>
     </div>
+@endsection
+@section('page-script')
+    @vite([
+        'resources/assets/vendor/libs/jquery-validation/jquery.validate.js',
+        'resources/views/auth/js/login.js',
+    ])
 @endsection

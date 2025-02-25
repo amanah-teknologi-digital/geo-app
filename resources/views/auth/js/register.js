@@ -114,7 +114,6 @@ $(document).ready(function () {
             }
         },
         submitHandler: function (form) {
-            alert("Form berhasil divalidasi!");
             form.submit();
         }
     });
