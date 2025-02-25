@@ -26,7 +26,22 @@
                         </div>
                         <!-- /Logo -->
                         <p class="mb-6">Nikmati layanan {{config('variables.templateName')}} setelah melakukan registrasi berikut !</p>
-                        <form id="formAuthentication" class="mb-6" action="{{url('/')}}" method="GET">
+                        @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    {{ $error }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endforeach
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+                        <form id="formAuthentication" class="mb-6" action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
                             <div class="mb-6">
                                 <label for="nama_lengkap" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" placeholder="Nama Lengkap" autofocus required autocomplete="off">

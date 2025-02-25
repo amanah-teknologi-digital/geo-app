@@ -44,7 +44,7 @@ $(document).ready(function () {
             no_telepon: {
                 required: true,
                 number: true,
-                max: 13
+                maxlength: 13
             },
             file_kartuid: {
                 required: true,

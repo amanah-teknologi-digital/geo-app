@@ -57,9 +57,13 @@
         </nav>
 
         <div class="d-flex align-content-center">
-            <a class="btn btn-sm btn-success" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a>
-            <span class="px-1">|</span>
-            <a class="btn btn-sm btn-primary" style="background-color: var(--color-default)" href="{{ route('register') }}"><i class="bi bi-journal-bookmark-fill"></i>&nbsp;Registrasi</a>
+            @auth
+                <a class="btn btn-sm btn-primary" style="background-color: var(--color-default)" href="{{ route('dashboard') }}"><i class="bi bi-house"></i>&nbsp;Dashboard</a>
+            @else
+                <a class="btn btn-sm btn-success" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a>
+                <span class="px-1">|</span>
+                <a class="btn btn-sm btn-primary" style="background-color: var(--color-default)" href="{{ route('register') }}"><i class="bi bi-journal-bookmark-fill"></i>&nbsp;Registrasi</a>
+            @endauth
         </div>
 
     </div>
