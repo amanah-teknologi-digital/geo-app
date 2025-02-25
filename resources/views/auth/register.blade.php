@@ -41,11 +41,11 @@
                             </div>
                             <div class="mb-6">
                                 <label for="no_telepon" class="form-label">No. Telepon <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="no_telepon" name="no_telepon" placeholder="No. Telepon" required autocomplete="off">
+                                <input type="text" class="form-control" id="no_telepon" name="no_telepon" placeholder="contoh: 085924315876" required autocomplete="off">
                             </div>
                             <div class="mb-6">
-                                <label for="file_kartuid" class="form-label">Unggah Kartu ID (KTM/KTP) <span class="text-danger">*</span></label>
-                                <input type="file" class="form-control" id="file_kartuid" name="file_kartuid" required>
+                                <label for="file_kartuid" class="form-label">Unggah Kartu ID (KTM/KTP) <span class="text-danger">*</span> <span class="text-muted"><i>(file dalam bentuk gambar <b>max 5 mb</b>)</i></span></label>
+                                <input type="file" class="form-control" id="file_kartuid" name="file_kartuid" accept="image/*" required>
                             </div>
                             <div class="mb-6 form-password-toggle">
                                 <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
@@ -63,7 +63,7 @@
                             </div>
                             <div class="my-8">
                                 <div class="form-check mb-0 ms-2">
-                                    <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms">
+                                    <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" required>
                                     <label class="form-check-label" for="terms-conditions">
                                         I agree to
                                         <a href="javascript:void(0);">privacy policy & terms <span class="text-danger">*</span></a>
