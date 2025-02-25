@@ -38,6 +38,16 @@ class RegisteredUserController extends Controller
             'file_kartuid' => ['required', 'file', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:5120'],
         ]);
 
+        $file = $request->file('file_kartuid');
+        $fileName = $file->getClientOriginalName();
+        $fileMime = $file->getClientMimeType();
+        $fileExt = $file->getClientOriginalExtension();
+        $filePath = $file->storeAs('uploads', $fileName);
+        File::create([
+            'name' => $fileName,
+            'path' => $filePath,
+        ]);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
