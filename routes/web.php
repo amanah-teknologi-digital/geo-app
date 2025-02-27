@@ -10,8 +10,8 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::middleware([roleMiddleware::class.':8'])->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::middleware(['role:8'])->group(function () {
+        Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
         Route::get('/dashboard-pengguna', [DashboardController::class, 'pengguna'])->name('dashboard.pengguna');
     });
 

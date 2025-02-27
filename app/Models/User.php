@@ -49,4 +49,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function akses()
+    {
+        return $this->belongsTo(Akses::class,'id_akses','id_akses');
+    }
 }
