@@ -90,7 +90,8 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'kartu_id' => $request->no_kartuid,
                 'no_hp' => $request->no_telepon,
-                'file_kartuid' => $id_file
+                'file_kartuid' => $id_file,
+                'id_akses' => 8 //untuk akses pengguna
             ]);
 
             event(new Registered($user));

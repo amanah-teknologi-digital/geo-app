@@ -23,7 +23,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'kartu_id',
         'no_hp',
-        'file_kartuid'
+        'file_kartuid',
+        'id_akses'
     ];
 
     /**
