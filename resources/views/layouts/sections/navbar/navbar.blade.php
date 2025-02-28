@@ -69,7 +69,7 @@
                                         <div class="dropdown-divider my-1"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0);">
+                                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                             <i class="bx bx-user bx-md me-3"></i><span>My Profile</span>
                                         </a>
                                     </li>
@@ -77,9 +77,13 @@
                                         <div class="dropdown-divider my-1"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0);">
-                                            <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
-                                        </a>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                                <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
+                                            </a>
+                                        </form>
                                     </li>
                                 </ul>
                             </li>
