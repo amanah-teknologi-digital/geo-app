@@ -1,9 +1,12 @@
 @extends('layouts.contentNavbarLayout')
 
-@section('title', 'Dashboard - Analytics')
+@section('title', $title.' • '.config('variables.templateName'))
 
 @section('vendor-style')
     @vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
+@endsection
+@section('page-style')
+    @vite('resources/assets/css/custom.scss')
 @endsection
 
 @section('vendor-script')
