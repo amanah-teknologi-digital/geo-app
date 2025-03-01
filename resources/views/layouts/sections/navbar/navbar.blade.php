@@ -1,6 +1,9 @@
 @php
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Route;
+    use Laravolt\Avatar\Facade as Avatar;
+
+    $avatar = Avatar::create(auth()->user()->name)->toBase64();
     $containerNav = $containerNav ?? 'container-fluid';
     $navbarDetached = ($navbarDetached ?? '');
 @endphp
@@ -43,8 +46,8 @@
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
                                    data-bs-toggle="dropdown">
-                                    <div class="avatar avatar-online">
-                                        <img src="{{ asset('assets/img/avatars/1.png') }}" alt
+                                    <div class="avatar">
+                                        <img src="{{ $avatar }}" alt
                                              class="w-px-40 h-auto rounded-circle">
                                     </div>
                                 </a>
@@ -53,8 +56,8 @@
                                         <a class="dropdown-item" href="javascript:void(0);">
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
-                                                    <div class="avatar avatar-online">
-                                                        <img src="{{ asset('assets/img/avatars/1.png') }}" alt
+                                                    <div class="avatar">
+                                                        <img src="{{ $avatar }}" alt
                                                              class="w-px-40 h-auto rounded-circle">
                                                     </div>
                                                 </div>
@@ -70,7 +73,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                                            <i class="bx bx-user bx-md me-3"></i><span>My Profile</span>
+                                            <i class="bx bx-user bx-md me-3"></i><span>Data Profile</span>
                                         </a>
                                     </li>
                                     <li>
