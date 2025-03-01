@@ -54,8 +54,7 @@ export default defineConfig({
                 ...LibsCssFiles,
                 ...FontsScssFiles,
                 'resources/assets/css/custom.scss',
-                ...JsCustomPage,
-                'resources/assets/vendor/libs/jquery-validation/jquery.validate.js'
+                ...JsCustomPage
             ],
             refresh: true
         }),
