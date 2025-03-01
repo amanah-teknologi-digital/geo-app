@@ -62,7 +62,7 @@
 @endsection
 @section('page-script')
     @vite([
-        'resources/assets/vendor/libs/jquery-validation/jquery.validate.js',
+        'resources/assets/vendor/libs/jquery-validation/jquery-validation.js',
         'resources/views/auth/js/konfirmasi_password.js',
     ])
 @endsection

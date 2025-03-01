@@ -11,7 +11,7 @@
 
 @section('vendor-script')
     @vite([
-        'resources/assets/vendor/libs/jquery-validation/jquery.validate.js'
+        'resources/assets/vendor/libs/jquery-validation/jquery-validation.js'
     ])
 @endsection
 
