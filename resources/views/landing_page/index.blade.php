@@ -52,19 +52,21 @@
                 <li><a href="#pengumuman"><i class="bi bi-newspaper"></i>&nbsp;Pengumuman</a></li>
                 <li><a href="#layanan"><i class="bi bi-info-circle-fill"></i>&nbsp;Layanan Support</a></li>
 {{--                <li><a href="#footer"><i class="bi bi-people-fill"></i>&nbsp;Kontak</a></li>--}}
+                @auth
+                    <li>
+                        <button class="btn btn-sm btn-primary" style="background-color: var(--color-default)"><a style="color: white !important;" href="{{ route('dashboard') }}"><i class="bi bi-house"></i>&nbsp;Dashboard</a></button>
+                    </li>
+                @else
+                    <li>
+                        <button class="btn btn-sm btn-success"><a href="{{ route('login') }}" style="color: white !important;"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a></button>
+                    </li>
+                    <li>
+                        <button class="btn btn-sm btn-primary" style="background-color: var(--color-default) !important;"><a style="color: white !important;" href="{{ route('register') }}"><i class="bi bi-journal-bookmark-fill"></i>&nbsp;Registrasi</a></button>
+                    </li>
+                @endauth
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list d-flex order-last"></i>
         </nav>
-
-        <div class="d-flex align-content-center">
-            @auth
-                <a class="btn btn-sm btn-primary" style="background-color: var(--color-default)" href="{{ route('dashboard') }}"><i class="bi bi-house"></i>&nbsp;Dashboard</a>
-            @else
-                <a class="btn btn-sm btn-success" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a>
-                <span class="px-1">|</span>
-                <a class="btn btn-sm btn-primary" style="background-color: var(--color-default)" href="{{ route('register') }}"><i class="bi bi-journal-bookmark-fill"></i>&nbsp;Registrasi</a>
-            @endauth
-        </div>
 
     </div>
     <style>
