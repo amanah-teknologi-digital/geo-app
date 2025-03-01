@@ -9,7 +9,7 @@
     ])
 @endsection
 
-@section('page-script')
+@section('vendor-script')
     @vite([
         'resources/assets/vendor/libs/jquery-validation/jquery.validate.js'
     ])
