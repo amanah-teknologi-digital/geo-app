@@ -9,6 +9,12 @@
     ])
 @endsection
 
+@section('page-script')
+    @vite([
+        'resources/assets/vendor/libs/jquery-validation/jquery.validate.js'
+    ])
+@endsection
+
 @section('content')
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
@@ -82,9 +88,7 @@
         </div>
     </div>
 @endsection
+
 @section('page-script')
-    @vite([
-        'resources/assets/vendor/libs/jquery-validation/jquery.validate.js',
-        'resources/views/auth/js/login.js',
-    ])
+    @vite('resources/views/auth/js/login.js')
 @endsection
