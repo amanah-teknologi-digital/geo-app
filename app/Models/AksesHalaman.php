@@ -4,23 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Akses extends Model
+class AksesHalaman extends Model
 {
-    protected $table = 'akses';
-    protected $primaryKey = 'id_akses';
+    protected $table = 'akses_halaman';
+    protected $primaryKey = ['id_akses','id_halaman'];
     public $incrementing = false;
     protected $fillable = [
         'id_akses',
-        'nama',
         'id_halaman'
     ];
 
+    public function akses()
+    {
+        return $this->belongsTo(Akses::class,'id_akses','id_akses');
+    }
     public function halaman()
     {
         return $this->belongsTo(Halaman::class,'id_halaman','id_halaman');
-    }
-
-    public function akseshalaman(){
-        return $this->hasMany(AksesHalaman::class,'id_akses','id_akses');
     }
 }

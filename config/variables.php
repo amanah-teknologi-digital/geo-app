@@ -1,8 +1,8 @@
 <?php
 // Variables
 return [
-    "creatorName" => "Geofisika Dev",
-    "creatorUrl" => "https://georeserve.net",
+    "creatorName" => "Teknik Geofisika ITS",
+    "creatorUrl" => "https://www.youtube.com/channel/UC78HW-Wv_VUnVM6x1lhHw6Q",
     "templateName" => "GeoReserve",
     "templateSuffix" => "Bootstrap Dashboard FREE",
     "templateVersion" => "2.0.0",

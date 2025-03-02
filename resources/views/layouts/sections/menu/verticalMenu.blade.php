@@ -14,15 +14,17 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        @foreach ($menuData[0]->menu as $menu)
+        @foreach ($menuData[0]->menu as $key => $menu)
 
             {{-- adding active and open class if child is active --}}
 
             {{-- menu headers --}}
             @if (isset($menu->menuHeader))
-                <li class="menu-header small text-uppercase">
-                    <span class="menu-header-text">{{ __($menu->menuHeader) }}</span>
-                </li>
+                @if ($key != 0)
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">{{ __($menu->menuHeader) }}</span>
+                    </li>
+                @endif
             @else
 
                 {{-- active menu method --}}
@@ -51,7 +53,7 @@
 
                 {{-- main menu --}}
                 <li class="menu-item {{$activeClass}}">
-                    <a href="{{ isset($menu->url) ? url($menu->url) : 'javascript:void(0);' }}"
+                    <a href="{{ isset($menu->url) ? route($menu->url) : 'javascript:void(0);' }}"
                        class="{{ isset($menu->submenu) ? 'menu-link menu-toggle' : 'menu-link' }}"
                        @if (isset($menu->target) and !empty($menu->target)) target="_blank" @endif>
                         @isset($menu->icon)

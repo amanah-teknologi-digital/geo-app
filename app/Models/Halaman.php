@@ -14,4 +14,14 @@ class Halaman extends Model
         'slug',
         'url'
     ];
+
+    public function header()
+    {
+        return $this->belongsTo(Header::class,'id_header','id_header');
+    }
+
+    public function subheader()
+    {
+        return $this->belongsTo(SubHeader::class,'id_subheader','id_subheader');
+    }
 }
