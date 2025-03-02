@@ -1,4 +1,5 @@
 import $ from "jquery";
+import "jquery-validation";
 
 $(document).ready(function () {
     $("#formAuthentication").validate({
