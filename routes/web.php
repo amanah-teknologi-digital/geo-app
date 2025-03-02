@@ -4,7 +4,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PengajuanGeoFacilityController;
 use App\Http\Controllers\PengajuanGeoLetterController;
 use App\Http\Controllers\PengajuanGeoRoomController;
+use App\Http\Controllers\PeralatanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RuanganController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->name('pengajuangeoletter.index');
         Route::get('/pengajuan-georoom', [PengajuanGeoRoomController::class, 'index'])->name('pengajuangeoroom.index');
         Route::get('/pengajuan-geofacility', [PengajuanGeoFacilityController::class, 'index'])->name('pengajuangeofacility.index');
+
+        //ruangan
+        Route::get('/ruangan', [RuanganController::class, 'index'])->name('ruangan.index');
+
+        //peralatan
+        Route::get('/peralatan', [PeralatanController::class, 'index'])->name('peralatan.index');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

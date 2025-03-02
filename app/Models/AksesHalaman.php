@@ -2,10 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class AksesHalaman extends Model
 {
+    protected static function boot(){
+        parent::boot();
+
+        static::addGlobalScope('order', function (Builder $builder) {
+            $builder->orderBy('urutan', 'ASC'); // Urutkan default berdasarkan tanggal terbaru
+        });
+    }
+
     protected $table = 'akses_halaman';
     protected $primaryKey = ['id_akses','id_halaman'];
     public $incrementing = false;
