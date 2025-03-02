@@ -75,8 +75,5 @@
     </div>
 @endsection
 @section('page-script')
-    @vite([
-        'resources/assets/vendor/libs/jquery-validation/jquery-validation.js',
-        'resources/views/auth/js/reset_password.js',
-    ])
+    @vite('resources/views/auth/js/reset_password.js')
 @endsection

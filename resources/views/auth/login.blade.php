@@ -84,7 +84,5 @@
 @endsection
 
 @section('page-script')
-    @vite([
-        'resources/views/auth/js/login.js'
-    ]);
+    @vite('resources/views/auth/js/login.js');
 @endsection
