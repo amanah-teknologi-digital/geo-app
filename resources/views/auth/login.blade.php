@@ -83,8 +83,6 @@
     </div>
 @endsection
 
-@section('page-script')
-    @vite([
+@vite([
     'resources/views/auth/js/login.js'
-    ]);
-@endsection
+]);
