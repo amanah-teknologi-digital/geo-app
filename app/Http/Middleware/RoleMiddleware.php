@@ -13,9 +13,9 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, int $role): Response
+    public function handle(Request $request, Closure $next, ... $roles): Response
     {
-        if (!auth()->check() || auth()->user()->id_akses !== $role) {
+        if (!auth()->check() || !in_array(auth()->user()->id_akses, $roles)) {
             abort(403, 'Unauthorized');
         }
         return $next($request);

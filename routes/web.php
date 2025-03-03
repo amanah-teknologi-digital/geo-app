@@ -15,9 +15,12 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::middleware(['role:8'])->group(function () {
+    Route::middleware(['role:8,1'])->group(function () {
         Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
         Route::get('/dashboard-pengguna', [DashboardController::class, 'pengguna'])->name('dashboard.pengguna');
+        Route::get('/dashboard-letter', [DashboardController::class, 'letter'])->name('dashboard.letter');
+        Route::get('/dashboard-room', [DashboardController::class, 'room'])->name('dashboard.room');
+        Route::get('/dashboard-facility', [DashboardController::class, 'facility'])->name('dashboard.facility');
 
         //pengajuan
         Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->name('pengajuangeoletter.index');
