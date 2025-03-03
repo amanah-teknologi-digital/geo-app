@@ -11,7 +11,7 @@ class AksesHalaman extends Model
         parent::boot();
 
         static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('urutan', 'ASC'); // Urutkan default berdasarkan tanggal terbaru
+            $builder->orderBy('id_akses', 'ASC')->orderBy('urutan', 'ASC'); // Urutkan default berdasarkan tanggal terbaru
         });
     }
 

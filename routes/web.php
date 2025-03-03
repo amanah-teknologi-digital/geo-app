@@ -15,24 +15,21 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::middleware(['role:8,1'])->group(function () {
-        Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
-        Route::get('/dashboard-pengguna', [DashboardController::class, 'pengguna'])->name('dashboard.pengguna');
-        Route::get('/dashboard-letter', [DashboardController::class, 'letter'])->name('dashboard.letter');
-        Route::get('/dashboard-room', [DashboardController::class, 'room'])->name('dashboard.room');
-        Route::get('/dashboard-facility', [DashboardController::class, 'facility'])->name('dashboard.facility');
+    Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
+    Route::get('/dashboard-pengguna', [DashboardController::class, 'pengguna'])->middleware('role:8')->name('dashboard.pengguna');
+    Route::get('/dashboard-letter', [DashboardController::class, 'letter'])->middleware('role:1,2,5,6,7')->name('dashboard.letter');
+    Route::get('/dashboard-room', [DashboardController::class, 'room'])->middleware('role:1,3,5,6,7')->name('dashboard.room');
+    Route::get('/dashboard-facility', [DashboardController::class, 'facility'])->middleware('role:1,4,5,6,7')->name('dashboard.facility');
+    //ruangan
+    Route::get('/ruangan', [RuanganController::class, 'index'])->name('ruangan.index');
 
-        //pengajuan
-        Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->name('pengajuangeoletter.index');
-        Route::get('/pengajuan-georoom', [PengajuanGeoRoomController::class, 'index'])->name('pengajuangeoroom.index');
-        Route::get('/pengajuan-geofacility', [PengajuanGeoFacilityController::class, 'index'])->name('pengajuangeofacility.index');
+    //peralatan
+    Route::get('/peralatan', [PeralatanController::class, 'index'])->name('peralatan.index');
 
-        //ruangan
-        Route::get('/ruangan', [RuanganController::class, 'index'])->name('ruangan.index');
-
-        //peralatan
-        Route::get('/peralatan', [PeralatanController::class, 'index'])->name('peralatan.index');
-    });
+    //pengajuan
+    Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->middleware('role:1,2,8')->name('pengajuangeoletter.index');
+    Route::get('/pengajuan-georoom', [PengajuanGeoRoomController::class, 'index'])->middleware('role:1,3,6,7,8')->name('pengajuangeoroom.index');
+    Route::get('/pengajuan-geofacility', [PengajuanGeoFacilityController::class, 'index'])->middleware('role:1,4,5,7,8')->name('pengajuangeofacility.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

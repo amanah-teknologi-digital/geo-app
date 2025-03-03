@@ -15,7 +15,11 @@
             <p class="mb-6 mx-2">
                 Maaf atas ketidaknyamanan ini, kami sedang melakukan perbaikan pada saat ini
             </p>
-            <a href="{{url('/')}}" class="btn btn-primary">Kembali ke landing page</a>
+            @auth
+                <a href="{{ route('dashboard') }}" class="btn btn-primary">Kembali ke Dashboard</a>
+            @else
+                <a href="{{url('/')}}" class="btn btn-primary">Kembali ke landing page</a>
+            @endif
             <div class="mt-6">
                 <img src="{{asset('assets/img/illustrations/girl-doing-yoga-light.png')}}" alt="girl-doing-yoga-light" width="500" class="img-fluid">
             </div>
