@@ -39,6 +39,9 @@ const FontsScssFiles = GetFilesArray('resources/assets/vendor/fonts/!(_)*.scss')
 // Custom js
 const JsCustomPage = GetFilesArray('resources/views/auth/js/!(_)*.js');
 
+// Script js on view
+const JsScriptPage = GetFilesArray('resources/views/script_view/!(_)*.js');
+
 export default defineConfig({
     plugins: [
         laravel({
@@ -54,7 +57,8 @@ export default defineConfig({
                 ...LibsCssFiles,
                 ...FontsScssFiles,
                 'resources/assets/css/custom.scss',
-                ...JsCustomPage
+                ...JsCustomPage,
+                ...JsScriptPage
             ],
             refresh: true
         }),

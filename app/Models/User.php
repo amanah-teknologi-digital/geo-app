@@ -54,4 +54,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Akses::class,'id_akses','id_akses');
     }
+
+    public function files()
+    {
+        return $this->belongsTo(Files::class,'file_kartuid','id_file');
+    }
 }
