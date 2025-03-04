@@ -80,11 +80,19 @@
                                         <div class="dropdown-divider my-1"></div>
                                     </li>
                                     <li>
+                                        <a class="dropdown-item" href="/">
+                                            <i class="bx bx-arrow-back bx-md me-3"></i><span>Kembali ke Landing Page</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider my-1"></div>
+                                    </li>
+                                    <li>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                                <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
+                                                <i class="text-danger bx bx-power-off bx-md me-3"></i><span>Log Out</span>
                                             </a>
                                         </form>
                                     </li>
