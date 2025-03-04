@@ -112,7 +112,7 @@
                                             ? route('file.getprivatefile', $file)
                                             : asset('assets/img/no_image.jpg');
                                     @endphp
-                                    <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
+                                    <img src="{{ $imageUrl.'?time='.time() }}" class="d-block h-px-100 rounded">
                                     <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
                                     <input type="file" class="form-control" id="file_kartuid" name="file_kartuid" accept="image/*">
                             </div>
