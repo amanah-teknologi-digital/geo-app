@@ -13,7 +13,11 @@ class FileController extends Controller
 
         if (Storage::disk('local')->exists($data_file->location)) {
             $file = Storage::disk('local')->get($data_file->location);
-            return response($file, 200)->header('Content-Type', $data_file->mime);
+            return response($file, 200)
+                ->header('Content-Type', $data_file->mime)
+                ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');
         }else{
             abort(404, 'File Tidak Ditemukan');
         }
