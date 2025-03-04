@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\DefaultDashboardMiddleware;
+use App\Http\Middleware\NoCacheMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'defaultdashboard' => DefaultDashboardMiddleware::class,
             'role' => RoleMiddleware::class,
+            'nocache' => NoCacheMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
