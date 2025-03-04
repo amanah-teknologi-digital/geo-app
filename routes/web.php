@@ -31,7 +31,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->middleware('role:1,2,8')->name('pengajuangeoletter.index');
     Route::get('/pengajuan-georoom', [PengajuanGeoRoomController::class, 'index'])->middleware('role:1,3,6,7,8')->name('pengajuangeoroom.index');
     Route::get('/pengajuan-geofacility', [PengajuanGeoFacilityController::class, 'index'])->middleware('role:1,4,5,7,8')->name('pengajuangeofacility.index');
+});
 
+Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

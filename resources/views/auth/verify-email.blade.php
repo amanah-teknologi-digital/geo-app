@@ -58,7 +58,10 @@
                                 </button>
                             </form>
                         </div>
-                        <div class="mt-4 d-flex justify-content-center">
+                        <div class="mt-4 d-flex justify-content-center align-content-between">
+                            <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-info">
+                                Update Profile
+                            </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger">
