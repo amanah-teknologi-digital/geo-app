@@ -46,7 +46,7 @@
                         @endif
                         @if (session('status') == 'verification-link-sent')
                             <div class="alert alert-success alert-dismissible" role="alert">
-                                Link verifikasi baru saja di kirim ke alamat email yang sudah kamu input saat registrasi.
+                                Link verifikasi baru saja di kirim ke alamat email yang sudah kamu input saat registrasi. buka email anda dan klik link yang sudah kami kirimkan!
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
