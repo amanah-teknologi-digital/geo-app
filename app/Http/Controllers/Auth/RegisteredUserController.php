@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -40,8 +41,8 @@ class RegisteredUserController extends Controller
                 'nama_lengkap' => ['required'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'unique:'.User::class],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                'no_kartuid' => ['required'],
-                'no_telepon' => ['required', 'string', 'max:13'],
+                'no_kartuid' => ['required', Rule::unique('users', 'kartu_id')],
+                'no_telepon' => ['required', 'string', 'max:13', Rule::unique('users', 'no_hp')],
                 'file_kartuid' => ['required', 'file', 'image', 'max:5120'],
             ],[
                 'nama_lengkap.required' => 'Nama lengkap wajib diisi.',
@@ -53,9 +54,11 @@ class RegisteredUserController extends Controller
                 'password.required'     => 'Password wajib diisi.',
                 'password.confirmed'    => 'Konfirmasi password tidak cocok.',
                 'no_kartuid.required'   => 'Nomor kartu ID wajib diisi.',
+                'no_kartuid.unique'     => 'Kartu ID sudah terdaftar.',
                 'no_telepon.required'   => 'Nomor telepon wajib diisi.',
                 'no_telepon.string'     => 'Nomor telepon harus berupa teks.',
                 'no_telepon.max'        => 'Nomor telepon maksimal 13 karakter.',
+                'no_telepon.unique'     => 'No Hp sudah terdaftar.',
                 'file_kartuid.required' => 'File kartu ID wajib diunggah.',
                 'file_kartuid.file'     => 'File kartu ID harus berupa file yang valid.',
                 'file_kartuid.image'    => 'File kartu ID harus berupa gambar.',

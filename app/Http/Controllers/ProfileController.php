@@ -37,8 +37,8 @@ class ProfileController extends Controller
             $request->validate([
                 'nama_lengkap' => ['required'],
                 'email' => ['required', 'string', 'lowercase', 'email', Rule::unique('users', 'email')->ignore(auth()->user()->id)],
-                'no_kartuid' => ['required'],
-                'no_telepon' => ['required', 'string', 'max:13'],
+                'no_kartuid' => ['required', Rule::unique('users', 'kartu_id')->ignore(auth()->user()->id)],
+                'no_telepon' => ['required', 'string', 'max:13', Rule::unique('users', 'no_hp')->ignore(auth()->user()->id)],
                 'file_kartuid' => ['file', 'image', 'max:5120'],
             ],[
                 'nama_lengkap.required' => 'Nama lengkap wajib diisi.',
@@ -48,9 +48,11 @@ class ProfileController extends Controller
                 'email.email'           => 'Format email tidak valid.',
                 'email.unique'          => 'Email sudah terdaftar.',
                 'no_kartuid.required'   => 'Nomor kartu ID wajib diisi.',
+                'no_kartuid.unique'     => 'Kartu ID sudah terdaftar.',
                 'no_telepon.required'   => 'Nomor telepon wajib diisi.',
                 'no_telepon.string'     => 'Nomor telepon harus berupa teks.',
                 'no_telepon.max'        => 'Nomor telepon maksimal 13 karakter.',
+                'no_telepon.unique'     => 'No Hp sudah terdaftar.',
                 'file_kartuid.file'     => 'File kartu ID harus berupa file yang valid.',
                 'file_kartuid.image'    => 'File kartu ID harus berupa gambar.',
                 'file_kartuid.mimes'    => 'File kartu ID harus berformat jpeg, png, atau jpg.',
