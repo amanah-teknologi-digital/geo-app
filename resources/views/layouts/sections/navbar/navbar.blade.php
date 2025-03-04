@@ -43,6 +43,10 @@
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- User -->
+                            <li class="nav-item lh-1 me-4">
+
+                                <b>Akses: </b><span class="badge bg-label-success">{{ auth()->user()->akses->nama  }}</span>
+                            </li>
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
                                    data-bs-toggle="dropdown">
@@ -63,7 +67,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <h6 class="mb-0">{{ auth()->user()->name }}</h6>
-                                                    <small class="text-muted">{{ auth()->user()->akses->nama }}</small>
+                                                    <small class="text-muted">{{ auth()->user()->kartu_id }}</small>
                                                 </div>
                                             </div>
                                         </a>
