@@ -244,7 +244,7 @@
                 <div class="address">
                     <h4 class="text-white">Alamat</h4>
                     <p>Gedung Teknik Geofisika</p>
-                    <p>Kampus ITS Sukolilo Surabaya – 60111 Jawa Timur, Indonesia</p>
+                    <p>{{ $pengaturan->alamat }}</p>
                 </div>
 
             </div>
@@ -254,9 +254,9 @@
                 <div>
                     <h4 class="text-white">Kontak</h4>
                     <p>
-                        Admin Geoletter: <span>Dihein (081357760223)</span><br>
-                        Admin Peminjaman Ruangan: <span>Sholichan (082233991889)</span><br>
-                        Admin Peminjaman Alat Lab: <span>Hamzah (08970007296)</span>
+                        Admin Geoletter: <span>{{ $pengaturan->admin_geoletter }}</span><br>
+                        Admin Peminjaman Ruangan: <span>{{ $pengaturan->admin_ruang }}</span><br>
+                        Admin Peminjaman Alat Lab: <span>{{ $pengaturan->admin_peralatan }}</span>
                     </p>
                 </div>
             </div>
@@ -266,10 +266,10 @@
                 <div class="social-links">
                     <h4 class="text-white">Ikuti Kami</h4>
                     <div class="d-flex text-white">
-                        <a href="https://www.youtube.com/channel/UC78HW-Wv_VUnVM6x1lhHw6Q" class="youtube text-white"><i class="bi bi-youtube text-white"></i></a>
-                        <a href="https://www.facebook.com/TeknikGeofisikaITS" class="facebook text-white"><i class="bi bi-facebook"></i></a>
-                        <a href="https://www.instagram.com/teknik_geofisika_its" class="instagram text-white"><i class="bi bi-instagram"></i></a>
-                        <a href="https://www.linkedin.com/company/teknik-geofisika-its" class="linkedin text-white"><i class="bi bi-linkedin"></i></a>
+                        <a href="{{ $pengaturan->link_yt }}" target="_blank" class="youtube text-white"><i class="bi bi-youtube text-white"></i></a>
+                        <a href="{{ $pengaturan->link_fb }}" target="_blank" class="facebook text-white"><i class="bi bi-facebook"></i></a>
+                        <a href="{{ $pengaturan->link_ig }}" target="_blank" class="instagram text-white"><i class="bi bi-instagram"></i></a>
+                        <a href="{{ $pengaturan->link_linkedin }}" target="_blank" class="linkedin text-white"><i class="bi bi-linkedin"></i></a>
                     </div>
                 </div>
             </div>
