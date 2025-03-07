@@ -113,7 +113,13 @@
                                             ? route('file.getprivatefile', $file)
                                             : asset('assets/img/no_image.jpg');
                                     @endphp
-                                    <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modals-transparent">
+                                            Lihat file
+                                        </button>
+                                    </div>
+
                                     <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
                                     <input type="file" class="form-control" id="file_kartuid" name="file_kartuid" accept="image/*">
                             </div>
@@ -168,6 +174,16 @@
                     </form>
                 </div>
                 <!-- /Account -->
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
+                <div class="modal-body">
+                    <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
+                </div>
             </div>
         </div>
     </div>
