@@ -1,7 +1,7 @@
 @php use Illuminate\Support\Facades\Storage; @endphp
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Account settings - Account')
+@section('title', 'Data Profile • '.config('variables.templateName'))
 
 @section('page-style')
     @vite([

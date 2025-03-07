@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //pengaturan
     Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
+    Route::post('/pengaturan/update', [PengaturanController::class, 'updatePengaturan'])->name('pengaturan.update');
 
     //pengajuan
     Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->middleware('role:1,2,8')->name('pengajuangeoletter.index');

@@ -243,7 +243,6 @@
                 <i class="bi bi-geo-alt icon text-white"></i>
                 <div class="address">
                     <h4 class="text-white">Alamat</h4>
-                    <p>Gedung Teknik Geofisika</p>
                     <p>{{ $pengaturan->alamat }}</p>
                 </div>
 
