@@ -2,6 +2,7 @@
 
 namespace App\Http\Repositories;
 
+use App\Models\Files;
 use App\Models\Pengaturan;
 
 class PengaturanRepository
@@ -40,6 +41,38 @@ class PengaturanRepository
                 'updater' => auth()->user()->id,
                 'updated_at' => now()
             ]);
+        }
+    }
+
+    public function createOrUpdateFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize, $jenis_file){
+        $file = Files::find($id_file);
+
+        if ($file) {
+            $file->file_name = $fileName;
+            $file->location = $filePath;
+            $file->mime = $fileMime;
+            $file->ext = $fileExt;
+            $file->file_size = $fileSize;
+            $file->is_private = 0;
+            $file->updated_at = now();
+            $file->updater = auth()->user()->id;
+            $file->save();
+        } else {
+            Files::create([
+                'id_file' => $id_file,
+                'file_name' => $fileName,
+                'location' => $filePath,
+                'mime' => $fileMime,
+                'ext' => $fileExt,
+                'file_size' => $fileSize,
+                'created_at' => now(),
+                'is_private' => 0,
+                'updater' => auth()->user()->id
+            ]);
+
+            $dataPengaturan = Pengaturan::first();
+            $dataPengaturan->$jenis_file = $id_file;
+            $dataPengaturan->save();
         }
     }
 }

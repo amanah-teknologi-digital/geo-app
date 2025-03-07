@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class LandingPageController extends Controller
 {
     public function index(){
-        $pengaturan = Pengaturan::first();
+        $pengaturan = Pengaturan::with(['files_geoletter', 'files_georoom', 'files_geofacility'])->first();
 
         return view('landing_page.index', compact('pengaturan'));
     }

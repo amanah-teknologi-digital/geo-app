@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Ramsey\Uuid\Uuid;
 
 class PengaturanController extends Controller
 {
@@ -29,6 +30,8 @@ class PengaturanController extends Controller
 
     public function updatePengaturan(Request $request){
         try {
+            $dataPengaturan = Pengaturan::first();
+
             $request->validate([
                 'alamat' => ['required'],
                 'admin_geoletter' => ['required'],
@@ -53,10 +56,38 @@ class PengaturanController extends Controller
                 'file.max' => 'Ukuran file tidak boleh lebih dari 10 MB.',
             ]);
 
-            //save file data ke database
-//            if ($request->hasFile('file_sop_geoletter')) {
-//                $id_file_geoletter =
-//            }
+            //save file geo letter
+            if ($request->hasFile('file_sop_geoletter')) {
+                if (empty($dataPengaturan->file_sop_geoletter)){
+                    $id_file_geoletter = strtoupper(Uuid::uuid4()->toString());
+                }else{
+                    $id_file_geoletter = $dataPengaturan->file_sop_geoletter;
+                }
+
+                $this->service->createOrUpdateFile($request->file('file_sop_geoletter'), $id_file_geoletter,'file_sop_geoletter');
+            }
+
+            //save file geo room
+            if ($request->hasFile('file_sop_georoom')) {
+                if (empty($dataPengaturan->file_sop_georoom)){
+                    $id_file_georoom = strtoupper(Uuid::uuid4()->toString());
+                }else{
+                    $id_file_georoom = $dataPengaturan->file_sop_georoom;
+                }
+
+                $this->service->createOrUpdateFile($request->file('file_sop_georoom'), $id_file_georoom,'file_sop_georoom');
+            }
+
+            //save file geo facility
+            if ($request->hasFile('file_sop_geofacility')) {
+                if (empty($dataPengaturan->file_sop_geofacility)){
+                    $id_file_geofacility = strtoupper(Uuid::uuid4()->toString());
+                }else{
+                    $id_file_geofacility = $dataPengaturan->file_sop_geofacility;
+                }
+
+                $this->service->createOrUpdateFile($request->file('file_sop_geofacility'), $id_file_geofacility,'file_sop_geofacility');
+            }
 
             $this->service->updatePengaturan($request);
 

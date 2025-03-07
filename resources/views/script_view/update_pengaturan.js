@@ -49,6 +49,14 @@ $(document).ready(function () {
             file_sop_geoletter: {
                 filesize: 10485760,
                 fileextension: ['jpg', 'jpeg', 'png', 'gif', 'pdf']
+            },
+            file_sop_georoom: {
+                filesize: 10485760,
+                fileextension: ['jpg', 'jpeg', 'png', 'gif', 'pdf']
+            },
+            file_sop_geofacility: {
+                filesize: 10485760,
+                fileextension: ['jpg', 'jpeg', 'png', 'gif', 'pdf']
             }
         },
         messages: {
@@ -77,6 +85,14 @@ $(document).ready(function () {
                 required: "Link linkedin wajib diisi"
             },
             file_sop_geoletter: {
+                filesize: "Ukuran file maksimal 5 MB",
+                fileextension: "Hanya file JPG, JPEG, PNG, GIF, dan PDF yang diperbolehkan"
+            },
+            file_sop_georoom: {
+                filesize: "Ukuran file maksimal 5 MB",
+                fileextension: "Hanya file JPG, JPEG, PNG, GIF, dan PDF yang diperbolehkan"
+            },
+            file_sop_geofacility: {
                 filesize: "Ukuran file maksimal 5 MB",
                 fileextension: "Hanya file JPG, JPEG, PNG, GIF, dan PDF yang diperbolehkan"
             }

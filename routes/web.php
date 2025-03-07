@@ -15,6 +15,7 @@ use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landingpage');
+Route::get('/get-public-file/{id_file}', [FileController::class, 'getPublicFile'])->middleware('nocache')->name('file.getpublicfile');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');

@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -199,8 +200,15 @@
                                 <h4>Geo Letter</h4>
                                 <p>Layanan ini mengarah pada perizinan persuratan, dengan mekanisme mendowload dan mengupload sesuai template surat kemudian mengunduhnya jika sudah disetujui admin.</p>
                                 <br>
+                                @php
+                                    $filePath = optional($dataPengaturan->files_geofacility)->location ?? 'no-exist';
+                                    $fileId = optional($dataPengaturan->files_geofacility)->id_file ?? -1;
+                                    $imageUrl = Storage::disk('public')->exists($filePath)
+                                        ? route('file.getpublicfile', $fileId)
+                                        : '#';
+                                @endphp
                                 <div class="text-center">
-                                    <a href="#" class="btn btn-sm btn-outline-primary"><span>Lihat SOP</span></a>
+                                    <a href="{{ $imageUrl }}" class="btn btn-sm btn-outline-primary"><span>Lihat SOP</span></a>
                                 </div>
                             </div>
                         </div><!-- End Icon Box -->
@@ -211,8 +219,15 @@
                                 <h4>Geo Room</h4>
                                 <p>Layanan ini memberikan pembokingan ruangan, dengan ketentuan melakukan pengajuan 2 hari sebelum pemakaian ruangan dan melampirkan berita acara setelah disetujui.</p>
                                 <br>
+                                @php
+                                    $filePath = optional($dataPengaturan->files_georoom)->location ?? 'no-exist';
+                                    $fileId = optional($dataPengaturan->files_georoom)->id_file ?? -1;
+                                    $imageUrl = Storage::disk('public')->exists($filePath)
+                                        ? route('file.getpublicfile', $fileId)
+                                        : '#';
+                                @endphp
                                 <div class="text-center">
-                                    <a href="#" class="btn btn-sm btn-outline-primary"><span>Lihat SOP</span></a>
+                                    <a href="{{ $imageUrl }}" class="btn btn-sm btn-outline-primary"><span>Lihat SOP</span></a>
                                 </div>
                             </div>
                         </div><!-- End Icon Box -->
@@ -223,8 +238,15 @@
                                 <h4>Geo Facility</h4>
                                 <p>Layanan untuk memanajemen peminjaman alat/lab, dengan vasiasi stok dan harga sesuai dengan durasi peminjaman alat. ada cost tambahan jika ada kerusakan.</p>
                                 <br>
+                                @php
+                                    $filePath = optional($dataPengaturan->files_geofacility)->location ?? 'no-exist';
+                                    $fileId = optional($dataPengaturan->files_geofacility)->id_file ?? -1;
+                                    $imageUrl = Storage::disk('public')->exists($filePath)
+                                        ? route('file.getpublicfile', $fileId)
+                                        : '#';
+                                @endphp
                                 <div class="text-center">
-                                    <a href="#" class="btn btn-sm btn-outline-primary" ><span>Lihat SOP</span></a>
+                                    <a href="{{ $imageUrl }}" class="btn btn-sm btn-outline-primary" ><span>Lihat SOP</span></a>
                                 </div>
                             </div>
                         </div><!-- End Icon Box -->
