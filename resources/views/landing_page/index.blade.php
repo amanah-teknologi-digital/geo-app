@@ -205,7 +205,7 @@
                                     $fileId = optional($pengaturan->files_geoletter)->id_file ?? -1;
                                     $imageUrl = Storage::disk('public')->exists($filePath)
                                         ? route('file.getpublicfile', $fileId)
-                                        : '#';
+                                        : 'javascript:void(0)';
                                 @endphp
                                 <div class="text-center">
                                     <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary"><span>Lihat SOP</span></a>
@@ -224,7 +224,7 @@
                                     $fileId = optional($pengaturan->files_georoom)->id_file ?? -1;
                                     $imageUrl = Storage::disk('public')->exists($filePath)
                                         ? route('file.getpublicfile', $fileId)
-                                        : '#';
+                                        : 'javascript:void(0)';
                                 @endphp
                                 <div class="text-center">
                                     <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary"><span>Lihat SOP</span></a>
@@ -243,7 +243,7 @@
                                     $fileId = optional($pengaturan->files_geofacility)->id_file ?? -1;
                                     $imageUrl = Storage::disk('public')->exists($filePath)
                                         ? route('file.getpublicfile', $fileId)
-                                        : '#';
+                                        : 'javascript:void(0)';
                                 @endphp
                                 <div class="text-center">
                                     <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary" ><span>Lihat SOP</span></a>
