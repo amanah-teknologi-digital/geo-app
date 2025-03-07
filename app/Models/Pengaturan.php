@@ -25,4 +25,18 @@ class Pengaturan extends Model
     {
         return $this->belongsTo(User::class, 'updater', 'id');
     }
+    public function files_geoletter()
+    {
+        return $this->belongsTo(Files::class, 'file_sop_geoletter', 'id_file');
+    }
+
+    public function files_georoom()
+    {
+        return $this->belongsTo(Files::class, 'file_sop_georoom', 'id_file');
+    }
+
+    public function files_geofacility()
+    {
+        return $this->belongsTo(Files::class, 'file_sop_geofacility', 'id_file');
+    }
 }

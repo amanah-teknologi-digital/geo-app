@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Storage; @endphp
 @extends('layouts/contentNavbarLayout')
 
 @section('title', $title.' • '.config('variables.templateName'))
@@ -70,6 +71,28 @@
                             <div>
                                 <label for="link_linkedin" class="form-label">Link LinkedIn <span class="text-danger">*</span><i>(jika kosong isi dengan #)</i></label>
                                 <input type="text" class="form-control" id="link_linkedin" name="link_linkedin" placeholder="link linkedin" value="{{ $dataPengaturan->link_linkedin }}" required autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="file_sop_geoletter" class="form-label">Unggah SOP GEO Letter <span class="text-muted"><i><b>(File gambar max 10 mb)</b></i></span></label>
+                                @php
+                                    $filePath = optional($dataPengaturan->files_geoletter)->location ?? 'no-exist';
+                                    $fileId = optional($dataPengaturan->files_geoletter)->id_file ?? -1;
+                                    $imageUrl = Storage::disk('local')->exists($filePath)
+                                        ? route('file.getprivatefile', $fileId)
+                                        : false;
+                                @endphp
+                                <div class="d-flex align-items-center gap-2">
+                                    @if(!$imageUrl)
+                                        <p class="text-warning"><i>File belum ada!</i></p>
+                                    @else
+                                        <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            Lihat file
+                                        </a>
+                                    @endif
+                                </div>
+
+                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
+                                <input type="file" class="form-control" id="file_sop_geoletter" name="file_sop_geoletter" accept="image/*,.pdf">
                             </div>
                         </div>
                         <div class="mt-6">

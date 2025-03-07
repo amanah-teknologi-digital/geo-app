@@ -37,7 +37,8 @@ class PengaturanController extends Controller
                 'link_yt' => ['required'],
                 'link_fb' => ['required'],
                 'link_ig' => ['required'],
-                'link_linkedin' => ['required']
+                'link_linkedin' => ['required'],
+                'file_sop_geoletter' => ['file', 'mimes:jpeg,png,jpg,pdf', 'max:10240']
             ],[
                 'alamat.required' => 'Alamat wajib diisi.',
                 'admin_geoletter.required' => 'Admin Geoletter wajib diisi.',
@@ -46,38 +47,18 @@ class PengaturanController extends Controller
                 'link_yt.required' => 'Link YouTube wajib diisi.',
                 'link_fb.required' => 'Link Facebook wajib diisi.',
                 'link_ig.required' => 'Link Instagram wajib diisi.',
-                'link_linkedin.required' => 'Link LinkedIn wajib diisi.'
+                'link_linkedin.required' => 'Link LinkedIn wajib diisi.',
+                'file.file' => 'File yang diunggah tidak valid.',
+                'file.mimes' => 'File harus berupa gambar (JPEG, PNG, JPG) atau PDF.',
+                'file.max' => 'Ukuran file tidak boleh lebih dari 10 MB.',
             ]);
 
             //save file data ke database
-            $pengaturan = Pengaturan::first(); // Ambil data pertama di tabel Pengaturan
+//            if ($request->hasFile('file_sop_geoletter')) {
+//                $id_file_geoletter =
+//            }
 
-            if ($pengaturan) {
-                $pengaturan->alamat = $request->alamat;
-                $pengaturan->admin_geoletter = $request->admin_geoletter;
-                $pengaturan->admin_ruang = $request->admin_ruang;
-                $pengaturan->admin_peralatan = $request->admin_peralatan;
-                $pengaturan->link_yt = $request->link_yt;
-                $pengaturan->link_fb = $request->link_fb;
-                $pengaturan->link_ig = $request->link_ig;
-                $pengaturan->link_linkedin = $request->link_linkedin;
-                $pengaturan->updater = auth()->user()->id;
-                $pengaturan->created_at = now();
-                $pengaturan->save(); // Simpan perubahan
-            } else {
-                Pengaturan::create([
-                    'alamat' => $request->alamat,
-                    'admin_geoletter' => $request->admin_geoletter,
-                    'admin_ruang' => $request->admin_ruang,
-                    'admin_peralatan' => $request->admin_peralatan,
-                    'link_yt' => $request->link_yt,
-                    'link_fb' => $request->link_fb,
-                    'link_ig' => $request->link_ig,
-                    'link_linkedin' => $request->link_linkedin,
-                    'updater' => auth()->user()->id,
-                    'updated_at' => now()
-                ]);
-            }
+            $this->service->updatePengaturan($request);
 
             return redirect()->back()->with('success', 'Pengaturan berhasil diperbarui.');
         } catch (ValidationException $e) {

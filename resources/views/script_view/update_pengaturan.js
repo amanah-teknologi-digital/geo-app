@@ -45,6 +45,10 @@ $(document).ready(function () {
             },
             link_linkedin: {
                 required: true
+            },
+            file_sop_geoletter: {
+                filesize: 10485760,
+                fileextension: ['jpg', 'jpeg', 'png', 'gif', 'pdf']
             }
         },
         messages: {
@@ -71,6 +75,10 @@ $(document).ready(function () {
             },
             link_linkedin: {
                 required: "Link linkedin wajib diisi"
+            },
+            file_sop_geoletter: {
+                filesize: "Ukuran file maksimal 5 MB",
+                fileextension: "Hanya file JPG, JPEG, PNG, GIF, dan PDF yang diperbolehkan"
             }
         },
         submitHandler: function (form) {
