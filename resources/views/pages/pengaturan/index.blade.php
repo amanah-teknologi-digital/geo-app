@@ -73,7 +73,7 @@
                                 <input type="text" class="form-control" id="link_linkedin" name="link_linkedin" placeholder="link linkedin" value="{{ $dataPengaturan->link_linkedin }}" required autocomplete="off">
                             </div>
                             <div>
-                                <label for="file_sop_geoletter" class="form-label">Unggah SOP GEO Letter <span class="text-muted"><i><b>(File gambar & pdf max 10 mb)</b></i></span></label>
+                                <label for="file_sop_geoletter" class="form-label">Unggah SOP GEO Letter <span class="text-muted"><i><b>(File gambar atau pdf max 10 mb)</b></i></span></label>
                                 @php
                                     $filePath = optional($dataPengaturan->files_geoletter)->location ?? 'no-exist';
                                     $fileId = optional($dataPengaturan->files_geoletter)->id_file ?? -1;
@@ -96,7 +96,7 @@
                                 <input type="file" class="form-control" id="file_sop_geoletter" name="file_sop_geoletter" accept="image/*,.pdf">
                             </div>
                             <div>
-                                <label for="file_sop_georoom" class="form-label">Unggah SOP GEO Room <span class="text-muted"><i><b>(File gambar & pdf max 10 mb)</b></i></span></label>
+                                <label for="file_sop_georoom" class="form-label">Unggah SOP GEO Room <span class="text-muted"><i><b>(File gambar atau pdf max 10 mb)</b></i></span></label>
                                 @php
                                     $filePath = optional($dataPengaturan->files_georoom)->location ?? 'no-exist';
                                     $fileId = optional($dataPengaturan->files_georoom)->id_file ?? -1;
@@ -119,7 +119,7 @@
                                 <input type="file" class="form-control" id="file_sop_georoom" name="file_sop_georoom" accept="image/*,.pdf">
                             </div>
                             <div>
-                                <label for="file_sop_geofacility" class="form-label">Unggah SOP GEO Facility <span class="text-muted"><i><b>(File gambar & pdf max 10 mb)</b></i></span></label>
+                                <label for="file_sop_geofacility" class="form-label">Unggah SOP GEO Facility <span class="text-muted"><i><b>(File gambar atau pdf max 10 mb)</b></i></span></label>
                                 @php
                                     $filePath = optional($dataPengaturan->files_geofacility)->location ?? 'no-exist';
                                     $fileId = optional($dataPengaturan->files_geofacility)->id_file ?? -1;

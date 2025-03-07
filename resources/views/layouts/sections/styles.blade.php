@@ -14,7 +14,10 @@
 ])
 
 <!-- Vendor Styles -->
-@vite(['resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.scss'])
+@vite([
+    'resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.scss',
+    'resources/assets/vendor/libs/datatable/datatable.scss'
+    ])
 @yield('vendor-style')
 
 <!-- Page Styles -->
