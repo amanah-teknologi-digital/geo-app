@@ -6,6 +6,8 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PengajuanGeoFacilityController;
 use App\Http\Controllers\PengajuanGeoLetterController;
 use App\Http\Controllers\PengajuanGeoRoomController;
+use App\Http\Controllers\PengaturanController;
+use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PeralatanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RuanganController;
@@ -25,6 +27,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //peralatan
     Route::get('/peralatan', [PeralatanController::class, 'index'])->name('peralatan.index');
+
+    //pengumuman
+    Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+
+    //pengaturan
+    Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
 
     //pengajuan
     Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->middleware('role:1,2,8')->name('pengajuangeoletter.index');
