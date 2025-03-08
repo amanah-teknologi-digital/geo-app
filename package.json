@@ -91,8 +91,10 @@
         "highlight.js": "~11.9.0",
         "jquery": "~3.7.1",
         "jquery-validation": "^1.21.0",
+        "jszip": "^3.10.1",
         "laravel-vite-plugin": "1.0.1",
         "masonry-layout": "~4.2.2",
+        "pdfmake": "^0.2.18",
         "perfect-scrollbar": "~1.5.5"
     }
 }

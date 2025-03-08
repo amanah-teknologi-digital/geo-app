@@ -34,26 +34,16 @@
                 </div>
             @endif
             <div class="card mb-6">
-                <!-- Account -->
-                <div class="card-header header-elements pb-4 border-bottom">
-                    <h5 class="mb-0 me-2"><span class="tf-icons bx bx-list-check"></span>&nbsp;List Pengumuman</h5>
-                    <div class="card-header-elements ms-auto">
-                        <button type="button" class="btn btn-xs btn-primary"><span class="icon-base bx bx-plus icon-xs me-1"></span>Tambah Pengumuman</button>
-                    </div>
-                </div>
                 <div class="card-body pt-4">
                     <table id="datatable" class="datatables-basic table table-bordered">
                         <thead>
                         <tr>
-                            <th></th>
-                            <th></th>
                             <th>id</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Date</th>
                             <th>Salary</th>
                             <th>Status</th>
-                            <th>Action</th>
                         </tr>
                         </thead>
                     </table>
