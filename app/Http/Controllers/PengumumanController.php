@@ -58,4 +58,8 @@ class PengumumanController extends Controller
 
         return view('pages.pengumuman.tambah', compact('title'));
     }
+
+    public function dotambahPengumuman(Request $request){
+        dd($request);
+    }
 }

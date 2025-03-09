@@ -32,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //pengumuman
     Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman');
     Route::get('/pengumuman/tambah', [PengumumanController::class, 'tambahPengumuman'])->name('pengumuman.tambah');
+    Route::post('/pengumuman/dotambah', [PengumumanController::class, 'dotambahPengumuman'])->name('pengumuman.dotambah');
     Route::get('/pengumuman/edit/{id_pengumuman}', [PengumumanController::class, 'editPengumuman'])->name('pengumuman.edit');
     Route::post('/pengumuman/update', [PengumumanController::class, 'updatePengumuman'])->name('pengumuman.update');
     Route::get('/pengumuman/getdata', [PengumumanController::class, 'getData'])->name('pengumuman.getdata');
