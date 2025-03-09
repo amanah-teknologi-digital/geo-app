@@ -45,9 +45,34 @@
                 </div>
             @endif
             <div class="card mb-6">
-                <div class="card-body pt-4">
-
-                </div>
+                    <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
+                        <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Pengumuman</h5>
+                        <a href="{{ route('pengumuman') }}" class="btn btn-sm btn-secondary btn-sm">
+                            <i class="bx bx-arrow-back"></i>&nbsp;Kembali
+                        </a>
+                    </div>
+                    <div class="card-body pt-4">
+                        <form id="formPengaturanLandingPage" method="POST" action="{{ route('pengaturan.update') }}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row g-6">
+                                <div>
+                                    <label for="judul" class="form-label">Judul Pengumuman <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="judul" name="judul" placeholder="judul" required autocomplete="off" autofocus>
+                                </div>
+                                <div>
+                                    <label for="isi_pengumuman" class="form-label">Isi Pengumuman <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="isi_pengumuman" name="isi_pengumuman" placeholder="isi" required autocomplete="off" autofocus>
+                                </div>
+                                <div>
+                                    <label for="gambar_header" class="form-label">Gambar Header <span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
+                                    <input type="file" class="form-control" id="gambar_header" name="gambar_header" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <button type="submit" class="btn btn-primary me-3">Tambah</button>
+                            </div>
+                        </form>
+                    </div>
             </div>
         </div>
     </div>

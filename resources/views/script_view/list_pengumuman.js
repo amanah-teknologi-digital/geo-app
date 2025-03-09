@@ -18,6 +18,7 @@ $(document).ready(function () {
             { data: 'judul', name: 'judul', className: 'all', searchable: true },
             { data: 'author', name: 'updater', className: 'all', searchable: true },
             { data: 'tanggal_post', name: 'created_at', className: 'all', searchable: true },
+            { data: 'posting', name: 'is_posting', className: 'all', searchable: false },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all' }
         ],
         order: [[3, 'desc']],
@@ -29,38 +30,38 @@ $(document).ready(function () {
         buttons: [
             {
                 extend: 'collection',
-                className: 'btn btn-sm btn-success dropdown-toggle me-2',
+                className: 'btn btn-sm btn-outline-success dropdown-toggle me-2',
                 text: '<i class="icon-base bx bx-export me-1"></i><span class="d-none d-lg-inline-block">Export</span>',
                 buttons: [
                     {
                         extend: 'print',
                         text: '<i class="icon-base bx bx-printer me-1" ></i>Print',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] }
+                        exportOptions: { columns: [0, 1, 2, 3, 4] }
                     },
                     {
                         extend: 'csv',
                         text: '<i class="icon-base bx bx-file me-1" ></i>Csv',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] }
+                        exportOptions: { columns: [0, 1, 2, 3, 4] }
                     },
                     {
                         extend: 'excel',
                         text: '<i class="icon-base bx bxs-file me-1"></i>Excel',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] }
+                        exportOptions: { columns: [0, 1, 2, 3, 4] }
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="icon-base bx bxs-file-pdf me-1"></i>Pdf',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] }
+                        exportOptions: { columns: [0, 1, 2, 3, 4] }
                     },
                     {
                         extend: 'copy',
                         text: '<i class="icon-base bx bx-copy me-1" ></i>Copy',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] }
+                        exportOptions: { columns: [0, 1, 2, 3, 4] }
                     }
                 ]
             },

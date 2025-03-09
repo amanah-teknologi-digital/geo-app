@@ -15,8 +15,8 @@ class PengumumanServices
         $this->repository = $repository;
     }
 
-    public function getDataPengaturan(){
-        $data = $this->repository->getDataPengaturan();
+    public function getDataPengumuman(){
+        $data = $this->repository->getDataPengumuman();
 
         return $data;
     }

@@ -25,4 +25,9 @@ class Pengumuman extends Model
     {
         return $this->belongsTo(Files::class, 'gambar_header', 'id_file');
     }
+
+    public function postinger()
+    {
+        return $this->belongsTo(User::class, 'postinger', 'id');
+    }
 }

@@ -18,15 +18,13 @@ class PengumumanController extends Controller
     public function index()
     {
         $title = "Pengumuman";
-        $dataPengaturan = $this->service->getDataPengaturan();
 
-        return view('pages.pengumuman.index', compact('dataPengaturan','title'));
+        return view('pages.pengumuman.index', compact('title'));
     }
 
     public function getData(Request $request){
         if ($request->ajax()) {
-            $data_pengumuman = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater')
-            ->with(['user','file_pengumuman'])->orderBy('created_at', 'DESC');
+            $data_pengumuman = $this->service->getDataPengumuman();
 
             return DataTables::of($data_pengumuman)
                 ->addIndexColumn()
@@ -38,6 +36,9 @@ class PengumumanController extends Controller
                 })
                 ->editColumn('tanggal_post', function ($data_pengumuman) {
                     return $data_pengumuman->created_at->format('d-m-Y');
+                })
+                ->addColumn('is_posting', function ($data_pengumuman) {
+                    return $data_pengumuman->is_posting? '<span class="badge bg-success">posting</span>':'<span class="badge bg-danger">tidak</span>';
                 })
                 ->addColumn('action', function ($data_pengumuman) {
                     return '
@@ -54,8 +55,7 @@ class PengumumanController extends Controller
 
     public function tambahPengumuman(){
         $title = "Tambah Pengumuman";
-        $dataPengaturan = $this->service->getDataPengaturan();
 
-        return view('pages.pengumuman.tambah', compact('dataPengaturan','title'));
+        return view('pages.pengumuman.tambah', compact('title'));
     }
 }

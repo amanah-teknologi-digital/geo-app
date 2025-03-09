@@ -51,6 +51,7 @@
                                 <th nowrap>Judul</th>
                                 <th nowrap>Author</th>
                                 <th nowrap>Tanggal Post</th>
+                                <th nowrap>Posting</th>
                                 <th nowrap>Aksi</th>
                             </tr>
                             </thead>

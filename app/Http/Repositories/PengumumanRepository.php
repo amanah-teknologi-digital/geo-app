@@ -4,11 +4,13 @@ namespace App\Http\Repositories;
 
 use App\Models\Files;
 use App\Models\Pengaturan;
+use App\Models\Pengumuman;
 
 class PengumumanRepository
 {
-    public function getDataPengaturan(){
-        $data = Pengaturan::with(['files_geoletter', 'files_georoom', 'files_geofacility'])->first();
+    public function getDataPengumuman(){
+        $data = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater', 'is_posting')
+            ->with(['user','file_pengumuman','postinger'])->orderBy('created_at', 'DESC');
 
         return $data;
     }
