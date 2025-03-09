@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-12">
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb flex">
                     <li class="breadcrumb-item">
                         <a href="#">Master Data</a>
                     </li>
