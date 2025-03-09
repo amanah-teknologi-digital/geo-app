@@ -15,9 +15,9 @@ $(document).ready(function () {
         },
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'all' },
-            { data: 'judul', name: 'judul', className: 'all' },
-            { data: 'author', name: 'updater', className: 'all' },
-            { data: 'tanggal_post', name: 'created_at', className: 'all' },
+            { data: 'judul', name: 'judul', className: 'all', searchable: true },
+            { data: 'author', name: 'updater', className: 'all', searchable: true },
+            { data: 'tanggal_post', name: 'created_at', className: 'all', searchable: true },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all' }
         ],
         order: [[3, 'desc']],
