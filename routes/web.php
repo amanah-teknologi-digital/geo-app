@@ -24,23 +24,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard-room', [DashboardController::class, 'room'])->middleware('role:1,3,5,6,7')->name('dashboard.room');
     Route::get('/dashboard-facility', [DashboardController::class, 'facility'])->middleware('role:1,4,5,6,7')->name('dashboard.facility');
     //ruangan
-    Route::get('/ruangan', [RuanganController::class, 'index'])->name('ruangan.index');
+    Route::get('/ruangan', [RuanganController::class, 'index'])->name('ruangan');
 
     //peralatan
-    Route::get('/peralatan', [PeralatanController::class, 'index'])->name('peralatan.index');
+    Route::get('/peralatan', [PeralatanController::class, 'index'])->name('peralatan');
 
     //pengumuman
-    Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+    Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman');
+    Route::get('/pengumuman/tambah', [PengumumanController::class, 'tambahPengumuman'])->name('pengumuman.tambah');
+    Route::get('/pengumuman/edit/{id_pengumuman}', [PengumumanController::class, 'editPengumuman'])->name('pengumuman.edit');
+    Route::post('/pengumuman/update', [PengumumanController::class, 'updatePengumuman'])->name('pengumuman.update');
     Route::get('/pengumuman/getdata', [PengumumanController::class, 'getData'])->name('pengumuman.getdata');
 
     //pengaturan
-    Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
+    Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan');
     Route::post('/pengaturan/update', [PengaturanController::class, 'updatePengaturan'])->name('pengaturan.update');
 
     //pengajuan
-    Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->middleware('role:1,2,8')->name('pengajuangeoletter.index');
-    Route::get('/pengajuan-georoom', [PengajuanGeoRoomController::class, 'index'])->middleware('role:1,3,6,7,8')->name('pengajuangeoroom.index');
-    Route::get('/pengajuan-geofacility', [PengajuanGeoFacilityController::class, 'index'])->middleware('role:1,4,5,7,8')->name('pengajuangeofacility.index');
+    Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->middleware('role:1,2,8')->name('pengajuangeoletter');
+    Route::get('/pengajuan-georoom', [PengajuanGeoRoomController::class, 'index'])->middleware('role:1,3,6,7,8')->name('pengajuangeoroom');
+    Route::get('/pengajuan-geofacility', [PengajuanGeoFacilityController::class, 'index'])->middleware('role:1,4,5,7,8')->name('pengajuangeofacility');
 });
 
 Route::middleware(['auth'])->group(function () {

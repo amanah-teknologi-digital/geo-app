@@ -48,6 +48,10 @@
                           $activeClass = 'active open';
                         }
                       }
+                    }else{
+                        if (str_contains($currentRouteName,$menu->slug) and strpos($currentRouteName,$menu->slug) === 0) {
+                          $activeClass = 'active open';
+                        }
                     }
                 @endphp
 

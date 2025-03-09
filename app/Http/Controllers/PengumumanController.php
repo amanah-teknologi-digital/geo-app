@@ -11,15 +11,13 @@ use Yajra\DataTables\DataTables;
 class PengumumanController extends Controller
 {
     private $service;
-    private $title;
     public function __construct()
     {
         $this->service = new PengumumanServices(new PengumumanRepository());
-        $this->title = 'Pengumuman';
     }
     public function index()
     {
-        $title = $this->title;
+        $title = "Pengumuman";
         $dataPengaturan = $this->service->getDataPengaturan();
 
         return view('pages.pengumuman.index', compact('dataPengaturan','title'));
@@ -52,5 +50,12 @@ class PengumumanController extends Controller
         }
 
         return response()->json(['message' => 'Invalid request'], 400);
+    }
+
+    public function tambahPengumuman(){
+        $title = "Tambah Pengumuman";
+        $dataPengaturan = $this->service->getDataPengaturan();
+
+        return view('pages.pengumuman.tambah', compact('dataPengaturan','title'));
     }
 }

@@ -64,7 +64,10 @@ $(document).ready(function () {
             },
             {
                 text: '<i class="icon-base bx bx-plus me-1"></i> <span class="d-none d-lg-inline-block">Tambah Pengumuman</span>',
-                className: 'create-new btn btn-sm btn-primary'
+                className: 'create-new btn btn-sm btn-primary',
+                action: function (e, dt, node, config) {
+                    window.location.href = routeTambah;
+                }
             }
         ]
     });
