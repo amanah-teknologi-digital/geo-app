@@ -37,16 +37,20 @@ class PengumumanController extends Controller
                 })
                 ->addColumn('pembuat', function ($data_pengumuman) {
                     return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengumuman->user->name.
-                        ', pada '.$data_pengumuman->created_at->format('d-m-Y H-i').'</span>';
+                        ',<br> pada '.$data_pengumuman->created_at->format('d-m-Y H-i').'</span>';
                 })
                 ->addColumn('posting', function ($data_pengumuman) {
-                    return $data_pengumuman->is_posting? '<span class="badge badge-xs bg-success">posting</span>':'<span class="badge badge-xs bg-warning">tidak</span>';
+                    return $data_pengumuman->is_posting? '<span class="badge bg-sm text-success">Posting</span>':'<span class="badge bg-sm text-warning">Tidak</span>';
                 })
                 ->addColumn('aksi', function ($data_pengumuman) {
-                    return '
-                        <a href="'.route('pengumuman.edit', $data_pengumuman->id_pengumuman).'" class="btn btn-sm btn-primary"><span class="bx bx-edit-alt"></span>&nbsp;Edit</a>
-                        <button class="btn btn-sm btn-danger delete-user" data-id="'.$data_pengumuman->id_pengumuman.'"><span class="bx bx-trash"></span>&nbsp;Hapus</button>
-                    ';
+                    $html = '<a href="'.route('pengumuman.edit', $data_pengumuman->id_pengumuman).'" class="btn btn-sm btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Edit</span></a>&nbsp;';
+                    $html .= '<button class="btn btn-sm btn-danger delete-pengumuman" data-id="'.$data_pengumuman->id_pengumuman.'" data-bs-toggle="modal" data-bs-target="#modal-hapus"><span class="bx bx-trash"></span><span class="d-none d-lg-inline-block">&nbsp;Hapus</span></button>&nbsp;';
+                    if ($data_pengumuman->is_posting == 1) {
+                        $html .= '<button class="btn btn-sm btn-warning batal-posting" data-id="'.$data_pengumuman->id_pengumuman.'" data-bs-toggle="modal" data-bs-target="#modal-unpost"><span class="bx bx-candles"></span><span class="d-none d-lg-inline-block">&nbsp;Unposting</span></button>';
+                    }else{
+                        $html .= '<button class="btn btn-sm btn-success posting-pengumuman" data-id="'.$data_pengumuman->id_pengumuman.'" data-bs-toggle="modal" data-bs-target="#modal-post"><span class="bx bx-paper-plane"></span><span class="d-none d-lg-inline-block">&nbsp;Posting</span></button>';
+                    }
+                    return $html;
                 })
                 ->rawColumns(['aksi', 'posting', 'pembuat']) // Untuk render tombol HTML
                 ->toJson();
@@ -66,13 +70,13 @@ class PengumumanController extends Controller
             $request->validate([
                 'judul' => ['required'],
                 'editor_quil' => ['required'],
-                'gambar_header' => ['required', 'file', 'images', 'max:5048']
+                'gambar_header' => ['required', 'file', 'image', 'max:5048']
             ],[
                 'judul.required' => 'Judul wajib diisi.',
                 'editor_quil.required' => 'Konten wajib diisi.',
                 'gambar_header.required' => 'Gambar Header wajib diisi.',
                 'gambar_header.file' => 'File yang diunggah tidak valid.',
-                'gambar_header.images' => 'File harus berupa gambar (JPEG, PNG, JPG).',
+                'gambar_header.image' => 'File harus berupa gambar.',
                 'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
             ]);
 
@@ -94,8 +98,13 @@ class PengumumanController extends Controller
     public function editPengumuman($id_pengumuman){
         $title = "Edit Pengumuman";
         $dataPengumuman = $this->service->getDataPengumuman($id_pengumuman);
+        if ($dataPengumuman->is_posting){
+            $is_edit = false;
+        }else{
+            $is_edit = true;
+        }
 
-        return view('pages.pengumuman.edit', compact('dataPengumuman','title'));
+        return view('pages.pengumuman.edit', compact('dataPengumuman', 'is_edit', 'title'));
     }
 
     public function doeditPengumuman(Request $request){
@@ -104,13 +113,13 @@ class PengumumanController extends Controller
                 'id_pengumuman' => ['required'],
                 'judul' => ['required'],
                 'editor_quil' => ['required'],
-                'gambar_header' => ['file', 'mimes:jpeg,png,jpg', 'max:5048']
+                'gambar_header' => ['file', 'image', 'max:5048']
             ],[
                 'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
                 'judul.required' => 'Judul wajib diisi.',
                 'editor_quil.required' => 'Konten wajib diisi.',
                 'gambar_header.file' => 'File yang diunggah tidak valid.',
-                'gambar_header.mimes' => 'File harus berupa gambar (JPEG, PNG, JPG).',
+                'gambar_header.image' => 'File harus berupa gambar.',
                 'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
             ]);
 
@@ -125,6 +134,76 @@ class PengumumanController extends Controller
             $this->service->updatePengumuman($request);
 
             return redirect()->back()->with('success', 'Berhasil Update Pengumuman.');
+        } catch (ValidationException $e) {
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function hapusPengumuman(Request $request){
+        try {
+            $request->validate([
+                'id_pengumuman' => ['required'],
+            ],[
+                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
+            ]);
+
+            $dataPengumuman = $this->service->getDataPengumuman($request->id_pengumuman);
+
+            $this->service->hapusPengumuman($dataPengumuman->id_pengumuman);
+
+            //hapus file gambar header
+            $id_file_gambar = $dataPengumuman->gambar_header;
+            $location = $dataPengumuman->file_pengumuman->location;
+            $this->service->hapusFile($id_file_gambar, $location);
+
+            return redirect()->back()->with('success', 'Berhasil Hapus Pengumuman.');
+        } catch (ValidationException $e) {
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+    public function postingPengumuman(Request $request){
+        try {
+            $request->validate([
+                'id_pengumuman' => ['required'],
+            ],[
+                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
+            ]);
+
+            $id_pengumuman = $request->id_pengumuman;
+
+            $this->service->postingPengumuman($id_pengumuman);
+
+            return redirect()->back()->with('success', 'Berhasil Posting Pengumuman.');
+        } catch (ValidationException $e) {
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function batalPostingPengumuman(Request $request){
+        try {
+            $request->validate([
+                'id_pengumuman' => ['required'],
+            ],[
+                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
+            ]);
+
+            $id_pengumuman = $request->id_pengumuman;
+
+            $this->service->batalPostingPengumuman($id_pengumuman);
+
+            return redirect()->back()->with('success', 'Berhasil Batal Posting Pengumuman.');
         } catch (ValidationException $e) {
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);

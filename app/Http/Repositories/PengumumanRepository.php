@@ -9,8 +9,8 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class PengumumanRepository
 {
     public function getDataPengumuman($id_pengumuman){
-        $data = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater', 'is_posting', 'postinger')
-            ->with(['user','file_pengumuman','postinger'])->orderBy('created_at', 'DESC');
+        $data = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater', 'is_posting', 'tgl_posting', 'postinger')
+            ->with(['user','file_pengumuman','postinger_user'])->orderBy('created_at', 'DESC');
 
         if (!empty($id_pengumuman)) {
             $data = $data->where('id_pengumuman', $id_pengumuman)->first();
@@ -68,6 +68,40 @@ class PengumumanRepository
                 'is_private' => 0,
                 'updater' => auth()->user()->id
             ]);
+        }
+    }
+
+    public function hapusFile($id_file){
+        $file = Files::find($id_file);
+        if ($file) {
+            $file->delete();
+        }
+    }
+
+    public function hapusPengumuman($id_pengumuman){
+        $pengumuman = Pengumuman::find($id_pengumuman);
+        if ($pengumuman) {
+            $pengumuman->delete();
+        }
+    }
+
+    public function postingPengumuman($id_pengumuman){
+        $pengumuman = Pengumuman::find($id_pengumuman);
+        if ($pengumuman) {
+            $pengumuman->is_posting = 1;
+            $pengumuman->tgl_posting = now();
+            $pengumuman->postinger = auth()->user()->id;
+            $pengumuman->save();
+        }
+    }
+
+    public function batalPostingPengumuman($id_pengumuman){
+        $pengumuman = Pengumuman::find($id_pengumuman);
+        if ($pengumuman) {
+            $pengumuman->is_posting = 0;
+            $pengumuman->tgl_posting = null;
+            $pengumuman->postinger = null;
+            $pengumuman->save();
         }
     }
 }

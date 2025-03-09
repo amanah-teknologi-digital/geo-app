@@ -16,7 +16,7 @@ $(document).ready(function () {
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'all text-center' },
             { data: 'judul', name: 'judul', className: 'all', searchable: true },
-            { data: 'pembuat', name: 'created_at', className: 'all', searchable: true },
+            { data: 'pembuat', name: 'created_at', className: 'all text-center', searchable: true },
             { data: 'posting', name: 'is_posting', className: 'all text-center', searchable: false },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all text-center nowrap' }
         ],
@@ -74,4 +74,22 @@ $(document).ready(function () {
         ]
     });
     $('div.head-label').html('<span class="card-header p-0"><i class="tf-icons bx bx-book-content"></i>&nbsp;List Pengumuman</span>');
+
+    $('#modal-hapus').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id'); // Ambil nilai data-id
+        $('#id_hapus').val(dataId); // Masukkan ke modal
+    });
+
+    $('#modal-unpost').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id'); // Ambil nilai data-id
+        $('#id_unposting').val(dataId); // Masukkan ke modal
+    });
+
+    $('#modal-post').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id'); // Ambil nilai data-id
+        $('#id_posting').val(dataId); // Masukkan ke modal
+    });
 })

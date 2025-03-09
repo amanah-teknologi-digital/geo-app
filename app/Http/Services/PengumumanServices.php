@@ -6,6 +6,7 @@ use App\Http\Repositories\PengumumanRepository;
 use App\Models\Files;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PengumumanServices
 {
@@ -56,4 +57,42 @@ class PengumumanServices
         }
     }
 
+    public function hapusFile($id_file, $location){
+        try {
+            Storage::disk('public')->delete($location);
+
+            //hapus file data di database
+            $this->repository->hapusFile($id_file);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function hapusPengumuman($id_pengumuman){
+        try {
+            $this->repository->hapusPengumuman($id_pengumuman);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function postingPengumuman($id_pengumuman){
+        try {
+            $this->repository->postingPengumuman($id_pengumuman);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function batalPostingPengumuman($id_pengumuman){
+        try {
+            $this->repository->batalPostingPengumuman($id_pengumuman);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
 }

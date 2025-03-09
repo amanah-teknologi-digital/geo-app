@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pengumuman extends Model
 {
     protected $table = 'pengumuman';
+    public $timestamps = false;
     protected $primaryKey = 'id_pengumuman';
     public $incrementing = false;
     protected $fillable = [
@@ -21,6 +22,11 @@ class Pengumuman extends Model
         'tgl_posting'
     ];
 
+    protected $casts = [
+        'tgl_posting' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
     public function user()
     {
         return $this->belongsTo(User::class, 'updater', 'id');
@@ -30,7 +36,7 @@ class Pengumuman extends Model
         return $this->belongsTo(Files::class, 'gambar_header', 'id_file');
     }
 
-    public function postinger()
+    public function postinger_user()
     {
         return $this->belongsTo(User::class, 'postinger', 'id');
     }

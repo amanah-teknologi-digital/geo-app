@@ -58,7 +58,7 @@
                         <div class="row g-6">
                             <div>
                                 <label for="judul" class="form-label">Judul Pengumuman <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="judul" name="judul" placeholder="judul" value="{{ $dataPengumuman->judul }}" required autocomplete="off" autofocus>
+                                <input type="text" class="form-control" id="judul" name="judul" placeholder="judul" value="{{ $dataPengumuman->judul }}" required autocomplete="off" autofocus {{ !$is_edit ? 'readonly':'' }}>
                             </div>
                             <div>
                                 <label for="isi_pengumuman" class="form-label">Isi Pengumuman <span class="text-danger">*</span></label>
@@ -81,16 +81,17 @@
                                         Lihat file
                                     </button>
                                 </div>
-
-                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
-                                <input type="file" class="form-control" id="gambar_header" name="gambar_header" accept="image/*">
+                                @if($is_edit)
+                                    <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
+                                    <input type="file" class="form-control" id="gambar_header" name="gambar_header" accept="image/*">
+                                @endif
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mt-6">
-                            @if($dataPengumuman->is_posting)
+                            @if(!$is_edit)
                                 <div class="text-muted">
-                                    Posting by: <strong>{{ $dataPengumuman->postinger->name }}</strong> | <span>{{ $dataPengumuman->tgl_posting->format('d-m-Y H:i') }}</span>
+                                    Posting by: <strong>{{ $dataPengumuman->postinger_user->name }}</strong> | <span>{{ $dataPengumuman->tgl_posting->format('d-m-Y H:i') }}</span>
                                 </div>
                             @else
                                 <button type="submit" class="btn btn-primary me-3">Update</button>
