@@ -16,10 +16,11 @@ $(document).ready(function () {
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'all' },
             { data: 'judul', name: 'judul', className: 'all' },
-            { data: 'author', name: 'author', className: 'all' },
-            { data: 'tanggal_post', name: 'tanggal_post', className: 'all' },
+            { data: 'author', name: 'updater', className: 'all' },
+            { data: 'tanggal_post', name: 'created_at', className: 'all' },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all' }
         ],
+        order: [[3, 'desc']],
         dom:
             //'Bfrtip',
             '<"mb-5 pb-4 border-bottom d-flex justify-content-between align-items-center"<"head-label text-center"><"dt-action-buttons text-end"B>><"d-flex mb-5 justify-content-between align-items-center row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex mt-5 justify-content-between row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',

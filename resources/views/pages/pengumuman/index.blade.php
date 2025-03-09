@@ -47,11 +47,11 @@
                         <table id="datatable" class="datatables-basic table table-bordered">
                             <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Judul</th>
-                                <th>Author</th>
-                                <th>Tanggal Post</th>
-                                <th>Aksi</th>
+                                <th nowrap>No</th>
+                                <th nowrap>Judul</th>
+                                <th nowrap>Author</th>
+                                <th nowrap>Tanggal Post</th>
+                                <th nowrap>Aksi</th>
                             </tr>
                             </thead>
                         </table>
