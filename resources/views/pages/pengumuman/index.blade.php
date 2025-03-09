@@ -13,6 +13,14 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Master Data</a>
+                    </li>
+                    <li class="breadcrumb-item active">Pengumuman</li>
+                </ol>
+            </nav>
             @if ($errors->any())
                 @foreach ($errors->all() as $error)
                     <div class="alert alert-danger alert-dismissible" role="alert">

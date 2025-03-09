@@ -13,6 +13,17 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Master Data</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('pengumuman') }}">Pengumuman</a>
+                    </li>
+                    <li class="breadcrumb-item active">Tambah</li>
+                </ol>
+            </nav>
             @if ($errors->any())
                 @foreach ($errors->all() as $error)
                     <div class="alert alert-danger alert-dismissible" role="alert">
@@ -37,7 +48,6 @@
                 <div class="card-body pt-4">
 
                 </div>
-                <!-- /Account -->
             </div>
         </div>
     </div>
