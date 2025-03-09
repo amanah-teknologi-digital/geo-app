@@ -38,12 +38,11 @@
                     <table id="datatable" class="datatables-basic table table-bordered">
                         <thead>
                         <tr>
-                            <th>id</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Date</th>
-                            <th>Salary</th>
-                            <th>Status</th>
+                            <th>No</th>
+                            <th>Judul</th>
+                            <th>Author</th>
+                            <th>Tanggal Post</th>
+                            <th>Aksi</th>
                         </tr>
                         </thead>
                     </table>
@@ -54,5 +53,8 @@
     </div>
 @endsection
 @section('page-script')
+    <script>
+        let routeName = "{{ route('pengumuman.getdata') }}"; // Ensure route name is valid
+    </script>
     @vite('resources/views/script_view/list_pengumuman.js')
 @endsection

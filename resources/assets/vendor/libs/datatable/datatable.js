@@ -9,7 +9,7 @@ import pdfmake from 'pdfmake/build/pdfmake.min'
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
 try {
-    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    // pdfMake.vfs = pdfFonts.pdfMake.vfs;
     DataTable.Buttons.jszip(jszip);
     DataTable.Buttons.pdfMake(pdfmake);
     window.DataTable = DataTable;
