@@ -4,6 +4,7 @@ $(document).ready(function () {
         serverSide: true,
         ajax: routeName,
         responsive: true,
+        scrollX: true,
         language: {
             emptyTable: "Data tidak ditemukan",
             zeroRecords: "Tidak ada hasil yang cocok",
@@ -13,11 +14,11 @@ $(document).ready(function () {
             lengthMenu: "Tampilkan _MENU_ data per halaman"
         },
         columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'judul', name: 'judul' },
-            { data: 'author', name: 'author' },
-            { data: 'tanggal_post', name: 'tanggal_post' },
-            { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'all' },
+            { data: 'judul', name: 'judul', className: 'all' },
+            { data: 'author', name: 'author', className: 'all' },
+            { data: 'tanggal_post', name: 'tanggal_post', className: 'all' },
+            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all' }
         ],
         dom:
             //'Bfrtip',
