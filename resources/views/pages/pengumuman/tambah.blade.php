@@ -66,7 +66,7 @@
                                     <div class="error-container" id="error-quil"></div>
                                 </div>
                                 <div>
-                                    <label for="gambar_header" class="form-label">Gambar Header <span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
+                                    <label for="gambar_header" class="form-label">Gambar Header <span class="text-danger">*</span><span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
                                     <input type="file" class="form-control" id="gambar_header" name="gambar_header" accept="image/*">
                                 </div>
                             </div>

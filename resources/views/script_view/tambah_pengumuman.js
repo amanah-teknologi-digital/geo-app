@@ -56,6 +56,7 @@ $(document).ready(function () {
                 quillRequired: true
             },
             gambar_header: {
+                required: true,
                 filesize: 5242880,
                 fileextension: ['jpg', 'jpeg', 'png', 'gif']
             }
@@ -68,6 +69,7 @@ $(document).ready(function () {
                 required: "Konten tidak boleh kosong"
             },
             gambar_header: {
+                required: "Gambar Header wajib diisi",
                 filesize: "Ukuran file maksimal 5 MB",
                 fileextension: "Hanya file JPG, JPEG, PNG, GIF, dan PDF yang diperbolehkan"
             }

@@ -21,26 +21,27 @@ class PengumumanServices
         return $data;
     }
 
-    public function updatePengaturan($request){
+    public function tambahPengumuman($request, $id_file){
         try {
-            $this->repository->updatePengaturan($request);
+            $this->repository->tambahPengumuman($request, $id_file);
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());
         }
     }
 
-    public function createOrUpdateFile($file, $id_file, $jenis_file){
+    public function tambahFile($file, $id_file){
+
         try {
             $fileName = $file->getClientOriginalName();
             $fileMime = $file->getClientMimeType();
             $fileExt = $file->getClientOriginalExtension();
             $newFileName = $id_file.'.'.$fileExt;
             $fileSize = $file->getSize();
-            $filePath = $file->storeAs('sop', $newFileName, 'public');
+            $filePath = $file->storeAs('pengumuman', $newFileName, 'public');
 
             //save file data ke database
-            $this->repository->createOrUpdateFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize, $jenis_file);
+            $this->repository->createOrUpdateFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize);
         }catch(Exception $e){
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

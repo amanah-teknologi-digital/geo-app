@@ -3,50 +3,32 @@
 namespace App\Http\Repositories;
 
 use App\Models\Files;
-use App\Models\Pengaturan;
 use App\Models\Pengumuman;
+use Ramsey\Uuid\Nonstandard\Uuid;
 
 class PengumumanRepository
 {
     public function getDataPengumuman(){
-        $data = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater', 'is_posting')
+        $data = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater', 'is_posting', 'postinger')
             ->with(['user','file_pengumuman','postinger'])->orderBy('created_at', 'DESC');
 
         return $data;
     }
 
-    public function updatePengaturan($request){
-        $pengaturan = Pengaturan::first(); // Ambil data pertama di tabel Pengaturan
+    public function tambahPengumuman($request, $id_file){
+        $id_pengumuman = strtoupper(Uuid::uuid4()->toString());
 
-        if ($pengaturan) {
-            $pengaturan->alamat = $request->alamat;
-            $pengaturan->admin_geoletter = $request->admin_geoletter;
-            $pengaturan->admin_ruang = $request->admin_ruang;
-            $pengaturan->admin_peralatan = $request->admin_peralatan;
-            $pengaturan->link_yt = $request->link_yt;
-            $pengaturan->link_fb = $request->link_fb;
-            $pengaturan->link_ig = $request->link_ig;
-            $pengaturan->link_linkedin = $request->link_linkedin;
-            $pengaturan->updater = auth()->user()->id;
-            $pengaturan->created_at = now();
-            $pengaturan->save(); // Simpan perubahan
-        } else {
-            Pengaturan::create([
-                'alamat' => $request->alamat,
-                'admin_geoletter' => $request->admin_geoletter,
-                'admin_ruang' => $request->admin_ruang,
-                'admin_peralatan' => $request->admin_peralatan,
-                'link_yt' => $request->link_yt,
-                'link_fb' => $request->link_fb,
-                'link_ig' => $request->link_ig,
-                'link_linkedin' => $request->link_linkedin,
-                'updater' => auth()->user()->id,
-                'updated_at' => now()
-            ]);
-        }
+        Pengumuman::create([
+            'id_pengumuman' => $id_pengumuman,
+            'judul' => $request->judul,
+            'data' => $request->editor_quil,
+            'gambar_header' => $id_file,
+            'created_at' => now(),
+            'updater' => auth()->user()->id
+        ]);
     }
 
-    public function createOrUpdateFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize, $jenis_file){
+    public function createOrUpdateFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize){
         $file = Files::find($id_file);
 
         if ($file) {
@@ -71,10 +53,6 @@ class PengumumanRepository
                 'is_private' => 0,
                 'updater' => auth()->user()->id
             ]);
-
-            $dataPengaturan = Pengaturan::first();
-            $dataPengaturan->$jenis_file = $id_file;
-            $dataPengaturan->save();
         }
     }
 }

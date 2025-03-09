@@ -10,11 +10,15 @@ class Pengumuman extends Model
     protected $primaryKey = 'id_pengumuman';
     public $incrementing = false;
     protected $fillable = [
+        'id_pengumuman',
         'judul',
         'data',
         'gambar_header',
         'created_at',
-        'updater'
+        'updater',
+        'postinger',
+        'is_posting',
+        'tgl_posting'
     ];
 
     public function user()
