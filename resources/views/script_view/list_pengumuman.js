@@ -3,12 +3,20 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: routeName,
+        language: {
+            emptyTable: "Data tidak ditemukan",
+            zeroRecords: "Tidak ada hasil yang cocok",
+            info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+            infoEmpty: "Menampilkan _END_ dari _TOTAL_ data",
+            search: "Cari:",
+            lengthMenu: "Tampilkan _MENU_ data per halaman"
+        },
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'judul' },
-            { data: 'author' },
-            { data: 'tanggal_post' },
-            { data: 'aksi' }
+            { data: 'judul', name: 'judul' },
+            { data: 'author', name: 'author' },
+            { data: 'tanggal_post', name: 'tanggal_post' },
+            { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
         ],
         dom:
             //'Bfrtip',
