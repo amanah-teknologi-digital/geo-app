@@ -62,6 +62,8 @@
                                 <div>
                                     <label for="isi_pengumuman" class="form-label">Isi Pengumuman <span class="text-danger">*</span></label>
                                     <div id="editor_pengumuman" style="height: 250px;"></div>
+                                    <input type="hidden" name="editor_quil" id="editor_quil">
+                                    <div class="error-container" id="error-quil"></div>
                                 </div>
                                 <div>
                                     <label for="gambar_header" class="form-label">Gambar Header <span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
