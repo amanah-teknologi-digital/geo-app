@@ -3,6 +3,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: routeName,
+        responsive: true,
         language: {
             emptyTable: "Data tidak ditemukan",
             zeroRecords: "Tidak ada hasil yang cocok",

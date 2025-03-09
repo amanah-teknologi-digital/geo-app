@@ -35,17 +35,19 @@
             @endif
             <div class="card mb-6">
                 <div class="card-body pt-4">
-                    <table id="datatable" class="datatables-basic table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Judul</th>
-                            <th>Author</th>
-                            <th>Tanggal Post</th>
-                            <th>Aksi</th>
-                        </tr>
-                        </thead>
-                    </table>
+                    <div class="table-responsive">
+                        <table id="datatable" class="datatables-basic table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Judul</th>
+                                <th>Author</th>
+                                <th>Tanggal Post</th>
+                                <th>Aksi</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
                 <!-- /Account -->
             </div>
