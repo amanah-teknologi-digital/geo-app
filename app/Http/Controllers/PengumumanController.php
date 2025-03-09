@@ -35,22 +35,20 @@ class PengumumanController extends Controller
                 ->addColumn('judul', function ($data_pengumuman) {
                     return $data_pengumuman->judul;
                 })
-                ->addColumn('author', function ($data_pengumuman) {
-                    return $data_pengumuman->user->name;
-                })
-                ->editColumn('tanggal_post', function ($data_pengumuman) {
-                    return $data_pengumuman->created_at->format('d-m-Y');
+                ->addColumn('pembuat', function ($data_pengumuman) {
+                    return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengumuman->user->name.
+                        ', pada '.$data_pengumuman->created_at->format('d-m-Y H-i').'</span>';
                 })
                 ->addColumn('posting', function ($data_pengumuman) {
-                    return $data_pengumuman->is_posting? '<span class="badge bg-success">posting</span>':'<span class="badge bg-danger">tidak</span>';
+                    return $data_pengumuman->is_posting? '<span class="badge badge-xs bg-success">posting</span>':'<span class="badge badge-xs bg-warning">tidak</span>';
                 })
                 ->addColumn('aksi', function ($data_pengumuman) {
                     return '
-                        <a href="'.url('users/edit/'.$data_pengumuman->id_pengumuman).'" class="btn btn-sm btn-primary">Edit</a>
-                        <button class="btn btn-sm btn-danger delete-user" data-id="'.$data_pengumuman->id_pengumuman.'">Delete</button>
+                        <a href="'.route('pengumuman.edit', $data_pengumuman->id_pengumuman).'" class="btn btn-sm btn-primary"><span class="bx bx-edit-alt"></span>&nbsp;Edit</a>
+                        <button class="btn btn-sm btn-danger delete-user" data-id="'.$data_pengumuman->id_pengumuman.'"><span class="bx bx-trash"></span>&nbsp;Hapus</button>
                     ';
                 })
-                ->rawColumns(['aksi', 'posting']) // Untuk render tombol HTML
+                ->rawColumns(['aksi', 'posting', 'pembuat']) // Untuk render tombol HTML
                 ->toJson();
         }
 
@@ -68,13 +66,13 @@ class PengumumanController extends Controller
             $request->validate([
                 'judul' => ['required'],
                 'editor_quil' => ['required'],
-                'gambar_header' => ['required', 'file', 'mimes:jpeg,png,jpg', 'max:5048']
+                'gambar_header' => ['required', 'file', 'images', 'max:5048']
             ],[
                 'judul.required' => 'Judul wajib diisi.',
                 'editor_quil.required' => 'Konten wajib diisi.',
                 'gambar_header.required' => 'Gambar Header wajib diisi.',
                 'gambar_header.file' => 'File yang diunggah tidak valid.',
-                'gambar_header.mimes' => 'File harus berupa gambar (JPEG, PNG, JPG).',
+                'gambar_header.images' => 'File harus berupa gambar (JPEG, PNG, JPG).',
                 'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
             ]);
 
@@ -84,6 +82,49 @@ class PengumumanController extends Controller
             $this->service->tambahPengumuman($request, $id_file_gambar);
 
             return redirect(route('pengumuman'))->with('success', 'Berhasil Tambah Pengumuman.');
+        } catch (ValidationException $e) {
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function editPengumuman($id_pengumuman){
+        $title = "Edit Pengumuman";
+        $dataPengumuman = $this->service->getDataPengumuman($id_pengumuman);
+
+        return view('pages.pengumuman.edit', compact('dataPengumuman','title'));
+    }
+
+    public function doeditPengumuman(Request $request){
+        try {
+            $request->validate([
+                'id_pengumuman' => ['required'],
+                'judul' => ['required'],
+                'editor_quil' => ['required'],
+                'gambar_header' => ['file', 'mimes:jpeg,png,jpg', 'max:5048']
+            ],[
+                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
+                'judul.required' => 'Judul wajib diisi.',
+                'editor_quil.required' => 'Konten wajib diisi.',
+                'gambar_header.file' => 'File yang diunggah tidak valid.',
+                'gambar_header.mimes' => 'File harus berupa gambar (JPEG, PNG, JPG).',
+                'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
+            ]);
+
+            $dataPengumuman = $this->service->getDataPengumuman($request->id_pengumuman);
+
+            //save file gambar header
+            $id_file_gambar = $dataPengumuman->gambar_header;
+            if ($request->hasFile('gambar_header')) {
+                $this->service->tambahFile($request->file('gambar_header'), $id_file_gambar);
+            }
+
+            $this->service->updatePengumuman($request);
+
+            return redirect()->back()->with('success', 'Berhasil Update Pengumuman.');
         } catch (ValidationException $e) {
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);

@@ -15,8 +15,8 @@ class PengumumanServices
         $this->repository = $repository;
     }
 
-    public function getDataPengumuman(){
-        $data = $this->repository->getDataPengumuman();
+    public function getDataPengumuman($id_pengumuman = null){
+        $data = $this->repository->getDataPengumuman($id_pengumuman);
 
         return $data;
     }
@@ -30,8 +30,16 @@ class PengumumanServices
         }
     }
 
-    public function tambahFile($file, $id_file){
+    public function updatePengumuman($request){
+        try {
+            $this->repository->updatePengumuman($request);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
 
+    public function tambahFile($file, $id_file){
         try {
             $fileName = $file->getClientOriginalName();
             $fileMime = $file->getClientMimeType();
