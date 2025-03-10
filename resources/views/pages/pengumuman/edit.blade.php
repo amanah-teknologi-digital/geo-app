@@ -91,13 +91,17 @@
                         <div class="d-flex justify-content-between align-items-center mt-6">
                             @if(!$is_edit)
                                 <div class="text-muted">
-                                    Posting by: <strong>{{ $dataPengumuman->postinger_user->name }}</strong> | <span>{{ $dataPengumuman->tgl_posting->format('d-m-Y H:i') }}</span>
+                                    <small>
+                                        Posting by: <strong>{{ $dataPengumuman->postinger_user->name }}</strong> | <span>{{ $dataPengumuman->tgl_posting->format('d-m-Y H:i') }}</span>
+                                    </small>
                                 </div>
                             @else
                                 <button type="submit" class="btn btn-primary me-3">Update</button>
                             @endif
                             <div class="text-muted">
-                                Updated by: <strong>{{ $dataPengumuman->user->name }}</strong> | <span>{{ ($dataPengumuman->updated_at ?? $dataPengumuman->created_at)->format('d-m-Y H:i') }}</span>
+                                <small>
+                                    Updated by: <strong>{{ $dataPengumuman->user->name }}</strong> | <span>{{ ($dataPengumuman->updated_at ?? $dataPengumuman->created_at)->format('d-m-Y H:i') }}</span>
+                                </small>
                             </div>
                         </div>
                     </form>
