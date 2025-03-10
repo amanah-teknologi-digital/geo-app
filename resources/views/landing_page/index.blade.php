@@ -123,51 +123,32 @@
         </div><!-- End Section Title -->
 
         <div class="container">
-            <div class="row gy-4">
-                <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                    <div class="team-member d-flex flex-column">
-                        <div class="member-img" style="height: 50%">
-                            <img src="{{ asset('landing_page_rss/gedung.png') }}" class="img-fluid" alt="" style="height: 100%">
+            <div class="d-flex flex-column flex-md-row w-100 gap-3 justify-content-{{ count($pengumumanterbaru) == 0 ? 'center': (count($pengumumanterbaru) == 1 ? 'center' : (count($pengumumanterbaru) == 2 ? 'center' : 'between')) }}">
+                @if(count($pengumumanterbaru) > 0)
+                    @foreach($pengumumanterbaru as $rows)
+                        <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                            <div class="team-member d-flex flex-column">
+                                <div class="member-img" style="height: 50%">
+                                    <img src="{{ asset('landing_page_rss/gedung.png') }}" class="img-fluid" alt="" style="height: 100%">
+                                </div>
+                                <div class="member-info">
+                                    <h4>Hari Libur Layanan</h4>
+                                    <span class="mt-3 mb-3 text-black">Velit aut quia fugit et et. Dolorum ea voluptate vel tempore tenetur ipsa quae auasa ... <i><a href="#" class="badge bg-info">Lihat selengkapnya <i class="bi bi-arrow-right"></i></a></i></span>
+                                </div>
+                                <span class="mt-auto text-end" style="padding: 10px 15px 20px 15px;"><i class="text-muted" style="font-size: smaller">Admin, 2 menit yang lalu</i></span>
+                            </div>
                         </div>
-                        <div class="member-info">
-                            <h4>Hari Libur Layanan</h4>
-                            <span class="mt-3 mb-3 text-black">Velit aut quia fugit et et. Dolorum ea voluptate vel tempore tenetur ipsa quae auasa ... <i><a href="#" class="badge bg-info">Lihat selengkapnya <i class="bi bi-arrow-right"></i></a></i></span>
-                        </div>
-                        <span class="mt-auto text-end" style="padding: 10px 15px 20px 15px;"><i class="text-muted" style="font-size: smaller">Admin, 2 menit yang lalu</i></span>
-                    </div>
-                </div><!-- End Chef Team Member -->
-
-                <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                    <div class="team-member d-flex flex-column">
-                        <div class="member-img" style="height: 50%">
-                            <img src="{{ asset('landing_page_rss/room_img.png') }}" class="img-fluid" alt="">
-                        </div>
-                        <div class="member-info">
-                            <h4>Info Magang Lab Termodinamika</h4>
-                            <span span class="mt-3 mb-3 text-black">Velit aut quia fugit et et. Dolorum ea voluptate vel tempore tenetur ipsa quae auasa ... <i><a href="#" class="badge bg-info">Lihat selengkapnya <i class="bi bi-arrow-right"></i></a></i></span>
-                        </div>
-                        <span class="mt-auto text-end" style="padding: 10px 15px 20px 15px;"><i class="text-muted" style="font-size: smaller">Admin, 2 hari yang lalu</i></span>
-                    </div>
-                </div><!-- End Chef Team Member -->
-
-                <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-                    <div class="team-member d-flex flex-column">
-                        <div class="member-img" style="height: 50%">
-                            <img src="{{ asset('landing_page_rss/geoletter_img.png') }}" class="img-fluid" alt="">
-                        </div>
-                        <div class="member-info">
-                            <h4>Peminjaman Ruangan</h4>
-                            <span class="mt-3 mb-3 text-black">Velit aut quia fugit et et. Dolorum ea voluptate vel tempore tenetur ipsa srwweor kjuwet juter grtes eno huariaby greeew... <i><a href="#" class="badge bg-info">Lihat selengkapnya <i class="bi bi-arrow-right"></i></a></i></span>
-                        </div>
-                        <span class="mt-auto text-end" style="padding: 10px 15px 20px 15px;"><i class="text-muted" style="font-size: smaller">Admin, 3 hari yang lalu</i></span>
-                    </div>
-                </div><!-- End Chef Team Member -->
-
+                    @endforeach
+                @else
+                    <div class="alert alert-info" data-aos="fade-up" data-aos-delay="100">Belum ada pengumuman terkini!</div>
+                @endif
             </div>
         </div>
-        <div class="text-center pt-5" data-aos="fade-up" data-aos-delay="100">
-            <a href="#" class="more-btn animated"><span>Lihat Semua Pengumuman</span> <i class="bi bi-chevron-right"></i></a>
-        </div>
+        @if(count($pengumumanterbaru) > 0)
+            <div class="text-center pt-5" data-aos="fade-up" data-aos-delay="100">
+                <a href="#" class="more-btn animated"><span>Lihat Semua Pengumuman</span> <i class="bi bi-chevron-right"></i></a>
+            </div>
+        @endif
     </section>
 
     <!-- Tentang Section -->
