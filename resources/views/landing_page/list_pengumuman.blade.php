@@ -37,7 +37,7 @@
     ======================================================== -->
     <style>
         .content-wrapper {
-            max-width: 900px;
+            max-width: 1024px;
             margin: auto;
             background: white;
             padding: 20px;
