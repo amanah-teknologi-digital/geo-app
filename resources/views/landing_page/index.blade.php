@@ -35,41 +35,6 @@
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
-</head>
-
-<body class="index-page">
-
-<header id="header" class="header d-flex align-items-center sticky-top" style="color: var(--color-default);">
-    <div class="container position-relative d-flex align-items-center justify-content-between" >
-
-        <a href="" class="logo d-flex align-items-center me-auto me-xl-0 order-first">
-            <img src="{{ asset('landing_page_rss/teknikgeo.png') }}" alt="">
-            <h1 class="sitename">GeoReserve</h1>
-        </a>
-
-        <nav id="navmenu" class="navmenu d-flex align-content-center" >
-            <ul>
-                <li><a href="#hero" class="active"><i class="bi bi-house-door-fill"></i>&nbsp;Halaman Utama<br></a></li>
-                <li><a href="#pengumuman"><i class="bi bi-newspaper"></i>&nbsp;Pengumuman</a></li>
-                <li><a href="#layanan"><i class="bi bi-info-circle-fill"></i>&nbsp;Layanan Support</a></li>
-{{--                <li><a href="#footer"><i class="bi bi-people-fill"></i>&nbsp;Kontak</a></li>--}}
-                @auth
-                    <li>
-                        <button class="btn btn-sm btn-primary w-100" style="background-color: var(--color-default)"><a style="color: white !important;" href="{{ route('dashboard') }}"><i class="bi bi-house"></i>&nbsp;Dashboard</a></button>
-                    </li>
-                @else
-                    <li>
-                        <button class="btn btn-sm btn-success w-100"><a href="{{ route('login') }}" style="color: white !important;"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a></button>
-                    </li>
-                    <li>
-                        <button class="btn btn-sm btn-primary w-100" style="background-color: var(--color-default) !important;"><a style="color: white !important;" href="{{ route('register') }}"><i class="bi bi-journal-bookmark-fill"></i>&nbsp;Registrasi</a></button>
-                    </li>
-                @endauth
-            </ul>
-            <i class="mobile-nav-toggle d-xl-none bi bi-list d-flex order-last"></i>
-        </nav>
-
-    </div>
     <style>
         .col-bg {
             position: relative;
@@ -141,6 +106,41 @@
             border-top: 1px solid #eee;
         }
     </style>
+</head>
+
+<body class="index-page">
+
+<header id="header" class="header d-flex align-items-center sticky-top" style="color: var(--color-default);">
+    <div class="container position-relative d-flex align-items-center justify-content-between" >
+
+        <a href="" class="logo d-flex align-items-center me-auto me-xl-0 order-first">
+            <img src="{{ asset('landing_page_rss/teknikgeo.png') }}" alt="">
+            <h1 class="sitename">GeoReserve</h1>
+        </a>
+
+        <nav id="navmenu" class="navmenu d-flex align-content-center" >
+            <ul>
+                <li><a href="#hero" class="active"><i class="bi bi-house-door-fill"></i>&nbsp;Halaman Utama<br></a></li>
+                <li><a href="#pengumuman"><i class="bi bi-newspaper"></i>&nbsp;Pengumuman</a></li>
+                <li><a href="#layanan"><i class="bi bi-info-circle-fill"></i>&nbsp;Layanan Support</a></li>
+{{--                <li><a href="#footer"><i class="bi bi-people-fill"></i>&nbsp;Kontak</a></li>--}}
+                @auth
+                    <li>
+                        <button class="btn btn-sm btn-primary w-100" style="background-color: var(--color-default)"><a style="color: white !important;" href="{{ route('dashboard') }}"><i class="bi bi-house"></i>&nbsp;Dashboard</a></button>
+                    </li>
+                @else
+                    <li>
+                        <button class="btn btn-sm btn-success w-100"><a href="{{ route('login') }}" style="color: white !important;"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a></button>
+                    </li>
+                    <li>
+                        <button class="btn btn-sm btn-primary w-100" style="background-color: var(--color-default) !important;"><a style="color: white !important;" href="{{ route('register') }}"><i class="bi bi-journal-bookmark-fill"></i>&nbsp;Registrasi</a></button>
+                    </li>
+                @endauth
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list d-flex order-last"></i>
+        </nav>
+
+    </div>
 </header>
 
 <main class="main">

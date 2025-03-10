@@ -35,6 +35,35 @@
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
+    <style>
+        .content-wrapper {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .news-image {
+            width: 100%;
+            max-height: 400px; /* Membatasi tinggi gambar */
+            object-fit: cover; /* Memastikan gambar tetap rapi */
+            border-radius: 8px;
+        }
+        .news-meta {
+            font-size: 14px;
+            color: gray;
+        }
+        .news-meta i {
+            margin-right: 5px;
+        }
+        .ql-editor {
+            padding: 0 !important;
+        }
+    </style>
+    @vite([
+        'resources/assets/vendor/libs/jquery/jquery.js',
+        'resources/views/script_view/lihat_pengumuman.js'
+        ])
 </head>
 
 <body class="index-page">
@@ -68,42 +97,15 @@
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list d-flex order-last"></i>
         </nav>
-
     </div>
-    <style>
-        .content-wrapper {
-            max-width: 900px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .news-image {
-            width: 100%;
-            max-height: 400px; /* Membatasi tinggi gambar */
-            object-fit: cover; /* Memastikan gambar tetap rapi */
-            border-radius: 8px;
-        }
-        .news-meta {
-            font-size: 14px;
-            color: gray;
-        }
-        .news-meta i {
-            margin-right: 5px;
-        }
-    </style>
 </header>
 
 <main class="main">
-    <section id="pengumuman" class="pengumuman section light-background" style="padding-top:30px; ">
-        <div class="container section-title" data-aos="fade-up">
-            <h4 class="font-bold header-section" ><i class="bi bi-newspaper"></i>&nbsp;Pengumuman</h4>
-        </div><!-- End Section Title -->
-
-        <div class="container">
-            <div class="row justify-content-center g-4" style="min-height: 50vh">
+    <section id="pengumuman" class="pengumuman section light-background" style="padding-top:50px; ">
+        <div class="container mt-0">
+            <div class="row justify-content-center" style="min-height: 50vh">
                 <div class="content-wrapper shadow" data-aos="fade-up">
-                    <a href="{{ route('landingpage') }}" class="btn btn-sm btn-warning" >← Kembali ke landing page</a>
+                    <a href="{{ route('landingpage') }}" class="btn btn-sm btn-outline-secondary" ><i class="bi bi-box-arrow-left"></i> Kembali ke landing page</a>
                     <h2 class="mt-2 fw-bold">{{ $data->judul }}</h2>
 
                     <div class="news-meta d-flex align-items-center gap-3 my-2">
@@ -119,9 +121,7 @@
                     @endphp
                     <img src="{{ $imageUrl }}" class="news-image mt-3" alt="{{ $data->judul }}">
 
-                    <p class="mt-4">
-                        {!! $data->data !!}
-                    </p>
+                    <div id="editor_pengumuman" class="mt-4" style="border: none !important;padding: 0!important;">{!! $data->data !!}</div>
                 </div>
             </div>
         </div>
