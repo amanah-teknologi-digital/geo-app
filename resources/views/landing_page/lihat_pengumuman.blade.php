@@ -71,87 +71,58 @@
 
     </div>
     <style>
-        .col-bg {
-            position: relative;
-            background-image: url({{ asset('landing_page_rss/gedung.png') }});
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            color: white;
-            padding: 50px;
-        }
-
-        /* Overlay semi-transparan */
-        .col-bg::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Warna hitam dengan transparansi 50% */
-        }
-
-        /* Agar teks tetap terlihat di atas overlay */
-        .col-bg > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .news-card {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease-in-out;
-        }
-        .news-card:hover {
-            transform: translateY(-5px);
-        }
-        .news-img {
-            height: 200px;
-            object-fit: cover;
-            width: 100%;
-        }
-        .news-content {
+        .content-wrapper {
+            max-width: 900px;
+            margin: auto;
+            background: white;
             padding: 20px;
+            border-radius: 10px;
         }
-        .news-date {
-            background-color: #dc3545;
-            color: white;
-            text-align: center;
-            padding: 3px;
+        .news-image {
+            width: 100%;
+            max-height: 400px; /* Membatasi tinggi gambar */
+            object-fit: cover; /* Memastikan gambar tetap rapi */
             border-radius: 8px;
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 12px;
         }
-        .icon-text {
+        .news-meta {
             font-size: 14px;
             color: gray;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
-        .news-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            border-top: 1px solid #eee;
+        .news-meta i {
+            margin-right: 5px;
         }
     </style>
 </header>
 
 <main class="main">
-    <section id="pengumuman" class="pengumuman section light-background">
+    <section id="pengumuman" class="pengumuman section light-background" style="padding-top:30px; ">
         <div class="container section-title" data-aos="fade-up">
             <h4 class="font-bold header-section" ><i class="bi bi-newspaper"></i>&nbsp;Pengumuman</h4>
         </div><!-- End Section Title -->
 
         <div class="container">
             <div class="row justify-content-center g-4" style="min-height: 50vh">
+                <div class="content-wrapper shadow" data-aos="fade-up">
+                    <a href="{{ route('landingpage') }}" class="btn btn-sm btn-warning" >← Kembali ke landing page</a>
+                    <h2 class="mt-2 fw-bold">{{ $data->judul }}</h2>
 
+                    <div class="news-meta d-flex align-items-center gap-3 my-2">
+                        <span><i class="bi bi-calendar"></i> {{ $data->tgl_posting->format('d M Y') }}</span>
+                        <span><i class="bi bi-person"></i> Ditulis oleh <b>{{ $data->postinger_user->name }}</b></span>
+                    </div>
+                    @php
+                        $file = $data->gambar_header;
+                        $filePath = $data->file_pengumuman->location;
+                        $imageUrl = Storage::disk('public')->exists($filePath)
+                            ? route('file.getpublicfile', $file)
+                            : asset('assets/img/no_image.jpg');
+                    @endphp
+                    <img src="{{ $imageUrl }}" class="news-image mt-3" alt="{{ $data->judul }}">
+
+                    <p class="mt-4">
+                        {!! $data->data !!}
+                    </p>
+                </div>
             </div>
         </div>
     </section>
