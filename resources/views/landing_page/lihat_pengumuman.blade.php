@@ -66,9 +66,9 @@
         ])
 </head>
 
-<body class="index-page">
+<body class="index-page light-background">
 
-<header id="header" class="header d-flex align-items-center sticky-top" style="color: var(--color-default);">
+<header id="header" class="header d-flex align-items-center sticky-top bg-white" style="color: var(--color-default);">
     <div class="container position-relative d-flex align-items-center justify-content-between" >
 
         <a href="" class="logo d-flex align-items-center me-auto me-xl-0 order-first">
@@ -100,9 +100,9 @@
     </div>
 </header>
 
-<main class="main">
-    <section id="pengumuman" class="pengumuman section light-background" style="padding-top:50px; ">
-        <div class="container mt-0">
+<main class="main ">
+    <div class="container mt-0">
+        <section id="pengumuman" class="pengumuman section" style="padding-top:50px; ">
             <div class="row justify-content-center" style="min-height: 50vh">
                 <div class="content-wrapper shadow" data-aos="fade-up">
                     <a href="{{ route('landingpage') }}" class="btn btn-sm btn-outline-secondary" ><i class="bi bi-box-arrow-left"></i> Kembali ke landing page</a>
@@ -124,8 +124,8 @@
                     <div id="editor_pengumuman" class="mt-4" style="border: none !important;padding: 0!important;">{!! $data->data !!}</div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </main>
 
 <footer id="footer" class="footer text-white" style="background-color: var(--color-default);">
