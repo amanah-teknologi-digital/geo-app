@@ -1,0 +1,4 @@
+ignore:
+  - storage/*
+  - !storage/app/public
+  - !storage/app/private
