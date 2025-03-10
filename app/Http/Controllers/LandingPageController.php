@@ -16,4 +16,13 @@ class LandingPageController extends Controller
 
         return view('landing_page.index', compact('pengaturan','pengumumanterbaru'));
     }
+
+    public function lihatPengumuman($id_pengumuman){
+        $pengaturan = Pengaturan::with(['files_geoletter', 'files_georoom', 'files_geofacility'])->first();
+
+        $data = Pengumuman::with(['user','file_pengumuman','postinger_user'])
+            ->where('is_posting', 1)->where("id_pengumuman", $id_pengumuman)->first();
+
+        return view('landing_page.lihat_pengumuman', compact('data','pengaturan'));
+    }
 }

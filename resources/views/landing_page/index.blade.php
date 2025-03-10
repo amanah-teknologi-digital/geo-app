@@ -170,7 +170,7 @@
             @if(count($pengumumanterbaru) > 0)
                     @foreach($pengumumanterbaru as $rows)
                         <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                            <a href="pengumuman-detail.html">
+                            <a href="{{ route('pengumuman.lihatpengumuman', $rows->id_pengumuman) }}">
                                 <div class="news-card bg-white position-relative">
                                     @php
                                         $file = $rows->gambar_header;
