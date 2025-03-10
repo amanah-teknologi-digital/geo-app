@@ -44,14 +44,14 @@
             <div class="card mb-6">
                 <div class="card-body pt-4">
                     <div class="table-responsive">
-                        <table id="datatable" class="table dt-responsive nowrap w-100">
+                        <table id="datatable" class="table">
                             <thead>
                             <tr>
-                                <th nowrap class="text-center">No</th>
-                                <th nowrap>Judul</th>
-                                <th nowrap>Pembuat</th>
-                                <th nowrap>Posting</th>
-                                <th nowrap class="text-center">Aksi</th>
+                                <th style="border-top-width: 1px" nowrap class="text-center">No</th>
+                                <th style="border-top-width: 1px" nowrap>Judul</th>
+                                <th style="border-top-width: 1px" nowrap>Pembuat</th>
+                                <th style="border-top-width: 1px" nowrap>Posting</th>
+                                <th style="border-top-width: 1px" nowrap class="text-center">Aksi</th>
                             </tr>
                             </thead>
                         </table>
