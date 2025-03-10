@@ -127,6 +127,7 @@
 @endsection
 @section('page-script')
     <script>
+        let title = "{{ $title }}";
         let routeName = "{{ route('pengumuman.getdata') }}"; // Ensure route name is valid
         let routeTambah = "{{ route('pengumuman.tambah') }}"
     </script>
