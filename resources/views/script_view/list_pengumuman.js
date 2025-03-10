@@ -16,7 +16,7 @@ $(document).ready(function () {
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'all text-center' },
             { data: 'judul', name: 'judul', className: 'all', searchable: true },
-            { data: 'pembuat', name: 'created_at', className: 'all text-center', searchable: true },
+            { data: 'pembuat', name: 'created_at', className: 'all', searchable: true },
             { data: 'posting', name: 'is_posting', className: 'all text-center', searchable: false },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all text-center nowrap' }
         ],

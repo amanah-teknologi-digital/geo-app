@@ -42,3 +42,7 @@
     color: var(--accent-color);
     font-size: 36px;
 }
+
+.table:not(.table-borderless):not(.table-dark) > :not(caption) > *:not(.table-dark) > * {
+    border-top-width: 0px;
+}

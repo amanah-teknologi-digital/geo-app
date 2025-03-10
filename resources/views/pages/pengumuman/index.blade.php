@@ -44,7 +44,7 @@
             <div class="card mb-6">
                 <div class="card-body pt-4">
                     <div class="table-responsive">
-                        <table id="datatable" class="datatables-basic table table-bordered">
+                        <table id="datatable" class="table dt-responsive nowrap w-100">
                             <thead>
                             <tr>
                                 <th nowrap class="text-center">No</th>
