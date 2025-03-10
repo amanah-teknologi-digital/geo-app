@@ -18,7 +18,7 @@ $(document).ready(function () {
             { data: 'judul', name: 'judul', className: 'all', searchable: true },
             { data: 'pembuat', name: 'created_at', className: 'all', searchable: true },
             { data: 'posting', name: 'is_posting', className: 'all text-center', searchable: false },
-            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all text-center nowrap' }
+            { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all text-center text-nowrap' }
         ],
         order: [[2, 'desc']],
         dom:
