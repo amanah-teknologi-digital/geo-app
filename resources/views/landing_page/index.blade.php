@@ -97,6 +97,49 @@
             position: relative;
             z-index: 1;
         }
+
+        .news-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+        .news-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .news-content {
+            padding: 20px;
+        }
+        .news-date {
+            background-color: #dc3545;
+            color: white;
+            text-align: center;
+            padding: 3px;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+        }
+        .icon-text {
+            font-size: 14px;
+            color: gray;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .news-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+        }
     </style>
 </header>
 
@@ -123,24 +166,39 @@
         </div><!-- End Section Title -->
 
         <div class="container">
-            <div class="d-flex flex-column flex-md-row w-100 gap-3 justify-content-{{ count($pengumumanterbaru) == 0 ? 'center': (count($pengumumanterbaru) == 1 ? 'center' : (count($pengumumanterbaru) == 2 ? 'center' : 'between')) }}">
-                @if(count($pengumumanterbaru) > 0)
+            <div class="row justify-content-center g-4">
+            @if(count($pengumumanterbaru) > 0)
                     @foreach($pengumumanterbaru as $rows)
-                        <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                            <div class="team-member d-flex flex-column">
-                                <div class="member-img" style="height: 50%">
-                                    <img src="{{ asset('landing_page_rss/gedung.png') }}" class="img-fluid" alt="" style="height: 100%">
+                        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                            <a href="pengumuman-detail.html">
+                                <div class="news-card bg-white position-relative">
+                                    @php
+                                        $file = $rows->gambar_header;
+                                        $filePath = $rows->file_pengumuman->location;
+                                        $imageUrl = Storage::disk('public')->exists($filePath)
+                                            ? route('file.getpublicfile', $file)
+                                            : asset('assets/img/no_image.jpg');
+                                    @endphp
+                                    <img src="{{ $imageUrl }}" class="news-img" alt="{{ $rows->judul }}">
+                                    <div class="news-content">
+                                        <h5>{{ $rows->judul }}</h5>
+                                        <p style="max-height: 10vh;min-height: 10vh">{!! Str::limit(strip_tags($rows->data), 100, '...') !!}</p>
+    {{--                                    <span class="mt-3 mb-3 text-black"><i><a href="#" class="badge bg-info">Lihat selengkapnya <i class="bi bi-arrow-right"></i></a></i></span>--}}
+                                    </div>
+                                    <div class="news-footer">
+                                        <div class="icon-text">
+                                            <span>👤 {{ $rows->postinger_user->name }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="news-date">{{ $rows->tgl_posting->format('d/m/Y') }}</div>
                                 </div>
-                                <div class="member-info">
-                                    <h4>Hari Libur Layanan</h4>
-                                    <span class="mt-3 mb-3 text-black">Velit aut quia fugit et et. Dolorum ea voluptate vel tempore tenetur ipsa quae auasa ... <i><a href="#" class="badge bg-info">Lihat selengkapnya <i class="bi bi-arrow-right"></i></a></i></span>
-                                </div>
-                                <span class="mt-auto text-end" style="padding: 10px 15px 20px 15px;"><i class="text-muted" style="font-size: smaller">Admin, 2 menit yang lalu</i></span>
-                            </div>
+                            </a>
                         </div>
                     @endforeach
                 @else
-                    <div class="alert alert-info" data-aos="fade-up" data-aos-delay="100">Belum ada pengumuman terkini!</div>
+                    <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="alert alert-warning" >Belum ada pengumuman terkini!</div>
+                    </div>
                 @endif
             </div>
         </div>
