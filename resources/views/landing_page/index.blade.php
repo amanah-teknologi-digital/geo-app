@@ -105,6 +105,13 @@
             padding: 15px 20px;
             border-top: 1px solid #eee;
         }
+        .judulnews {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 
@@ -181,7 +188,7 @@
                                     @endphp
                                     <img src="{{ $imageUrl }}" class="news-img" alt="{{ $rows->judul }}">
                                     <div class="news-content">
-                                        <h5>{{ $rows->judul }}</h5>
+                                        <h5 class="judulnews">{{ $rows->judul }}</h5>
                                         <p style="max-height: 10vh;min-height: 10vh">{!! Str::limit(strip_tags($rows->data), 100, '...') !!}</p>
     {{--                                    <span class="mt-3 mb-3 text-black"><i><a href="#" class="badge bg-info">Lihat selengkapnya <i class="bi bi-arrow-right"></i></a></i></span>--}}
                                     </div>
@@ -204,7 +211,7 @@
         </div>
         @if(count($pengumumanterbaru) > 0)
             <div class="text-center pt-5" data-aos="fade-up" data-aos-delay="100">
-                <a href="#" class="more-btn animated"><span>Lihat Semua Pengumuman</span> <i class="bi bi-chevron-right"></i></a>
+                <a href="{{ route('pengumuman.listpengumuman') }}" class="more-btn animated"><span>Lihat Semua Pengumuman</span> <i class="bi bi-chevron-right"></i></a>
             </div>
         @endif
     </section>

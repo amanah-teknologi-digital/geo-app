@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>{{ $data->judul }}</title>
+    <title>List Pengumuman</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
 
@@ -43,26 +43,15 @@
             padding: 20px;
             border-radius: 10px;
         }
-        .news-image {
-            width: 100%;
-            max-height: 400px; /* Membatasi tinggi gambar */
-            object-fit: cover; /* Memastikan gambar tetap rapi */
-            border-radius: 8px;
-        }
-        .news-meta {
-            font-size: 14px;
-            color: gray;
-        }
-        .news-meta i {
-            margin-right: 5px;
-        }
-        .ql-editor {
-            padding: 0 !important;
-        }
     </style>
+    <script>
+        let routeName = "{{ route('pengumuman.getlistpengumuman') }}"
+    </script>
     @vite([
         'resources/assets/vendor/libs/jquery/jquery.js',
-        'resources/views/script_view/lihat_pengumuman.js'
+        'resources/assets/vendor/libs/datatable/datatable.js',
+        'resources/assets/vendor/libs/datatable/datatable.scss',
+        'resources/views/script_view/list_landingpengumuman.js',
         ])
 </head>
 
@@ -105,23 +94,25 @@
         <div class="container mt-0">
             <div class="row justify-content-center" style="min-height: 50vh">
                 <div class="content-wrapper shadow" data-aos="fade-up">
-                    <a href="{{ route('landingpage') }}" class="btn btn-sm btn-outline-secondary" ><i class="bi bi-box-arrow-left"></i> Kembali ke landing page</a>
-                    <h2 class="mt-2 fw-bold">{{ $data->judul }}</h2>
-
-                    <div class="news-meta d-flex align-items-center gap-3 my-2">
-                        <span><i class="bi bi-calendar"></i> {{ $data->tgl_posting->format('d M Y') }}</span>
-                        <span><i class="bi bi-person"></i> Ditulis oleh <b>{{ $data->postinger_user->name }}</b></span>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap flex-md-nowrap mb-3">
+                        <h5 class="mb-0"><i class="bi bi-list"></i>&nbsp;List Pengumuman</h5>
+                        <a href="{{ route('landingpage') }}" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-box-arrow-left"></i> Kembali ke landing page
+                        </a>
                     </div>
-                    @php
-                        $file = $data->gambar_header;
-                        $filePath = $data->file_pengumuman->location;
-                        $imageUrl = Storage::disk('public')->exists($filePath)
-                            ? route('file.getpublicfile', $file)
-                            : asset('assets/img/no_image.jpg');
-                    @endphp
-                    <img src="{{ $imageUrl }}" class="news-image mt-3" alt="{{ $data->judul }}">
-
-                    <div id="editor_pengumuman" class="mt-4" style="border: none !important;padding: 0!important;">{!! $data->data !!}</div>
+                    <div class="table-responsive">
+                        <table id="datatable" class="table">
+                            <thead>
+                            <tr>
+                                <th style="border-top-width: 1px" nowrap class="text-center">No</th>
+                                <th style="border-top-width: 1px" nowrap>Judul</th>
+                                <th style="border-top-width: 1px" nowrap>Pembuat</th>
+                                <th style="border-top-width: 1px" nowrap>Posting</th>
+                                <th style="border-top-width: 1px" nowrap class="text-center">Aksi</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

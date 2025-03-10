@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [LandingPageController::class, 'index'])->name('landingpage');
 Route::get('/get-public-file/{id_file}', [FileController::class, 'getPublicFile'])->middleware('nocache')->name('file.getpublicfile');
 Route::get('/pengumuman/lihat/{id_pengumuman}', [LandingPageController::class, 'lihatPengumuman'])->name('pengumuman.lihatpengumuman');
+Route::get('/pengumuman/list', [LandingPageController::class, 'listPengumuman'])->name('pengumuman.listpengumuman');
+Route::get('/pengumuman/getlist', [LandingPageController::class, 'getListPengumuman'])->name('pengumuman.getlistpengumuman');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
