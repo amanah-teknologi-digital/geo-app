@@ -21,7 +21,7 @@ class PengumumanController extends Controller
     }
     public function index()
     {
-        $title = "Pengumuman";
+        $title = "List Pengumuman";
 
         return view('pages.pengumuman.index', compact('title'));
     }
