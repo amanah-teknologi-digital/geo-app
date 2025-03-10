@@ -10,7 +10,7 @@ class PengumumanRepository
 {
     public function getDataPengumuman($id_pengumuman){
         $data = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater', 'is_posting', 'tgl_posting', 'postinger')
-            ->with(['user','file_pengumuman','postinger_user'])->orderBy('created_at', 'DESC');
+            ->with(['user','file_pengumuman','postinger_user']);
 
         if (!empty($id_pengumuman)) {
             $data = $data->where('id_pengumuman', $id_pengumuman)->first();

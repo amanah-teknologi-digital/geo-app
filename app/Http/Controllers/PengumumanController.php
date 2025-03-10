@@ -37,7 +37,7 @@ class PengumumanController extends Controller
                 })
                 ->addColumn('pembuat', function ($data_pengumuman) {
                     return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengumuman->user->name.
-                        ',<br> pada '.$data_pengumuman->created_at->format('d-m-Y H-i').'</span>';
+                        ',<br> pada '.$data_pengumuman->created_at->format('d-m-Y H:i').'</span>';
                 })
                 ->addColumn('posting', function ($data_pengumuman) {
                     return $data_pengumuman->is_posting? '<span class="badge bg-sm text-success">Posting</span>':'<span class="badge bg-sm text-warning">Tidak</span>';
@@ -57,6 +57,12 @@ class PengumumanController extends Controller
                     return $html;
                 })
                 ->rawColumns(['aksi', 'posting', 'pembuat']) // Untuk render tombol HTML
+                ->filterColumn('judul', function($query, $keyword) {
+                    $query->where('judul', 'LIKE', "%{$keyword}%");
+                })
+                ->filterColumn('created_at', function($query, $keyword) {
+                    $query->whereRaw("DATE_FORMAT(created_at, '%d-%m-%Y %H:%i') LIKE ?", ["%{$keyword}%"]);
+                })
                 ->toJson();
         }
 
