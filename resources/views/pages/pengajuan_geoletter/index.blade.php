@@ -16,9 +16,9 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb flex">
                     <li class="breadcrumb-item">
-                        <a href="#">Master Data</a>
+                        <a href="#">Pengajuan</a>
                     </li>
-                    <li class="breadcrumb-item active">Pengumuman</li>
+                    <li class="breadcrumb-item active">Pengajuan Geo Letter</li>
                 </ol>
             </nav>
             @if ($errors->any())
@@ -128,8 +128,8 @@
 @section('page-script')
     <script>
         let title = "{{ $title }}";
-        let routeName = "{{ route('pengumuman.getdata') }}"; // Ensure route name is valid
+        let routeName = "{{ route('pengajuangeoletter.getdata') }}"; // Ensure route name is valid
         let routeTambah = "{{ route('pengumuman.tambah') }}"
     </script>
-    @vite('resources/views/script_view/list_pengumuman.js')
+    @vite('resources/views/script_view/pengajuan_geoletter/list_pengajuan.js')
 @endsection

@@ -40,7 +40,7 @@ const FontsScssFiles = GetFilesArray('resources/assets/vendor/fonts/!(_)*.scss')
 const JsCustomPage = GetFilesArray('resources/views/auth/js/!(_)*.js');
 
 // Script js on view
-const JsScriptPage = GetFilesArray('resources/views/script_view/!(_)*.js');
+const JsScriptPage = GetFilesArray('resources/views/script_view/**/!(_)*.js');
 
 export default defineConfig({
     plugins: [
