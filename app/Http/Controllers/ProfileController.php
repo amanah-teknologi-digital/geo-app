@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -33,6 +34,14 @@ class ProfileController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
+        $originalFilePath = auth()->user()->files->location;
+        $backupFilePath = $originalFilePath . '.backup';
+
+        if (Storage::disk('local')->exists($originalFilePath)) {
+            // Backup file asli
+            Storage::disk('local')->move($originalFilePath, $backupFilePath);
+        }
+
         try {
             $request->validate([
                 'nama_lengkap' => ['required'],
@@ -59,6 +68,8 @@ class ProfileController extends Controller
                 'file_kartuid.max'      => 'Ukuran file kartu ID maksimal 5MB.',
             ]);
 
+            DB::beginTransaction();
+
             if ($request->hasFile('file_kartuid')) {
                 $id_file = auth()->user()->file_kartuid;
                 $file = $request->file('file_kartuid');
@@ -67,7 +78,6 @@ class ProfileController extends Controller
                 $fileExt = $file->getClientOriginalExtension();
                 $newFileName = $id_file.'.'.$fileExt;
                 $fileSize = $file->getSize();
-                Storage::disk('local')->delete(auth()->user()->files->location);
                 $filePath = $file->storeAs('identitas', $newFileName, 'local');
 
                 //save file data ke database
@@ -92,14 +102,30 @@ class ProfileController extends Controller
             $user->no_hp = $request->no_telepon;
             $user->save();
 
+            DB::commit();
+
+            if ($request->hasFile('file_kartuid')) {
+                if (Storage::disk('local')->exists($backupFilePath)) {
+                    Storage::disk('local')->delete($backupFilePath);
+                }
+            }else{
+                if (Storage::disk('local')->exists($backupFilePath)) {
+                    Storage::disk('local')->move($backupFilePath, $originalFilePath);
+                }
+            }
+
             return Redirect::route('profile.edit')->with('status', 'profile-updated');
 
         } catch (ValidationException $e) {
-            if ($request->hasFile('file_kartuid')) {Storage::disk('local')->delete($filePath);}
+            DB::rollBack();
+            Storage::disk('local')->delete($originalFilePath);
+            Storage::disk('local')->move($backupFilePath, $originalFilePath);
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
         } catch (Exception $e) {
-            if ($request->hasFile('file_kartuid')) {Storage::disk('local')->delete($filePath);}
+            DB::rollBack();
+            Storage::disk('local')->delete($originalFilePath);
+            Storage::disk('local')->move($backupFilePath, $originalFilePath);
             Log::error($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
