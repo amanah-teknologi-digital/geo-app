@@ -10,6 +10,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -75,6 +76,8 @@ class RegisteredUserController extends Controller
             $fileSize = $file->getSize();
             $filePath = $file->storeAs('identitas', $newFileName, 'local');
 
+            DB::beginTransaction();
+
             //save file data ke database
             Files::create([
                 'id_file' => $id_file,
@@ -97,16 +100,19 @@ class RegisteredUserController extends Controller
                 'id_akses' => 8 //untuk akses pengguna
             ]);
 
+            DB::commit();
             event(new Registered($user));
 
             Auth::login($user);
 
             return redirect(route('dashboard', absolute: false));
         } catch (ValidationException $e) {
+            DB::rollBack();
             Storage::disk('local')->delete($filePath);
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
         } catch (Exception $e) {
+            DB::rollBack();
             Storage::disk('local')->delete($filePath);
             Log::error($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
