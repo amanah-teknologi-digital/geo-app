@@ -56,6 +56,14 @@
                             </thead>
                         </table>
                     </div>
+                    <ul class="fa-ul ml-auto float-end mt-5">
+                        <li>
+                            <small><em>Pengumuman yang statusnya posting saja, masuk di list landing page.</em></small>
+                        </li>
+                        <li>
+                            <small><em>Pengumuman yang sudah di posting tidak bisa diedit (harus <b>diunposting</b> terlebih dahulu).</em></small>
+                        </li>
+                    </ul>
                 </div>
                 <!-- /Account -->
             </div>
