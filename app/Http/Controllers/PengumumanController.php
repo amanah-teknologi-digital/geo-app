@@ -7,6 +7,7 @@ use App\Http\Services\PengumumanServices;
 use App\Models\Pengumuman;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Nonstandard\Uuid;
@@ -90,16 +91,21 @@ class PengumumanController extends Controller
                 'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
             ]);
 
+            DB::beginTransaction();
             //save file gambar header
             $id_file_gambar = strtoupper(Uuid::uuid4()->toString());
             $this->service->tambahFile($request->file('gambar_header'), $id_file_gambar);
             $this->service->tambahPengumuman($request, $id_file_gambar);
 
+            DB::commit();
+
             return redirect(route('pengumuman'))->with('success', 'Berhasil Tambah Pengumuman.');
         } catch (ValidationException $e) {
+            DB::rollBack();
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -135,6 +141,7 @@ class PengumumanController extends Controller
 
             $dataPengumuman = $this->service->getDataPengumuman($request->id_pengumuman);
 
+            DB::beginTransaction();
             //save file gambar header
             $id_file_gambar = $dataPengumuman->gambar_header;
             if ($request->hasFile('gambar_header')) {
@@ -143,11 +150,15 @@ class PengumumanController extends Controller
 
             $this->service->updatePengumuman($request);
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'Berhasil Update Pengumuman.');
         } catch (ValidationException $e) {
+            DB::rollBack();
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -163,6 +174,8 @@ class PengumumanController extends Controller
 
             $dataPengumuman = $this->service->getDataPengumuman($request->id_pengumuman);
 
+            DB::beginTransaction();
+
             $this->service->hapusPengumuman($dataPengumuman->id_pengumuman);
 
             //hapus file gambar header
@@ -170,11 +183,15 @@ class PengumumanController extends Controller
             $location = $dataPengumuman->file_pengumuman->location;
             $this->service->hapusFile($id_file_gambar, $location);
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'Berhasil Hapus Pengumuman.');
         } catch (ValidationException $e) {
+            DB::rollBack();
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }

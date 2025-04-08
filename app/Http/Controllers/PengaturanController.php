@@ -7,6 +7,7 @@ use App\Http\Services\PengaturanServices;
 use App\Models\Pengaturan;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Uuid;
@@ -56,6 +57,8 @@ class PengaturanController extends Controller
                 'file.max' => 'Ukuran file tidak boleh lebih dari 10 MB.',
             ]);
 
+            DB::beginTransaction();
+
             //save file geo letter
             if ($request->hasFile('file_sop_geoletter')) {
                 if (empty($dataPengaturan->file_sop_geoletter)){
@@ -91,11 +94,15 @@ class PengaturanController extends Controller
 
             $this->service->updatePengaturan($request);
 
+            DB::commit();
+
             return redirect()->back()->with('success', 'Pengaturan berhasil diperbarui.');
         } catch (ValidationException $e) {
+            DB::rollBack();
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
