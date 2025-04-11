@@ -80,5 +80,5 @@
     </div>
 @endsection
 @section('page-script')
-    @vite('resources/views/script_view/tambah_pengumuman.js')
+    @vite('resources/views/script_view/pengajuan_geoletter/tambah_pengajuan.js')
 @endsection
