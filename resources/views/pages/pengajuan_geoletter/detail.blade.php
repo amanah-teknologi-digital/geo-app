@@ -19,9 +19,9 @@
                         <a href="#">Master Data</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('pengumuman') }}">Pengumuman</a>
+                        <a href="{{ route('pengumuman') }}">Pengajuan Geo Letter</a>
                     </li>
-                    <li class="breadcrumb-item active">Edit</li>
+                    <li class="breadcrumb-item active">Detail</li>
                 </ol>
             </nav>
             @if ($errors->any())
@@ -46,31 +46,31 @@
             @endif
             <div class="card mb-6">
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                    <h5 class="card-title mb-0"><i class="bx bx-edit-alt"></i>&nbsp;Edit Pengumuman</h5>
+                    <h5 class="card-title mb-0"><i class="bx bx-edit-alt"></i>&nbsp;Detail Pengajuan</h5>
                     <a href="{{ route('pengumuman') }}" class="btn btn-sm btn-secondary btn-sm">
                         <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                     </a>
                 </div>
                 <div class="card-body pt-4">
-                    <form id="formPengumuman" method="POST" action="{{ route('pengumuman.doedit') }}" enctype="multipart/form-data">
+                    <form id="formPengumuman" method="POST" action="{{ route('pengajuangeoletter.doedit') }}" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="id_pengumuman" value="{{ $dataPengumuman->id_pengumuman }}">
+                        <input type="hidden" name="id_pengumuman" value="{{ $dataPengajuan->id_pengumuman }}">
                         <div class="row g-6">
                             <div>
                                 <label for="judul" class="form-label">Judul Pengumuman <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="judul" name="judul" placeholder="judul" value="{{ $dataPengumuman->judul }}" required autocomplete="off" autofocus {{ !$is_edit ? 'readonly':'' }}>
+                                <input type="text" class="form-control" id="judul" name="judul" placeholder="judul" value="{{ $dataPengajuan->judul }}" required autocomplete="off" autofocus {{ !$is_edit ? 'readonly':'' }}>
                             </div>
                             <div>
                                 <label for="isi_pengumuman" class="form-label">Isi Pengumuman <span class="text-danger">*</span></label>
-                                <div id="editor_pengumuman" style="height: 250px;">{!! $dataPengumuman->data !!}</div>
-                                <input type="hidden" name="editor_quil" id="editor_quil" value="{{ $dataPengumuman->data }}">
+                                <div id="editor_pengumuman" style="height: 250px;">{!! $dataPengajuan->data !!}</div>
+                                <input type="hidden" name="editor_quil" id="editor_quil" value="{{ $dataPengajuan->data }}">
                                 <div class="error-container" id="error-quil"></div>
                             </div>
                             <div>
                                 <label for="gambar_header" class="form-label">Gambar Header <span class="text-danger">*</span><span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
                                 @php
-                                    $file = $dataPengumuman->gambar_header;
-                                    $filePath = $dataPengumuman->file_pengumuman->location;
+                                    $file = $dataPengajuan->gambar_header;
+                                    $filePath = $dataPengajuan->file_pengumuman->location;
                                     $imageUrl = Storage::disk('public')->exists($filePath)
                                         ? route('file.getpublicfile', $file)
                                         : asset('assets/img/no_image.jpg');
@@ -92,7 +92,7 @@
                             @if(!$is_edit)
                                 <div class="text-muted">
                                     <small>
-                                        Posting by: <strong>{{ $dataPengumuman->postinger_user->name }}</strong> | <span>{{ $dataPengumuman->tgl_posting->format('d-m-Y H:i') }}</span>
+                                        Posting by: <strong>{{ $dataPengajuan->postinger_user->name }}</strong> | <span>{{ $dataPengajuan->tgl_posting->format('d-m-Y H:i') }}</span>
                                     </small>
                                 </div>
                             @else
@@ -100,7 +100,7 @@
                             @endif
                             <div class="text-muted">
                                 <small>
-                                    Updated by: <strong>{{ $dataPengumuman->user->name }}</strong> | <span>{{ ($dataPengumuman->updated_at ?? $dataPengumuman->created_at)->format('d-m-Y H:i') }}</span>
+                                    Updated by: <strong>{{ $dataPengajuan->user->name }}</strong> | <span>{{ ($dataPengajuan->updated_at ?? $dataPengajuan->created_at)->format('d-m-Y H:i') }}</span>
                                 </small>
                             </div>
                         </div>

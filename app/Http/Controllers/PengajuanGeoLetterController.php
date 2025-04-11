@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Repositories\PengajuanGeoLetterRepository;
 use App\Http\Services\PengajuanGeoLetterServices;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+use Ramsey\Uuid\Nonstandard\Uuid;
 use Yajra\DataTables\DataTables;
 
 class PengajuanGeoLetterController extends Controller
@@ -72,5 +76,48 @@ class PengajuanGeoLetterController extends Controller
         $data_jenissurat = $this->service->getJenisSurat();
 
         return view('pages.pengajuan_geoletter.tambah', compact('title','data_jenissurat'));
+    }
+
+    public function dotambahPengajuan(Request $request){
+        try {
+            $request->validate([
+                'jenis_surat' => ['required'],
+                'editor_quil' => ['required'],
+                'keterangan' => ['required']
+            ],[
+                'jenis_surat.required' => 'Jenis Surat wajib diisi.',
+                'editor_quil.required' => 'Konten wajib diisi.',
+                'keterangan.required' => 'Keterangan wajib diisi.'
+            ]);
+
+            DB::beginTransaction();
+            //save file gambar header
+            $id_pengajuan = strtoupper(Uuid::uuid4()->toString());
+            $this->service->tambahPengajuan($request, $id_pengajuan);
+
+            DB::commit();
+
+            return redirect(route('pengajuangeoletter.detail', $id_pengajuan))->with('success', 'Berhasil Tambah Pengajuan Geo Letter.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function detailPengajuan($id_pengajuan){
+        $title = "Detail Pengajuan Geo Letter";
+        $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+        if ($dataPengajuan->id_statuspengajuan == 0) {
+            $is_edit = true;
+        }else{
+            $is_edit = false;
+        }
+
+        return view('pages.pengajuan_geoletter.detail', compact('dataPengajuan', 'is_edit', 'title'));
     }
 }

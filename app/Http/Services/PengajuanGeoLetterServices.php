@@ -22,9 +22,9 @@ class PengajuanGeoLetterServices
         return $data;
     }
 
-    public function tambahPengumuman($request, $id_file){
+    public function tambahPengajuan($request, $id_pengajuan){
         try {
-            $this->repository->tambahPengumuman($request, $id_file);
+            $this->repository->tambahPengajuan($request, $id_pengajuan);
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

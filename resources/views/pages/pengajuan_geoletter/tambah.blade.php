@@ -56,7 +56,7 @@
                             @csrf
                             <div class="row g-6">
                                 <div>
-                                    <label for="judul" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                    <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
                                     <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
                                         <option value="" selected disabled>-- Pilih Jenis Surat --</option>
                                         @foreach($data_jenissurat as $row)
@@ -65,7 +65,7 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="isi_surat" class="form-label">Form Surat <span class="text-danger">*</span></label>
+                                    <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
                                     <div id="editor_surat" style="height: 250px;"></div>
                                     <input type="hidden" name="editor_quil" id="editor_quil">
                                     <div class="error-container" id="error-quil"></div>

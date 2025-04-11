@@ -32,14 +32,14 @@ class PengajuanGeoLetterRepository
         return $data;
     }
 
-    public function tambahPengumuman($request, $id_file){
-        $id_pengumuman = strtoupper(Uuid::uuid4()->toString());
-
-        Pengumuman::create([
-            'id_pengumuman' => $id_pengumuman,
-            'judul' => $request->judul,
-            'data' => $request->editor_quil,
-            'gambar_header' => $id_file,
+    public function tambahPengajuan($request, $id_pengajuan){
+        PengajuanGeoLetter::create([
+            'id_pengajuan' => $id_pengajuan,
+            'pengaju' => auth()->user()->id,
+            'id_statuspengajuan' => 0, //draft
+            'id_jenissurat' => $request->jenis_surat,
+            'keterangan' => $request->keterangan,
+            'data_form' => $request->editor_quil,
             'created_at' => now(),
             'updater' => auth()->user()->id
         ]);
