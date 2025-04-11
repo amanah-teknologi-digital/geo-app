@@ -3,17 +3,18 @@
 namespace App\Http\Repositories;
 
 use App\Models\Files;
+use App\Models\PengajuanGeoLetter;
 use App\Models\Pengumuman;
 use Ramsey\Uuid\Nonstandard\Uuid;
 
 class PengajuanGeoLetterRepository
 {
     public function getDataPengajuan($id_pengajuan){
-        $data = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater', 'is_posting', 'tgl_posting', 'postinger')
-            ->with(['user','file_pengumuman','postinger_user']);
+        $data = PengajuanGeoLetter::select('id_pengajuan', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
+            ->with(['pengaju','updater','jenissurat','statuspengajuan']);
 
-        if (!empty($id_pengumuman)) {
-            $data = $data->where('id_pengumuman', $id_pengumuman)->first();
+        if (!empty($id_pengajuan)) {
+            $data = $data->where('id_pengajuan', $id_pengajuan)->first();
         }
 
         return $data;

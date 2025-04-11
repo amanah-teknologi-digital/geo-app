@@ -48,9 +48,9 @@
                             <thead>
                             <tr>
                                 <th style="border-top-width: 1px" nowrap class="text-center">No</th>
-                                <th style="border-top-width: 1px" nowrap>Judul</th>
-                                <th style="border-top-width: 1px" nowrap>Pembuat</th>
-                                <th style="border-top-width: 1px" nowrap>Posting</th>
+                                <th style="border-top-width: 1px" nowrap>Jenis Surat</th>
+                                <th style="border-top-width: 1px" nowrap>Pengaju</th>
+                                <th style="border-top-width: 1px" nowrap>Keterangan</th>
                                 <th style="border-top-width: 1px" nowrap class="text-center">Aksi</th>
                             </tr>
                             </thead>
@@ -58,10 +58,7 @@
                     </div>
                     <ul class="fa-ul ml-auto float-end mt-5">
                         <li>
-                            <small><em>Pengumuman yang statusnya posting saja, masuk di list landing page.</em></small>
-                        </li>
-                        <li>
-                            <small><em>Pengumuman yang sudah di posting tidak bisa diedit (harus <b>diunposting</b> terlebih dahulu).</em></small>
+                            <small><em>Pengajuan yang sudah diajukan tidak dapat dibatalkan.</em></small>
                         </li>
                     </ul>
                 </div>
@@ -137,7 +134,7 @@
     <script>
         let title = "{{ $title }}";
         let routeName = "{{ route('pengajuangeoletter.getdata') }}"; // Ensure route name is valid
-        let routeTambah = "{{ route('pengumuman.tambah') }}"
+        let routeTambah = "{{ route('pengajuangeoletter.tambah') }}"
     </script>
     @vite('resources/views/script_view/pengajuan_geoletter/list_pengajuan.js')
 @endsection

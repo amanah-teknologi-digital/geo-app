@@ -30,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:1,2,8')->group(function () { //geo letter
         Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->name('pengajuangeoletter');
         Route::get('/pengajuan-geoletter/getdata', [PengajuanGeoLetterController::class, 'getData'])->name('pengajuangeoletter.getdata');
+        Route::get('/pengajuan-geoletter/detail/{id_pengajuan}', [PengajuanGeoLetterController::class, 'detailPengajuan'])->name('pengajuangeoletter.detail');
+        Route::get('/pengajuan-geoletter/tambah', [PengajuanGeoLetterController::class, 'tambahPengajuan'])->name('pengajuangeoletter.tambah');
     });
 
     Route::middleware('role:1,3,6,7,8')->group(function () { //geo room
