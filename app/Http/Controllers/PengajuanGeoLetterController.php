@@ -58,4 +58,10 @@ class PengajuanGeoLetterController extends Controller
 
         return response()->json(['message' => 'Invalid request'], 400);
     }
+
+    public function tambahPengajuan(){
+        $title = "Tambah Pengajuan";
+
+        return view('pages.pengajuan_geoletter.tambah', compact('title'));
+    }
 }

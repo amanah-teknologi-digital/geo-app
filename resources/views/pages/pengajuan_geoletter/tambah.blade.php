@@ -19,7 +19,7 @@
                         <a href="#">Master Data</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('pengumuman') }}">Pengumuman</a>
+                        <a href="{{ route('pengumuman') }}">Pengajuan Geo Letter</a>
                     </li>
                     <li class="breadcrumb-item active">Tambah</li>
                 </ol>
@@ -46,8 +46,8 @@
             @endif
             <div class="card mb-6">
                     <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                        <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Pengumuman</h5>
-                        <a href="{{ route('pengumuman') }}" class="btn btn-sm btn-secondary btn-sm">
+                        <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Pengajuan</h5>
+                        <a href="{{ route('pengajuangeoletter') }}" class="btn btn-sm btn-secondary btn-sm">
                             <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                         </a>
                     </div>
