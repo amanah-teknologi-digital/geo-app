@@ -16,8 +16,8 @@ class PengajuanGeoLetterServices
         $this->repository = $repository;
     }
 
-    public function getDataPengumuman($id_pengumuman = null){
-        $data = $this->repository->getDataPengumuman($id_pengumuman);
+    public function getDataPengajuan($id_pengajuan = null){
+        $data = $this->repository->getDataPengajuan($id_pengajuan);
 
         return $data;
     }

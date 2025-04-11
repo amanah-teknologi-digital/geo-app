@@ -23,9 +23,9 @@ class PengajuanGeoLetterController extends Controller
 
     public function getData(Request $request){
         if ($request->ajax()) {
-            $data_pengumuman = $this->service->getDataPengumuman();
+            $data_pengajuan = $this->service->getDataPengajuan();
 
-            return DataTables::of($data_pengumuman)
+            return DataTables::of($data_pengajuan)
                 ->addIndexColumn()
                 ->addColumn('judul', function ($data_pengumuman) {
                     return $data_pengumuman->judul;

@@ -8,7 +8,7 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 
 class PengajuanGeoLetterRepository
 {
-    public function getDataPengumuman($id_pengumuman){
+    public function getDataPengajuan($id_pengajuan){
         $data = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater', 'is_posting', 'tgl_posting', 'postinger')
             ->with(['user','file_pengumuman','postinger_user']);
 
