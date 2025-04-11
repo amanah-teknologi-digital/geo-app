@@ -31,6 +31,12 @@ class PengajuanGeoLetterServices
         }
     }
 
+    public function getJenisSurat($id_jenissurat = null){
+        $data = $this->repository->getJenisSurat($id_jenissurat);
+
+        return $data;
+    }
+
     public function updatePengumuman($request){
         try {
             $this->repository->updatePengumuman($request);

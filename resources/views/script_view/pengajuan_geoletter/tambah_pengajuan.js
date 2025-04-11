@@ -1,7 +1,7 @@
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 $(document).ready(function () {
-    const quill = new Quill('#editor_pengumuman', {
+    const quill = new Quill('#editor_surat', {
         bounds: '#full-editor',
         modules: {
             toolbar: [
@@ -21,57 +21,33 @@ $(document).ready(function () {
         $("#editor_quil").val(quill.root.innerHTML);
     });
 
-    $.validator.addMethod("filesize", function(value, element, param) {
-        // Cek jika file dipilih
-        if(element.files.length === 0) {
-            return true;
-        }
-        // Ukuran file dalam bytes
-        return element.files[0].size <= param;
-    }, "Ukuran file terlalu besar.");
-
-    // Custom method untuk validasi tipe file (misal hanya jpg dan png)
-    $.validator.addMethod("fileextension", function(value, element, param) {
-        if(element.files.length === 0){
-            return true;
-        }
-        // Dapatkan nama file dan ekstrak ekstensi
-        var fileName = element.files[0].name;
-        var extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-        return $.inArray(extension, param) !== -1;
-    }, "Tipe file tidak diperbolehkan.");
-
     // Custom validator untuk Quill Editor
     $.validator.addMethod("quillRequired", function (value, element) {
         return value !== "<p><br></p>" && value !== "";
     }, "Konten tidak boleh kosong");
 
-    $("#formPengumuman").validate({
+    $("#formPengajuan").validate({
         ignore: "",
         rules: {
-            judul: {
+            jenis_surat: {
                 required: true
             },
             editor_quil: {
                 quillRequired: true
             },
-            gambar_header: {
-                required: true,
-                filesize: 5242880,
-                fileextension: ['jpg', 'jpeg', 'png', 'gif']
+            keterangan: {
+                required: true
             }
         },
         messages: {
-            judul: {
-                required: "Judul wajib diisi"
+            jenis_surat: {
+                required: "Jenis surat wajib diisi"
             },
             editor_quil: {
                 required: "Konten tidak boleh kosong"
             },
-            gambar_header: {
-                required: "Gambar Header wajib diisi",
-                filesize: "Ukuran file maksimal 5 MB",
-                fileextension: "Hanya file JPG, JPEG, PNG, GIF, dan PDF yang diperbolehkan"
+            keterangan: {
+                required: "Keterangan wajib diisi"
             }
         },
         errorPlacement: function(error, element) {
@@ -85,6 +61,27 @@ $(document).ready(function () {
         },
         submitHandler: function (form) {
             form.submit();
+        }
+    });
+
+    $('#jenis_surat').on('change', function() {
+        let id_jenissurat = $(this).val();
+
+        if (id_jenissurat) {
+            $.ajax({
+                url: routeGetJenisSurat,
+                type: 'GET',
+                data: { id_jenissurat: id_jenissurat },
+                dataType: 'json',
+                success: function(response) {
+                    quill.root.innerHTML = response.default_form;
+                },
+                error: function(xhr, status, error) {
+                    quill.root.innerHTML = '';
+                }
+            });
+        } else {
+            quill.root.innerHTML = '';
         }
     });
 })

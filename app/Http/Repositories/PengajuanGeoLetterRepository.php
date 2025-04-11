@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\Files;
+use App\Models\JenisSurat;
 use App\Models\PengajuanGeoLetter;
 use App\Models\Pengumuman;
 use Ramsey\Uuid\Nonstandard\Uuid;
@@ -15,6 +16,17 @@ class PengajuanGeoLetterRepository
 
         if (!empty($id_pengajuan)) {
             $data = $data->where('id_pengajuan', $id_pengajuan)->first();
+        }
+
+        return $data;
+    }
+
+    public function getJenisSurat($id_jenissurat){
+        $data = JenisSurat::select('id_jenissurat', 'nama', 'default_form', 'created_at', 'updated_at')->orderBy('created_at');
+        if (!empty($id_jenissurat)) {
+            $data = $data->where('id_jenissurat', $id_jenissurat)->first();
+        }else{
+            $data = $data->get();
         }
 
         return $data;

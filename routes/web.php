@@ -32,6 +32,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pengajuan-geoletter/getdata', [PengajuanGeoLetterController::class, 'getData'])->name('pengajuangeoletter.getdata');
         Route::get('/pengajuan-geoletter/detail/{id_pengajuan}', [PengajuanGeoLetterController::class, 'detailPengajuan'])->name('pengajuangeoletter.detail');
         Route::get('/pengajuan-geoletter/tambah', [PengajuanGeoLetterController::class, 'tambahPengajuan'])->name('pengajuangeoletter.tambah');
+        Route::post('/pengajuan-geoletter/dotambah', [PengajuanGeoLetterController::class, 'dotambahPengajuan'])->name('pengajuangeoletter.dotambah');
+        Route::get('/pengajuan-geoletter/getjenissurat', [PengajuanGeoLetterController::class, 'getJenisSurat'])->name('pengajuangeoletter.getjenissurat');
     });
 
     Route::middleware('role:1,3,6,7,8')->group(function () { //geo room

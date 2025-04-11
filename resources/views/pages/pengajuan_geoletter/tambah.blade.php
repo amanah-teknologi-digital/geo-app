@@ -52,22 +52,27 @@
                         </a>
                     </div>
                     <div class="card-body pt-4">
-                        <form id="formPengumuman" method="POST" action="{{ route('pengumuman.dotambah') }}" enctype="multipart/form-data">
+                        <form id="formPengajuan" method="POST" action="{{ route('pengajuangeoletter.dotambah') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="row g-6">
                                 <div>
-                                    <label for="judul" class="form-label">Judul Pengumuman <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="judul" name="judul" placeholder="judul" required autocomplete="off" autofocus>
+                                    <label for="judul" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                    <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
+                                        <option value="" selected disabled>-- Pilih Jenis Surat --</option>
+                                        @foreach($data_jenissurat as $row)
+                                            <option value="{{ $row->id_jenissurat }}">{{ $row->nama }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div>
-                                    <label for="isi_pengumuman" class="form-label">Isi Pengumuman <span class="text-danger">*</span></label>
-                                    <div id="editor_pengumuman" style="height: 250px;"></div>
+                                    <label for="isi_surat" class="form-label">Form Surat <span class="text-danger">*</span></label>
+                                    <div id="editor_surat" style="height: 250px;"></div>
                                     <input type="hidden" name="editor_quil" id="editor_quil">
                                     <div class="error-container" id="error-quil"></div>
                                 </div>
                                 <div>
-                                    <label for="gambar_header" class="form-label">Gambar Header <span class="text-danger">*</span><span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
-                                    <input type="file" class="form-control" id="gambar_header" name="gambar_header" accept="image/*">
+                                    <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
+                                    <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required></textarea>
                                 </div>
                             </div>
                             <div class="mt-6">
@@ -80,5 +85,8 @@
     </div>
 @endsection
 @section('page-script')
+    <script>
+        let routeGetJenisSurat = "{{ route('pengajuangeoletter.getjenissurat') }}";
+    </script>
     @vite('resources/views/script_view/pengajuan_geoletter/tambah_pengajuan.js')
 @endsection

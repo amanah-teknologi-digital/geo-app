@@ -59,9 +59,18 @@ class PengajuanGeoLetterController extends Controller
         return response()->json(['message' => 'Invalid request'], 400);
     }
 
+    public function getJenisSurat(Request $request){
+        $id_jenissurat = $request->id_jenissurat;
+        $data = $this->service->getJenisSurat($id_jenissurat);
+
+        return response()->json($data);
+    }
+
     public function tambahPengajuan(){
         $title = "Tambah Pengajuan";
 
-        return view('pages.pengajuan_geoletter.tambah', compact('title'));
+        $data_jenissurat = $this->service->getJenisSurat();
+
+        return view('pages.pengajuan_geoletter.tambah', compact('title','data_jenissurat'));
     }
 }
