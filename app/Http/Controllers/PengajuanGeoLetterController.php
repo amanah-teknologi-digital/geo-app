@@ -7,6 +7,7 @@ use App\Http\Services\PengajuanGeoLetterServices;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Nonstandard\Uuid;
 use Yajra\DataTables\DataTables;
@@ -35,7 +36,7 @@ class PengajuanGeoLetterController extends Controller
                     return $data_pengajuan->jenissurat->nama;
                 })
                 ->addColumn('pengaju', function ($data_pengajuan) {
-                    return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengajuan->pengaju->name.
+                    return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengajuan->pihakpengaju->name.
                         ',<br> pada '.$data_pengajuan->created_at->format('d-m-Y H:i').'</span>';
                 })
                 ->addColumn('keterangan', function ($data_pengajuan) {
@@ -52,7 +53,9 @@ class PengajuanGeoLetterController extends Controller
                 })
                 ->rawColumns(['aksi', 'keterangan', 'pengaju']) // Untuk render tombol HTML
                 ->filterColumn('jenissurat', function($query, $keyword) {
-                    $query->where('jenis_surat.nama', 'LIKE', "%{$keyword}%");
+                    $query->whereHas('jenissurat', function ($q) use ($keyword) {
+                        $q->where('nama', 'like', "%{$keyword}%");
+                    });
                 })
                 ->filterColumn('keterangan', function($query, $keyword) {
                     $query->where('keterangan', 'LIKE', "%{$keyword}%");

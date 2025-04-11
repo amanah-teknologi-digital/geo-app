@@ -26,12 +26,12 @@ class PengajuanGeoLetter extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
-    public function pengaju()
+    public function pihakpengaju()
     {
         return $this->belongsTo(User::class, 'pengaju', 'id');
     }
 
-    public function updater()
+    public function pihakupdater()
     {
         return $this->belongsTo(User::class, 'updater', 'id');
     }
