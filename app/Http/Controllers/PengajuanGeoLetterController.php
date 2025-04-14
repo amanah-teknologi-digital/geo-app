@@ -42,13 +42,16 @@ class PengajuanGeoLetterController extends Controller
                 ->addColumn('keterangan', function ($data_pengajuan) {
                     return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->keterangan.'</span>';
                 })
+                ->addColumn('status', function ($data_pengajuan) {
+                    return '<span class="text-muted" style="font-size: smaller; font-style: italic; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
+                })
                 ->addColumn('aksi', function ($data_pengajuan) {
                     $html = '<a href="'.route('pengajuangeoletter.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>';
                     $html .= '&nbsp;&nbsp;<a href="javascript:;" data-id="'.$data_pengajuan->id_pengajuan.'" data-bs-toggle="modal" data-bs-target="#modal-hapus" class="btn btn-sm py-1 px-2 btn-danger"><span class="bx bx-trash"></span><span class="d-none d-lg-inline-block">&nbsp;Hapus</span></a>';
 
                     return $html;
                 })
-                ->rawColumns(['jenissurat', 'aksi', 'keterangan', 'pengaju']) // Untuk render tombol HTML
+                ->rawColumns(['jenissurat', 'aksi', 'keterangan', 'pengaju', 'status']) // Untuk render tombol HTML
                 ->filterColumn('jenissurat', function($query, $keyword) {
                     $query->whereHas('jenis_surat', function ($q) use ($keyword) {
                         $q->where('jenis_surat.nama', 'like', "%{$keyword}%");
@@ -56,6 +59,9 @@ class PengajuanGeoLetterController extends Controller
                 })
                 ->filterColumn('keterangan', function($query, $keyword) {
                     $query->where('pengajuan_geoletter.keterangan', 'LIKE', "%{$keyword}%");
+                })
+                ->filterColumn('pengaju', function($query, $keyword) {
+                    $query->where('pengajuan_geoletter.nama_pengaju', 'LIKE', "%{$keyword}%");
                 })
                 ->toJson();
         }

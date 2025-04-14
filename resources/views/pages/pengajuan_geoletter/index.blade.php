@@ -49,9 +49,9 @@
                             <tr>
                                 <th style="border-top-width: 1px" nowrap class="text-center">No</th>
                                 <th style="border-top-width: 1px" nowrap>Jenis Surat</th>
-                                <th style="border-top-width: 1px" nowrap>Pengaju</th>
-                                <th style="border-top-width: 1px" nowrap>No Hp</th>
-                                <th style="border-top-width: 1px" nowrap>Keterangan</th>
+                                <th style="border-top-width: 1px">Data Pengaju</th>
+                                <th style="border-top-width: 1px">Keterangan</th>
+                                <th style="border-top-width: 1px" nowrap>Status Pengajuan</th>
                                 <th style="border-top-width: 1px" nowrap class="text-center">Aksi</th>
                             </tr>
                             </thead>
