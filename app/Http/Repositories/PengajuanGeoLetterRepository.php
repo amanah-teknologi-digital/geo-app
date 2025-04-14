@@ -11,13 +11,11 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class PengajuanGeoLetterRepository
 {
     public function getDataPengajuan($id_pengajuan){
-        $data = PengajuanGeoLetter::select('id_pengajuan', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
-            ->with(['pihakpengaju','pihakupdater','jenissurat','statuspengajuan'])->orderBy('created_at', 'desc');
+        $data = PengajuanGeoLetter::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
+            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan'])->orderBy('created_at', 'desc');
 
         if (!empty($id_pengajuan)) {
             $data = $data->where('id_pengajuan', $id_pengajuan)->first();
-        }else{
-            $data = $data->get();
         }
 
         return $data;

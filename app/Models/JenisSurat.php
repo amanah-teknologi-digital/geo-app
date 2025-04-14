@@ -8,6 +8,7 @@ class JenisSurat extends Model
 {
     protected $table = 'jenis_surat';
     protected $primaryKey = 'id_jenissurat';
+    protected $keyType = 'string';
     public $incrementing = false;
     protected $fillable = [
         'id_jenissurat',

@@ -17,7 +17,7 @@ $(document).ready(function () {
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'all text-center' },
             { data: 'jenissurat', name: 'jenissurat', className: 'all', searchable: true },
             { data: 'pengaju', name: 'pengaju', className: 'all', searchable: true },
-            { data: 'keterangan', name: 'keterangan', className: 'all text-center', searchable: false },
+            { data: 'keterangan', name: 'keterangan', className: 'all', searchable: true },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all text-center text-nowrap' }
         ],
         order: [[2, 'desc']],

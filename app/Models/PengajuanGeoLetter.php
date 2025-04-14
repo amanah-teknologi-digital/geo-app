@@ -36,7 +36,7 @@ class PengajuanGeoLetter extends Model
         return $this->belongsTo(User::class, 'updater', 'id');
     }
 
-    public function jenissurat()
+    public function jenis_surat()
     {
         return $this->belongsTo(JenisSurat::class, 'id_jenissurat', 'id_jenissurat');
     }

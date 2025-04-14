@@ -33,7 +33,7 @@ class PengajuanGeoLetterController extends Controller
             return DataTables::of($data_pengajuan)
                 ->addIndexColumn()
                 ->addColumn('jenissurat', function ($data_pengajuan) {
-                    return $data_pengajuan->jenissurat->nama;
+                    return '<b>'.$data_pengajuan->jenis_surat->nama.'</b>';
                 })
                 ->addColumn('pengaju', function ($data_pengajuan) {
                     return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengajuan->pihakpengaju->name.
@@ -43,22 +43,19 @@ class PengajuanGeoLetterController extends Controller
                     return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->keterangan.'</span>';
                 })
                 ->addColumn('aksi', function ($data_pengajuan) {
-                    $html = '<a href="'.route('pengajuangeoletter.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>&nbsp;';
-                    $html .= '<div class="d-inline-block"><a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow me-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-dots-vertical-rounded icon-base"></i></a>';
-                    $html .= '<div class="dropdown-menu dropdown-menu-end m-0" style="">';
-                    $html .= '<div class="dropdown-divider"></div>';
-                    $html .= '<a href="javascript:;" class="dropdown-item text-danger delete-record" data-id="'.$data_pengajuan->id_pengajuan.'" data-bs-toggle="modal" data-bs-target="#modal-hapus"><span class="bx bx-trash"></span>&nbsp;Hapus</a>';
-                    $html .= '</div></div>';
+                    $html = '<a href="'.route('pengajuangeoletter.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>';
+                    $html .= '&nbsp;&nbsp;<a href="javascript:;" data-id="'.$data_pengajuan->id_pengajuan.'" data-bs-toggle="modal" data-bs-target="#modal-hapus" class="btn btn-sm py-1 px-2 btn-danger"><span class="bx bx-trash"></span><span class="d-none d-lg-inline-block">&nbsp;Hapus</span></a>';
+
                     return $html;
                 })
-                ->rawColumns(['aksi', 'keterangan', 'pengaju']) // Untuk render tombol HTML
+                ->rawColumns(['jenissurat', 'aksi', 'keterangan', 'pengaju']) // Untuk render tombol HTML
                 ->filterColumn('jenissurat', function($query, $keyword) {
-                    $query->whereHas('jenissurat', function ($q) use ($keyword) {
-                        $q->where('nama', 'like', "%{$keyword}%");
+                    $query->whereHas('jenis_surat', function ($q) use ($keyword) {
+                        $q->where('jenis_surat.nama', 'like', "%{$keyword}%");
                     });
                 })
                 ->filterColumn('keterangan', function($query, $keyword) {
-                    $query->where('keterangan', 'LIKE', "%{$keyword}%");
+                    $query->where('pengajuan_geoletter.keterangan', 'LIKE', "%{$keyword}%");
                 })
                 ->toJson();
         }
