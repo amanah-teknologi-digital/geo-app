@@ -15,6 +15,10 @@ class PengajuanGeoLetter extends Model
         'pengaju',
         'id_statuspengajuan',
         'id_jenissurat',
+        'nama_pengaju',
+        'no_hp',
+        'email',
+        'kartu_id',
         'created_at',
         'keterangan',
         'data_form',
@@ -26,10 +30,6 @@ class PengajuanGeoLetter extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
-    public function pihakpengaju()
-    {
-        return $this->belongsTo(User::class, 'pengaju', 'id');
-    }
 
     public function pihakupdater()
     {

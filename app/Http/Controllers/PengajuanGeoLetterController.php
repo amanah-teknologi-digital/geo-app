@@ -36,7 +36,7 @@ class PengajuanGeoLetterController extends Controller
                     return '<b>'.$data_pengajuan->jenis_surat->nama.'</b>';
                 })
                 ->addColumn('pengaju', function ($data_pengajuan) {
-                    return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengajuan->pihakpengaju->name.
+                    return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengajuan->nama_pengaju.
                         ',<br> pada '.$data_pengajuan->created_at->format('d-m-Y H:i').'</span>';
                 })
                 ->addColumn('keterangan', function ($data_pengajuan) {

@@ -11,8 +11,8 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class PengajuanGeoLetterRepository
 {
     public function getDataPengajuan($id_pengajuan){
-        $data = PengajuanGeoLetter::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
-            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan'])->orderBy('created_at', 'desc');
+        $data = PengajuanGeoLetter::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'kartu_id', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
+            ->with(['pihakupdater','jenis_surat','statuspengajuan'])->orderBy('created_at', 'desc');
 
         if (!empty($id_pengajuan)) {
             $data = $data->where('id_pengajuan', $id_pengajuan)->first();
@@ -38,6 +38,10 @@ class PengajuanGeoLetterRepository
             'pengaju' => auth()->user()->id,
             'id_statuspengajuan' => 0, //draft
             'id_jenissurat' => $request->jenis_surat,
+            'nama_pengaju' => auth()->user()->name,
+            'no_hp' => auth()->user()->no_hp,
+            'email' => auth()->user()->email,
+            'kartu_id' => auth()->user()->kartu_id,
             'keterangan' => $request->keterangan,
             'data_form' => $request->editor_quil,
             'created_at' => now(),
