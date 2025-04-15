@@ -25,7 +25,7 @@ class PengajuanPersuratanController extends Controller
     public function index(){
         $title = $this->subtitle;
 
-        return view('pages.pengajuan_geoletter.index', compact('title'));
+        return view('pages.pengajuan_surat.index', compact('title'));
     }
 
     public function getData(Request $request){
@@ -62,10 +62,10 @@ class PengajuanPersuratanController extends Controller
                     });
                 })
                 ->filterColumn('keterangan', function($query, $keyword) {
-                    $query->where('pengajuan_geoletter.keterangan', 'LIKE', "%{$keyword}%");
+                    $query->where('pengajuan_surat.keterangan', 'LIKE', "%{$keyword}%");
                 })
                 ->filterColumn('pengaju', function($query, $keyword) {
-                    $query->where('pengajuan_geoletter.nama_pengaju', 'LIKE', "%{$keyword}%");
+                    $query->where('pengajuan_surat.nama_pengaju', 'LIKE', "%{$keyword}%");
                 })
                 ->toJson();
         }
@@ -85,7 +85,7 @@ class PengajuanPersuratanController extends Controller
 
         $data_jenissurat = $this->service->getJenisSurat();
 
-        return view('pages.pengajuan_geoletter.tambah', compact('title', 'data_jenissurat'));
+        return view('pages.pengajuan_surat.tambah', compact('title', 'data_jenissurat'));
     }
 
     public function dotambahPengajuan(Request $request){
@@ -157,7 +157,7 @@ class PengajuanPersuratanController extends Controller
             $is_edit = false;
         }
 
-        return view('pages.pengajuan_geoletter.detail', compact('dataPengajuan', 'is_edit', 'title'));
+        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'is_edit', 'title'));
     }
 
 }

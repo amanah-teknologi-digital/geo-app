@@ -129,5 +129,5 @@
     <script>
         let routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
     </script>
-    @vite('resources/views/script_view/pengajuan_geoletter/tambah_pengajuan.js')
+    @vite('resources/views/script_view/pengajuan_surat/tambah_pengajuan.js')
 @endsection

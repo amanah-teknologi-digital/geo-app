@@ -95,5 +95,5 @@
         let routeName = "{{ route('pengajuansurat.getdata') }}"; // Ensure route name is valid
         let routeTambah = "{{ route('pengajuansurat.tambah') }}"
     </script>
-    @vite('resources/views/script_view/pengajuan_geoletter/list_pengajuan.js')
+    @vite('resources/views/script_view/pengajuan_surat/list_pengajuan.js')
 @endsection
