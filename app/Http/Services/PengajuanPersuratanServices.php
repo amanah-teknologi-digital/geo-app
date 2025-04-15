@@ -54,4 +54,16 @@ class PengajuanPersuratanServices
             throw new Exception($e->getMessage());
         }
     }
+
+    public function checkOtoritasPengajuan($id_statuspengajuan){
+        $id_akses = auth()->user()->akses->id_akses;
+
+        if (($id_statuspengajuan == 0 OR $id_statuspengajuan == 4) && in_array($id_akses, [1, 8])) { //jika status draft atau revisi dan akses superadmin & pengguna itu bisa edit
+            $is_edit = true;
+        }else{
+            $is_edit = false;
+        }
+
+        return $is_edit;
+    }
 }

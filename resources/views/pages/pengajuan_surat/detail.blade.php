@@ -16,12 +16,12 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="#">Master Data</a>
+                        <a href="#">Pengajuan</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('pengumuman') }}">Pengajuan Geo Letter</a>
+                        <a href="{{ route('pengajuansurat') }}">{{ (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : '') }}</a>
                     </li>
-                    <li class="breadcrumb-item active">Detail</li>
+                    <li class="breadcrumb-item active">{{ $title }}</li>
                 </ol>
             </nav>
             @if ($errors->any())
@@ -46,33 +46,30 @@
             @endif
             <div class="card mb-6">
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                    <h5 class="card-title mb-0"><i class="bx bx-edit-alt"></i>&nbsp;Detail Pengajuan</h5>
-                    <a href="{{ route('pengumuman') }}" class="btn btn-sm btn-secondary btn-sm">
+                    <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Pengajuan</h5>
+                    <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary btn-sm">
                         <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                     </a>
                 </div>
                 <div class="card-body pt-4">
-                    <form id="formPengumuman" method="POST" action="{{ route('pengajuangeoletter.doedit') }}" enctype="multipart/form-data">
+                    <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.dotambah') }}" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="id_pengumuman" value="{{ $dataPengajuan->id_pengumuman }}">
                         <div class="row g-6">
                             <div>
-                                <label for="judul" class="form-label">Judul Pengumuman <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="judul" name="judul" placeholder="judul" value="{{ $dataPengajuan->judul }}" required autocomplete="off" autofocus {{ !$is_edit ? 'readonly':'' }}>
+                                <label for="nama_pengaju" class="form-label">Nama Pengaju <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="{{ Auth()->user()->name }}" readonly>
                             </div>
                             <div>
-                                <label for="isi_pengumuman" class="form-label">Isi Pengumuman <span class="text-danger">*</span></label>
-                                <div id="editor_pengumuman" style="height: 250px;">{!! $dataPengajuan->data !!}</div>
-                                <input type="hidden" name="editor_quil" id="editor_quil" value="{{ $dataPengajuan->data }}">
-                                <div class="error-container" id="error-quil"></div>
+                                <label for="kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="{{ Auth()->user()->kartu_id }}" readonly>
                             </div>
                             <div>
-                                <label for="gambar_header" class="form-label">Gambar Header <span class="text-danger">*</span><span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
+                                <label for="file_kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
                                 @php
-                                    $file = $dataPengajuan->gambar_header;
-                                    $filePath = $dataPengajuan->file_pengumuman->location;
-                                    $imageUrl = Storage::disk('public')->exists($filePath)
-                                        ? route('file.getpublicfile', $file)
+                                    $file = auth()->user()->file_kartuid;
+                                    $filePath = auth()->user()->files->location;
+                                    $imageUrl = Storage::disk('local')->exists($filePath)
+                                        ? route('file.getprivatefile', $file)
                                         : asset('assets/img/no_image.jpg');
                                 @endphp
                                 <div class="d-flex align-items-center gap-2">
@@ -81,37 +78,45 @@
                                         Lihat file
                                     </button>
                                 </div>
-                                @if($is_edit)
-                                    <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
-                                    <input type="file" class="form-control" id="gambar_header" name="gambar_header" accept="image/*">
-                                @endif
+                            </div>
+                            <div>
+                                <label for="no_hp" class="form-label">No. Hp <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="{{ Auth()->user()->no_hp }}" readonly>
+                            </div>
+                            <div>
+                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="{{ Auth()->user()->email }}" readonly>
+                            </div>
+                            <div>
+                                <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
+                                    <option value="" selected disabled>-- Pilih Jenis Surat --</option>
+                                    @foreach($dataJenisSurat as $row)
+                                        <option value="{{ $row->id_jenissurat }}">{{ $row->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
+                                <div id="editor_surat" style="height: 250px;"></div>
+                                <input type="hidden" name="editor_quil" id="editor_quil">
+                                <div class="error-container" id="error-quil"></div>
+                            </div>
+                            <div>
+                                <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
+                                <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required></textarea>
                             </div>
                         </div>
-
-                        <div class="d-flex justify-content-between align-items-center mt-6">
-                            @if(!$is_edit)
-                                <div class="text-muted">
-                                    <small>
-                                        Posting by: <strong>{{ $dataPengajuan->postinger_user->name }}</strong> | <span>{{ $dataPengajuan->tgl_posting->format('d-m-Y H:i') }}</span>
-                                    </small>
-                                </div>
-                            @else
-                                <button type="submit" class="btn btn-primary me-3">Update</button>
-                            @endif
-                            <div class="text-muted">
-                                <small>
-                                    Updated by: <strong>{{ $dataPengajuan->user->name }}</strong> | <span>{{ ($dataPengajuan->updated_at ?? $dataPengajuan->created_at)->format('d-m-Y H:i') }}</span>
-                                </small>
-                            </div>
+                        <div class="mt-6">
+                            <button type="submit" class="btn btn-primary me-3">Tambah</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Modal -->
     <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
                 <div class="modal-body">
                     <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
@@ -121,5 +126,8 @@
     </div>
 @endsection
 @section('page-script')
-    @vite('resources/views/script_view/edit_pengumuman.js')
+    <script>
+        let routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
+    </script>
+    @vite('resources/views/script_view/pengajuan_surat/tambah_pengajuan.js')
 @endsection

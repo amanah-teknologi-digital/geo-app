@@ -83,9 +83,9 @@ class PengajuanPersuratanController extends Controller
     public function tambahPengajuan(){
         $title = "Tambah Pengajuan";
 
-        $data_jenissurat = $this->service->getJenisSurat();
+        $dataJenisSurat = $this->service->getJenisSurat();
 
-        return view('pages.pengajuan_surat.tambah', compact('title', 'data_jenissurat'));
+        return view('pages.pengajuan_surat.tambah', compact('title', 'dataJenisSurat'));
     }
 
     public function dotambahPengajuan(Request $request){
@@ -107,7 +107,7 @@ class PengajuanPersuratanController extends Controller
 
             DB::commit();
 
-            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Tambah Pengajuan Geo Letter.');
+            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Tambah Pengajuan.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();
@@ -149,15 +149,12 @@ class PengajuanPersuratanController extends Controller
 
     public function detailPengajuan($id_pengajuan){
         $title = "Detail Pengajuan";
+
         $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+        $dataJenisSurat = $this->service->getJenisSurat();
+        $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
 
-        if ($dataPengajuan->id_statuspengajuan == 0) {
-            $is_edit = true;
-        }else{
-            $is_edit = false;
-        }
-
-        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'is_edit', 'title'));
+        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'isEdit', 'title'));
     }
 
 }

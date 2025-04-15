@@ -91,7 +91,7 @@
                                     <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
                                     <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
                                         <option value="" selected disabled>-- Pilih Jenis Surat --</option>
-                                        @foreach($data_jenissurat as $row)
+                                        @foreach($dataJenisSurat as $row)
                                             <option value="{{ $row->id_jenissurat }}">{{ $row->nama }}</option>
                                         @endforeach
                                     </select>
