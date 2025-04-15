@@ -30,11 +30,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:1,2,8')->group(function () { //geo letter
         Route::get('/pengajuan-surat', [PengajuanPersuratanController::class, 'index'])->name('pengajuansurat');
         Route::get('/pengajuan-surat/getdata', [PengajuanPersuratanController::class, 'getData'])->name('pengajuansurat.getdata');
-        Route::get('/pengajuan-surat/detail/{id_pengajuan}', [PengajuanPersuratanController::class, 'detailPengajuan'])->name('pengajuansurat.detail');
-        Route::post('/pengajuan-surat/doedit', [PengajuanPersuratanController::class, 'doeditPengajuan'])->name('pengajuansurat.doedit');
-        Route::get('/pengajuan-surat/tambah', [PengajuanPersuratanController::class, 'tambahPengajuan'])->name('pengajuansurat.tambah');
-        Route::post('/pengajuan-surat/dotambah', [PengajuanPersuratanController::class, 'dotambahPengajuan'])->name('pengajuansurat.dotambah');
         Route::get('/pengajuan-surat/getjenissurat', [PengajuanPersuratanController::class, 'getJenisSurat'])->name('pengajuansurat.getjenissurat');
+        Route::get('/pengajuan-surat/tambah', [PengajuanPersuratanController::class, 'tambahPengajuan'])->name('pengajuansurat.tambah');
+        Route::post('/pengajuan-surat/dotambah', [PengajuanPersuratanController::class, 'doTambahPengajuan'])->name('pengajuansurat.dotambah');
+        Route::get('/pengajuan-surat/detail/{id_pengajuan}', [PengajuanPersuratanController::class, 'detailPengajuan'])->name('pengajuansurat.detail');
+        Route::post('/pengajuan-surat/doupdate', [PengajuanPersuratanController::class, 'doUpdatePengajuan'])->name('pengajuansurat.doupdate');
         Route::post('/pengajuan-surat/hapus', [PengajuanPersuratanController::class, 'hapusPengajuan'])->name('pengajuansurat.hapus');
     });
 

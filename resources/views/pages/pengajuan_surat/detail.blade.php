@@ -46,13 +46,13 @@
             @endif
             <div class="card mb-6">
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                    <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Pengajuan</h5>
+                    <h5 class="card-title mb-0"><i class="bx bx-edit-alt"></i>&nbsp;Detail Pengajuan</h5>
                     <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary btn-sm">
                         <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                     </a>
                 </div>
                 <div class="card-body pt-4">
-                    <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.dotambah') }}" enctype="multipart/form-data">
+                    <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}">
                         @csrf
                         <div class="row g-6">
                             <div>
@@ -64,7 +64,7 @@
                                 <input type="text" class="form-control" value="{{ Auth()->user()->kartu_id }}" readonly>
                             </div>
                             <div>
-                                <label for="file_kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
+                                <label for="file_kartu_id" class="form-label">File Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
                                 @php
                                     $file = auth()->user()->file_kartuid;
                                     $filePath = auth()->user()->files->location;

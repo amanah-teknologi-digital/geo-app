@@ -88,7 +88,7 @@ class PengajuanPersuratanController extends Controller
         return view('pages.pengajuan_surat.tambah', compact('title', 'dataJenisSurat'));
     }
 
-    public function dotambahPengajuan(Request $request){
+    public function doTambahPengajuan(Request $request){
         try {
             $request->validate([
                 'jenis_surat' => ['required'],
@@ -157,4 +157,34 @@ class PengajuanPersuratanController extends Controller
         return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'isEdit', 'title'));
     }
 
+    public function doUpdatePengajuan(Request $request){
+        try {
+            $request->validate([
+                'jenis_surat' => ['required'],
+                'editor_quil' => ['required'],
+                'keterangan' => ['required']
+            ],[
+                'jenis_surat.required' => 'Jenis Surat wajib diisi.',
+                'editor_quil.required' => 'Konten wajib diisi.',
+                'keterangan.required' => 'Keterangan wajib diisi.'
+            ]);
+
+            DB::beginTransaction();
+            //save file gambar header
+            $id_pengajuan = strtoupper(Uuid::uuid4()->toString());
+            $this->service->tambahPengajuan($request, $id_pengajuan);
+
+            DB::commit();
+
+            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Tambah Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }
