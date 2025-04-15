@@ -4,7 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PengajuanGeoFacilityController;
-use App\Http\Controllers\PengajuanGeoLetterController;
+use App\Http\Controllers\PengajuanPersuratanController;
 use App\Http\Controllers\PengajuanGeoRoomController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\PengumumanController;
@@ -22,27 +22,28 @@ Route::get('/pengumuman/getlist', [LandingPageController::class, 'getListPengumu
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
-    Route::get('/dashboard-letter', [DashboardController::class, 'letter'])->middleware('role:1,2,5,6,7')->name('dashboard.letter');
-    Route::get('/dashboard-room', [DashboardController::class, 'room'])->middleware('role:1,3,5,6,7')->name('dashboard.room');
-    Route::get('/dashboard-facility', [DashboardController::class, 'facility'])->middleware('role:1,4,5,6,7')->name('dashboard.facility');
+    Route::get('/dashboard-surat', [DashboardController::class, 'surat'])->middleware('role:1,2,5,6,7')->name('dashboard.surat');
+    Route::get('/dashboard-ruangan', [DashboardController::class, 'ruangan'])->middleware('role:1,3,5,6,7')->name('dashboard.ruangan');
+    Route::get('/dashboard-peralatan', [DashboardController::class, 'peralatan'])->middleware('role:1,4,5,6,7')->name('dashboard.peralatan');
     Route::get('/dashboard-pengguna', [DashboardController::class, 'pengguna'])->middleware('role:8')->name('dashboard.pengguna');
 
     Route::middleware('role:1,2,8')->group(function () { //geo letter
-        Route::get('/pengajuan-geoletter', [PengajuanGeoLetterController::class, 'index'])->name('pengajuangeoletter');
-        Route::get('/pengajuan-geoletter/getdata', [PengajuanGeoLetterController::class, 'getData'])->name('pengajuangeoletter.getdata');
-        Route::get('/pengajuan-geoletter/detail/{id_pengajuan}', [PengajuanGeoLetterController::class, 'detailPengajuan'])->name('pengajuangeoletter.detail');
-        Route::post('/pengajuan-geoletter/doedit', [PengajuanGeoLetterController::class, 'doeditPengajuan'])->name('pengajuangeoletter.doedit');
-        Route::get('/pengajuan-geoletter/tambah', [PengajuanGeoLetterController::class, 'tambahPengajuan'])->name('pengajuangeoletter.tambah');
-        Route::post('/pengajuan-geoletter/dotambah', [PengajuanGeoLetterController::class, 'dotambahPengajuan'])->name('pengajuangeoletter.dotambah');
-        Route::get('/pengajuan-geoletter/getjenissurat', [PengajuanGeoLetterController::class, 'getJenisSurat'])->name('pengajuangeoletter.getjenissurat');
+        Route::get('/pengajuan-surat', [PengajuanPersuratanController::class, 'index'])->name('pengajuansurat');
+        Route::get('/pengajuan-surat/getdata', [PengajuanPersuratanController::class, 'getData'])->name('pengajuansurat.getdata');
+        Route::get('/pengajuan-surat/detail/{id_pengajuan}', [PengajuanPersuratanController::class, 'detailPengajuan'])->name('pengajuansurat.detail');
+        Route::post('/pengajuan-surat/doedit', [PengajuanPersuratanController::class, 'doeditPengajuan'])->name('pengajuansurat.doedit');
+        Route::get('/pengajuan-surat/tambah', [PengajuanPersuratanController::class, 'tambahPengajuan'])->name('pengajuansurat.tambah');
+        Route::post('/pengajuan-surat/dotambah', [PengajuanPersuratanController::class, 'dotambahPengajuan'])->name('pengajuansurat.dotambah');
+        Route::get('/pengajuan-surat/getjenissurat', [PengajuanPersuratanController::class, 'getJenisSurat'])->name('pengajuansurat.getjenissurat');
+        Route::post('/pengajuan-surat/hapus', [PengajuanPersuratanController::class, 'hapusPengajuan'])->name('pengajuansurat.hapus');
     });
 
     Route::middleware('role:1,3,6,7,8')->group(function () { //geo room
-        Route::get('/pengajuan-georoom', [PengajuanGeoRoomController::class, 'index'])->name('pengajuangeoroom');
+        Route::get('/pengajuan-ruangan', [PengajuanGeoRoomController::class, 'index'])->name('pengajuanruangan');
     });
 
     Route::middleware('role:1,4,5,7,8')->group(function () { //geo facility
-        Route::get('/pengajuan-geofacility', [PengajuanGeoFacilityController::class, 'index'])->name('pengajuangeofacility');
+        Route::get('/pengajuan-peralatan', [PengajuanGeoFacilityController::class, 'index'])->name('pengajuanperalatan');
     });
 
     Route::middleware('role:1')->group(function () { //super admin

@@ -11,19 +11,19 @@ class DashboardController extends Controller{
         return view('pages.dashboard.dashboard_pengguna', compact('title'));
     }
 
-    public function letter(){
+    public function surat(){
         $title = 'Dashboard Persuratan';
 
         return view('pages.dashboard.dashboard_pengguna', compact('title'));
     }
 
-    public function room(){
+    public function ruangan(){
         $title = 'Dashboard Ruangan';
 
         return view('pages.dashboard.dashboard_pengguna', compact('title'));
     }
 
-    public function facility(){
+    public function peralatan(){
         $title = 'Dashboard Peralatan';
 
         return view('pages.dashboard.dashboard_pengguna', compact('title'));

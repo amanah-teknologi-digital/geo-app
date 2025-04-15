@@ -16,12 +16,12 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="#">Master Data</a>
+                        <a href="#">Pengajuan</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('pengumuman') }}">Pengajuan Geo Letter</a>
+                        <a href="{{ route('pengajuansurat') }}">{{ (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : '') }}</a>
                     </li>
-                    <li class="breadcrumb-item active">Tambah</li>
+                    <li class="breadcrumb-item active">{{ $title }}</li>
                 </ol>
             </nav>
             @if ($errors->any())
@@ -47,12 +47,12 @@
             <div class="card mb-6">
                     <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
                         <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Pengajuan</h5>
-                        <a href="{{ route('pengajuangeoletter') }}" class="btn btn-sm btn-secondary btn-sm">
+                        <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary btn-sm">
                             <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                         </a>
                     </div>
                     <div class="card-body pt-4">
-                        <form id="formPengajuan" method="POST" action="{{ route('pengajuangeoletter.dotambah') }}" enctype="multipart/form-data">
+                        <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.dotambah') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="row g-6">
                                 <div>
@@ -127,7 +127,7 @@
 @endsection
 @section('page-script')
     <script>
-        let routeGetJenisSurat = "{{ route('pengajuangeoletter.getjenissurat') }}";
+        let routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
     </script>
     @vite('resources/views/script_view/pengajuan_geoletter/tambah_pengajuan.js')
 @endsection

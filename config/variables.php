@@ -24,5 +24,8 @@ return [
     "twitterUrl" => "https://twitter.com/Theme_Selection",
     "githubUrl" => "https://github.com/themeselection",
     "dribbbleUrl" => "https://dribbble.com/themeselection",
-    "instagramUrl" => "https://www.instagram.com/themeselection/"
+    "instagramUrl" => "https://www.instagram.com/themeselection/",
+    "namaLayananPersuratan" => "Geo Letter",
+    "namaLayananSewaRuangan" => "Geo Room",
+    "namaLayananSewaPeralatan" => "Geo Tools",
 ];

@@ -38,28 +38,28 @@ $(document).ready(function () {
                         title: title,
                         text: '<i class="icon-base bx bx-printer me-1" ></i>Print',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] }
+                        exportOptions: { columns: [0, 1, 2, 3, 4] }
                     },
                     {
                         extend: 'csv',
                         title: title,
                         text: '<i class="icon-base bx bx-file me-1" ></i>Csv',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] }
+                        exportOptions: { columns: [0, 1, 2, 3, 4] }
                     },
                     {
                         extend: 'excel',
                         title: title,
                         text: '<i class="icon-base bx bxs-file me-1"></i>Excel',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] }
+                        exportOptions: { columns: [0, 1, 2, 3, 4] }
                     },
                     {
                         extend: 'pdf',
                         title: title,
                         text: '<i class="icon-base bx bxs-file-pdf me-1"></i>Pdf',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] },
+                        exportOptions: { columns: [0, 1, 2, 3, 4] },
                         customize: function(doc) {
                             doc.content[1].layout = {
                                 hLineWidth: function (i, node) {
@@ -83,7 +83,7 @@ $(document).ready(function () {
 
                             doc.content[1].table.body.forEach(function(row, i) {
                                 row[0].alignment = 'center'; // Kolom No
-                                row[3].alignment = 'center'; // Kolom posting
+                                row[4].alignment = 'center'; // Kolom posting
                             });
 
                             doc.content[1].margin = [ 100, 0, 100, 0 ]
@@ -101,7 +101,7 @@ $(document).ready(function () {
                         title: title,
                         text: '<i class="icon-base bx bx-copy me-1" ></i>Copy',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [0, 1, 2, 3] }
+                        exportOptions: { columns: [0, 1, 2, 3, 4] }
                     }
                 ]
             },

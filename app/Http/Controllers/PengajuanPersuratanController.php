@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Repositories\PengajuanGeoLetterRepository;
-use App\Http\Services\PengajuanGeoLetterServices;
+use App\Http\Repositories\PengajuanPersuratanRepository;
+use App\Http\Services\PengajuanPersuratanServices;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,16 +12,18 @@ use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Nonstandard\Uuid;
 use Yajra\DataTables\DataTables;
 
-class PengajuanGeoLetterController extends Controller
+class PengajuanPersuratanController extends Controller
 {
     private $service;
+    private $subtitle;
     public function __construct()
     {
-        $this->service = new PengajuanGeoLetterServices(new PengajuanGeoLetterRepository());
+        $this->service = new PengajuanPersuratanServices(new PengajuanPersuratanRepository());
+        $this->subtitle = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : '');
     }
 
     public function index(){
-        $title = "List Pengajuan GeoLetter";
+        $title = $this->subtitle;
 
         return view('pages.pengajuan_geoletter.index', compact('title'));
     }
@@ -43,11 +45,13 @@ class PengajuanGeoLetterController extends Controller
                     return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->keterangan.'</span>';
                 })
                 ->addColumn('status', function ($data_pengajuan) {
-                    return '<span class="text-muted" style="font-size: smaller; font-style: italic; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
+                    return '<span class="text-muted" style="font-size: smaller; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
                 })
                 ->addColumn('aksi', function ($data_pengajuan) {
-                    $html = '<a href="'.route('pengajuangeoletter.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>';
-                    $html .= '&nbsp;&nbsp;<a href="javascript:;" data-id="'.$data_pengajuan->id_pengajuan.'" data-bs-toggle="modal" data-bs-target="#modal-hapus" class="btn btn-sm py-1 px-2 btn-danger"><span class="bx bx-trash"></span><span class="d-none d-lg-inline-block">&nbsp;Hapus</span></a>';
+                    $html = '<a href="'.route('pengajuansurat.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>';
+                    if ($data_pengajuan->id_statuspengajuan == 0) { //status draft bisa hapus
+                        $html .= '&nbsp;&nbsp;<a href="javascript:;" data-id="' . $data_pengajuan->id_pengajuan . '" data-bs-toggle="modal" data-bs-target="#modal-hapus" class="btn btn-sm py-1 px-2 btn-danger"><span class="bx bx-trash"></span><span class="d-none d-lg-inline-block">&nbsp;Hapus</span></a>';
+                    }
 
                     return $html;
                 })
@@ -81,7 +85,7 @@ class PengajuanGeoLetterController extends Controller
 
         $data_jenissurat = $this->service->getJenisSurat();
 
-        return view('pages.pengajuan_geoletter.tambah', compact('title','data_jenissurat'));
+        return view('pages.pengajuan_geoletter.tambah', compact('title', 'data_jenissurat'));
     }
 
     public function dotambahPengajuan(Request $request){
@@ -103,7 +107,35 @@ class PengajuanGeoLetterController extends Controller
 
             DB::commit();
 
-            return redirect(route('pengajuangeoletter.detail', $id_pengajuan))->with('success', 'Berhasil Tambah Pengajuan Geo Letter.');
+            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Tambah Pengajuan Geo Letter.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function hapusPengajuan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan tidak ada.',
+            ]);
+
+            $dataPengajuan = $this->service->getDataPengajuan($request->id_pengajuan);
+
+            DB::beginTransaction();
+
+            $this->service->hapusPengajuan($dataPengajuan->id_pengajuan);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Berhasil Hapus Pengajuan.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();
@@ -116,8 +148,9 @@ class PengajuanGeoLetterController extends Controller
     }
 
     public function detailPengajuan($id_pengajuan){
-        $title = "Detail Pengajuan Geo Letter";
+        $title = "Detail Pengajuan";
         $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+
         if ($dataPengajuan->id_statuspengajuan == 0) {
             $is_edit = true;
         }else{
@@ -126,4 +159,5 @@ class PengajuanGeoLetterController extends Controller
 
         return view('pages.pengajuan_geoletter.detail', compact('dataPengajuan', 'is_edit', 'title'));
     }
+
 }

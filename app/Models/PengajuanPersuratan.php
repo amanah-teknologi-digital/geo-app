@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PengajuanGeoLetter extends Model
+class PengajuanPersuratan extends Model
 {
-    protected $table = 'pengajuan_geoletter';
+    protected $table = 'pengajuan_surat';
     public $timestamps = false;
     protected $primaryKey = 'id_pengajuan';
     public $incrementing = false;
