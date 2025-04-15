@@ -56,6 +56,38 @@
                             @csrf
                             <div class="row g-6">
                                 <div>
+                                    <label for="nama_pengaju" class="form-label">Nama Pengaju <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" value="{{ Auth()->user()->name }}" readonly>
+                                </div>
+                                <div>
+                                    <label for="kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" value="{{ Auth()->user()->kartu_id }}" readonly>
+                                </div>
+                                <div>
+                                    <label for="file_kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
+                                    @php
+                                        $file = auth()->user()->file_kartuid;
+                                        $filePath = auth()->user()->files->location;
+                                        $imageUrl = Storage::disk('local')->exists($filePath)
+                                            ? route('file.getprivatefile', $file)
+                                            : asset('assets/img/no_image.jpg');
+                                    @endphp
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modals-transparent">
+                                            Lihat file
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="no_hp" class="form-label">No. Hp <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" value="{{ Auth()->user()->no_hp }}" readonly>
+                                </div>
+                                <div>
+                                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" value="{{ Auth()->user()->email }}" readonly>
+                                </div>
+                                <div>
                                     <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
                                     <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
                                         <option value="" selected disabled>-- Pilih Jenis Surat --</option>
@@ -80,6 +112,15 @@
                             </div>
                         </form>
                     </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
+                <div class="modal-body">
+                    <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
+                </div>
             </div>
         </div>
     </div>

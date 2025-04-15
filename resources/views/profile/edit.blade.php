@@ -179,7 +179,7 @@
     </div>
     <!-- Modal -->
     <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
                 <div class="modal-body">
                     <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
