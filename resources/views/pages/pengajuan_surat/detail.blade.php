@@ -112,13 +112,13 @@
                                     <span class="timeline-icon bg-warning"><i class="bx bx-revision text-white"></i></span>
                                     <h5 class="mb-0">Direvisi Admin Geo Letter</h5>
                                     <p class="text-muted fst-italic fs-6">12 March 2020</p>
-                                    <p class="text-muted small"><b>Ket:</b> File kartu ID kurang Jelas</p>
+                                    <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">File kartu ID kurang Jelas sdjshdsj sdjshaugg asyfat wughhsbd dshgsy ajshaguw sausahd asjhuebd sjashaua</span></p>
                                 </li>
                                 <li class="timeline-item mb-5">
                                     <span class="timeline-icon bg-primary"><i class="bx bx-reset text-white"></i></span>
                                     <h5 class="mb-0">Sudah Direvisi Pengguna</h5>
                                     <p class="text-muted fst-italic fs-6">13 March 2020</p>
-                                    <p class="text-muted small"><b>Ket:</b> File Kartu ID sudah diperjelas</p>
+                                    <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">File Kartu ID sudah diperjelas</span></p>
                                 </li>
                                 <li class="timeline-item mb-5">
                                     <span class="timeline-icon bg-success"><i class="bx bx-check text-white"></i></span>
@@ -130,7 +130,7 @@
                                     <span class="timeline-icon bg-danger"><i class="bx bx-x text-white"></i></span>
                                     <h5 class="mb-0">Ditolak Admin Geo Letter</h5>
                                     <p class="text-muted fst-italic fs-6">13 March 2020</p>
-                                    <p class="text-muted small"><b>Ket:</b> Maaf tidak jadi!</p>
+                                    <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">Maaf tidak jadi!</span></p>
                                 </li>
                             </ul>
                         </div>
