@@ -154,7 +154,7 @@ class PengajuanPersuratanController extends Controller
         $dataJenisSurat = $this->service->getJenisSurat();
         $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
 
-        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'isEdit', 'title'));
+        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'id_pengajuan', 'isEdit', 'title'));
     }
 
     public function doUpdatePengajuan(Request $request){
