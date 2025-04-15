@@ -12,7 +12,7 @@ class PengajuanPersuratanRepository
 {
     public function getDataPengajuan($id_pengajuan){
         $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'kartu_id', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
-            ->with(['pihakupdater','jenis_surat','statuspengajuan'])->orderBy('created_at', 'desc');
+            ->with(['pihakupdater','jenis_surat','statuspengajuan','persetujuan'])->orderBy('created_at', 'desc');
 
         if (!empty($id_pengajuan)) {
             $data = $data->where('id_pengajuan', $id_pengajuan)->first();

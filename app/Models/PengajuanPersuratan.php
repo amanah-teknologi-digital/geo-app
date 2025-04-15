@@ -46,4 +46,9 @@ class PengajuanPersuratan extends Model
         return $this->belongsTo(StatusPengajuan::class, 'id_statuspengajuan', 'id_statuspengajuan');
     }
 
+    public function persetujuan()
+    {
+        return $this->hasMany(PersetujuanPersuratan::class, 'id_pengajuan', 'id_pengajuan');
+    }
+
 }
