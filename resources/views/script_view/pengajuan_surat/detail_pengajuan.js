@@ -128,7 +128,3 @@ $(document).ready(function () {
         $('#id_akses_tolak').val(dataId); // Masukkan ke modal
     });
 })
-
-function goAjukan(id_akses){
-
-}
