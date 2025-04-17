@@ -168,9 +168,27 @@ class PengajuanPersuratanServices
         }
     }
 
-    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan){
+    public function revisiPengajuan($id_pengajuan){
         try {
-            $this->repository->tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan);
+            $this->repository->revisiPengajuan($id_pengajuan);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function sudahRevisiPengajuan($id_pengajuan){
+        try {
+            $this->repository->sudahRevisiPengajuan($id_pengajuan);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan = null){
+        try {
+            $this->repository->tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan);
         }catch(Exception $e){
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

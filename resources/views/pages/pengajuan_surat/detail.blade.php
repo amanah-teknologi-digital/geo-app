@@ -106,8 +106,8 @@
                                 @foreach($dataPengajuan->persetujuan as $pers)
                                     <li class="timeline-item mb-5">
                                         <span class="timeline-icon {{ $pers->statuspersetujuan->class_bg }}"><i class="{{ $pers->statuspersetujuan->class_label }}"></i></span>
-                                        <h5 class="mb-0">{{ $pers->statuspersetujuan->nama.' '.$pers->akses->nama }}</h5>
-                                        <p class="text-muted fst-italic fs-6">{{ $pers->created_at->format('d/m/Y H:i') }} oleh {{ $pers->nama_penyetuju }}</p>
+                                        <p class="mb-0 fw-medium">{{ $pers->statuspersetujuan->nama.' '.$pers->akses->nama }}</p>
+                                        <p class="text-muted fst-italic small">{{ $pers->created_at->format('d/m/Y H:i') }} oleh {{ $pers->nama_penyetuju }}</p>
                                         @if(!empty($pers->keterangan))
                                             <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">{{ $pers->keterangan }}</span></p>
                                         @endif
@@ -189,7 +189,7 @@
                                 @elseif($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
                                     <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
                                     @if($dataPengajuan->id_statuspengajuan == 5)
-                                        <p class="mb-0 fw-medium text-danger">Pengajuan sudah direvisi dan belum Diverifikasi kembali!</p>
+                                        <p class="mb-0 fw-medium text-danger">Pengajuan sudah direvisi dan belum diverifikasi kembali!</p>
                                     @else
                                         <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi!</p>
                                     @endif
@@ -210,7 +210,7 @@
                                     </a>
                                 @endif
                                 @if($statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI')
-                                    <a href="javascript:void(0)" onclick="goSudahRevisi({{ $statusVerifikasi['must_akses'] }})" class="btn btn-info btn-sm d-flex align-items-center">
+                                    <a href="javascript:void(0)" data-id_akses_sudahrevisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-sudahrevisi" class="btn btn-info btn-sm d-flex align-items-center">
                                         <i class="bx bx-paper-plane"></i>&nbsp;Sudah Direvisi
                                     </a>
                                 @endif
@@ -219,11 +219,11 @@
                                         <i class="bx bx-check-circle"></i>&nbsp;Setujui
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:void(0)" onclick="goRevisi({{ $statusVerifikasi['must_akses'] }})" class="btn btn-warning btn-sm d-flex align-items-center">
+                                    <a href="javascript:void(0)" data-id_akses_revisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-revisi" class="btn btn-warning btn-sm d-flex align-items-center">
                                         <i class="bx bx-revision"></i>&nbsp;Revisi
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:void(0)" onclick="goTolak({{ $statusVerifikasi['must_akses'] }})" class="btn btn-danger btn-sm d-flex align-items-center">
+                                    <a href="javascript:void(0)" data-id_akses_tolak="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
                                         <i class="bx bx-x"></i>&nbsp;Tolak
                                     </a>
                                 @endif
@@ -285,6 +285,56 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success">Iya</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-revisi" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('pengajuansurat.revisi') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_akses" id="id_akses_revisi" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Revisi Pengajuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="keteranganrev" class="form-label">Keterangan <span class="text-danger">*</span></label>
+                            <textarea name="keteranganrev" id="keteranganrev" class="form-control" cols="10" rows="5" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-warning">Revisi</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-sudahrevisi" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('pengajuansurat.sudahrevisi') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_akses" id="id_akses_sudahrevisi" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Sudah Revisi Pengajuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="keterangansudahrev" class="form-label">Keterangan <span class="text-danger">*</span></label>
+                            <textarea name="keterangansudahrev" id="keterangansudahrev" class="form-control" cols="10" rows="5" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-info">Ajukan Revisi</button>
                     </div>
                 </div>
             </form>

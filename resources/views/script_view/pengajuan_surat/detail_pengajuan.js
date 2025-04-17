@@ -106,6 +106,20 @@ $(document).ready(function () {
         var dataId = button.data('id_akses_setujui'); // Ambil nilai data-id
         $('#id_akses_setujui').val(dataId); // Masukkan ke modal
     });
+
+    $('#modal-revisi').on('show.bs.modal', function(event) {
+        $('#keteranganrev').html("");
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_akses_revisi'); // Ambil nilai data-id
+        $('#id_akses_revisi').val(dataId); // Masukkan ke modal
+    });
+
+    $('#modal-sudahrevisi').on('show.bs.modal', function(event) {
+        $('#keterangansudahrev').html("");
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_akses_sudahrevisi'); // Ambil nilai data-id
+        $('#id_akses_sudahrevisi').val(dataId); // Masukkan ke modal
+    });
 })
 
 function goAjukan(id_akses){

@@ -250,6 +250,8 @@ class PengajuanPersuratanController extends Controller
             if ($dataPengajuan->id_statuspengajuan == 2 || $dataPengajuan->id_statuspengajuan == 5) {
                 if ($id_akses == 2) { //jika admin
                     $this->service->setujuiPengajuan($id_pengajuan); //ubah status pengajuan
+                }else{
+                    $this->service->ajukanPengajuan($id_pengajuan); //ubah ke status diajukan
                 }
                 $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 1);
             }
@@ -257,6 +259,86 @@ class PengajuanPersuratanController extends Controller
             DB::commit();
 
             return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Setujui Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function revisiPengajuan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+                'keteranganrev' => ['required']
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.',
+                'keteranganrev.required' => 'Keterangan revisi wajib diisi.'
+            ]);
+
+            $id_pengajuan = $request->id_pengajuan;
+            $id_akses = $request->id_akses;
+            if (empty($id_akses)){
+                $id_akses = auth()->user()->id_akses;
+            }
+            $keterangan = $request->keteranganrev;
+
+            $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+
+            DB::beginTransaction();
+
+            if ($dataPengajuan->id_statuspengajuan == 2 || $dataPengajuan->id_statuspengajuan == 5) {
+                $this->service->revisiPengajuan($id_pengajuan); //ubah status pengajuan
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 4, $keterangan);
+            }
+
+            DB::commit();
+
+            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Revisi Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function sudahRevisiPengajuan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+                'keterangansudahrev' => ['required']
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.',
+                'keterangansudahrev.required' => 'Keterangan sudah revisi wajib diisi.'
+            ]);
+
+            $id_pengajuan = $request->id_pengajuan;
+            $id_akses = $request->id_akses;
+            if (empty($id_akses)){
+                $id_akses = auth()->user()->id_akses;
+            }
+            $keterangan = $request->keterangansudahrev;
+
+            $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+
+            DB::beginTransaction();
+
+            if ($dataPengajuan->id_statuspengajuan == 4) {
+                $this->service->sudahRevisiPengajuan($id_pengajuan); //ubah status pengajuan
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 5, $keterangan);
+            }
+
+            DB::commit();
+
+            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Ajukan Revisi Pengajuan.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();

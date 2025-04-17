@@ -103,7 +103,19 @@ class PengajuanPersuratanRepository
         $dataPengajuan->save();
     }
 
-    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan = null){
+    public function revisiPengajuan($id_pengajuan){
+        $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
+        $dataPengajuan->id_statuspengajuan = 4;
+        $dataPengajuan->save();
+    }
+
+    public function sudahRevisiPengajuan($id_pengajuan){
+        $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
+        $dataPengajuan->id_statuspengajuan = 5;
+        $dataPengajuan->save();
+    }
+
+    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan){
         $id_persetujuan = strtoupper(Uuid::uuid4()->toString());
 
         PersetujuanPersuratan::create([
