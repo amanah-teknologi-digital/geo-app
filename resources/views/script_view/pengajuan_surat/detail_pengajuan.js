@@ -120,6 +120,13 @@ $(document).ready(function () {
         var dataId = button.data('id_akses_sudahrevisi'); // Ambil nilai data-id
         $('#id_akses_sudahrevisi').val(dataId); // Masukkan ke modal
     });
+
+    $('#modal-tolak').on('show.bs.modal', function(event) {
+        $('#keterangantolak').html("");
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_akses_tolak'); // Ambil nilai data-id
+        $('#id_akses_tolak').val(dataId); // Masukkan ke modal
+    });
 })
 
 function goAjukan(id_akses){

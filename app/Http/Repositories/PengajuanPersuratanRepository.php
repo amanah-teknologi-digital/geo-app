@@ -115,6 +115,12 @@ class PengajuanPersuratanRepository
         $dataPengajuan->save();
     }
 
+    public function tolakPengajuan($id_pengajuan){
+        $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
+        $dataPengajuan->id_statuspengajuan = 3;
+        $dataPengajuan->save();
+    }
+
     public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan){
         $id_persetujuan = strtoupper(Uuid::uuid4()->toString());
 

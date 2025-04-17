@@ -186,6 +186,15 @@ class PengajuanPersuratanServices
         }
     }
 
+    public function tolakPengajuan($id_pengajuan){
+        try {
+            $this->repository->tolakPengajuan($id_pengajuan);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan = null){
         try {
             $this->repository->tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan);

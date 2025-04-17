@@ -340,6 +340,31 @@
             </form>
         </div>
     </div>
+    <div class="modal fade" id="modal-tolak" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('pengajuansurat.tolak') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_akses" id="id_akses_tolak" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Tolak Pengajuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="keterangantolak" class="form-label">Keterangan <span class="text-danger">*</span></label>
+                            <textarea name="keterangantolak" id="keterangantolak" class="form-control" cols="10" rows="5" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Tolak Pengajuan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 @section('page-script')
     <script>

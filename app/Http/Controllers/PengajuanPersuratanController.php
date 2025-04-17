@@ -349,4 +349,44 @@ class PengajuanPersuratanController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function tolakPengajuan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+                'keterangantolak' => ['required']
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.',
+                'keterangantolak.required' => 'Keterangan tolak wajib diisi.'
+            ]);
+
+            $id_pengajuan = $request->id_pengajuan;
+            $id_akses = $request->id_akses;
+            if (empty($id_akses)){
+                $id_akses = auth()->user()->id_akses;
+            }
+            $keterangan = $request->keterangantolak;
+
+            $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+
+            DB::beginTransaction();
+
+            if ($dataPengajuan->id_statuspengajuan == 2 || $dataPengajuan->id_statuspengajuan == 5) {
+                $this->service->tolakPengajuan($id_pengajuan); //ubah status pengajuan
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 3, $keterangan);
+            }
+
+            DB::commit();
+
+            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Tolak Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }
