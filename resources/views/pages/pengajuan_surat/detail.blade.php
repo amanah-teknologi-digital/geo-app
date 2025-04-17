@@ -126,9 +126,9 @@
             <div class="card mb-6">
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
                     <h5 class="card-title mb-0"><i class="bx bx-envelope"></i>&nbsp;Data Persuratan</h5>
+                    <h5 class="card-title mb-0"><i class="bx bx-stats"></i>&nbsp;Status Pengajuan: <span class="fst-italic" style="color: {{ $dataPengajuan->statuspengajuan->html_color }}">{{ $dataPengajuan->statuspengajuan->nama }}</span></h5>
                 </div>
                 <div class="card-body pt-4">
-                    <h5 class="text-muted fst-italic">Status Pengajuan: <span style="color: {{ $dataPengajuan->statuspengajuan->html_color }}">{{ $dataPengajuan->statuspengajuan->nama }}</span></h5>
                     <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}">
                         @csrf
                         <div class="row g-6">
@@ -160,8 +160,34 @@
                             </div>
                         @endif
                     </form>
+                    <ul class="fa-ul ml-auto float-end mt-5">
+                        <li>
+                            <small><em>Dengan <b>ajukan pengajuan</b>, pengajuan akan <b>diverifikasi</b> oleh admin.</em></small>
+                        </li>
+                        <li>
+                            <small><em>Selama berstatus <b>Diajukan</b>, maka tidak diperbolehkan <b>mengupdate</b> pengajuan kecuali ada <b>revisi dari admin</b>.</em></small>
+                        </li>
+                        <li>
+                            <small><em>Jika ada <b>revisi dari admin</b>, maka update data <b>pengajuan</b> atau <b>biodata</b> sesuai dengan <b>arahan revisi</b> pada histori persetujuan.</em></small>
+                        </li>
+                        <li>
+                            <small><em>Pengajuan yang berstatus <b>Draft</b> masih bisa <b>dihapus/dibatalkan</b>.</em></small>
+                        </li>
+                    </ul>
                 </div>
             </div>
+            @if($isEdit)
+                <center style="margin-top: 30px">
+                    <a href="javascript:void(0)" onclick="goTolak(' + id_unik + ')" title="" class="btn-danger btn-sm tx-montserrat tx-semibold"><i class="fa fa-times wd-10"></i>&nbsp;Tolak Pengajuan</a>&nbsp;
+                    <a href="javascript:void(0)" onclick="goSetujui(' + id_unik + ')" title="" class="btn-success btn-sm tx-montserrat tx-semibold"><i class="fa fa-check wd-10"></i>&nbsp;&nbsp;Setujui Pengajuan</a>
+                </center>
+            @else
+                <center style="margin-top: 30px">
+                    <p class="tx-success">Disetujui Direktur oleh <i><b>'+data_konfirmasi[0]['user']['name']+'</b> pada ' + date + ' ' + time + '</i></p>
+                    <p class="tx-danger">Ditolak Direktur oleh <i><b>'+data_konfirmasi[0]['user']['name']+'</b> pada ' + date + ' ' + time + '</i></p>
+                    <a href="javascript:void(0)" data-toggle="modal" data-alasan="'+data_konfirmasi[0]['keterangan']+'" title="" class="btn btn-xs btn-icon btn-info bt-alasan"><i class="fa fa-info"></i>&nbsp;Alasan</a>
+                </center>
+            @endif
         </div>
     </div>
     <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
