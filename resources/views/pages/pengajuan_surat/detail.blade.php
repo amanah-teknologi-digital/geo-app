@@ -123,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card mb-6">
+            <div class="card" style="margin-bottom: 5.5rem !important;">
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
                     <h5 class="card-title mb-0"><i class="bx bx-envelope"></i>&nbsp;Data Persuratan</h5>
                     <h5 class="card-title mb-0"><i class="bx bx-stats"></i>&nbsp;Status Pengajuan: <span class="fst-italic" style="color: {{ $dataPengajuan->statuspengajuan->html_color }}">{{ $dataPengajuan->statuspengajuan->nama }}</span></h5>
@@ -131,6 +131,7 @@
                 <div class="card-body pt-4">
                     <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}">
                         @csrf
+                        <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" required>
                         <div class="row g-6">
                             <div>
                                 <label for="jenis_surat" class="form-label">Jenis Surat <span
@@ -145,7 +146,7 @@
                             <div>
                                 <label for="isi_surat" class="form-label">Form Isi Surat <span
                                         class="text-danger">*</span></label>
-                                <div id="editor_surat" style="height: 250px;">{!! $dataPengajuan->data_form !!}</div>
+                                <div id="editor_surat" style="height: 500px;">{!! $dataPengajuan->data_form !!}</div>
                                 <input type="hidden" name="editor_quil" id="editor_quil" value="{{ $dataPengajuan->data_form }}">
                                 <div class="error-container" id="error-quil"></div>
                             </div>
@@ -162,7 +163,7 @@
                     </form>
                     <ul class="fa-ul ml-auto float-end mt-5">
                         <li>
-                            <small><em>Dengan <b>ajukan pengajuan</b>, pengajuan akan <b>diverifikasi</b> oleh admin.</em></small>
+                            <small><em>Dengan <b>ajukan pengajuan</b>, pengajuan akan <b>diverifikasi</b> oleh admin. Pengajuan yang berstatus <b>Draft</b> masih bisa <b>dihapus/dibatalkan</b></em></small>
                         </li>
                         <li>
                             <small><em>Selama berstatus <b>Diajukan</b>, maka tidak diperbolehkan <b>mengupdate</b> pengajuan kecuali ada <b>revisi dari admin</b>.</em></small>
@@ -170,17 +171,36 @@
                         <li>
                             <small><em>Jika ada <b>revisi dari admin</b>, maka update data <b>pengajuan</b> atau <b>biodata</b> sesuai dengan <b>arahan revisi</b> pada histori persetujuan.</em></small>
                         </li>
-                        <li>
-                            <small><em>Pengajuan yang berstatus <b>Draft</b> masih bisa <b>dihapus/dibatalkan</b>.</em></small>
-                        </li>
                     </ul>
                 </div>
             </div>
             @if($isEdit)
-                <center style="margin-top: 30px">
-                    <a href="javascript:void(0)" onclick="goTolak(' + id_unik + ')" title="" class="btn-danger btn-sm tx-montserrat tx-semibold"><i class="fa fa-times wd-10"></i>&nbsp;Tolak Pengajuan</a>&nbsp;
-                    <a href="javascript:void(0)" onclick="goSetujui(' + id_unik + ')" title="" class="btn-success btn-sm tx-montserrat tx-semibold"><i class="fa fa-check wd-10"></i>&nbsp;&nbsp;Setujui Pengajuan</a>
-                </center>
+                <div class="position-fixed bottom-0 mb-10 start-50 translate-middle-x px-3 pb-3" style="z-index: 1050; width: 100%;">
+                    <div class="fixed-verifikasi-card">
+                        <div class="card rounded-3 w-100 bg-gray-500 border-gray-700" style="box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <!-- Isi card -->
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
+                                    <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi</p>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <a href="javascript:void(0)" onclick="goSetujui()" class="btn btn-success btn-sm d-flex align-items-center">
+                                        <i class="bx bx-check-circle"></i>&nbsp;Setujui
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a href="javascript:void(0)" onclick="goRevisi()" class="btn btn-warning btn-sm d-flex align-items-center">
+                                        <i class="bx bx-revision"></i>&nbsp;Revisi
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a href="javascript:void(0)" onclick="goTolak()" class="btn btn-danger btn-sm d-flex align-items-center">
+                                        <i class="bx bx-x"></i>&nbsp;Tolak
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @else
                 <center style="margin-top: 30px">
                     <p class="tx-success">Disetujui Direktur oleh <i><b>'+data_konfirmasi[0]['user']['name']+'</b> pada ' + date + ' ' + time + '</i></p>

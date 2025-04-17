@@ -66,4 +66,34 @@ class PengajuanPersuratanServices
 
         return $is_edit;
     }
+
+    public function getStatusVerifikasi($id_pengajuan){
+        $id_akses = auth()->user()->akses->id_akses;
+        $dataPengajuan = $this->getDataPengajuan($id_pengajuan);
+
+        $must_aprove = '';
+        $message = '';
+        $data = [];
+
+        if ($id_akses == 1){ //super admin
+            if ($dataPengajuan->id_statuspengajuan == 0){ //draft
+                $must_aprove = 'AJUKAN';
+            }else if ($dataPengajuan->id_statuspengajuan == 4){ //jika revisi harus sudah direvisi
+                $must_aprove = 'SUDAH DIREVISI';
+            }else{
+                $data = $pers_terakhir;
+            }
+
+        }elseif ($id_akses == 2){ //admin geo letter
+
+        }elseif ($id_akses == 8){ //pengguna
+
+        }
+
+        return [
+            'must_aprove' => $must_aprove,
+            'message' => $message,
+            'data' => $data
+        ];
+    }
 }

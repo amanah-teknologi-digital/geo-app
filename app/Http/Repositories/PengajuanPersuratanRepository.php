@@ -50,14 +50,19 @@ class PengajuanPersuratanRepository
     }
 
     public function updatePengajuan($request){
-        $id_pengumuman = $request->id_pengumuman;
+        $id_pengajuan = $request->id_pengajuan;
 
-        $dataPengumuman = Pengumuman::find($id_pengumuman);
-        $dataPengumuman->judul = $request->judul;
-        $dataPengumuman->data = $request->editor_quil;
-        $dataPengumuman->updated_at = now();
-        $dataPengumuman->updater = auth()->user()->id;
-        $dataPengumuman->save();
+        $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
+        $dataPengajuan->nama_pengaju = auth()->user()->name;
+        $dataPengajuan->kartu_id = auth()->user()->kartu_id;
+        $dataPengajuan->no_hp = auth()->user()->no_hp;
+        $dataPengajuan->email = auth()->user()->email;
+        $dataPengajuan->id_jenissurat = $request->jenis_surat;
+        $dataPengajuan->keterangan = $request->keterangan;
+        $dataPengajuan->data_form = $request->editor_quil;
+        $dataPengajuan->updated_at = now();
+        $dataPengajuan->updater = auth()->user()->id;
+        $dataPengajuan->save();
     }
 
     public function hapusPengajuan($id_pengajuan){

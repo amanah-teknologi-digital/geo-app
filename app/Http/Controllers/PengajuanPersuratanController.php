@@ -154,6 +154,7 @@ class PengajuanPersuratanController extends Controller
         $dataJenisSurat = $this->service->getJenisSurat();
         $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
         //$isEdit = false;
+        $statusVerifikasi = $this->service->getStatusVerifikasi($id_pengajuan);
 
         return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'id_pengajuan', 'isEdit', 'title'));
     }
@@ -161,10 +162,12 @@ class PengajuanPersuratanController extends Controller
     public function doUpdatePengajuan(Request $request){
         try {
             $request->validate([
+                'id_pengajuan' => ['required'],
                 'jenis_surat' => ['required'],
                 'editor_quil' => ['required'],
                 'keterangan' => ['required']
             ],[
+                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.',
                 'jenis_surat.required' => 'Jenis Surat wajib diisi.',
                 'editor_quil.required' => 'Konten wajib diisi.',
                 'keterangan.required' => 'Keterangan wajib diisi.'
@@ -172,8 +175,8 @@ class PengajuanPersuratanController extends Controller
 
             DB::beginTransaction();
             //save file gambar header
-            $id_pengajuan = strtoupper(Uuid::uuid4()->toString());
-            $this->service->tambahPengajuan($request, $id_pengajuan);
+            $id_pengajuan = $request->id_pengajuan;
+            $this->service->updatePengajuan($request);
 
             DB::commit();
 

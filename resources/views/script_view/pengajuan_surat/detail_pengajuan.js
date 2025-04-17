@@ -33,6 +33,9 @@ $(document).ready(function () {
     $("#formPengajuan").validate({
         ignore: "",
         rules: {
+            id_pengajuan:{
+                required: true
+            },
             jenis_surat: {
                 required: true
             },
@@ -44,6 +47,9 @@ $(document).ready(function () {
             }
         },
         messages: {
+            id_pengajuan: {
+                required: "Id Pengajuan wajib diisi"
+            },
             jenis_surat: {
                 required: "Jenis surat wajib diisi"
             },
