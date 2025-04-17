@@ -128,6 +128,7 @@
                     <h5 class="card-title mb-0"><i class="bx bx-envelope"></i>&nbsp;Data Persuratan</h5>
                 </div>
                 <div class="card-body pt-4">
+                    <h5 class="text-muted fst-italic">Status Pengajuan: <span style="color: {{ $dataPengajuan->statuspengajuan->html_color }}">{{ $dataPengajuan->statuspengajuan->nama }}</span></h5>
                     <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}">
                         @csrf
                         <div class="row g-6">
