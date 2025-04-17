@@ -101,38 +101,24 @@
                             <h5 class="card-title mb-0"><i class="bx bx-history"></i>&nbsp;Histori Persetujuan</h5>
                         </div>
                         <div class="card-body pt-4">
-                            <ul class="timeline-with-icons">
-                                <li class="timeline-item mb-5">
-                                    <span class="timeline-icon bg-success"><i class="bx bx-paper-plane text-white"></i></span>
-                                    <h5 class="mb-0">Diajukan Pengguna</h5>
-                                    <p class="text-muted fst-italic fs-6">11 March 2020</p>
-{{--                                    <p class="text-muted small">-</p>--}}
-                                </li>
-                                <li class="timeline-item mb-5">
-                                    <span class="timeline-icon bg-warning"><i class="bx bx-revision text-white"></i></span>
-                                    <h5 class="mb-0">Direvisi Admin Geo Letter</h5>
-                                    <p class="text-muted fst-italic fs-6">12 March 2020</p>
-                                    <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">File kartu ID kurang Jelas sdjshdsj sdjshaugg asyfat wughhsbd dshgsy ajshaguw sausahd asjhuebd sjashaua</span></p>
-                                </li>
-                                <li class="timeline-item mb-5">
-                                    <span class="timeline-icon bg-primary"><i class="bx bx-reset text-white"></i></span>
-                                    <h5 class="mb-0">Sudah Direvisi Pengguna</h5>
-                                    <p class="text-muted fst-italic fs-6">13 March 2020</p>
-                                    <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">File Kartu ID sudah diperjelas</span></p>
-                                </li>
-                                <li class="timeline-item mb-5">
-                                    <span class="timeline-icon bg-success"><i class="bx bx-check text-white"></i></span>
-                                    <h5 class="mb-0">Disetujui Admin Geo Letter</h5>
-                                    <p class="text-muted fst-italic fs-6">13 March 2020</p>
-{{--                                    <p class="text-muted small">-</p>--}}
-                                </li>
-                                <li class="timeline-item mb-5">
-                                    <span class="timeline-icon bg-danger"><i class="bx bx-x text-white"></i></span>
-                                    <h5 class="mb-0">Ditolak Admin Geo Letter</h5>
-                                    <p class="text-muted fst-italic fs-6">13 March 2020</p>
-                                    <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">Maaf tidak jadi!</span></p>
-                                </li>
-                            </ul>
+                            @if($dataPengajuan->persetujuan->isNotEmpty())
+                                <ul class="timeline-with-icons">
+                                @foreach($dataPengajuan->persetujuan as $pers)
+                                    <li class="timeline-item mb-5">
+                                        <span class="timeline-icon {{ $pers->statuspersetujuan->class_bg }}"><i class="{{ $pers->statuspersetujuan->class_label }}"></i></span>
+                                        <h5 class="mb-0">{{ $pers->statuspersetujuan->nama.' '.$pers->akses->nama }}</h5>
+                                        <p class="text-muted fst-italic fs-6">{{ $pers->created_at->format('d/m/Y H:i') }} oleh {{ $pers->nama_penyetuju }}</p>
+                                        @if(!empty($pers->keterangan))
+                                            <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">{{ $pers->keterangan }}</span></p>
+                                        @endif
+                                    </li>
+                                @endforeach
+                                </ul>
+                            @else
+                                <div class="text-center">
+                                    <p class="text-muted">Persetujuan Kosong!</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -148,29 +134,30 @@
                             <div>
                                 <label for="jenis_surat" class="form-label">Jenis Surat <span
                                         class="text-danger">*</span></label>
-                                <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
+                                <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus {{ $isEdit? '':'disabled' }} >
                                     <option value="" selected disabled>-- Pilih Jenis Surat --</option>
                                     @foreach($dataJenisSurat as $row)
-                                        <option value="{{ $row->id_jenissurat }}">{{ $row->nama }}</option>
+                                        <option value="{{ $row->id_jenissurat }}" {{ ($dataPengajuan->id_jenissurat == $row->id_jenissurat) ? 'selected':'' }}>{{ $row->nama }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div>
                                 <label for="isi_surat" class="form-label">Form Isi Surat <span
                                         class="text-danger">*</span></label>
-                                <div id="editor_surat" style="height: 250px;"></div>
-                                <input type="hidden" name="editor_quil" id="editor_quil">
+                                <div id="editor_surat" style="height: 250px;">{!! $dataPengajuan->data_form !!}</div>
+                                <input type="hidden" name="editor_quil" id="editor_quil" value="{{ $dataPengajuan->data_form }}">
                                 <div class="error-container" id="error-quil"></div>
                             </div>
                             <div>
                                 <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
-                                <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5"
-                                          required></textarea>
+                                <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required {{ $isEdit? '':'readonly' }} >{{ $dataPengajuan->keterangan }}</textarea>
                             </div>
                         </div>
-                        <div class="mt-6">
-                            <button type="submit" class="btn btn-primary me-3">Update Data</button>
-                        </div>
+                        @if($isEdit)
+                            <div class="mt-6">
+                                <button type="submit" class="btn btn-warning me-3 text-black"><i class="bx bx-save"></i>&nbsp;Update Pengajuan</button>
+                            </div>
+                        @endif
                     </form>
                 </div>
             </div>
@@ -188,6 +175,7 @@
 @endsection
 @section('page-script')
     <script>
+        let isEdit = {{ $isEdit ? 'true' : 'false' }};
         let routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
     </script>
     @vite('resources/views/script_view/pengajuan_surat/detail_pengajuan.js')

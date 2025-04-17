@@ -48,7 +48,7 @@ class PengajuanPersuratan extends Model
 
     public function persetujuan()
     {
-        return $this->hasMany(PersetujuanPersuratan::class, 'id_pengajuan', 'id_pengajuan');
+        return $this->hasMany(PersetujuanPersuratan::class, 'id_pengajuan', 'id_pengajuan')->orderBy('created_at');
     }
 
 }

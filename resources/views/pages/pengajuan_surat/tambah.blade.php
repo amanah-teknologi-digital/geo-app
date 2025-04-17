@@ -108,7 +108,7 @@
                                 </div>
                             </div>
                             <div class="mt-6">
-                                <button type="submit" class="btn btn-primary me-3">Tambah</button>
+                                <button type="submit" class="btn btn-primary me-3"><i class="bx bx-save"></i>&nbsp;Tambah Pengajuan</button>
                             </div>
                         </form>
                     </div>

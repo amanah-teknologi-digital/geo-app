@@ -17,6 +17,10 @@ $(document).ready(function () {
         theme: 'snow'
     });
 
+    if (!isEdit){
+        quill.disable();
+    }
+
     quill.on("text-change", function () {
         $("#editor_quil").val(quill.root.innerHTML);
     });

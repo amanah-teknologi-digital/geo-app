@@ -12,6 +12,7 @@ class StatusPersetujuan extends Model
     protected $fillable = [
         'id_statuspersetujuan',
         'nama',
-        'html_color'
+        'class_label',
+        'class_bg'
     ];
 }
