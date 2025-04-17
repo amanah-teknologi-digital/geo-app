@@ -74,26 +74,106 @@ class PengajuanPersuratanServices
         $must_aprove = '';
         $message = '';
         $data = [];
+        $must_akses = 0;
+        $must_sebagai = '';
+
+        if ($id_akses == 1){
+            $persetujuanTerakhir = $this->repository->getPersetujuanTerakhirSuper($id_pengajuan);
+        }else{
+            $persetujuanTerakhir = $this->repository->getPersetujuanTerakhir($id_pengajuan, $id_akses);
+        }
 
         if ($id_akses == 1){ //super admin
+            if ($dataPengajuan->id_statuspengajuan == 0){ //draft
+                $must_aprove = 'AJUKAN';
+                $must_akses = 8;
+                $must_sebagai = 'Pengguna';
+            }else{
+                if ($dataPengajuan->id_statuspengajuan == 2) { //verifikator sebagai
+                    $must_aprove = 'VERIFIKASI';
+                    $must_akses = 2;
+                    $must_sebagai = 'Admin Geo Letter';
+                }if ($dataPengajuan->id_statuspengajuan == 4){ //jika revisi harus sudah direvisi
+                    $must_aprove = 'SUDAH DIREVISI';
+                    $must_akses = 8;
+                    $must_sebagai = 'Pengguna';
+                }else if ($dataPengajuan->id_statuspengajuan == 5){ //jika sudah revisi harus diverifikasi
+                    $must_aprove = 'VERIFIKASI';
+                    $must_akses = 2;
+                    $must_sebagai = 'Admin Geo Letter';
+                }else{
+                    if (empty($persetujuanTerakhir)){
+                        $message = 'Persetujuan Kosong!';
+                    }else{
+                        $data = $persetujuanTerakhir;
+                    }
+                }
+            }
+        }elseif ($id_akses == 2){ //admin geo letter
+            if ($dataPengajuan->id_statuspengajuan == 0){ //draft
+                $message = 'Pengajuan Belum Diajukan!';
+            }else{
+                if (empty($persetujuanTerakhir)){
+                    $must_aprove = 'VERIFIKASI';
+                }else{
+                    if ($dataPengajuan->id_statuspengajuan == 5){ //sudah direvisi
+                        $must_aprove = 'VERIFIKASI';
+                    }else{
+                        if (empty($persetujuanTerakhir)){
+                            $message = 'Persetujuan Kosong!';
+                        }else{
+                            $data = $persetujuanTerakhir;
+                        }
+                    }
+                }
+            }
+        }elseif ($id_akses == 8){ //pengguna
             if ($dataPengajuan->id_statuspengajuan == 0){ //draft
                 $must_aprove = 'AJUKAN';
             }else if ($dataPengajuan->id_statuspengajuan == 4){ //jika revisi harus sudah direvisi
                 $must_aprove = 'SUDAH DIREVISI';
             }else{
-                $data = $pers_terakhir;
+                if (empty($persetujuanTerakhir)){
+                    $message = 'Persetujuan Kosong!';
+                }else{
+                    $data = $persetujuanTerakhir;
+                }
             }
-
-        }elseif ($id_akses == 2){ //admin geo letter
-
-        }elseif ($id_akses == 8){ //pengguna
-
         }
 
         return [
             'must_aprove' => $must_aprove,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
+            'must_akses' => $must_akses,
+            'must_sebagai' => $must_sebagai
         ];
+    }
+
+    public function ajukanPengajuan($id_pengajuan){
+        try {
+            $this->repository->ajukanPengajuan($id_pengajuan);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function setujuiPengajuan($id_pengajuan){
+        try {
+            $this->repository->setujuiPengajuan($id_pengajuan);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan){
+        try {
+            $this->repository->tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
     }
 }

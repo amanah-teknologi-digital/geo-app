@@ -45,7 +45,7 @@ class PengajuanPersuratanController extends Controller
                     return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->keterangan.'</span>';
                 })
                 ->addColumn('status', function ($data_pengajuan) {
-                    return '<span class="text-muted" style="font-size: smaller; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
+                    return '<span style="font-size: smaller; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
                 })
                 ->addColumn('aksi', function ($data_pengajuan) {
                     $html = '<a href="'.route('pengajuansurat.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>';
@@ -156,7 +156,7 @@ class PengajuanPersuratanController extends Controller
         //$isEdit = false;
         $statusVerifikasi = $this->service->getStatusVerifikasi($id_pengajuan);
 
-        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'id_pengajuan', 'isEdit', 'title'));
+        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'id_pengajuan', 'isEdit', 'statusVerifikasi', 'title'));
     }
 
     public function doUpdatePengajuan(Request $request){
@@ -180,7 +180,83 @@ class PengajuanPersuratanController extends Controller
 
             DB::commit();
 
-            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Tambah Pengajuan.');
+            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Update Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function ajukanPengajuan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required']
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.'
+            ]);
+
+            $id_pengajuan = $request->id_pengajuan;
+            $id_akses = $request->id_akses;
+            if (empty($id_akses)){
+                $id_akses = auth()->user()->id_akses;
+            }
+
+            $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+
+            DB::beginTransaction();
+
+            if ($dataPengajuan->id_statuspengajuan == 0) {
+                $this->service->ajukanPengajuan($id_pengajuan); //ubah status pengajuan
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 2);
+            }
+
+            DB::commit();
+
+            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Mengajukan Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function setujuiPengajuan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required']
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.'
+            ]);
+
+            $id_pengajuan = $request->id_pengajuan;
+            $id_akses = $request->id_akses;
+            if (empty($id_akses)){
+                $id_akses = auth()->user()->id_akses;
+            }
+
+            $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+
+            DB::beginTransaction();
+
+            if ($dataPengajuan->id_statuspengajuan == 2 || $dataPengajuan->id_statuspengajuan == 5) {
+                if ($id_akses == 2) { //jika admin
+                    $this->service->setujuiPengajuan($id_pengajuan); //ubah status pengajuan
+                }
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 1);
+            }
+
+            DB::commit();
+
+            return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Setujui Pengajuan.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();

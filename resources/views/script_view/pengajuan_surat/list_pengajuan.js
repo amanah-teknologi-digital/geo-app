@@ -18,7 +18,7 @@ $(document).ready(function () {
             { data: 'jenissurat', name: 'jenissurat', className: 'all', searchable: true },
             { data: 'pengaju', name: 'pengaju', className: 'all', searchable: true },
             { data: 'keterangan', name: 'keterangan', className: 'all', searchable: false },
-            { data: 'status', name: 'status', className: 'all text-center text-nowrap', searchable: false },
+            { data: 'status', name: 'status', className: 'all text-center', searchable: false },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all text-center text-nowrap' }
         ],
         order: [[2, 'desc']],

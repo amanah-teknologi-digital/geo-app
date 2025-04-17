@@ -6,6 +6,7 @@ use App\Models\Files;
 use App\Models\JenisSurat;
 use App\Models\PengajuanPersuratan;
 use App\Models\Pengumuman;
+use App\Models\PersetujuanPersuratan;
 use Ramsey\Uuid\Nonstandard\Uuid;
 
 class PengajuanPersuratanRepository
@@ -70,5 +71,50 @@ class PengajuanPersuratanRepository
         if ($pengajuan) {
             $pengajuan->delete();
         }
+    }
+
+    public function getPersetujuanTerakhir($id_pengajuan, $id_akses){
+        $data = PersetujuanPersuratan::with(['pihakpenyetuju','statuspersetujuan','akses'])
+            ->where('id_pengajuan', $id_pengajuan)
+            ->where('id_akses', $id_akses)
+            ->first();
+
+        return $data;
+    }
+
+    public function getPersetujuanTerakhirSuper($id_pengajuan){
+        $data = PersetujuanPersuratan::with(['pihakpenyetuju','statuspersetujuan','akses'])
+            ->where('id_pengajuan', $id_pengajuan)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return $data;
+    }
+
+    public function ajukanPengajuan($id_pengajuan){
+        $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
+        $dataPengajuan->id_statuspengajuan = 2;
+        $dataPengajuan->save();
+    }
+
+    public function setujuiPengajuan($id_pengajuan){
+        $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
+        $dataPengajuan->id_statuspengajuan = 1;
+        $dataPengajuan->save();
+    }
+
+    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan = null){
+        $id_persetujuan = strtoupper(Uuid::uuid4()->toString());
+
+        PersetujuanPersuratan::create([
+            'id_persetujuan' => $id_persetujuan,
+            'id_pengajuan' => $id_pengajuan,
+            'id_statuspersetujuan' => $id_statuspersetujuan,
+            'id_akses' => $id_akses,
+            'penyetuju' => auth()->user()->id,
+            'nama_penyetuju' => auth()->user()->name,
+            'keterangan' => $keterangan,
+            'created_at' => now()
+        ]);
     }
 }

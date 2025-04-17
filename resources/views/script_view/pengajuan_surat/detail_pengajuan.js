@@ -94,4 +94,20 @@ $(document).ready(function () {
             quill.root.innerHTML = '';
         }
     });
+
+    $('#modal-ajukan').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_akses_ajukan'); // Ambil nilai data-id
+        $('#id_akses_ajukan').val(dataId); // Masukkan ke modal
+    });
+
+    $('#modal-setujui').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_akses_setujui'); // Ambil nilai data-id
+        $('#id_akses_setujui').val(dataId); // Masukkan ke modal
+    });
 })
+
+function goAjukan(id_akses){
+
+}

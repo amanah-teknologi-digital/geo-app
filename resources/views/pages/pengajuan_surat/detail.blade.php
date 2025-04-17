@@ -136,7 +136,7 @@
                             <div>
                                 <label for="jenis_surat" class="form-label">Jenis Surat <span
                                         class="text-danger">*</span></label>
-                                <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus {{ $isEdit? '':'disabled' }} >
+                                <select name="jenis_surat" id="jenis_surat" class="form-control" required {{ $isEdit? '':'disabled' }} >
                                     <option value="" selected disabled>-- Pilih Jenis Surat --</option>
                                     @foreach($dataJenisSurat as $row)
                                         <option value="{{ $row->id_jenissurat }}" {{ ($dataPengajuan->id_jenissurat == $row->id_jenissurat) ? 'selected':'' }}>{{ $row->nama }}</option>
@@ -174,40 +174,67 @@
                     </ul>
                 </div>
             </div>
-            @if($isEdit)
-                <div class="position-fixed bottom-0 mb-10 start-50 translate-middle-x px-3 pb-3" style="z-index: 1050; width: 100%;">
-                    <div class="fixed-verifikasi-card">
-                        <div class="card rounded-3 w-100 bg-gray-500 border-gray-700" style="box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <!-- Isi card -->
-                                <div class="d-flex align-items-center">
+            <div class="position-fixed bottom-0 mb-10 start-50 translate-middle-x px-3 pb-3" style="z-index: 1050; width: 100%;">
+                <div class="fixed-verifikasi-card">
+                    <div class="card rounded-3 w-100 bg-gray-500 border-gray-700" style="box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <!-- Isi card -->
+                            <div class="d-flex align-items-center">
+                                @if($statusVerifikasi['must_aprove'] == 'AJUKAN')
+                                    <div class="bg-warning rounded me-3" style="width: 10px; height: 50px;"></div>
+                                    <p class="mb-0 fw-medium">Pengajuan Belum Diajukan!</p>
+                                @elseif($statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI')
+                                    <div class="bg-warning rounded me-3" style="width: 10px; height: 50px;"></div>
+                                    <p class="mb-0 fw-medium">Pengajuan Direvisi!</p>
+                                @elseif($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
                                     <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
-                                    <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi</p>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <a href="javascript:void(0)" onclick="goSetujui()" class="btn btn-success btn-sm d-flex align-items-center">
+                                    @if($dataPengajuan->id_statuspengajuan == 5)
+                                        <p class="mb-0 fw-medium text-danger">Pengajuan sudah direvisi dan belum Diverifikasi kembali!</p>
+                                    @else
+                                        <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi!</p>
+                                    @endif
+                                @else
+                                    @if($statusVerifikasi['data'])
+                                        <div class="bg-info rounded me-3" style="width: 10px; height: 50px;"></div>
+                                        <p class="mb-0 fw-medium">{{ $statusVerifikasi['data']->statuspersetujuan->nama.' oleh '.$statusVerifikasi['data']->nama_penyetuju.' pada '.$statusVerifikasi['data']->created_at->format('d/m/Y H:i') }}</p>
+                                    @else
+                                        <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
+                                        <p class="mb-0 fw-medium">{{ $statusVerifikasi['message'] }}</p>
+                                    @endif
+                                @endif
+                            </div>
+                            <div class="d-flex align-items-center">
+                                @if($statusVerifikasi['must_aprove'] == 'AJUKAN')
+                                    <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-ajukan" class="btn btn-success btn-sm d-flex align-items-center">
+                                        <i class="bx bx-paper-plane"></i>&nbsp;Ajukan Pengajuan
+                                    </a>
+                                @endif
+                                @if($statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI')
+                                    <a href="javascript:void(0)" onclick="goSudahRevisi({{ $statusVerifikasi['must_akses'] }})" class="btn btn-info btn-sm d-flex align-items-center">
+                                        <i class="bx bx-paper-plane"></i>&nbsp;Sudah Direvisi
+                                    </a>
+                                @endif
+                                @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
+                                    <a href="javascript:void(0)" data-id_akses_setujui="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-setujui" class="btn btn-success btn-sm d-flex align-items-center">
                                         <i class="bx bx-check-circle"></i>&nbsp;Setujui
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:void(0)" onclick="goRevisi()" class="btn btn-warning btn-sm d-flex align-items-center">
+                                    <a href="javascript:void(0)" onclick="goRevisi({{ $statusVerifikasi['must_akses'] }})" class="btn btn-warning btn-sm d-flex align-items-center">
                                         <i class="bx bx-revision"></i>&nbsp;Revisi
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:void(0)" onclick="goTolak()" class="btn btn-danger btn-sm d-flex align-items-center">
+                                    <a href="javascript:void(0)" onclick="goTolak({{ $statusVerifikasi['must_akses'] }})" class="btn btn-danger btn-sm d-flex align-items-center">
                                         <i class="bx bx-x"></i>&nbsp;Tolak
                                     </a>
-                                </div>
+                                @endif
+                                @if(!empty($statusVerifikasi['must_sebagai']))
+                                    &nbsp;<br><span class="fst-italic fw-medium">(Sebagai {{ $statusVerifikasi['must_sebagai'] }})</span>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-            @else
-                <center style="margin-top: 30px">
-                    <p class="tx-success">Disetujui Direktur oleh <i><b>'+data_konfirmasi[0]['user']['name']+'</b> pada ' + date + ' ' + time + '</i></p>
-                    <p class="tx-danger">Ditolak Direktur oleh <i><b>'+data_konfirmasi[0]['user']['name']+'</b> pada ' + date + ' ' + time + '</i></p>
-                    <a href="javascript:void(0)" data-toggle="modal" data-alasan="'+data_konfirmasi[0]['keterangan']+'" title="" class="btn btn-xs btn-icon btn-info bt-alasan"><i class="fa fa-info"></i>&nbsp;Alasan</a>
-                </center>
-            @endif
+            </div>
         </div>
     </div>
     <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
@@ -217,6 +244,50 @@
                     <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-ajukan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('pengajuansurat.ajukan') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_akses" id="id_akses_ajukan" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Ajukan Pengajuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah yakin mengajukan pengajuan ini?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">Iya</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-setujui" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('pengajuansurat.setujui') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_akses" id="id_akses_setujui" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Setujui Pengajuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah yakin menyetujui pengajuan ini?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">Iya</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 @endsection

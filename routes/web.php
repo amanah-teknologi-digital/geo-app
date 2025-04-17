@@ -36,6 +36,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pengajuan-surat/detail/{id_pengajuan}', [PengajuanPersuratanController::class, 'detailPengajuan'])->name('pengajuansurat.detail');
         Route::post('/pengajuan-surat/doupdate', [PengajuanPersuratanController::class, 'doUpdatePengajuan'])->name('pengajuansurat.doupdate');
         Route::post('/pengajuan-surat/hapus', [PengajuanPersuratanController::class, 'hapusPengajuan'])->name('pengajuansurat.hapus');
+        Route::post('/pengajuan-surat/ajukan', [PengajuanPersuratanController::class, 'ajukanPengajuan'])->name('pengajuansurat.ajukan');
+        Route::post('/pengajuan-surat/setujui', [PengajuanPersuratanController::class, 'setujuiPengajuan'])->name('pengajuansurat.setujui');
+        Route::post('/pengajuan-surat/revisi', [PengajuanPersuratanController::class, 'revisiPengajuan'])->name('pengajuansurat.revisi');
+        Route::post('/pengajuan-surat/sudahrevisi', [PengajuanPersuratanController::class, 'sudahRevisiPengajuan'])->name('pengajuansurat.sudahrevisi');
     });
 
     Route::middleware('role:1,3,6,7,8')->group(function () { //geo room

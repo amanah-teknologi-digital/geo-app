@@ -9,6 +9,7 @@ class PersetujuanPersuratan extends Model
     protected $table = 'persetujuan_surat';
     protected $primaryKey = 'id_persetujuan';
     public $incrementing = false;
+    public $timestamps = false;
     protected $fillable = [
         'id_persetujuan',
         'id_pengajuan',
@@ -18,6 +19,10 @@ class PersetujuanPersuratan extends Model
         'nama_penyetuju',
         'keterangan',
         'created_at'
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
     ];
 
     public function pihakpenyetuju()
