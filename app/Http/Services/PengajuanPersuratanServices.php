@@ -17,7 +17,8 @@ class PengajuanPersuratanServices
     }
 
     public function getDataPengajuan($id_pengajuan = null){
-        $data = $this->repository->getDataPengajuan($id_pengajuan);
+        $id_akses = auth()->user()->id_akses;
+        $data = $this->repository->getDataPengajuan($id_pengajuan, $id_akses);
 
         return $data;
     }

@@ -11,9 +11,18 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 
 class PengajuanPersuratanRepository
 {
-    public function getDataPengajuan($id_pengajuan){
+    public function getDataPengajuan($id_pengajuan, $id_akses){
         $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'kartu_id', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
             ->with(['pihakupdater','jenis_surat','statuspengajuan','persetujuan'])->orderBy('created_at', 'desc');
+
+        $id_pengguna = auth()->user()->id;
+        if ($id_akses == 8){ //pengguna
+            $data = $data->where('pengaju', $id_pengguna);
+        }
+
+        if ($id_akses == 2){ // admin geo harus status tidak draft
+            $data = $data->where('id_statuspengajuan', '!=', 0);
+        }
 
         if (!empty($id_pengajuan)) {
             $data = $data->where('id_pengajuan', $id_pengajuan)->first();
