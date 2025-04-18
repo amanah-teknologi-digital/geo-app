@@ -46,22 +46,6 @@
             @endif
             <div class="row">
                 <div class="col-md-8">
-                    @if(!($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI'))
-                        <div class="card mb-6 rounded-3 w-100">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <!-- Isi card -->
-                                <div class="d-flex align-items-center">
-                                    @if($statusVerifikasi['data'])
-                                        <div class="bg-info rounded me-3" style="width: 10px; height: 50px;"></div>
-                                        <p class="mb-0 fw-medium">{{ $statusVerifikasi['data']->statuspersetujuan->nama.' oleh '.$statusVerifikasi['data']->nama_penyetuju.' pada '.$statusVerifikasi['data']->created_at->format('d/m/Y H:i') }}</p>
-                                    @else
-                                        <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
-                                        <p class="mb-0 fw-medium">{{ $statusVerifikasi['message'] }}</p>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endif
                     <div class="card mb-6">
                         <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
                             <h5 class="card-title mb-0"><i class="bx bx-user"></i>&nbsp;Data Pemohon</h5>
@@ -139,10 +123,10 @@
                     </div>
                 </div>
             </div>
-            <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI') ? 'style="margin-bottom: 5.5rem !important;"':'' ?> >
+            <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI') ? 'style="margin-bottom: 5.5rem !important;"':'style="margin-bottom: 1.5rem !important;"' ?> >
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                    <h5 class="card-title mb-0"><i class="bx bx-envelope"></i>&nbsp;Data Persuratan</h5>
-                    <h5 class="card-title mb-0"><i class="bx bx-stats"></i>&nbsp;Status Pengajuan: <span class="fst-italic" style="color: {{ $dataPengajuan->statuspengajuan->html_color }}">{{ $dataPengajuan->statuspengajuan->nama }}</span></h5>
+                    <h5 class="card-title mb-0"><i class="bx bx-envelope pb-0"></i>&nbsp;Data Persuratan</h5>
+                    <h5 class="card-title mb-0"><i class="bx bx-station"></i>&nbsp;Status Pengajuan: <span class="fst-italic" style="color: {{ $dataPengajuan->statuspengajuan->html_color }}">{{ $dataPengajuan->statuspengajuan->nama }}</span></h5>
                 </div>
                 <div class="card-body pt-4">
                     <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}">
@@ -249,6 +233,21 @@
                                     @endif
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="card mb-6 rounded-3 w-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <!-- Isi card -->
+                        <div class="d-flex align-items-center">
+                            @if($statusVerifikasi['data'])
+                                <div class="{{ $statusVerifikasi['data']->statuspersetujuan->class_bg }} rounded me-3" style="width: 10px; height: 50px;"></div>
+                                <p class="mb-0 fw-medium">{{ $statusVerifikasi['data']->statuspersetujuan->nama.' oleh '.$statusVerifikasi['data']->nama_penyetuju.' pada '.$statusVerifikasi['data']->created_at->format('d/m/Y H:i') }}</p>
+                            @else
+                                <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
+                                <p class="mb-0 fw-medium">{{ $statusVerifikasi['message'] }}</p>
+                            @endif
                         </div>
                     </div>
                 </div>

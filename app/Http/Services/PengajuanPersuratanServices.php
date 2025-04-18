@@ -47,6 +47,15 @@ class PengajuanPersuratanServices
         }
     }
 
+    public function updateDataPemohon($id_pengajuan){
+        try {
+            $this->repository->updateDataPemohon($id_pengajuan);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function hapusPengajuan($id_pengajuan){
         try {
             $this->repository->hapusPengajuan($id_pengajuan);
@@ -78,7 +87,7 @@ class PengajuanPersuratanServices
         $must_akses = 0;
         $must_sebagai = '';
 
-        if ($id_akses == 1){
+        if ($id_akses == 1 || $dataPengajuan->id_statuspengajuan == 1 || $dataPengajuan->id_statuspengajuan == 3){
             $persetujuanTerakhir = $this->repository->getPersetujuanTerakhirSuper($id_pengajuan);
         }else{
             $persetujuanTerakhir = $this->repository->getPersetujuanTerakhir($id_pengajuan, $id_akses);

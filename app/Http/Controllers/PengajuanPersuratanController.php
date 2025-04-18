@@ -154,6 +154,20 @@ class PengajuanPersuratanController extends Controller
         $dataJenisSurat = $this->service->getJenisSurat();
         $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
         //$isEdit = false;
+        if ($isEdit){
+            //update data pemohon pengajuan
+            try {
+                DB::beginTransaction();
+
+                $this->service->updateDataPemohon($id_pengajuan);
+
+                DB::commit();
+            } catch (Exception $e) {
+                DB::rollBack();
+                Log::error($e->getMessage());
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
         $statusVerifikasi = $this->service->getStatusVerifikasi($id_pengajuan);
 
         return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'id_pengajuan', 'isEdit', 'statusVerifikasi', 'title'));
