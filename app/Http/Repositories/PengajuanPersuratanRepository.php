@@ -7,13 +7,14 @@ use App\Models\JenisSurat;
 use App\Models\PengajuanPersuratan;
 use App\Models\Pengumuman;
 use App\Models\PersetujuanPersuratan;
+use App\Models\User;
 use Ramsey\Uuid\Nonstandard\Uuid;
 
 class PengajuanPersuratanRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
         $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'kartu_id', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
-            ->with(['pihakupdater','jenis_surat','statuspengajuan','persetujuan'])->orderBy('created_at', 'desc');
+            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan'])->orderBy('created_at', 'desc');
 
         $id_pengguna = auth()->user()->id;
         if ($id_akses == 8){ //pengguna
@@ -62,11 +63,14 @@ class PengajuanPersuratanRepository
     public function updatePengajuan($request){
         $id_pengajuan = $request->id_pengajuan;
 
+        $dataPengajuan = $this->getDataPengajuan($id_pengajuan, auth()->user()->id_akses);
+        $dataUser = User::find($dataPengajuan->pengaju);
+
         $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
-        $dataPengajuan->nama_pengaju = auth()->user()->name;
-        $dataPengajuan->kartu_id = auth()->user()->kartu_id;
-        $dataPengajuan->no_hp = auth()->user()->no_hp;
-        $dataPengajuan->email = auth()->user()->email;
+        $dataPengajuan->nama_pengaju = $dataUser->name;
+        $dataPengajuan->kartu_id = $dataUser->kartu_id;
+        $dataPengajuan->no_hp = $dataUser->no_hp;
+        $dataPengajuan->email = $dataUser->email;
         $dataPengajuan->id_jenissurat = $request->jenis_surat;
         $dataPengajuan->keterangan = $request->keterangan;
         $dataPengajuan->data_form = $request->editor_quil;
@@ -86,6 +90,7 @@ class PengajuanPersuratanRepository
         $data = PersetujuanPersuratan::with(['pihakpenyetuju','statuspersetujuan','akses'])
             ->where('id_pengajuan', $id_pengajuan)
             ->where('id_akses', $id_akses)
+            ->orderBy('created_at', 'desc')
             ->first();
 
         return $data;

@@ -74,19 +74,19 @@
                                 <div>
                                     <label for="nama_pengaju" class="form-label">Nama Pengaju <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ Auth()->user()->name }}" readonly>
+                                    <input type="text" class="form-control" value="{{ $dataPengajuan->nama_pengaju }}" readonly>
                                 </div>
                                 <div>
                                     <label for="kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ Auth()->user()->kartu_id }}" readonly>
+                                    <input type="text" class="form-control" value="{{ $dataPengajuan->kartu_id }}" readonly>
                                 </div>
                                 <div>
                                     <label for="file_kartu_id" class="form-label">File Kartu ID (NRP/KTP) <span
                                             class="text-danger">*</span></label>
                                     @php
-                                        $file = auth()->user()->file_kartuid;
-                                        $filePath = auth()->user()->files->location;
+                                        $file = $dataPengajuan->pihakpengaju->file_kartuid;
+                                        $filePath = $dataPengajuan->pihakpengaju->files->location;
                                         $imageUrl = Storage::disk('local')->exists($filePath)
                                             ? route('file.getprivatefile', $file)
                                             : asset('assets/img/no_image.jpg');
@@ -101,11 +101,11 @@
                                 </div>
                                 <div>
                                     <label for="no_hp" class="form-label">No. Hp <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ Auth()->user()->no_hp }}" readonly>
+                                    <input type="text" class="form-control" value="{{ $dataPengajuan->no_hp }}" readonly>
                                 </div>
                                 <div>
                                     <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ Auth()->user()->email }}" readonly>
+                                    <input type="text" class="form-control" value="{{ $dataPengajuan->email }}" readonly>
                                 </div>
                             </div>
                         </div>

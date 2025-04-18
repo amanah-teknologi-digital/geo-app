@@ -31,6 +31,11 @@ class PengajuanPersuratan extends Model
         'updated_at' => 'datetime',
     ];
 
+    public function pihakpengaju()
+    {
+        return $this->belongsTo(User::class, 'pengaju', 'id');
+    }
+
     public function pihakupdater()
     {
         return $this->belongsTo(User::class, 'updater', 'id');
