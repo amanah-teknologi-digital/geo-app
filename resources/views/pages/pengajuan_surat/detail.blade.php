@@ -123,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card" style="margin-bottom: 5.5rem !important;">
+            <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI') ? 'style="margin-bottom: 5.5rem !important;"':'style="margin-bottom: 1.5rem !important;"' ?> >
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
                     <h5 class="card-title mb-0"><i class="bx bx-envelope"></i>&nbsp;Data Persuratan</h5>
                     <h5 class="card-title mb-0"><i class="bx bx-stats"></i>&nbsp;Status Pengajuan: <span class="fst-italic" style="color: {{ $dataPengajuan->statuspengajuan->html_color }}">{{ $dataPengajuan->statuspengajuan->nama }}</span></h5>
@@ -174,67 +174,84 @@
                     </ul>
                 </div>
             </div>
-            <div class="position-fixed bottom-0 mb-10 start-50 translate-middle-x px-3 pb-3" style="z-index: 1050; width: 100%;">
-                <div class="fixed-verifikasi-card">
-                    <div class="card rounded-3 w-100 bg-gray-500 border-gray-700" style="box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <!-- Isi card -->
-                            <div class="d-flex align-items-center">
-                                @if($statusVerifikasi['must_aprove'] == 'AJUKAN')
-                                    <div class="bg-warning rounded me-3" style="width: 10px; height: 50px;"></div>
-                                    <p class="mb-0 fw-medium">Pengajuan Belum Diajukan!</p>
-                                @elseif($statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI')
-                                    <div class="bg-warning rounded me-3" style="width: 10px; height: 50px;"></div>
-                                    <p class="mb-0 fw-medium">Pengajuan Direvisi!</p>
-                                @elseif($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
-                                    <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
-                                    @if($dataPengajuan->id_statuspengajuan == 5)
-                                        <p class="mb-0 fw-medium text-danger">Pengajuan sudah direvisi dan belum diverifikasi kembali!</p>
-                                    @else
-                                        <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi!</p>
-                                    @endif
-                                @else
-                                    @if($statusVerifikasi['data'])
-                                        <div class="bg-info rounded me-3" style="width: 10px; height: 50px;"></div>
-                                        <p class="mb-0 fw-medium">{{ $statusVerifikasi['data']->statuspersetujuan->nama.' oleh '.$statusVerifikasi['data']->nama_penyetuju.' pada '.$statusVerifikasi['data']->created_at->format('d/m/Y H:i') }}</p>
-                                    @else
+            @if($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI')
+                <div class="position-fixed bottom-0 mb-10 start-50 translate-middle-x px-3 pb-3" style="z-index: 1050; width: 100%;">
+                    <div class="fixed-verifikasi-card">
+                        <div class="card rounded-3 w-100 bg-gray-500 border-gray-700" style="box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <!-- Isi card -->
+                                <div class="d-flex align-items-center">
+                                    @if($statusVerifikasi['must_aprove'] == 'AJUKAN')
+                                        <div class="bg-warning rounded me-3" style="width: 10px; height: 50px;"></div>
+                                        <p class="mb-0 fw-medium">Pengajuan Belum Diajukan!</p>
+                                    @elseif($statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI')
+                                        <div class="bg-warning rounded me-3" style="width: 10px; height: 50px;"></div>
+                                        <p class="mb-0 fw-medium">Pengajuan Direvisi!</p>
+                                    @elseif($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
                                         <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
-                                        <p class="mb-0 fw-medium">{{ $statusVerifikasi['message'] }}</p>
+                                        @if($dataPengajuan->id_statuspengajuan == 5)
+                                            <p class="mb-0 fw-medium text-danger">Pengajuan sudah direvisi dan belum diverifikasi kembali!</p>
+                                        @else
+                                            <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi!</p>
+                                        @endif
+                                    @else
+                                        @if($statusVerifikasi['data'])
+                                            <div class="bg-info rounded me-3" style="width: 10px; height: 50px;"></div>
+                                            <p class="mb-0 fw-medium">{{ $statusVerifikasi['data']->statuspersetujuan->nama.' oleh '.$statusVerifikasi['data']->nama_penyetuju.' pada '.$statusVerifikasi['data']->created_at->format('d/m/Y H:i') }}</p>
+                                        @else
+                                            <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
+                                            <p class="mb-0 fw-medium">{{ $statusVerifikasi['message'] }}</p>
+                                        @endif
                                     @endif
-                                @endif
-                            </div>
-                            <div class="d-flex align-items-center">
-                                @if($statusVerifikasi['must_aprove'] == 'AJUKAN')
-                                    <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-ajukan" class="btn btn-success btn-sm d-flex align-items-center">
-                                        <i class="bx bx-paper-plane"></i>&nbsp;Ajukan Pengajuan
-                                    </a>
-                                @endif
-                                @if($statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI')
-                                    <a href="javascript:void(0)" data-id_akses_sudahrevisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-sudahrevisi" class="btn btn-info btn-sm d-flex align-items-center">
-                                        <i class="bx bx-paper-plane"></i>&nbsp;Sudah Direvisi
-                                    </a>
-                                @endif
-                                @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
-                                    <a href="javascript:void(0)" data-id_akses_setujui="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-setujui" class="btn btn-success btn-sm d-flex align-items-center">
-                                        <i class="bx bx-check-circle"></i>&nbsp;Setujui
-                                    </a>
-                                    &nbsp;&nbsp;
-                                    <a href="javascript:void(0)" data-id_akses_revisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-revisi" class="btn btn-warning btn-sm d-flex align-items-center">
-                                        <i class="bx bx-revision"></i>&nbsp;Revisi
-                                    </a>
-                                    &nbsp;&nbsp;
-                                    <a href="javascript:void(0)" data-id_akses_tolak="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
-                                        <i class="bx bx-x"></i>&nbsp;Tolak
-                                    </a>
-                                @endif
-                                @if(!empty($statusVerifikasi['must_sebagai']))
-                                    &nbsp;<br><span class="fst-italic fw-medium">(Sebagai {{ $statusVerifikasi['must_sebagai'] }})</span>
-                                @endif
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    @if($statusVerifikasi['must_aprove'] == 'AJUKAN')
+                                        <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-ajukan" class="btn btn-success btn-sm d-flex align-items-center">
+                                            <i class="bx bx-paper-plane"></i>&nbsp;Ajukan Pengajuan
+                                        </a>
+                                    @endif
+                                    @if($statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI')
+                                        <a href="javascript:void(0)" data-id_akses_sudahrevisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-sudahrevisi" class="btn btn-info btn-sm d-flex align-items-center">
+                                            <i class="bx bx-paper-plane"></i>&nbsp;Sudah Direvisi
+                                        </a>
+                                    @endif
+                                    @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
+                                        <a href="javascript:void(0)" data-id_akses_setujui="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-setujui" class="btn btn-success btn-sm d-flex align-items-center">
+                                            <i class="bx bx-check-circle"></i>&nbsp;Setujui
+                                        </a>
+                                        &nbsp;&nbsp;
+                                        <a href="javascript:void(0)" data-id_akses_revisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-revisi" class="btn btn-warning btn-sm d-flex align-items-center">
+                                            <i class="bx bx-revision"></i>&nbsp;Revisi
+                                        </a>
+                                        &nbsp;&nbsp;
+                                        <a href="javascript:void(0)" data-id_akses_tolak="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
+                                            <i class="bx bx-x"></i>&nbsp;Tolak
+                                        </a>
+                                    @endif
+                                    @if(!empty($statusVerifikasi['must_sebagai']))
+                                        &nbsp;<br><span class="fst-italic fw-medium">(Sebagai {{ $statusVerifikasi['must_sebagai'] }})</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <div class="card rounded-3 w-100 bg-gray-500 border-gray-700" style="box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <!-- Isi card -->
+                        <div class="d-flex align-items-center">
+                            @if($statusVerifikasi['data'])
+                                <div class="bg-info rounded me-3" style="width: 10px; height: 50px;"></div>
+                                <p class="mb-0 fw-medium">{{ $statusVerifikasi['data']->statuspersetujuan->nama.' oleh '.$statusVerifikasi['data']->nama_penyetuju.' pada '.$statusVerifikasi['data']->created_at->format('d/m/Y H:i') }}</p>
+                            @else
+                                <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
+                                <p class="mb-0 fw-medium">{{ $statusVerifikasi['message'] }}</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
     <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
