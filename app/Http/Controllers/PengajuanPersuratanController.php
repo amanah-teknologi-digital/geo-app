@@ -29,6 +29,8 @@ class PengajuanPersuratanController extends Controller
     }
 
     public function getData(Request $request){
+        $id_akses = auth()->user()->id_akses;
+
         if ($request->ajax()) {
             $data_pengajuan = $this->service->getDataPengajuan();
 
@@ -44,8 +46,11 @@ class PengajuanPersuratanController extends Controller
                 ->addColumn('keterangan', function ($data_pengajuan) {
                     return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->keterangan.'</span>';
                 })
-                ->addColumn('status', function ($data_pengajuan) {
-                    return '<span style="font-size: smaller; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
+                ->addColumn('status', function ($data_pengajuan) use($id_akses) {
+                    $html = '<span style="font-size: smaller; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
+                    $html .= $this->service->getHtmlStatusPengajuan($data_pengajuan->id_statuspengajuan, $id_akses, $data_pengajuan->persetujuan);
+
+                    return $html;
                 })
                 ->addColumn('aksi', function ($data_pengajuan) {
                     $html = '<a href="'.route('pengajuansurat.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>';

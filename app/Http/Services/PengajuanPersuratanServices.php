@@ -205,6 +205,60 @@ class PengajuanPersuratanServices
         }
     }
 
+    public function getHtmlStatusPengajuan($id_statuspengajuan, $id_akses, $dataPersetujuan){
+        $html = '';
+
+        if ($id_akses == 8){ //pengguna
+            if ($id_statuspengajuan == 0){
+                $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
+            }elseif ($id_statuspengajuan == 4){
+                $html .= '<br><i class="text-danger small">(Pengajuan Direvisi)</i>';
+            }
+        }
+
+        if ($id_akses == 2){ //admin
+            if ($id_statuspengajuan == 5){
+                $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
+            }elseif ($id_statuspengajuan == 2){
+                if ($dataPersetujuan->isNotEmpty()){
+                    $id_persetujuan = $dataPersetujuan->first(function ($item) {
+                        return $item->id_akses == 2;
+                    })->id_persetujuan ?? null;
+
+                    if (empty($id_persetujuan)){
+                        $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
+                    }
+                }else{
+                    $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
+                }
+            }
+        }
+
+        if ($id_akses == 1){ //superadmin
+            if ($id_statuspengajuan == 0){
+                $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
+            }elseif ($id_statuspengajuan == 4){
+                $html .= '<br><i class="text-danger small">(Pengajuan Direvisi)</i>';
+            }elseif ($id_statuspengajuan == 5){
+                $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
+            }elseif ($id_statuspengajuan == 2){
+                if ($dataPersetujuan->isNotEmpty()){
+                    $id_persetujuan = $dataPersetujuan->first(function ($item) {
+                        return $item->id_akses == 2;
+                    })->id_persetujuan ?? null;
+
+                    if (empty($id_persetujuan)){
+                        $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
+                    }
+                }else{
+                    $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
+                }
+            }
+        }
+
+        return $html;
+    }
+
     public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan = null){
         try {
             $this->repository->tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan);

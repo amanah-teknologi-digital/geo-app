@@ -14,16 +14,27 @@ class PengajuanPersuratanRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
         $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'kartu_id', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
-            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan'])->orderBy('created_at', 'desc');
+            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan']);
 
         $id_pengguna = auth()->user()->id;
         if ($id_akses == 8){ //pengguna
-            $data = $data->where('pengaju', $id_pengguna);
+            $data = $data->where('pengaju', $id_pengguna)
+                ->orderByRaw('FIELD(id_statuspengajuan, 0, 4)');
         }
 
         if ($id_akses == 2){ // admin geo harus status tidak draft
-            $data = $data->where('id_statuspengajuan', '!=', 0);
+            $data = $data->where('id_statuspengajuan', '!=', 0)
+            ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_surat WHERE persetujuan_surat.id_pengajuan = pengajuan_surat.id_pengajuan AND persetujuan_surat.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
+            ->orderByRaw('FIELD(id_statuspengajuan, 5)');
         }
+
+        if ($id_akses == 1){ //super admin
+            $data = $data->orderByRaw('FIELD(id_statuspengajuan, 0, 4)')
+                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_surat WHERE persetujuan_surat.id_pengajuan = pengajuan_surat.id_pengajuan AND persetujuan_surat.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
+                ->orderByRaw('FIELD(id_statuspengajuan, 5)');
+        }
+
+        $data = $data->orderBy('created_at', 'desc');
 
         if (!empty($id_pengajuan)) {
             $data = $data->where('id_pengajuan', $id_pengajuan)->first();
