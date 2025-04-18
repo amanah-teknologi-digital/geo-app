@@ -23,8 +23,7 @@ class PengajuanPersuratanRepository
                     WHEN id_statuspengajuan = 0 THEN 0
                     WHEN id_statuspengajuan = 4 THEN 1
                     ELSE 2
-                    END')
-                ->orderBy('id_statuspengajuan');
+                    END');
         }
 
         if ($id_akses == 2){ // admin geo harus status tidak draft
@@ -33,8 +32,7 @@ class PengajuanPersuratanRepository
                 ->orderByRaw('CASE
                     WHEN id_statuspengajuan = 5 THEN 0
                     ELSE 1
-                    END')
-                ->orderBy('id_statuspengajuan');
+                    END');
         }
 
         if ($id_akses == 1){ //super admin
@@ -45,8 +43,7 @@ class PengajuanPersuratanRepository
                     WHEN id_statuspengajuan = 4 THEN 1
                     WHEN id_statuspengajuan = 5 THEN 2
                     ELSE 3
-                    END') // Urutkan dengan id_statuspengajuan 0, 4, 5
-                ->orderBy('id_statuspengajuan');
+                    END'); // Urutkan dengan id_statuspengajuan 0, 4, 5
         }
 
         $data = $data->orderBy('created_at', 'desc');
