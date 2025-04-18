@@ -21,7 +21,7 @@ $(document).ready(function () {
             { data: 'status', name: 'status', className: 'all text-center', searchable: false },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all text-center text-nowrap' }
         ],
-        order: [[2, 'desc']],
+        //order: [[2, 'desc']],
         dom:
             //'Bfrtip',
             '<"mb-5 pb-4 border-bottom d-flex justify-content-between align-items-center"<"head-label text-center"><"dt-action-buttons text-end"B>><"d-flex mb-5 justify-content-between align-items-center row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex mt-5 justify-content-between row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',

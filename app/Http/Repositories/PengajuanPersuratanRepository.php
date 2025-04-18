@@ -19,19 +19,34 @@ class PengajuanPersuratanRepository
         $id_pengguna = auth()->user()->id;
         if ($id_akses == 8){ //pengguna
             $data = $data->where('pengaju', $id_pengguna)
-                ->orderByRaw('FIELD(id_statuspengajuan, 0, 4)');
+                ->orderByRaw('CASE
+                    WHEN id_statuspengajuan = 0 THEN 0
+                    WHEN id_statuspengajuan = 4 THEN 1
+                    ELSE 2
+                    END')
+                ->orderBy('id_statuspengajuan');
         }
 
         if ($id_akses == 2){ // admin geo harus status tidak draft
             $data = $data->where('id_statuspengajuan', '!=', 0)
-            ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_surat WHERE persetujuan_surat.id_pengajuan = pengajuan_surat.id_pengajuan AND persetujuan_surat.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
-            ->orderByRaw('FIELD(id_statuspengajuan, 5)');
+                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_surat WHERE persetujuan_surat.id_pengajuan = pengajuan_surat.id_pengajuan AND persetujuan_surat.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
+                ->orderByRaw('CASE
+                    WHEN id_statuspengajuan = 5 THEN 0
+                    ELSE 1
+                    END')
+                ->orderBy('id_statuspengajuan');
         }
 
         if ($id_akses == 1){ //super admin
-            $data = $data->orderByRaw('FIELD(id_statuspengajuan, 0, 4)')
+            $data = $data
                 ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_surat WHERE persetujuan_surat.id_pengajuan = pengajuan_surat.id_pengajuan AND persetujuan_surat.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
-                ->orderByRaw('FIELD(id_statuspengajuan, 5)');
+                ->orderByRaw('CASE
+                    WHEN id_statuspengajuan = 0 THEN 0
+                    WHEN id_statuspengajuan = 4 THEN 1
+                    WHEN id_statuspengajuan = 5 THEN 2
+                    ELSE 3
+                    END') // Urutkan dengan id_statuspengajuan 0, 4, 5
+                ->orderBy('id_statuspengajuan');
         }
 
         $data = $data->orderBy('created_at', 'desc');
