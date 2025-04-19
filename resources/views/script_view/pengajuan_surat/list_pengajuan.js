@@ -1,4 +1,19 @@
 $(document).ready(function () {
+    let btnTambah = {
+        text: '',
+        className: 'd-none'
+    };
+
+    if (isTambah){
+        btnTambah = {
+            text: '<i class="icon-base bx bx-plus me-1"></i> <span class="d-none d-lg-inline-block">Tambah Pengajuan</span>',
+                className: 'create-new btn btn-sm btn-primary',
+                action: function (e, dt, node, config) {
+                window.location.href = routeTambah;
+            }
+        }
+    }
+
     $("#datatable").DataTable({
         processing: true,
         serverSide: true,
@@ -105,13 +120,7 @@ $(document).ready(function () {
                     }
                 ]
             },
-            {
-                text: '<i class="icon-base bx bx-plus me-1"></i> <span class="d-none d-lg-inline-block">Tambah Pengajuan</span>',
-                className: 'create-new btn btn-sm btn-primary',
-                action: function (e, dt, node, config) {
-                    window.location.href = routeTambah;
-                }
-            }
+            btnTambah
         ]
     });
     $('div.head-label').html('<span class="card-header p-0"><i class="tf-icons bx bx-book-content"></i>&nbsp;List Pengajuan</span>');

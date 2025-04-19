@@ -77,6 +77,16 @@ class PengajuanPersuratanServices
         return $is_edit;
     }
 
+    public function checkAksesTambah($idAkses){
+        if (in_array($idAkses,[1,8])){ //cuma bisa super admin & pengguna
+            $isTambah = true;
+        }else{
+            $isTambah = false;
+        }
+
+        return $isTambah;
+    }
+
     public function getStatusVerifikasi($id_pengajuan){
         $id_akses = auth()->user()->akses->id_akses;
         $dataPengajuan = $this->getDataPengajuan($id_pengajuan);

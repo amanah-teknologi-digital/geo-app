@@ -92,6 +92,7 @@
 @section('page-script')
     <script>
         let title = "{{ $title }}";
+        let isTambah = "{{ $isTambah }}";
         let routeName = "{{ route('pengajuansurat.getdata') }}"; // Ensure route name is valid
         let routeTambah = "{{ route('pengajuansurat.tambah') }}"
     </script>

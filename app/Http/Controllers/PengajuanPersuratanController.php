@@ -24,8 +24,9 @@ class PengajuanPersuratanController extends Controller
 
     public function index(){
         $title = $this->subtitle;
+        $isTambah = $this->service->checkAksesTambah(Auth()->user()->id_akses);
 
-        return view('pages.pengajuan_surat.index', compact('title'));
+        return view('pages.pengajuan_surat.index', compact('isTambah','title'));
     }
 
     public function getData(Request $request){
