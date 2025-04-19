@@ -14,7 +14,7 @@ class DashboardController extends Controller{
     public function surat(){
         $title = 'Dashboard Persuratan';
 
-        return view('pages.dashboard.dashboard_pengguna', compact('title'));
+        return view('pages.dashboard.dashboard_surat', compact('title'));
     }
 
     public function ruangan(){
