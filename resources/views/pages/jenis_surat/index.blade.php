@@ -68,16 +68,16 @@
     </div>
     <div class="modal fade" id="modal-hapus" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengumuman.hapus') }}" method="POST">
+            <form action="{{ route('jenissurat.hapus') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengumuman" id="id_hapus">
+                <input type="hidden" name="id_jenissurat" id="id_hapus">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Hapus Pengumuman</h5>
+                        <h5 class="modal-title" id="exampleModalLabel2">Hapus Jenis Surat</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Apakah yakin menghapus pengumuman ini?</p>
+                        <p>Apakah yakin menghapus jenis surat ini?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
@@ -87,43 +87,43 @@
             </form>
         </div>
     </div>
-    <div class="modal fade" id="modal-unpost" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modal-nonaktif" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengumuman.unposting') }}" method="POST">
+            <form action="{{ route('jenissurat.nonaktifkan') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengumuman" id="id_unposting">
+                <input type="hidden" name="id_jenissurat" id="id_nonaktif">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Batal Posting Pengumuman</h5>
+                        <h5 class="modal-title" id="exampleModalLabel2">Non Aktifkan Jenis Surat</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Apakah yakin membatalkan posting pengumuman ini?</p>
+                        <p>Apakah yakin menonaktifkan jenis surat ini?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-warning">Batal Posting</button>
+                        <button type="submit" class="btn btn-warning">Non Aktifkan</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="modal fade" id="modal-post" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modal-aktif" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengumuman.posting') }}" method="POST">
+            <form action="{{ route('jenissurat.aktifkan') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengumuman" id="id_posting">
+                <input type="hidden" name="id_jenissurat" id="id_aktif">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Posting Pengumuman</h5>
+                        <h5 class="modal-title" id="exampleModalLabel2">Aktifkan Jenis Surat</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Apakah yakin posting pengumuman ini? posting pengumuman akan menampilkan pengumuman pada landing page.</p>
+                        <p>Apakah yakin mengaktifkan jenis surat ini? aktifkan jenis surat akan bisa diajukan oleh pengguna.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Posting</button>
+                        <button type="submit" class="btn btn-success">Aktifkan</button>
                     </div>
                 </div>
             </form>

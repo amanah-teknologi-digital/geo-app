@@ -50,6 +50,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/jenis-surat/dotambah', [JenisSuratController::class, 'doTambahJenisSurat'])->name('jenissurat.dotambah');
             Route::get('/jenis-surat/edit/{id_jenissurat}', [JenisSuratController::class, 'editJenisSurat'])->name('jenissurat.edit');
             Route::post('/jenis-surat/doedit', [JenisSuratController::class, 'doEditJenisSurat'])->name('jenissurat.doedit');
+            Route::post('/jenis-surat/hapus', [JenisSuratController::class, 'hapusJenisSurat'])->name('jenissurat.hapus');
+            Route::post('/jenis-surat/aktifkan', [JenisSuratController::class, 'aktifkanJenisSurat'])->name('jenissurat.aktifkan');
+            Route::post('/jenis-surat/nonaktifkan', [JenisSuratController::class, 'nonAktifkanJenisSurat'])->name('jenissurat.nonaktifkan');
         });
     });
 

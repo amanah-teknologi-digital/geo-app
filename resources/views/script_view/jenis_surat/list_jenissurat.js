@@ -120,15 +120,15 @@ $(document).ready(function () {
         $('#id_hapus').val(dataId); // Masukkan ke modal
     });
 
-    $('#modal-unpost').on('show.bs.modal', function(event) {
+    $('#modal-nonaktif').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Ambil tombol yang diklik
         var dataId = button.data('id'); // Ambil nilai data-id
-        $('#id_unposting').val(dataId); // Masukkan ke modal
+        $('#id_nonaktif').val(dataId); // Masukkan ke modal
     });
 
-    $('#modal-post').on('show.bs.modal', function(event) {
+    $('#modal-aktif').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Ambil tombol yang diklik
         var dataId = button.data('id'); // Ambil nilai data-id
-        $('#id_posting').val(dataId); // Masukkan ke modal
+        $('#id_aktif').val(dataId); // Masukkan ke modal
     });
 })

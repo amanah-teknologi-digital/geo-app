@@ -2,10 +2,7 @@
 
 namespace App\Http\Repositories;
 
-use App\Models\Files;
 use App\Models\JenisSurat;
-use App\Models\Pengumuman;
-use Ramsey\Uuid\Nonstandard\Uuid;
 
 class JenisSuratRepository
 {
@@ -41,30 +38,30 @@ class JenisSuratRepository
         $dataPengumuman->save();
     }
 
-    public function hapusPengumuman($id_pengumuman){
-        $pengumuman = Pengumuman::find($id_pengumuman);
-        if ($pengumuman) {
-            $pengumuman->delete();
+    public function hapusJenisSurat($idJenisSurat){
+        $JenisSurat = JenisSurat::find($idJenisSurat);
+        if ($JenisSurat) {
+            $JenisSurat->delete();
         }
     }
 
-    public function postingPengumuman($id_pengumuman){
-        $pengumuman = Pengumuman::find($id_pengumuman);
-        if ($pengumuman) {
-            $pengumuman->is_posting = 1;
-            $pengumuman->tgl_posting = now();
-            $pengumuman->postinger = auth()->user()->id;
-            $pengumuman->save();
+    public function aktifkanJenisSurat($idJenisSurat){
+        $JenisSurat = JenisSurat::find($idJenisSurat);
+        if ($JenisSurat) {
+            $JenisSurat->is_aktif = 1;
+            $JenisSurat->updated_at = now();
+            $JenisSurat->updater = auth()->user()->id;
+            $JenisSurat->save();
         }
     }
 
-    public function batalPostingPengumuman($id_pengumuman){
-        $pengumuman = Pengumuman::find($id_pengumuman);
-        if ($pengumuman) {
-            $pengumuman->is_posting = 0;
-            $pengumuman->tgl_posting = null;
-            $pengumuman->postinger = null;
-            $pengumuman->save();
+    public function nonAktifkanJenisSurat($idJenisSurat){
+        $JenisSurat = JenisSurat::find($idJenisSurat);
+        if ($JenisSurat) {
+            $JenisSurat->is_aktif = 0;
+            $JenisSurat->updated_at = now();
+            $JenisSurat->updater = auth()->user()->id;
+            $JenisSurat->save();
         }
     }
 }

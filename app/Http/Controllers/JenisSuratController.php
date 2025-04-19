@@ -42,7 +42,11 @@ class JenisSuratController extends Controller
                         '</span>';
                 })
                 ->addColumn('status', function ($dataJenisSurat) {
-                    return $dataJenisSurat->is_aktif? '<span class="badge bg-sm text-success">Aktif</span>':'<span class="badge bg-sm text-warning">Tidak Aktif</span>';
+                    $html = $dataJenisSurat->is_aktif? '<span class="badge bg-sm text-success">Aktif</span>':'<span class="badge bg-sm text-warning">Tidak Aktif</span>';
+                    if ($dataJenisSurat->pengajuansurat){
+                        $html .= '<br><i><span class="badge bg-sm text-danger">(Dipakai)</span></i>';
+                    }
+                    return $html;
                 })
                 ->addColumn('aksi', function ($dataJenisSurat) {
                     $html = '<a href="'.route('jenissurat.edit', $dataJenisSurat->id_jenissurat).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Edit</span></a>&nbsp;';
@@ -50,7 +54,7 @@ class JenisSuratController extends Controller
                     $html .= '<div class="dropdown-menu dropdown-menu-end m-0" style="">';
 
                     if ($dataJenisSurat->is_aktif == 1) {
-                        $html .= '<a href="javascript:;" class="dropdown-item text-warning nonaktifkan-jenissurat" data-id="'.$dataJenisSurat->id_jenissurat.'" data-bs-toggle="modal" data-bs-target="#modal-nonaktif"><span class="bx bx-x"></span>&nbsp;Non Aktifkan</a>';
+                        $html .= '<a href="javascript:;" class="dropdown-item text-warning nonaktifkan-jenissurat" data-id="'.$dataJenisSurat->id_jenissurat.'" data-bs-toggle="modal" data-bs-target="#modal-nonaktif"><span class="bx bx-no-entry"></span>&nbsp;Non Aktifkan</a>';
                     }else{
                         $html .= '<a href="javascript:;" class="dropdown-item text-success aktifkan-jenissurat" data-id="'.$dataJenisSurat->id_jenissurat.'" data-bs-toggle="modal" data-bs-target="#modal-aktif"><span class="bx bx-check"></span>&nbsp;Aktifkan</a>';
                     }
@@ -145,28 +149,23 @@ class JenisSuratController extends Controller
         }
     }
 
-    public function hapusPengumuman(Request $request){
+    public function hapusJenisSurat(Request $request){
         try {
             $request->validate([
-                'id_pengumuman' => ['required'],
+                'id_jenissurat' => ['required'],
             ],[
-                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
+                'id_jenissurat.required' => 'Id Jenis Surat tidak ada.',
             ]);
 
-            $dataPengumuman = $this->service->getDataPengumuman($request->id_pengumuman);
+            $dataJenisSurat = $this->service->getDataJenisSurat($request->id_jenissurat);
 
             DB::beginTransaction();
 
-            $this->service->hapusPengumuman($dataPengumuman->id_pengumuman);
-
-            //hapus file gambar header
-            $id_file_gambar = $dataPengumuman->gambar_header;
-            $location = $dataPengumuman->file_pengumuman->location;
-            $this->service->hapusFile($id_file_gambar, $location);
+            $this->service->hapusJenisSurat($dataJenisSurat->id_jenissurat);
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Berhasil Hapus Pengumuman.');
+            return redirect()->back()->with('success', 'Berhasil Hapus Jenis Surat.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();
@@ -177,19 +176,19 @@ class JenisSuratController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-    public function postingPengumuman(Request $request){
+    public function aktifkanJenisSurat(Request $request){
         try {
             $request->validate([
-                'id_pengumuman' => ['required'],
+                'id_jenissurat' => ['required'],
             ],[
-                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
+                'id_jenissurat.required' => 'Id Jenis Surat tidak ada.',
             ]);
 
-            $id_pengumuman = $request->id_pengumuman;
+            $idJenisSurat = $request->id_jenissurat;
 
-            $this->service->postingPengumuman($id_pengumuman);
+            $this->service->aktifkanJenisSurat($idJenisSurat);
 
-            return redirect()->back()->with('success', 'Berhasil Posting Pengumuman.');
+            return redirect()->back()->with('success', 'Berhasil Aktifkan Jenis Surat.');
         } catch (ValidationException $e) {
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
@@ -199,19 +198,19 @@ class JenisSuratController extends Controller
         }
     }
 
-    public function batalPostingPengumuman(Request $request){
+    public function nonAktifkanJenisSurat(Request $request){
         try {
             $request->validate([
-                'id_pengumuman' => ['required'],
+                'id_jenissurat' => ['required'],
             ],[
-                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
+                'id_jenissurat.required' => 'Id Jenis Surat tidak ada.',
             ]);
 
-            $id_pengumuman = $request->id_pengumuman;
+            $idJenisSurat = $request->id_jenissurat;
 
-            $this->service->batalPostingPengumuman($id_pengumuman);
+            $this->service->nonAktifkanJenisSurat($idJenisSurat);
 
-            return redirect()->back()->with('success', 'Berhasil Batal Posting Pengumuman.');
+            return redirect()->back()->with('success', 'Berhasil Menonaktifkan Jenis Surat.');
         } catch (ValidationException $e) {
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
