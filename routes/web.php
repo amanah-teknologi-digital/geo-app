@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PengajuanGeoFacilityController;
 use App\Http\Controllers\PengajuanPersuratanController;
@@ -41,6 +42,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/pengajuan-surat/revisi', [PengajuanPersuratanController::class, 'revisiPengajuan'])->name('pengajuansurat.revisi');
         Route::post('/pengajuan-surat/sudahrevisi', [PengajuanPersuratanController::class, 'sudahRevisiPengajuan'])->name('pengajuansurat.sudahrevisi');
         Route::post('/pengajuan-surat/tolak', [PengajuanPersuratanController::class, 'tolakPengajuan'])->name('pengajuansurat.tolak');
+
+        Route::middleware('role:1,2')->group(function () { //bisa manajemen jenis surat
+            Route::get('/jenis-surat', [JenisSuratController::class, 'index'])->name('jenissurat');
+        });
     });
 
     Route::middleware('role:1,3,6,7,8')->group(function () { //geo room
