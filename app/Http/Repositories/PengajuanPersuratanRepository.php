@@ -55,12 +55,16 @@ class PengajuanPersuratanRepository
         return $data;
     }
 
-    public function getJenisSurat($id_jenissurat){
+    public function getJenisSurat($id_jenissurat, $isEdit){
         $data = JenisSurat::select('id_jenissurat', 'nama', 'default_form', 'created_at', 'updated_at')->orderBy('created_at');
         if (!empty($id_jenissurat)) {
             $data = $data->where('id_jenissurat', $id_jenissurat)->first();
         }else{
-            $data = $data->where('is_aktif', 1)->get();
+            if ($isEdit){
+                $data = $data->where('is_aktif', 1)->get();
+            }else{
+                $data = $data->get();
+            }
         }
 
         return $data;

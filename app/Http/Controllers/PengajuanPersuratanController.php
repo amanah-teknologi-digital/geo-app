@@ -88,7 +88,7 @@ class PengajuanPersuratanController extends Controller
     public function tambahPengajuan(){
         $title = "Tambah Pengajuan";
 
-        $dataJenisSurat = $this->service->getJenisSurat();
+        $dataJenisSurat = $this->service->getJenisSurat(isEdit: true);
 
         return view('pages.pengajuan_surat.tambah', compact('title', 'dataJenisSurat'));
     }
@@ -156,8 +156,8 @@ class PengajuanPersuratanController extends Controller
         $title = "Detail Pengajuan";
 
         $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
-        $dataJenisSurat = $this->service->getJenisSurat();
         $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
+        $dataJenisSurat = $this->service->getJenisSurat(isEdit: $isEdit);
         //$isEdit = false;
         if ($isEdit){
             //update data pemohon pengajuan

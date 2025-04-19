@@ -32,8 +32,8 @@ class PengajuanPersuratanServices
         }
     }
 
-    public function getJenisSurat($id_jenissurat = null){
-        $data = $this->repository->getJenisSurat($id_jenissurat);
+    public function getJenisSurat($id_jenissurat = null, $isEdit = false){
+        $data = $this->repository->getJenisSurat($id_jenissurat, $isEdit);
 
         return $data;
     }
