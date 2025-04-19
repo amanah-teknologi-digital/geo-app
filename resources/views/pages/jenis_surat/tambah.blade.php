@@ -19,7 +19,7 @@
                         <a href="#">Master Data</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('pengumuman') }}">Pengumuman</a>
+                        <a href="{{ route('jenissurat') }}">Jenis Surat</a>
                     </li>
                     <li class="breadcrumb-item active">Tambah</li>
                 </ol>
@@ -46,32 +46,28 @@
             @endif
             <div class="card mb-6">
                     <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                        <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Pengumuman</h5>
-                        <a href="{{ route('pengumuman') }}" class="btn btn-sm btn-secondary btn-sm">
+                        <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Jenis Surat</h5>
+                        <a href="{{ route('jenissurat') }}" class="btn btn-sm btn-secondary btn-sm">
                             <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                         </a>
                     </div>
                     <div class="card-body pt-4">
-                        <form id="formPengumuman" method="POST" action="{{ route('pengumuman.dotambah') }}" enctype="multipart/form-data">
+                        <form id="formJenisSurat" method="POST" action="{{ route('jenissurat.dotambah') }}">
                             @csrf
                             <div class="row g-6">
                                 <div>
-                                    <label for="judul" class="form-label">Judul Pengumuman <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="judul" name="judul" placeholder="judul" required autocomplete="off" autofocus>
+                                    <label for="nama_jenis" class="form-label">Nama Jenis Surat <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="nama_jenis" name="nama_jenis" placeholder="Nama jenis surat" required autocomplete="off" autofocus>
                                 </div>
                                 <div>
-                                    <label for="isi_pengumuman" class="form-label">Isi Pengumuman <span class="text-danger">*</span></label>
-                                    <div id="editor_pengumuman" style="height: 250px;"></div>
+                                    <label for="isi_template" class="form-label">Template Surat <span class="text-danger">*</span></label>
+                                    <div id="editor_template" style="height: 700px;"></div>
                                     <input type="hidden" name="editor_quil" id="editor_quil">
                                     <div class="error-container" id="error-quil"></div>
                                 </div>
-                                <div>
-                                    <label for="gambar_header" class="form-label">Gambar Header <span class="text-danger">*</span><span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
-                                    <input type="file" class="form-control" id="gambar_header" name="gambar_header" accept="image/*">
-                                </div>
                             </div>
                             <div class="mt-6">
-                                <button type="submit" class="btn btn-primary me-3">Tambah</button>
+                                <button type="submit" class="btn btn-primary me-3"><i class="bx bx-save"></i>&nbsp;Tambah Jenis Surat</button>
                             </div>
                         </form>
                     </div>
@@ -80,5 +76,5 @@
     </div>
 @endsection
 @section('page-script')
-    @vite('resources/views/script_view/tambah_pengumuman.js')
+    @vite('resources/views/script_view/jenis_surat/tambah_jenissurat.js')
 @endsection

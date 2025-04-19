@@ -45,6 +45,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::middleware('role:1,2')->group(function () { //bisa manajemen jenis surat
             Route::get('/jenis-surat', [JenisSuratController::class, 'index'])->name('jenissurat');
+            Route::get('/jenis-surat/getdata', [JenisSuratController::class, 'getData'])->name('jenissurat.getdata');
+            Route::get('/jenis-surat/tambah', [JenisSuratController::class, 'tambahJenisSurat'])->name('jenissurat.tambah');
+            Route::post('/jenis-surat/dotambah', [JenisSuratController::class, 'doTambahJenisSurat'])->name('jenissurat.dotambah');
+            Route::get('/jenis-surat/edit/{id_jenissurat}', [JenisSuratController::class, 'editJenisSurat'])->name('jenissurat.edit');
+            Route::post('/jenis-surat/doedit', [JenisSuratController::class, 'doEditJenisSurat'])->name('jenissurat.doedit');
         });
     });
 

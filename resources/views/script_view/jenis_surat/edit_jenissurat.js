@@ -1,7 +1,7 @@
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 $(document).ready(function () {
-    const quill = new Quill('#editor_pengumuman', {
+    const quill = new Quill('#editor_template', {
         bounds: '#full-editor',
         modules: {
             toolbar: [
@@ -21,26 +21,6 @@ $(document).ready(function () {
         $("#editor_quil").val(quill.root.innerHTML);
     });
 
-    $.validator.addMethod("filesize", function(value, element, param) {
-        // Cek jika file dipilih
-        if(element.files.length === 0) {
-            return true;
-        }
-        // Ukuran file dalam bytes
-        return element.files[0].size <= param;
-    }, "Ukuran file terlalu besar.");
-
-    // Custom method untuk validasi tipe file (misal hanya jpg dan png)
-    $.validator.addMethod("fileextension", function(value, element, param) {
-        if(element.files.length === 0){
-            return true;
-        }
-        // Dapatkan nama file dan ekstrak ekstensi
-        var fileName = element.files[0].name;
-        var extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-        return $.inArray(extension, param) !== -1;
-    }, "Tipe file tidak diperbolehkan.");
-
     // Custom validator untuk Quill Editor
     $.validator.addMethod("quillRequired", function (value, element) {
         return value !== "<p><br></p>" && value !== "";
@@ -49,29 +29,19 @@ $(document).ready(function () {
     $("#formPengumuman").validate({
         ignore: "",
         rules: {
-            judul: {
+            nama_jenis: {
                 required: true
             },
             editor_quil: {
                 quillRequired: true
-            },
-            gambar_header: {
-                required: true,
-                filesize: 5242880,
-                fileextension: ['jpg', 'jpeg', 'png', 'gif']
             }
         },
         messages: {
-            judul: {
-                required: "Judul wajib diisi"
+            nama_jenis: {
+                required: "Nama jenis surat wajib diisi"
             },
             editor_quil: {
-                required: "Konten tidak boleh kosong"
-            },
-            gambar_header: {
-                required: "Gambar Header wajib diisi",
-                filesize: "Ukuran file maksimal 5 MB",
-                fileextension: "Hanya file JPG, JPEG, PNG, GIF, dan PDF yang diperbolehkan"
+                required: "Template tidak boleh kosong"
             }
         },
         errorPlacement: function(error, element) {

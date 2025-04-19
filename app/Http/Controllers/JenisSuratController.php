@@ -21,47 +21,50 @@ class JenisSuratController extends Controller
     }
     public function index()
     {
-        $title = "List Pengumuman";
+        $title = "Jenis Surat";
 
-        return view('pages.pengumuman.index', compact('title'));
+        return view('pages.jenis_surat.index', compact('title'));
     }
 
     public function getData(Request $request){
         if ($request->ajax()) {
-            $data_pengumuman = $this->service->getDataPengumuman();
+            $dataJenisSurat = $this->service->getDataJenisSurat();
 
-            return DataTables::of($data_pengumuman)
+            return DataTables::of($dataJenisSurat)
                 ->addIndexColumn()
-                ->addColumn('judul', function ($data_pengumuman) {
-                    return $data_pengumuman->judul;
+                ->addColumn('jenissurat', function ($dataJenisSurat) {
+                    return '<b>'.$dataJenisSurat->nama.'</b>';
                 })
-                ->addColumn('pembuat', function ($data_pengumuman) {
-                    return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengumuman->user->name.
-                        ',<br> pada '.$data_pengumuman->created_at->format('d-m-Y H:i').'</span>';
+                ->addColumn('updater', function ($dataJenisSurat) {
+                    return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.
+                        $dataJenisSurat->pihakupdater->name.',<br> pada '.
+                        ($dataJenisSurat->updated_at ? $dataJenisSurat->updated_at->format('d-m-Y H:i') : $dataJenisSurat->created_at->format('d-m-Y H:i')).
+                        '</span>';
                 })
-                ->addColumn('posting', function ($data_pengumuman) {
-                    return $data_pengumuman->is_posting? '<span class="badge bg-sm text-success">Posting</span>':'<span class="badge bg-sm text-warning">Tidak</span>';
+                ->addColumn('status', function ($dataJenisSurat) {
+                    return $dataJenisSurat->is_aktif? '<span class="badge bg-sm text-success">Aktif</span>':'<span class="badge bg-sm text-warning">Tidak Aktif</span>';
                 })
-                ->addColumn('aksi', function ($data_pengumuman) {
-                    $html = '<a href="'.route('pengumuman.edit', $data_pengumuman->id_pengumuman).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Edit</span></a>&nbsp;';
+                ->addColumn('aksi', function ($dataJenisSurat) {
+                    $html = '<a href="'.route('jenissurat.edit', $dataJenisSurat->id_jenissurat).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Edit</span></a>&nbsp;';
                     $html .= '<div class="d-inline-block"><a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow me-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-dots-vertical-rounded icon-base"></i></a>';
                     $html .= '<div class="dropdown-menu dropdown-menu-end m-0" style="">';
-                    if ($data_pengumuman->is_posting == 1) {
-                        $html .= '<a href="javascript:;" class="dropdown-item text-warning batal-posting" data-id="'.$data_pengumuman->id_pengumuman.'" data-bs-toggle="modal" data-bs-target="#modal-unpost"><span class="bx bx-candles"></span>&nbsp;Unposting</a>';
+
+                    if ($dataJenisSurat->is_aktif == 1) {
+                        $html .= '<a href="javascript:;" class="dropdown-item text-warning nonaktifkan-jenissurat" data-id="'.$dataJenisSurat->id_jenissurat.'" data-bs-toggle="modal" data-bs-target="#modal-nonaktif"><span class="bx bx-x"></span>&nbsp;Non Aktifkan</a>';
                     }else{
-                        $html .= '<a href="javascript:;" class="dropdown-item text-success posting-pengumuman" data-id="'.$data_pengumuman->id_pengumuman.'" data-bs-toggle="modal" data-bs-target="#modal-post"><span class="bx bx-paper-plane"></span>&nbsp;Posting</a>';
+                        $html .= '<a href="javascript:;" class="dropdown-item text-success aktifkan-jenissurat" data-id="'.$dataJenisSurat->id_jenissurat.'" data-bs-toggle="modal" data-bs-target="#modal-aktif"><span class="bx bx-check"></span>&nbsp;Aktifkan</a>';
                     }
-                    $html .= '<div class="dropdown-divider"></div>';
-                    $html .= '<a href="javascript:;" class="dropdown-item text-danger delete-record" data-id="'.$data_pengumuman->id_pengumuman.'" data-bs-toggle="modal" data-bs-target="#modal-hapus"><span class="bx bx-trash"></span>&nbsp;Hapus</a>';
+
+                    if (!$dataJenisSurat->pengajuansurat) {
+                        $html .= '<div class="dropdown-divider"></div>';
+                        $html .= '<a href="javascript:;" class="dropdown-item text-danger hapus-jenissurat" data-id="' . $dataJenisSurat->id_jenissurat . '" data-bs-toggle="modal" data-bs-target="#modal-hapus"><span class="bx bx-trash"></span>&nbsp;Hapus</a>';
+                    }
                     $html .= '</div></div>';
                     return $html;
                 })
-                ->rawColumns(['aksi', 'posting', 'pembuat']) // Untuk render tombol HTML
-                ->filterColumn('judul', function($query, $keyword) {
-                    $query->where('judul', 'LIKE', "%{$keyword}%");
-                })
-                ->filterColumn('created_at', function($query, $keyword) {
-                    $query->whereRaw("DATE_FORMAT(created_at, '%d-%m-%Y %H:%i') LIKE ?", ["%{$keyword}%"]);
+                ->rawColumns(['jenissurat', 'aksi', 'updater', 'status']) // Untuk render tombol HTML
+                ->filterColumn('jenissurat', function($query, $keyword) {
+                    $query->where('nama', 'LIKE', "%{$keyword}%");
                 })
                 ->toJson();
         }
@@ -69,36 +72,30 @@ class JenisSuratController extends Controller
         return response()->json(['message' => 'Invalid request'], 400);
     }
 
-    public function tambahPengumuman(){
-        $title = "Tambah Pengumuman";
+    public function tambahJenisSurat(){
+        $title = "Tambah Jenis Surat";
 
-        return view('pages.pengumuman.tambah', compact('title'));
+        return view('pages.jenis_surat.tambah', compact('title'));
     }
 
-    public function dotambahPengumuman(Request $request){
+    public function doTambahJenisSurat(Request $request){
         try {
             $request->validate([
-                'judul' => ['required'],
-                'editor_quil' => ['required'],
-                'gambar_header' => ['required', 'file', 'image', 'max:5048']
+                'nama_jenis' => ['required'],
+                'editor_quil' => ['required']
             ],[
-                'judul.required' => 'Judul wajib diisi.',
-                'editor_quil.required' => 'Konten wajib diisi.',
-                'gambar_header.required' => 'Gambar Header wajib diisi.',
-                'gambar_header.file' => 'File yang diunggah tidak valid.',
-                'gambar_header.image' => 'File harus berupa gambar.',
-                'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
+                'nama_jenis.required' => 'Nama jenis surat wajib diisi.',
+                'editor_quil.required' => 'Template surat wajib diisi.'
             ]);
 
             DB::beginTransaction();
             //save file gambar header
-            $id_file_gambar = strtoupper(Uuid::uuid4()->toString());
-            $this->service->tambahFile($request->file('gambar_header'), $id_file_gambar);
-            $this->service->tambahPengumuman($request, $id_file_gambar);
+            $id_jenissurat = strtoupper(Uuid::uuid4()->toString());
+            $this->service->tambahJenisSurat($request, $id_jenissurat);
 
             DB::commit();
 
-            return redirect(route('pengumuman'))->with('success', 'Berhasil Tambah Pengumuman.');
+            return redirect(route('jenissurat'))->with('success', 'Berhasil Tambah Jenis Surat.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();
@@ -110,48 +107,33 @@ class JenisSuratController extends Controller
         }
     }
 
-    public function editPengumuman($id_pengumuman){
-        $title = "Edit Pengumuman";
-        $dataPengumuman = $this->service->getDataPengumuman($id_pengumuman);
-        if ($dataPengumuman->is_posting){
-            $is_edit = false;
-        }else{
-            $is_edit = true;
-        }
+    public function editJenisSurat($idJenisSurat){
+        $title = "Edit Jenis Surat";
+        $dataJenisSurat = $this->service->getDataJenisSurat($idJenisSurat);
 
-        return view('pages.pengumuman.edit', compact('dataPengumuman', 'is_edit', 'title'));
+        return view('pages.jenis_surat.edit', compact('dataJenisSurat', 'title'));
     }
 
-    public function doeditPengumuman(Request $request){
+    public function doEditJenisSurat(Request $request){
         try {
             $request->validate([
-                'id_pengumuman' => ['required'],
-                'judul' => ['required'],
-                'editor_quil' => ['required'],
-                'gambar_header' => ['file', 'image', 'max:5048']
+                'id_jenissurat' => ['required'],
+                'nama_jenis' => ['required'],
+                'editor_quil' => ['required']
             ],[
-                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
-                'judul.required' => 'Judul wajib diisi.',
-                'editor_quil.required' => 'Konten wajib diisi.',
-                'gambar_header.file' => 'File yang diunggah tidak valid.',
-                'gambar_header.image' => 'File harus berupa gambar.',
-                'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
+                'id_jenissurat.required' => 'Id Jenis Surat tidak ada.',
+                'nama_jenis.required' => 'Nama jenis surat wajib diisi.',
+                'editor_quil.required' => 'Template wajib diisi.'
             ]);
-
-            $dataPengumuman = $this->service->getDataPengumuman($request->id_pengumuman);
 
             DB::beginTransaction();
             //save file gambar header
-            $id_file_gambar = $dataPengumuman->gambar_header;
-            if ($request->hasFile('gambar_header')) {
-                $this->service->tambahFile($request->file('gambar_header'), $id_file_gambar);
-            }
 
-            $this->service->updatePengumuman($request);
+            $this->service->updateJenisSurat($request);
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Berhasil Update Pengumuman.');
+            return redirect()->back()->with('success', 'Berhasil Update Jenis Surat.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();

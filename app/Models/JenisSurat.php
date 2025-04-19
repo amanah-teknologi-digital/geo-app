@@ -14,13 +14,24 @@ class JenisSurat extends Model
         'id_jenissurat',
         'nama',
         'default_form',
+        'is_aktif',
         'created_at',
         'updated_at',
         'updater'
     ];
 
-    public function updater()
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    public function pihakupdater()
     {
         return $this->belongsTo(User::class, 'updater', 'id');
+    }
+
+    public function pengajuansurat()
+    {
+        return $this->belongsTo(PengajuanPersuratan::class, 'id_jenissurat', 'id_jenissurat');
     }
 }
