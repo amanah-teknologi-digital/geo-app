@@ -60,7 +60,7 @@ class PengajuanPersuratanRepository
         if (!empty($id_jenissurat)) {
             $data = $data->where('id_jenissurat', $id_jenissurat)->first();
         }else{
-            $data = $data->get();
+            $data = $data->where('is_aktif', 1)->get();
         }
 
         return $data;
