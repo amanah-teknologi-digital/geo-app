@@ -58,6 +58,14 @@ function initiateChart(){
                 format: 'dd MMM'
             }
         },
+        yaxis: {
+            min: 0,
+            labels: {
+                formatter: function (val) {
+                    return val.toFixed(0); // menghilangkan .0
+                }
+            }
+        },
         series: [
             {
                 name: 'Jumlah Pengajuan',

@@ -58,6 +58,14 @@ function initiateChart(){
                 format: 'dd MMM'
             }
         },
+        yaxis: {
+            min: 0,
+            labels: {
+                formatter: function (val) {
+                    return val.toFixed(0); // menghilangkan .0
+                }
+            }
+        },
         series: [
             {
                 name: 'Jumlah Pengajuan',
@@ -144,6 +152,7 @@ function setDataStatus(data){
 }
 
 function generateChart(data){
+    console.log(data)
     let timestamps = data['listTanggal'];
     let jumlahPengajuan = data['listPengajuan'];
     let jumlahDisetujui = data['listDisetujui'];
