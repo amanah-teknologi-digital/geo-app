@@ -104,7 +104,8 @@
                     <div class="col-md-12">
                         <div class="card-body" style="position: relative;">
                             <div id="chart"></div>
-                            <p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 10px;">
+                            <br>
+                            <p style="font-size: 12px; color: #666; text-align: center; margin-bottom: 10px;">
                                 Geser ke kiri atau zoom untuk melihat data hari lainnya.
                             </p>
                         </div>
