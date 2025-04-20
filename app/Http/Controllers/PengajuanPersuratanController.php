@@ -19,7 +19,7 @@ class PengajuanPersuratanController extends Controller
     public function __construct()
     {
         $this->service = new PengajuanPersuratanServices(new PengajuanPersuratanRepository());
-        $this->subtitle = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : '');
+        $this->subtitle = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
     }
 
     public function index(){

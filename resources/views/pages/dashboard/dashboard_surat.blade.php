@@ -118,6 +118,7 @@
 @section('page-script')
     <script>
         let routeGetDataSurat = "{{ route('dashboard.suratgetdata') }}";
+        let istilahPersuratan = "{{ $istilahPersuratan }}";
     </script>
     @vite('resources/views/script_view/dashboard_surat/script.js')
 @endsection

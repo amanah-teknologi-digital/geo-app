@@ -8,20 +8,24 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller{
     private $service;
+    private $istilahPersuratan;
     public function __construct()
     {
         $this->service = new DashboardServices(new DashboardRepository());
+        $this->istilahPersuratan = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
     }
     public function pengguna(){
         $title = 'Dashboard Pengguna';
+        $istilahPersuratan = $this->istilahPersuratan;
 
-        return view('pages.dashboard.dashboard_pengguna', compact('title'));
+        return view('pages.dashboard.dashboard_pengguna', compact('title' ,'istilahPersuratan'));
     }
 
     public function surat(){
-        $title = 'Dashboard Persuratan';
+        $title = 'Dashboard '.$this->istilahPersuratan;
+        $istilahPersuratan = $this->istilahPersuratan;
 
-        return view('pages.dashboard.dashboard_surat', compact('title'));
+        return view('pages.dashboard.dashboard_surat', compact('title','istilahPersuratan'));
     }
 
     public function ruangan(){

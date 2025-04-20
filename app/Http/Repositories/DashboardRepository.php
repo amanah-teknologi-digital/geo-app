@@ -31,6 +31,10 @@ class DashboardRepository
     }
 
     public function getDataStatistikPersuratan($tahun){
+        $data = PengajuanPersuratan::with('persetujuan')
+            ->where(DB::raw('YEAR(created_at)'), $tahun)
+            ->get();
 
+        return $data;
     }
 }
