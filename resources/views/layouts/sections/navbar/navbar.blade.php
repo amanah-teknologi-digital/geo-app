@@ -10,9 +10,7 @@
 
     <!-- Navbar -->
 @if(isset($navbarDetached) && $navbarDetached == 'navbar-detached')
-    <nav
-        class="layout-navbar {{$containerNav}} navbar navbar-expand-xl {{$navbarDetached}} align-items-center bg-navbar-theme"
-        id="layout-navbar">
+    <nav class="layout-navbar {{$containerNav}} navbar navbar-expand-xl {{$navbarDetached}} align-items-center bg-navbar-theme" id="layout-navbar">
         @endif
         @if(isset($navbarDetached) && $navbarDetached == '')
             <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
@@ -41,6 +39,59 @@
                     @endif
 
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                        <ul class="navbar-nav flex-row align-items-center justify-start items-start">
+                            <li id="loader_notifikasi" style="display: none">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                            </li>
+                            <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2" id="kontent_notifikasi">
+                                <a class="nav-link dropdown-toggle hide-arrow d-flex align-items-center" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span class="position-relative" id="icon_notifikasi">
+                                        <i class="icon-base bx bx-bell icon-md"></i>
+                                        <span class="badge rounded-pill bg-danger badge-dot badge-notifications border" id="tanda_notif" style="display: none"></span>
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-start p-0" style="min-width: 25rem; !important;">
+                                    <li class="dropdown-menu-header border-bottom">
+                                        <div class="dropdown-header d-flex align-items-center py-3">
+                                            <h6 class="mb-0 me-auto">Notifikasi</h6>
+                                            <div class="d-flex align-items-center h6 mb-0">
+                                                <span class="badge bg-label-primary me-2" id="pesan_notifikasi">tidak ada notifikasi</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="dropdown-notifications-list scrollable-container ps ps--active-y">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item list-group-item-action dropdown-notifications-item" id="data_notif_surat" style="display: none">
+                                                <a href="{{ route('pengajuansurat') }}">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 me-3">
+                                                            <div class="avatar">
+                                                                <i class="icon-base bx bxs-envelope" style="font-size: 2.5rem;"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="mb-0">Pengajuan {{ (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan') }}</h6>
+                                                            <ul>
+                                                                <li id="notif_surat_ajukan" style="display: none">
+                                                                    <small class="mb-1 d-block text-body">Sebanyak&nbsp;<b class="text-danger" id="jml_surat_ajukan">0</b>&nbsp;pengajuan belum diajukan</small>
+                                                                </li>
+                                                                <li id="notif_surat_verifikasi" style="display: none">
+                                                                    <small class="mb-1 d-block text-body">Sebanyak&nbsp;<b class="text-danger" id="jml_surat_verifikasi">0</b>&nbsp;pengajuan belum diverifikasi</small>
+                                                                </li>
+                                                                <li id="notif_surat_revisi" style="display: none">
+                                                                    <small class="mb-1 d-block text-body">Sebanyak&nbsp;<b class="text-danger" id="jml_surat_revisi">0</b>&nbsp;pengajuan direvisi</small>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- User -->
                             <li class="nav-item lh-1 me-4">
@@ -111,3 +162,6 @@
                 @endif
             </nav>
             <!-- / Navbar -->
+@if(isset($navbarDetached) && $navbarDetached == 'navbar-detached')
+    </nav>
+@endif

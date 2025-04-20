@@ -37,4 +37,23 @@ class DashboardRepository
 
         return $data;
     }
+
+    public function getDataNotifSurat($idAkses){
+        $data = PengajuanPersuratan::with(['persetujuan']);
+
+        $id_pengguna = auth()->user()->id;
+        if ($idAkses == 8){ //pengguna
+            $data = $data->where('pengaju', $id_pengguna)->get();
+        }
+
+        if ($idAkses == 2){ // admin geo harus status tidak draft
+            $data = $data->where('id_statuspengajuan', '!=', 0)->get();
+        }
+
+        if ($idAkses == 1){ //super admin
+            $data = $data->get();
+        }
+
+        return $data;
+    }
 }

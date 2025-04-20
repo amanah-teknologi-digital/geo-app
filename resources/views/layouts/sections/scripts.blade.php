@@ -22,3 +22,7 @@
 <!-- BEGIN: Page JS-->
 @yield('page-script')
 <!-- END: Page JS-->
+<script>
+    let routeGetDataNotifikasi = "{{ route('dashboard.getdatanotifikasi') }}";
+</script>
+@vite(['resources/views/script_view/notifikasi/script.js'])

@@ -51,4 +51,15 @@ class DashboardController extends Controller{
         ];
         return response()->json($data);
     }
+
+    public function getDataNotifikasi(){
+        $idAkses = auth()->user()->id_akses;
+        $dataNotifSurat = $this->service->getDataNotifSurat($idAkses);
+
+        $data = [
+            'dataNotifSurat' => $dataNotifSurat
+        ];
+
+        return response()->json($data);
+    }
 }

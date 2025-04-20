@@ -93,3 +93,43 @@
 .margin_45{
     margin-bottom: 4.5rem !important
 }
+
+.layout-navbar .navbar-dropdown .badge-notifications{
+    inset-block-start: 3px;
+    inset-inline-end: -2px;
+}
+
+.badge.badge-notifications:not(.badge-center) {
+    font-size: .582rem;
+    line-height: .75rem;
+    padding-block: .05rem;
+    padding-inline: .2rem;
+}
+
+.badge.badge-notifications {
+    position: absolute;
+    margin: 0;
+    inset-block-start: auto;
+    transform: translate(-50%, -30%);
+}
+.badge.badge-dot {
+    display: inline-block;
+    padding: 0;
+    border-radius: 50%;
+    margin: 0;
+    block-size: .5rem;
+    inline-size: .5rem;
+}
+
+.bounce {
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}

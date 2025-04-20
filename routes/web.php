@@ -23,6 +23,7 @@ Route::get('/pengumuman/getlist', [LandingPageController::class, 'getListPengumu
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
+    Route::get('/dashboard/getdatanotifikasi', [DashboardController::class, 'getDataNotifikasi'])->name('dashboard.getdatanotifikasi');
     Route::get('/dashboard-surat', [DashboardController::class, 'surat'])->middleware('role:1,2,5,6,7')->name('dashboard.surat');
     Route::get('/dashboard-surat/getdata', [DashboardController::class, 'getDataSurat'])->middleware('role:1,2,5,6,7')->name('dashboard.suratgetdata');
     Route::get('/dashboard-ruangan', [DashboardController::class, 'ruangan'])->middleware('role:1,3,5,6,7')->name('dashboard.ruangan');
