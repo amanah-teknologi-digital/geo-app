@@ -14,8 +14,8 @@ class RuanganServices
         $this->repository = $repository;
     }
 
-    public function getDataJenisSurat($idJenisSurat = null){
-        $data = $this->repository->getDataJenisSurat($idJenisSurat);
+    public function getDataRuangan($idRuangan = null){
+        $data = $this->repository->getDataRuangan($idRuangan);
 
         return $data;
     }

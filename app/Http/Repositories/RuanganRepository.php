@@ -3,14 +3,17 @@
 namespace App\Http\Repositories;
 
 use App\Models\JenisSurat;
+use App\Models\Ruangan;
 
 class RuanganRepository
 {
-    public function getDataJenisSurat($idJenisSurat){
-        $data = JenisSurat::with(['pihakupdater','pengajuansurat'])->orderBy('created_at');
+    public function getDataRuangan($idRuangan){
+        $data = Ruangan::with(['pihakupdater','gambar'])->orderBy('created_at');
 
-        if (!empty($idJenisSurat)) {
-            $data = $data->where('id_jenissurat', $idJenisSurat)->first();
+        if (!empty($idRuangan)) {
+            $data = $data->where('id_ruangan', $idRuangan)->first();
+        }else{
+            $data = $data->get();
         }
 
         return $data;

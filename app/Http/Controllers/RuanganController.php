@@ -17,6 +17,8 @@ class RuanganController extends Controller
     {
         $title = "Ruangan";
 
-        return view('pages.ruangan.index', compact('title'));
+        $dataRuangan = $this->service->getDataRuangan();
+
+        return view('pages.ruangan.index', compact('title', 'dataRuangan'));
     }
 }
