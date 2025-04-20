@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardRepository
 {
-    public function getDataTotalPersuratan($tahun){
+    public function getDataTotalPersuratan($tahun, $idUser){
         $data = PengajuanPersuratan::selectRaw('
                 YEAR(created_at) as tahun,
                 COUNT(id_pengajuan) as total_pengajuan,
@@ -16,8 +16,12 @@ class DashboardRepository
                 COUNT(CASE WHEN id_statuspengajuan NOT IN (1,3) THEN 1 END) as on_proses')
             ->groupBy(DB::raw('YEAR(created_at)'))
             ->orderByDesc('tahun')
-            ->where(DB::raw('YEAR(created_at)'), $tahun)
-            ->first();
+            ->where(DB::raw('YEAR(created_at)'), $tahun);
+        if (!empty($idUser)){
+            $data = $data->where('pengaju', $idUser)->first();
+        }else{
+            $data = $data->first();
+        }
 
         $data = $data ?? (object) [
             'tahun' => $tahun,
@@ -30,10 +34,15 @@ class DashboardRepository
         return $data;
     }
 
-    public function getDataStatistikPersuratan($tahun){
+    public function getDataStatistikPersuratan($tahun, $idUser){
         $data = PengajuanPersuratan::with('persetujuan')
-            ->where(DB::raw('YEAR(created_at)'), $tahun)
-            ->get();
+            ->where(DB::raw('YEAR(created_at)'), $tahun);
+
+        if (!empty($idUser)){
+            $data = $data->where('pengaju', $idUser)->get();
+        }else{
+            $data = $data->get();
+        }
 
         return $data;
     }

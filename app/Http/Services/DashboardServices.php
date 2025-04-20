@@ -14,16 +14,16 @@ class DashboardServices
         $this->repository = $repository;
     }
 
-    public function getDataTotalPersuratan($tahun)
+    public function getDataTotalPersuratan($tahun, $idUser = null)
     {
-        $data = $this->repository->getDataTotalPersuratan($tahun);
+        $data = $this->repository->getDataTotalPersuratan($tahun, $idUser);
 
         return $data;
     }
 
-    public function getDataStatistikPersuratan($tahun)
+    public function getDataStatistikPersuratan($tahun, $idUser = null)
     {
-        $data = $this->repository->getDataStatistikPersuratan($tahun);
+        $data = $this->repository->getDataStatistikPersuratan($tahun, $idUser);
 
         $timestamp = [];
         foreach ($data as $key => $value) {

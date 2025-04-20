@@ -29,6 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard-ruangan', [DashboardController::class, 'ruangan'])->middleware('role:1,3,5,6,7')->name('dashboard.ruangan');
     Route::get('/dashboard-peralatan', [DashboardController::class, 'peralatan'])->middleware('role:1,4,5,6,7')->name('dashboard.peralatan');
     Route::get('/dashboard-pengguna', [DashboardController::class, 'pengguna'])->middleware('role:8')->name('dashboard.pengguna');
+    Route::get('/dashboard-pengguna/getdata', [DashboardController::class, 'getDataSuratPengguna'])->middleware('role:8')->name('dashboard.suratgetdatapengguna');
 
     Route::middleware('role:1,2,8')->group(function () { //geo letter
         Route::get('/pengajuan-surat', [PengajuanPersuratanController::class, 'index'])->name('pengajuansurat');
