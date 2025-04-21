@@ -90,8 +90,6 @@
                                                     @endif
                                                     <a class="btn btn-sm btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <span class="me-2">Detail</span><i class="icon-base bx bx-chevron-right icon-sm lh-1 scaleX-n1-rtl"></i> </a>
                                                 </div>
-{{--                                                <div class="col-sm-6">--}}
-{{--                                                    </div>--}}
                                             </div>
                                         </div>
                                     </div>
@@ -103,6 +101,11 @@
                             </div>
                         @endif
                     </div>
+                    <ul class="fa-ul ml-auto float-end mt-5">
+                        <li>
+                            <small><em>Hanya ruangan berstatus <b>aktif</b> yang bisa dibooking!.</em></small>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
