@@ -52,72 +52,63 @@
                     </a>
                 </div>
                 <div class="card-body pt-4">
-                    <form id="formRuangan" method="POST" action="{{ route('ruangan.doupdate') }}" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="id_ruangan" value="{{ $idRuangan }}" required>
-                        <div class="row g-6">
-                            <div>
-                                <label for="kode_ruangan" class="form-label">Kode Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: TG-301)</i></label>
-                                <input type="text" class="form-control" id="kode_ruangan" name="kode_ruangan" placeholder="Kode Ruangan (harus unik dari lainya)" value="{{ $dataRuangan->kode_ruangan }}" required autocomplete="off" autofocus>
-                            </div>
-                            <div>
-                                <label for="nama_ruangan" class="form-label">Nama Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: Ruangan TG-301)</i></label>
-                                <input type="text" class="form-control" id="nama_ruangan" name="nama_ruangan" placeholder="Nama Ruangan" value="{{ $dataRuangan->nama }}" required autocomplete="off">
-                            </div>
-                            <div>
-                                <label for="lantai" class="form-label">Lantai <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="lantai" id="lantai" placeholder="Lantai" value="{{ $dataRuangan->lantai }}" required autocomplete="off">
-                            </div>
-                            <div>
-                                <label for="kapasitas" class="form-label">Kapasitas <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="kapasitas" id="kapasitas" placeholder="Kapasitas" value="{{ $dataRuangan->kapasitas }}" required autocomplete="off">
-                            </div>
-                            <div>
-                                <label for="deskripsi" class="form-label">Deskripsi Ruangan <span class="text-danger">*</span></label>
-                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="5" placeholder="Contoh: Ruangan Kelas Teknik Geofisika ITS" required>{{ $dataRuangan->deskripsi }}</textarea>
-                            </div>
-                            <div>
-                                <label for="keterangan" class="form-label">Keterangan Ruangan <span class="text-danger">*</span></label>
-                                <textarea class="form-control" name="keterangan" id="keterangan" rows="20" placeholder="Ruangan ini disewakan untuk keperluan kegiatan seperti rapat, pelatihan, seminar, atau acara lainnya. Fasilitas yang tersedia meliputi: Kursi dan meja, AC, Proyektor dan layar, Sound system, Wi-Fi, Area parkir" required>{{ $dataRuangan->keterangan }}</textarea>
-                            </div>
-                            <div>
-                                <label for="gambar_ruangan" class="form-label">Gambar Ruangan <span class="text-danger">*</span><span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
-                                @php
-                                    $file = $dataRuangan->gambar_file;
-                                    $filePath = $dataRuangan->gambar->location;
-                                    $imageUrl = Storage::disk('public')->exists($filePath)
-                                        ? route('file.getpublicfile', $file)
-                                        : asset('assets/img/no_image.jpg');
-                                @endphp
-                                <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
-                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modals-transparent">
-                                        Lihat file
-                                    </button>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap mb-6 gap-2">
+                        <div class="me-1">
+                            <h5 class="mb-0">UI/UX Basic Fundamentals</h5>
+                            <p class="mb-0">Prof. <span class="fw-medium text-heading"> Devonne Wallbridge </span></p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-label-danger">UI/UX</span>
+                            <i class="icon-base bx bx-share-alt icon-lg mx-4"></i>
+                            <i class="icon-base bx bx-bookmarks icon-lg"></i>
+                        </div>
+                    </div>
+                    <div class="card academy-content shadow-none border">
+                        @php
+                            $file = $dataRuangan->gambar_file;
+                            $filePath = $dataRuangan->gambar->location;
+                            $imageUrl = Storage::disk('public')->exists($filePath)
+                                ? route('file.getpublicfile', $file)
+                                : asset('assets/img/no_image.jpg');
+                        @endphp
+                        <div class="p-2">
+                            <img class="img-fluid" style="aspect-ratio: 4 / 3;border-radius: 8px;object-fit: cover;width: 100%;" src="{{ $imageUrl }}" alt="{{ $dataRuangan->nama }}">
+                        </div>
+                        <div class="card-body pt-4">
+                            <h5>About this course</h5>
+                            <p class="mb-0">Learn web design in 1 hour with 25+ simple-to-use rules and guidelines — tons of amazing web design resources included!</p>
+                            <hr class="my-6">
+                            <h5>By the numbers</h5>
+                            <div class="d-flex flex-wrap row-gap-2">
+                                <div class="me-12">
+                                    <p class="text-nowrap mb-2"><i class="icon-base bx bx-check me-2 align-bottom"></i>Skill level: All Levels</p>
+                                    <p class="text-nowrap mb-2"><i class="icon-base bx bx-group me-2 align-top"></i>Students: 38,815</p>
+                                    <p class="text-nowrap mb-2"><i class="icon-base bx bx-globe me-2 align-bottom"></i>Languages: English</p>
+                                    <p class="text-nowrap mb-0"><i class="icon-base bx bx-file me-2 align-bottom"></i>Captions: Yes</p>
                                 </div>
-                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
-                                <input type="file" class="form-control" id="gambar_ruangan" name="gambar_ruangan" accept="image/*">
+                                <div>
+                                    <p class="text-nowrap mb-2"><i class="icon-base bx bx-video me-2 align-top ms-50"></i>Lectures: 19</p>
+                                    <p class="text-nowrap mb-0"><i class="icon-base bx bx-time-five me-2 align-top"></i>Video: 1.5 total hours</p>
+                                </div>
+                            </div>
+                            <hr class="my-6">
+                            <h5>Description</h5>
+                            <p class="mb-6">The material of this course is also covered in my other course about web design and development with HTML5 &amp; CSS3. Scroll to the bottom of this page to check out that course, too! If you're already taking my other course, you already have all it takes to start designing beautiful websites today!</p>
+                            <p class="mb-6">"Best web design course: If you're interested in web design, but want more than just a "how to use WordPress" course,I highly recommend this one." — Florian Giusti</p>
+                            <p>"Very helpful to us left-brained people: I am familiar with HTML, CSS, JQuery, and Twitter Bootstrap, but I needed instruction in web design. This course gave me practical, impactful techniques for making websites more beautiful and engaging." — Susan Darlene Cain</p>
+                            <hr class="my-6">
+                            <h5>Instructor</h5>
+                            <div class="d-flex justify-content-start align-items-center user-name">
+                                <div class="avatar-wrapper">
+                                    <div class="avatar me-4"><img src="../../assets/img/avatars/11.png" alt="Avatar" class="rounded-circle"></div>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <h6 class="mb-1">Devonne Wallbridge</h6>
+                                    <small>Web Developer, Designer, and Teacher</small>
+                                </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mt-6">
-                            <button type="submit" class="btn btn-warning text-black me-3"><i class="bx bx-save"></i>&nbsp;Update Ruangan</button>
-                            <div class="text-muted">
-                                <small>
-                                    Updated by: <strong>{{ $dataRuangan->pihakupdater->name }}</strong> | <span>{{ ($dataRuangan->updated_at ?? $dataRuangan->created_at)->format('d-m-Y H:i') }}</span>
-                                </small>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
-        <div class="modal-dialog">
-            <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
-                <div class="modal-body">
-                    <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
+                    </div>
                 </div>
             </div>
         </div>
