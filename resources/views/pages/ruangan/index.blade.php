@@ -67,27 +67,27 @@
                                         ? route('file.getpublicfile', $file)
                                         : asset('assets/img/no_image.jpg');
                                 @endphp
-                                <div class="col-sm-6 col-lg-4">
-                                    <div class="card p-2 h-100 shadow border" >
-                                        <div class="rounded-2 p-4 text-center mb-4">
+                                <div class="col-sm-3 col-lg-3">
+                                    <div class="card p-2 h-100 shadow border mh-100">
+                                        <div class="rounded-2 p-4 text-center mb-4 border-bottom">
                                             <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"><img class="img-fluid " style="height: 200px;aspect-ratio: 4 / 3;border-radius: 8px;object-fit: cover;width: 100%;" src="{{ $imageUrl }}" alt="{{ $ruang->nama }}"></a>
                                         </div>
-                                        <div class="card-body p-4 pt-2">
+                                        <div class="card-body p-4 pt-0">
+                                            <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}" class="h6 w-100 text-truncate">{{ $ruang->nama }}&nbsp;<span class="badge bg-success mb-3">{{ $ruang->kode_ruangan }}</span></a>
                                             <div class="d-flex justify-content-between align-items-center mb-4">
                                                 <span class="badge bg-label-primary">Lantai {{ $ruang->lantai }}</span>
                                                 <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
-                                                    <span class="fw-normal">Kapasitas {{ $ruang->kapasitas }} Orang</span>
+                                                    <span class="fw-normal w-100 text-muted">Kapasitas {{ $ruang->kapasitas }} Orang</span>
                                                 </p>
                                             </div>
-                                            <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}" class="h5">{{ $ruang->nama }}&nbsp;<span class="badge bg-success mb-3">{{ $ruang->kode_ruangan }}</span></a>
-                                            <p class="mt-1">{{ $ruang->deskripsi }}</p>
-                                            <div class="d-flex flex-column flex-md-row gap-4 text-nowrap flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
+                                            <p class="mt-1 small text-truncate w-100 fst-italic">{{ $ruang->deskripsi }}</p>
+                                            <div class="d-flex flex-column flex-md-row gap-3 text-nowrap flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
                                                 @if($ruang->is_aktif)
-                                                    <a class="w-100 btn btn-outline-success d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <i class="icon-base bx bx-calendar icon-sm align-middle scaleX-n1-rtl me-2"></i><span>Lihat Jadwal</span> </a>
+                                                    <a class="w-100 btn btn-sm btn-outline-success d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <i class="icon-base bx bx-calendar icon-sm align-middle scaleX-n1-rtl me-2"></i><span>Lihat Jadwal</span> </a>
                                                 @else
                                                     <span class="badge bg-danger d-flex align-items-center">Tidak Aktif</span>
                                                 @endif
-                                                <a class="w-100 btn btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <span class="me-2">Detail</span><i class="icon-base bx bx-chevron-right icon-sm lh-1 scaleX-n1-rtl"></i> </a>
+                                                <a class="w-100 btn btn-sm btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <span class="me-2">Detail</span><i class="icon-base bx bx-chevron-right icon-sm lh-1 scaleX-n1-rtl"></i> </a>
                                             </div>
                                         </div>
                                     </div>
