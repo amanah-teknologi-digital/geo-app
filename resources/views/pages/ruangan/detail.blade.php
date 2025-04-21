@@ -52,47 +52,77 @@
                     </a>
                 </div>
                 <div class="card-body pt-4">
-                    <form id="formRuangan" method="POST" action="{{ route('ruangan.dotambah') }}" enctype="multipart/form-data">
+                    <form id="formRuangan" method="POST" action="{{ route('ruangan.doupdate') }}" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="id_ruangan" value="{{ $idRuangan }}" required>
                         <div class="row g-6">
                             <div>
                                 <label for="kode_ruangan" class="form-label">Kode Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: TG-301)</i></label>
-                                <input type="text" class="form-control" id="kode_ruangan" name="kode_ruangan" placeholder="Kode Ruangan (harus unik dari lainya)" required autocomplete="off" autofocus>
+                                <input type="text" class="form-control" id="kode_ruangan" name="kode_ruangan" placeholder="Kode Ruangan (harus unik dari lainya)" value="{{ $dataRuangan->kode_ruangan }}" required autocomplete="off" autofocus>
                             </div>
                             <div>
                                 <label for="nama_ruangan" class="form-label">Nama Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: Ruangan TG-301)</i></label>
-                                <input type="text" class="form-control" id="nama_ruangan" name="nama_ruangan" placeholder="Nama Ruangan" required autocomplete="off">
+                                <input type="text" class="form-control" id="nama_ruangan" name="nama_ruangan" placeholder="Nama Ruangan" value="{{ $dataRuangan->nama }}" required autocomplete="off">
                             </div>
                             <div>
                                 <label for="lantai" class="form-label">Lantai <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="lantai" id="lantai" placeholder="Lantai" required autocomplete="off">
+                                <input type="number" class="form-control" name="lantai" id="lantai" placeholder="Lantai" value="{{ $dataRuangan->lantai }}" required autocomplete="off">
                             </div>
                             <div>
                                 <label for="kapasitas" class="form-label">Kapasitas <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="kapasitas" id="kapasitas" placeholder="Kapasitas" required autocomplete="off">
+                                <input type="number" class="form-control" name="kapasitas" id="kapasitas" placeholder="Kapasitas" value="{{ $dataRuangan->kapasitas }}" required autocomplete="off">
                             </div>
                             <div>
                                 <label for="deskripsi" class="form-label">Deskripsi Ruangan <span class="text-danger">*</span></label>
-                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="5" placeholder="Contoh: Ruangan Kelas Teknik Geofisika ITS" required></textarea>
+                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="5" placeholder="Contoh: Ruangan Kelas Teknik Geofisika ITS" required>{{ $dataRuangan->deskripsi }}</textarea>
                             </div>
                             <div>
                                 <label for="keterangan" class="form-label">Keterangan Ruangan <span class="text-danger">*</span></label>
-                                <textarea class="form-control" name="keterangan" id="keterangan" rows="20" placeholder="Ruangan ini disewakan untuk keperluan kegiatan seperti rapat, pelatihan, seminar, atau acara lainnya. Fasilitas yang tersedia meliputi: Kursi dan meja, AC, Proyektor dan layar, Sound system, Wi-Fi, Area parkir" required></textarea>
+                                <textarea class="form-control" name="keterangan" id="keterangan" rows="20" placeholder="Ruangan ini disewakan untuk keperluan kegiatan seperti rapat, pelatihan, seminar, atau acara lainnya. Fasilitas yang tersedia meliputi: Kursi dan meja, AC, Proyektor dan layar, Sound system, Wi-Fi, Area parkir" required>{{ $dataRuangan->keterangan }}</textarea>
                             </div>
                             <div>
                                 <label for="gambar_ruangan" class="form-label">Gambar Ruangan <span class="text-danger">*</span><span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
+                                @php
+                                    $file = $dataRuangan->gambar_file;
+                                    $filePath = $dataRuangan->gambar->location;
+                                    $imageUrl = Storage::disk('public')->exists($filePath)
+                                        ? route('file.getpublicfile', $file)
+                                        : asset('assets/img/no_image.jpg');
+                                @endphp
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modals-transparent">
+                                        Lihat file
+                                    </button>
+                                </div>
+                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
                                 <input type="file" class="form-control" id="gambar_ruangan" name="gambar_ruangan" accept="image/*">
                             </div>
                         </div>
-                        <div class="mt-6">
-                            <button type="submit" class="btn btn-primary me-3"><i class="bx bx-save"></i>&nbsp;Tambah Ruangan</button>
+                        <div class="d-flex justify-content-between align-items-center mt-6">
+                            <button type="submit" class="btn btn-warning text-black me-3"><i class="bx bx-save"></i>&nbsp;Update Ruangan</button>
+                            <div class="text-muted">
+                                <small>
+                                    Updated by: <strong>{{ $dataRuangan->pihakupdater->name }}</strong> | <span>{{ ($dataRuangan->updated_at ?? $dataRuangan->created_at)->format('d-m-Y H:i') }}</span>
+                                </small>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
+                <div class="modal-body">
+                    <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('page-script')
-    @vite('resources/views/script_view/ruangan/tambah_ruangan.js')
+    @vite('resources/views/script_view/ruangan/detail_ruangan.js')
 @endsection
