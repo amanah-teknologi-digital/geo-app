@@ -99,8 +99,13 @@
                                 <input type="file" class="form-control" id="gambar_ruangan" name="gambar_ruangan" accept="image/*">
                             </div>
                         </div>
-                        <div class="mt-6">
+                        <div class="d-flex justify-content-between align-items-center mt-6">
                             <button type="submit" class="btn btn-warning text-black me-3"><i class="bx bx-save"></i>&nbsp;Update Ruangan</button>
+                            <div class="text-muted">
+                                <small>
+                                    Updated by: <strong>{{ $dataRuangan->pihakupdater->name }}</strong> | <span>{{ ($dataRuangan->updated_at ?? $dataRuangan->created_at)->format('d-m-Y H:i') }}</span>
+                                </small>
+                            </div>
                         </div>
                     </form>
                 </div>
