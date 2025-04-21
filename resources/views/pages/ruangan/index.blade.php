@@ -50,7 +50,7 @@
                         <div class="dt-action-buttons text-end">
                             <div class="dt-buttons btn-group flex-wrap">
                                 <div class="btn-group">
-                                    <a href="{{ route('ruangan') }}" class="btn btn-secondary create-new btn-sm btn-primary" ><span><i class="icon-base bx bx-plus me-1"></i> <span class="d-none d-lg-inline-block">Tambah Ruangan</span></span></a>
+                                    <a href="{{ route('ruangan.tambah') }}" class="btn btn-secondary create-new btn-sm btn-primary" ><span><i class="icon-base bx bx-plus me-1"></i> <span class="d-none d-lg-inline-block">Tambah Ruangan</span></span></a>
                                 </div>
                             </div>
                         </div>

@@ -46,7 +46,7 @@
             @endif
             <div class="card mb-6">
                     <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                        <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Pengumuman</h5>
+                        <h5 class="card-title mb-0"><i class="bx bx-plus mb-1"></i>&nbsp;Tambah Pengumuman</h5>
                         <a href="{{ route('pengumuman') }}" class="btn btn-sm btn-secondary btn-sm">
                             <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                         </a>

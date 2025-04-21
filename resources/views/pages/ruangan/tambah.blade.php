@@ -19,7 +19,7 @@
                         <a href="#">Master Data</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('jenissurat') }}">Jenis Surat</a>
+                        <a href="{{ route('ruangan') }}">{{ $title }}</a>
                     </li>
                     <li class="breadcrumb-item active">Tambah</li>
                 </ol>
@@ -46,13 +46,13 @@
             @endif
             <div class="card mb-6">
                     <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                        <h5 class="card-title mb-0"><i class="bx bx-plus"></i>&nbsp;Tambah Jenis Surat</h5>
-                        <a href="{{ route('jenissurat') }}" class="btn btn-sm btn-secondary btn-sm">
+                        <h5 class="card-title mb-0"><i class="bx bx-plus mb-1"></i>&nbsp;Tambah Ruangan</h5>
+                        <a href="{{ route('ruangan') }}" class="btn btn-sm btn-secondary btn-sm mb-0">
                             <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                         </a>
                     </div>
                     <div class="card-body pt-4">
-                        <form id="formJenisSurat" method="POST" action="{{ route('jenissurat.dotambah') }}">
+                        <form id="formRuangan" method="POST" action="{{ route('ruangan.dotambah') }}">
                             @csrf
                             <div class="row g-6">
                                 <div>

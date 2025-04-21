@@ -61,8 +61,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
-    Route::middleware('role:1,3,6,7,8')->group(function () { //geo room
+    //ruangan
+    Route::get('/ruangan', [RuanganController::class, 'index'])->name('ruangan');
+    Route::middleware('role:1,3,6,7,8')->group(function () {
         Route::get('/pengajuan-ruangan', [PengajuanGeoRoomController::class, 'index'])->name('pengajuanruangan');
+        Route::middleware('role:1,3')->group(function () { //bisa manajemen ruangan
+            Route::get('/ruangan/tambah', [RuanganController::class, 'tambahRuangan'])->name('ruangan.tambah');
+            Route::get('/ruangan/gotambah', [RuanganController::class, 'doTambahRuangan'])->name('ruangan.dotambah');
+        });
     });
 
     Route::middleware('role:1,4,5,7,8')->group(function () { //geo facility
@@ -85,9 +91,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan');
         Route::post('/pengaturan/update', [PengaturanController::class, 'updatePengaturan'])->name('pengaturan.update');
     });
-
-    //ruangan
-    Route::get('/ruangan', [RuanganController::class, 'index'])->name('ruangan');
 
     //peralatan
     Route::get('/peralatan', [PeralatanController::class, 'index'])->name('peralatan');

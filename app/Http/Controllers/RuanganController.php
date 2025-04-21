@@ -21,4 +21,10 @@ class RuanganController extends Controller
 
         return view('pages.ruangan.index', compact('title', 'dataRuangan'));
     }
+
+    public function tambahRuangan(){
+        $title = "Ruangan";
+
+        return view('pages.ruangan.tambah', compact('title'));
+    }
 }
