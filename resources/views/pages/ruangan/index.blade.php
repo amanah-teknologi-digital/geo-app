@@ -57,30 +57,33 @@
                             </div>
                         @endif
                     </div>
-                    <div class="row gy-6 mb-6">
+                    <div class="row gy-12 gx-12 mb-6">
                         @if($dataRuangan->isNotEmpty())
                             @foreach($dataRuangan as $ruang)
+                                @php
+                                    $file = $ruang->gambar_file;
+                                    $filePath = $ruang->gambar->location;
+                                    $imageUrl = Storage::disk('public')->exists($filePath)
+                                        ? route('file.getpublicfile', $file)
+                                        : asset('assets/img/no_image.jpg');
+                                @endphp
                                 <div class="col-sm-6 col-lg-4">
-                                    <div class="card p-2 h-100 shadow-none border">
-                                        <div class="rounded-2 text-center mb-4">
-                                            <a href="app-academy-course-details.html"><img class="img-fluid" src="../../assets/img/pages/app-academy-tutor-1.png" alt="tutor image 1"></a>
+                                    <div class="card p-2 h-100 shadow border">
+                                        <div class="rounded-2 p-4 text-center mb-4">
+                                            <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"><img class="img-fluid " style="height: 200px;aspect-ratio: 4 / 3;border-radius: 8px;object-fit: cover;width: 100%;" src="{{ $imageUrl }}" alt="{{ $ruang->nama }}"></a>
                                         </div>
                                         <div class="card-body p-4 pt-2">
                                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                                <span class="badge bg-label-primary">Web</span>
+                                                <span class="badge bg-label-primary">Lantai {{ $ruang->lantai }}</span>
                                                 <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
-                                                    4.4 <span class="text-warning"><i class="icon-base bx bxs-star me-1 mb-1_5"></i></span><span class="fw-normal">(1.23k)</span>
+                                                    <span class="fw-normal">Kapasitas {{ $ruang->kapasitas }} Orang</span>
                                                 </p>
                                             </div>
-                                            <a href="app-academy-course-details.html" class="h5">Basics of Angular</a>
-                                            <p class="mt-1">Introductory course for Angular and framework basics in web development.</p>
-                                            <p class="d-flex align-items-center mb-1"><i class="icon-base bx bx-time-five me-1"></i>30 minutes</p>
-                                            <div class="progress mb-4" style="height: 8px">
-                                                <div class="progress-bar w-75" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
+                                            <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}" class="h5">{{ $ruang->nama }}&nbsp;<span class="badge bg-success mb-3">{{ $ruang->kode_ruangan }}</span></a>
+                                            <p class="mt-1">{{ $ruang->deskripsi }}</p>
                                             <div class="d-flex flex-column flex-md-row gap-4 text-nowrap flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
-                                                <a class="w-100 btn btn-label-secondary d-flex align-items-center" href="app-academy-course-details.html"> <i class="icon-base bx bx-rotate-right icon-sm align-middle scaleX-n1-rtl me-2"></i><span>Start Over</span> </a>
-                                                <a class="w-100 btn btn-label-primary d-flex align-items-center" href="app-academy-course-details.html"> <span class="me-2">Continue</span><i class="icon-base bx bx-chevron-right icon-sm lh-1 scaleX-n1-rtl"></i> </a>
+                                                <a class="w-100 btn btn-outline-success d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <i class="icon-base bx bx-calendar icon-sm align-middle scaleX-n1-rtl me-2"></i><span>Lihat Jadwal</span> </a>
+                                                <a class="w-100 btn btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <span class="me-2">Detail</span><i class="icon-base bx bx-chevron-right icon-sm lh-1 scaleX-n1-rtl"></i> </a>
                                             </div>
                                         </div>
                                     </div>
