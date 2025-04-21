@@ -9,7 +9,7 @@ use App\Models\Ruangan;
 class RuanganRepository
 {
     public function getDataRuangan($idRuangan){
-        $data = Ruangan::with(['pihakupdater','gambar'])->orderBy('created_at');
+        $data = Ruangan::with(['pihakupdater','gambar'])->orderBy('is_aktif','DESC')->orderBy('created_at');
 
         if (!empty($idRuangan)) {
             $data = $data->where('id_ruangan', $idRuangan)->first();
