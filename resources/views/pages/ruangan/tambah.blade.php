@@ -19,7 +19,7 @@
                         <a href="#">Master Data</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('ruangan') }}">{{ $title }}</a>
+                        <a href="{{ route('ruangan') }}">Ruangan</a>
                     </li>
                     <li class="breadcrumb-item active">Tambah</li>
                 </ol>
@@ -52,22 +52,40 @@
                         </a>
                     </div>
                     <div class="card-body pt-4">
-                        <form id="formRuangan" method="POST" action="{{ route('ruangan.dotambah') }}">
+                        <form id="formRuangan" method="POST" action="{{ route('ruangan.dotambah') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="row g-6">
                                 <div>
-                                    <label for="nama_jenis" class="form-label">Nama Jenis Surat <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nama_jenis" name="nama_jenis" placeholder="Nama jenis surat" required autocomplete="off" autofocus>
+                                    <label for="kode_ruangan" class="form-label">Kode Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: TG-301)</i></label>
+                                    <input type="text" class="form-control" id="kode_ruangan" name="kode_ruangan" placeholder="Kode Ruangan (harus unik dari lainya)" required autocomplete="off" autofocus>
                                 </div>
                                 <div>
-                                    <label for="isi_template" class="form-label">Template Surat <span class="text-danger">*</span></label>
-                                    <div id="editor_template" style="height: 700px;"></div>
-                                    <input type="hidden" name="editor_quil" id="editor_quil">
-                                    <div class="error-container" id="error-quil"></div>
+                                    <label for="nama_ruangan" class="form-label">Nama Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: Ruangan TG-301)</i></label>
+                                    <input type="text" class="form-control" id="nama_ruangan" name="nama_ruangan" placeholder="Nama Ruangan" required autocomplete="off">
+                                </div>
+                                <div>
+                                    <label for="lantai" class="form-label">Lantai <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="lantai" id="lantai" placeholder="Lantai" required autocomplete="off">
+                                </div>
+                                <div>
+                                    <label for="kapasitas" class="form-label">Kapasitas <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="kapasitas" id="kapasitas" placeholder="Kapasitas" required autocomplete="off">
+                                </div>
+                                <div>
+                                    <label for="deskripsi" class="form-label">Deskripsi Ruangan <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" name="deskripsi" id="deskripsi" rows="5" placeholder="Contoh: Ruangan Kelas Teknik Geofisika ITS" required></textarea>
+                                </div>
+                                <div>
+                                    <label for="keterangan" class="form-label">Keterangan Ruangan <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" name="keterangan" id="keterangan" rows="20" placeholder="Ruangan ini disewakan untuk keperluan kegiatan seperti rapat, pelatihan, seminar, atau acara lainnya. Fasilitas yang tersedia meliputi: Kursi dan meja, AC, Proyektor dan layar, Sound system, Wi-Fi, Area parkir" required></textarea>
+                                </div>
+                                <div>
+                                    <label for="gambar_ruangan" class="form-label">Gambar Ruangan <span class="text-danger">*</span><span class="text-muted"><i><b>(File gambar max 5 mb)</b></i></span></label>
+                                    <input type="file" class="form-control" id="gambar_ruangan" name="gambar_ruangan" accept="image/*">
                                 </div>
                             </div>
                             <div class="mt-6">
-                                <button type="submit" class="btn btn-primary me-3"><i class="bx bx-save"></i>&nbsp;Tambah Jenis Surat</button>
+                                <button type="submit" class="btn btn-primary me-3"><i class="bx bx-save"></i>&nbsp;Tambah Ruangan</button>
                             </div>
                         </form>
                     </div>
@@ -76,5 +94,5 @@
     </div>
 @endsection
 @section('page-script')
-    @vite('resources/views/script_view/jenis_surat/tambah_jenissurat.js')
+    @vite('resources/views/script_view/ruangan/tambah_ruangan.js')
 @endsection

@@ -20,6 +20,26 @@ class RuanganServices
         return $data;
     }
 
+    public function checkAksesTambah($idAkses){
+        if (in_array($idAkses,[1,3])){ //cuma bisa super admin & admin
+            $isTambah = true;
+        }else{
+            $isTambah = false;
+        }
+
+        return $isTambah;
+    }
+
+    public function checkAksesEdit($idAkses){
+        if (in_array($idAkses,[1,3])){ //cuma bisa super admin & admin
+            $isEdit = true;
+        }else{
+            $isEdit = false;
+        }
+
+        return $isEdit;
+    }
+
     public function tambahJenisSurat($request, $idJenisSurat){
         try {
             $this->repository->tambahJenisSurat($request, $idJenisSurat);

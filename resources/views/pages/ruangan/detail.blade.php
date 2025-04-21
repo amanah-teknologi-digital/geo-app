@@ -52,7 +52,7 @@
                     </a>
                 </div>
                 <div class="card-body pt-4">
-                    <form id="formRuangan" method="POST" action="{{ route('ruangan.doupdate') }}" enctype="multipart/form-data">
+                    <form id="formRuangan" method="POST" action="{{ route('ruangan.dotambah') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="row g-6">
                             <div>

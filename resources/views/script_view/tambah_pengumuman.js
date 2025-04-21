@@ -71,7 +71,7 @@ $(document).ready(function () {
             gambar_header: {
                 required: "Gambar Header wajib diisi",
                 filesize: "Ukuran file maksimal 5 MB",
-                fileextension: "Hanya file JPG, JPEG, PNG, GIF, dan PDF yang diperbolehkan"
+                fileextension: "Hanya file JPG, JPEG, PNG, GIF yang diperbolehkan"
             }
         },
         errorPlacement: function(error, element) {

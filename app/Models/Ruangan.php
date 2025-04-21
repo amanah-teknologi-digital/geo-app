@@ -12,6 +12,7 @@ class Ruangan extends Model
     public $incrementing = false;
     protected $fillable = [
         'id_ruangan',
+        'kode_ruangan',
         'nama',
         'deskripsi',
         'keterangan',

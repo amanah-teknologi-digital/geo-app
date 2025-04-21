@@ -47,13 +47,15 @@
                         <div class="head-label text-center">
                             <span class="card-header p-0"><i class="tf-icons bx bx-book-content"></i>&nbsp;List Ruangan</span>
                         </div>
-                        <div class="dt-action-buttons text-end">
-                            <div class="dt-buttons btn-group flex-wrap">
-                                <div class="btn-group">
-                                    <a href="{{ route('ruangan.tambah') }}" class="btn btn-secondary create-new btn-sm btn-primary" ><span><i class="icon-base bx bx-plus me-1"></i> <span class="d-none d-lg-inline-block">Tambah Ruangan</span></span></a>
+                        @if($isTambah)
+                            <div class="dt-action-buttons text-end">
+                                <div class="dt-buttons btn-group flex-wrap">
+                                    <div class="btn-group">
+                                        <a href="{{ route('ruangan.tambah') }}" class="btn btn-secondary create-new btn-sm btn-primary" ><span><i class="icon-base bx bx-plus me-1"></i> <span class="d-none d-lg-inline-block">Tambah Ruangan</span></span></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     <div class="row gy-6 mb-6">
                         @if($dataRuangan->isNotEmpty())
