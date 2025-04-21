@@ -68,8 +68,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pengajuan-ruangan', [PengajuanGeoRoomController::class, 'index'])->name('pengajuanruangan');
         Route::middleware('role:1,3')->group(function () { //bisa manajemen ruangan
             Route::get('/ruangan/tambah', [RuanganController::class, 'tambahRuangan'])->name('ruangan.tambah');
-            Route::get('/ruangan/dotambah', [RuanganController::class, 'doTambahRuangan'])->name('ruangan.dotambah');
-            Route::get('/ruangan/doupdate', [RuanganController::class, 'doUpdateRuangan'])->name('ruangan.doupdate');
+            Route::post('/ruangan/dotambah', [RuanganController::class, 'doTambahRuangan'])->name('ruangan.dotambah');
+            Route::post('/ruangan/doupdate', [RuanganController::class, 'doUpdateRuangan'])->name('ruangan.doupdate');
         });
     });
 

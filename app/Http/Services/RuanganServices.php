@@ -40,18 +40,35 @@ class RuanganServices
         return $isEdit;
     }
 
-    public function tambahJenisSurat($request, $idJenisSurat){
+    public function tambahFile($file, $idFile){
         try {
-            $this->repository->tambahJenisSurat($request, $idJenisSurat);
+            $fileName = $file->getClientOriginalName();
+            $fileMime = $file->getClientMimeType();
+            $fileExt = $file->getClientOriginalExtension();
+            $newFileName = $idFile.'.'.$fileExt;
+            $fileSize = $file->getSize();
+            $filePath = $file->storeAs('ruangan', $newFileName, 'public');
+
+            //save file data ke database
+            $this->repository->createOrUpdateFile($idFile, $fileName, $filePath, $fileMime, $fileExt, $fileSize);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function tambahRuangan($request, $idRuangan, $idFileGambar){
+        try {
+            $this->repository->tambahRuangan($request, $idRuangan, $idFileGambar);
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());
         }
     }
 
-    public function updateJenisSurat($request){
+    public function updateRuangan($request, $idRuangan){
         try {
-            $this->repository->updateJenisSurat($request);
+            $this->repository->updateRuangan($request, $idRuangan);
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Repositories\PengumumanRepository;
 use App\Http\Services\PengumumanServices;
-use App\Models\Pengumuman;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
