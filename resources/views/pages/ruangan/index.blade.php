@@ -67,27 +67,31 @@
                                         ? route('file.getpublicfile', $file)
                                         : asset('assets/img/no_image.jpg');
                                 @endphp
-                                <div class="col-sm-3 col-lg-3">
+                                <div class="col-sm-4 col-lg-4">
                                     <div class="card p-2 h-100 shadow border mh-100">
-                                        <div class="rounded-2 p-4 text-center mb-4 border-bottom">
-                                            <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"><img class="img-fluid " style="height: 200px;aspect-ratio: 4 / 3;border-radius: 8px;object-fit: cover;width: 100%;" src="{{ $imageUrl }}" alt="{{ $ruang->nama }}"></a>
+                                        <div class="rounded-2 p-2 text-center mb-4 border-bottom">
+                                            <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"><img class="img-fluid " style="height: 8.5rem;aspect-ratio: 4 / 3;border-radius: 8px;object-fit: cover;width: 100%;" src="{{ $imageUrl }}" alt="{{ $ruang->nama }}"></a>
                                         </div>
-                                        <div class="card-body p-4 pt-0">
-                                            <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}" class="h6 w-100 text-truncate">{{ $ruang->nama }}&nbsp;<span class="badge bg-success mb-3">{{ $ruang->kode_ruangan }}</span></a>
+                                        <div class="card-body p-2 pt-0">
+                                            <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}" class="h6 w-100 text-truncate">{{ $ruang->nama }}&nbsp;<span class="badge rounded-pill bg-primary mb-3">{{ $ruang->kode_ruangan }}</span></a>
                                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                                <span class="badge bg-label-primary">Lantai {{ $ruang->lantai }}</span>
+                                                <span class="badge bg-label-primary small" style="font-size: 0.8125rem !important;">Lantai {{ $ruang->lantai }}</span>
                                                 <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
-                                                    <span class="fw-normal w-100 text-muted">Kapasitas {{ $ruang->kapasitas }} Orang</span>
+                                                    <span class="fw-normal small w-100 text-muted">Kapasitas {{ $ruang->kapasitas }} Orang</span>
                                                 </p>
                                             </div>
                                             <p class="mt-1 small text-truncate w-100 fst-italic">{{ $ruang->deskripsi }}</p>
-                                            <div class="d-flex flex-column flex-md-row gap-3 text-nowrap flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
-                                                @if($ruang->is_aktif)
-                                                    <a class="w-100 btn btn-sm btn-outline-success d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <i class="icon-base bx bx-calendar icon-sm align-middle scaleX-n1-rtl me-2"></i><span>Lihat Jadwal</span> </a>
-                                                @else
-                                                    <span class="badge bg-danger d-flex align-items-center">Tidak Aktif</span>
-                                                @endif
-                                                <a class="w-100 btn btn-sm btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <span class="me-2">Detail</span><i class="icon-base bx bx-chevron-right icon-sm lh-1 scaleX-n1-rtl"></i> </a>
+                                            <div class="row d-flex align-items-center">
+                                                <div class="col-sm-6">
+                                                    @if($ruang->is_aktif)
+                                                        <a class="btn btn-sm btn-outline-success d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <i class="icon-base bx bx-calendar icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Jadwal</span> </a>
+                                                    @else
+                                                        <span class="badge bg-danger">Tidak Aktif</span>
+                                                    @endif
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <a class="btn btn-sm btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <span class="me-2">Detail</span><i class="icon-base bx bx-chevron-right icon-sm lh-1 scaleX-n1-rtl"></i> </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
