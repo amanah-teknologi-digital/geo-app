@@ -65,6 +65,8 @@ class RuanganRepository
     }
 
     public function updateRuangan($request, $idRuangan){
+        $aktif = $request->input('is_aktif', 0);
+
         $dataRuangan = Ruangan::find($idRuangan);
         $dataRuangan->kode_ruangan = $request->kode_ruangan;
         $dataRuangan->nama = $request->nama_ruangan;
@@ -72,7 +74,7 @@ class RuanganRepository
         $dataRuangan->keterangan = $request->keterangan;
         $dataRuangan->kapasitas = $request->kapasitas;
         $dataRuangan->lantai = $request->lantai;
-        $dataRuangan->is_aktif = 1;
+        $dataRuangan->is_aktif = $aktif;
         $dataRuangan->updated_at = now();
         $dataRuangan->updater = auth()->user()->id;
         $dataRuangan->save();

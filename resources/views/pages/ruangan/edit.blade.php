@@ -73,6 +73,12 @@
                                 <input type="number" class="form-control" name="kapasitas" id="kapasitas" placeholder="Kapasitas" value="{{ $dataRuangan->kapasitas }}" required autocomplete="off">
                             </div>
                             <div>
+                                <label for="is_aktif" class="form-label">Apakah aktif ? <span class="text-danger">*</span></label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" name="is_aktif" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataRuangan->is_aktif? 'checked':'' ?> >
+                                </div>
+                            </div>
+                            <div>
                                 <label for="deskripsi" class="form-label">Deskripsi Ruangan <span class="text-danger">*</span></label>
                                 <textarea class="form-control" name="deskripsi" id="deskripsi" rows="5" placeholder="Contoh: Ruangan Kelas Teknik Geofisika ITS" required>{{ $dataRuangan->deskripsi }}</textarea>
                             </div>
