@@ -28,8 +28,9 @@ class RuanganController extends Controller
 
     public function tambahRuangan(){
         $title = "Tambah Ruangan";
+        $dataFasilitas = config('listfasilitas', []);
 
-        return view('pages.ruangan.tambah', compact('title'));
+        return view('pages.ruangan.tambah', compact('title','dataFasilitas'));
     }
 
     public function doTambahRuangan(Request $request){

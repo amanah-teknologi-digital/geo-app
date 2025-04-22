@@ -64,16 +64,25 @@
                                     <input type="text" class="form-control" id="nama_ruangan" name="nama_ruangan" placeholder="Nama Ruangan" required autocomplete="off">
                                 </div>
                                 <div>
-                                    <label for="lantai" class="form-label">Lantai <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="lantai" id="lantai" placeholder="Lantai" required autocomplete="off">
+                                    <label for="lokasi" class="form-label">Lokasi <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="Lokasi" required autocomplete="off">
                                 </div>
                                 <div>
                                     <label for="kapasitas" class="form-label">Kapasitas <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="kapasitas" id="kapasitas" placeholder="Kapasitas" required autocomplete="off">
                                 </div>
                                 <div>
-                                    <label for="deskripsi" class="form-label">Deskripsi Ruangan <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" name="deskripsi" id="deskripsi" rows="5" placeholder="Contoh: Ruangan Kelas Teknik Geofisika ITS" required></textarea>
+                                    <label for="fasilitas" class="form-label">Fasilitas Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Pilih minimal 1)</i></label>
+                                    <select id="fasilitas" name="fasilitas[]" class="form-control" multiple="multiple" required>
+                                        @foreach ($dataFasilitas as $kategori => $fasilitas)
+                                            <optgroup label="{{ $kategori }}">
+                                                @foreach ($fasilitas as $item)
+                                                    <option value="{{ $item['id'] }}" data-icon="{{ $item['icon'] }}">{{ $item['text'] }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                    <div class="error-container" id="error-fasilitas"></div>
                                 </div>
                                 <div>
                                     <label for="keterangan" class="form-label">Keterangan Ruangan <span class="text-danger">*</span></label>
