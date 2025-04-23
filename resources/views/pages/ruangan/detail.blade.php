@@ -94,7 +94,7 @@
                                     <p class="mb-0">{{ $dataRuangan->lokasi }}</p>
                                     <hr class="my-6">
                                     <h5>Fasilitas</h5>
-                                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2">
+                                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xxl-3 g-2">
                                         @foreach(json_decode($dataRuangan->fasilitas, true) as $item)
                                             <div class="col">
                                                 <p class="mb-2"><i class="icon-base bx <?= $item['icon'] ?> me-2 align-bottom"></i>&nbsp;{{ $item['text'] }}</p>
