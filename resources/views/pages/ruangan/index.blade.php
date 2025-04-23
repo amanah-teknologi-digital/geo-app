@@ -66,6 +66,7 @@
                                     $imageUrl = Storage::disk('public')->exists($filePath)
                                         ? route('file.getpublicfile', $file)
                                         : asset('assets/img/no_image.jpg');
+                                    $fasilitas = json_decode($ruang->fasilitas, true);
                                 @endphp
                                 <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xxl-3">
                                     <div class="card p-2 h-100 shadow border mh-100">
@@ -80,7 +81,7 @@
                                                     <span class="fw-normal small w-100 text-muted">Kapasitas {{ $ruang->kapasitas }} Orang</span>
                                                 </p>
                                             </div>
-                                            <p class="mt-1 small text-truncate w-100 fst-italic">{{ $ruang->deskripsi }}</p>
+                                            <p class="mt-1 small text-truncate w-100 fst-italic">{{ $ruang->lokasi }}</p>
                                             <div class="row align-items-center gx-4">
                                                 <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
                                                     @if($ruang->is_aktif)
