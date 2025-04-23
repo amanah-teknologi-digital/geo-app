@@ -79,11 +79,11 @@ class PengumumanController extends Controller
         try {
             $request->validate([
                 'judul' => ['required'],
-                'editor_quil' => ['required'],
+                'editor_pengumuman' => ['required', 'string', 'min:10'],
                 'gambar_header' => ['required', 'file', 'image', 'max:5048']
             ],[
                 'judul.required' => 'Judul wajib diisi.',
-                'editor_quil.required' => 'Konten wajib diisi.',
+                'editor_pengumuman.required' => 'Konten wajib diisi.',
                 'gambar_header.required' => 'Gambar Header wajib diisi.',
                 'gambar_header.file' => 'File yang diunggah tidak valid.',
                 'gambar_header.image' => 'File harus berupa gambar.',
@@ -127,12 +127,12 @@ class PengumumanController extends Controller
             $request->validate([
                 'id_pengumuman' => ['required'],
                 'judul' => ['required'],
-                'editor_quil' => ['required'],
+                'editor_pengumuman' => ['required', 'string', 'min:10'],
                 'gambar_header' => ['file', 'image', 'max:5048']
             ],[
                 'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
                 'judul.required' => 'Judul wajib diisi.',
-                'editor_quil.required' => 'Konten wajib diisi.',
+                'editor_pengumuman.required' => 'Konten wajib diisi.',
                 'gambar_header.file' => 'File yang diunggah tidak valid.',
                 'gambar_header.image' => 'File harus berupa gambar.',
                 'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',

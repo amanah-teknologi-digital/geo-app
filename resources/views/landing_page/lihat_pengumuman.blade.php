@@ -61,8 +61,7 @@
         }
     </style>
     @vite([
-        'resources/assets/vendor/libs/jquery/jquery.js',
-        'resources/views/script_view/lihat_pengumuman.js'
+        'resources/assets/vendor/libs/jquery/jquery.js'
         ])
 </head>
 

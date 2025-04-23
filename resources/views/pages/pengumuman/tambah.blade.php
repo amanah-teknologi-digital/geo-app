@@ -61,8 +61,12 @@
                                 </div>
                                 <div>
                                     <label for="isi_pengumuman" class="form-label">Isi Pengumuman <span class="text-danger">*</span></label>
-                                    <div id="editor_pengumuman" style="height: 250px;"></div>
-                                    <input type="hidden" name="editor_quil" id="editor_quil">
+                                    <div id="editor-loading" class="text-center">
+                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <textarea id="editor_pengumuman" name="editor_pengumuman" style="height: 500px;"></textarea>
                                     <div class="error-container" id="error-quil"></div>
                                 </div>
                                 <div>

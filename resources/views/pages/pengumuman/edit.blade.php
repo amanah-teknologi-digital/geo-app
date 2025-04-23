@@ -62,8 +62,12 @@
                             </div>
                             <div>
                                 <label for="isi_pengumuman" class="form-label">Isi Pengumuman <span class="text-danger">*</span></label>
-                                <div id="editor_pengumuman" style="height: 250px;">{!! $dataPengumuman->data !!}</div>
-                                <input type="hidden" name="editor_quil" id="editor_quil" value="{{ $dataPengumuman->data }}">
+                                <div id="editor-loading" class="text-center">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <textarea id="editor_pengumuman" name="editor_pengumuman" style="height: 500px;">{!! $dataPengumuman->data !!}</textarea>
                                 <div class="error-container" id="error-quil"></div>
                             </div>
                             <div>
@@ -96,7 +100,7 @@
                                     </small>
                                 </div>
                             @else
-                                <button type="submit" class="btn btn-primary me-3">Update</button>
+                                <button type="submit" class="btn btn-warning text-black me-3"><i class="bx bx-save"></i>&nbsp;Update Pengumuman</button>
                             @endif
                             <div class="text-muted">
                                 <small>
@@ -121,5 +125,8 @@
     </div>
 @endsection
 @section('page-script')
+    <script>
+        let isEdit = {{ $is_edit ? 'true' : 'false' }};
+    </script>
     @vite('resources/views/script_view/edit_pengumuman.js')
 @endsection

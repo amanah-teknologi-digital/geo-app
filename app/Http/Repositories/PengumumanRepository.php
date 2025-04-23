@@ -25,7 +25,7 @@ class PengumumanRepository
         Pengumuman::create([
             'id_pengumuman' => $id_pengumuman,
             'judul' => $request->judul,
-            'data' => $request->editor_quil,
+            'data' => $request->editor_pengumuman,
             'gambar_header' => $id_file,
             'created_at' => now(),
             'updater' => auth()->user()->id
@@ -37,7 +37,7 @@ class PengumumanRepository
 
         $dataPengumuman = Pengumuman::find($id_pengumuman);
         $dataPengumuman->judul = $request->judul;
-        $dataPengumuman->data = $request->editor_quil;
+        $dataPengumuman->data = $request->editor_pengumuman;
         $dataPengumuman->updated_at = now();
         $dataPengumuman->updater = auth()->user()->id;
         $dataPengumuman->save();

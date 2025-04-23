@@ -1,24 +1,31 @@
-import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
 $(document).ready(function () {
-    const quill = new Quill('#editor_pengumuman', {
-        bounds: '#full-editor',
-        modules: {
-            toolbar: [
-                [{ 'header': '1'}, {'header': '2'}, { 'font': [] }, { 'size': [] }],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['bold', 'italic', 'underline'],
-                [{ 'align': [] }],
-                ['link'],
-                ['image'],
-                ['blockquote']
-            ]
+    tinymce.init({
+        selector: '#editor_pengumuman',
+        plugins: 'link image code table lists wordcount',
+        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist',
+        menubar: 'file edit insert format table',
+        skin: false, // karena kita import manual
+        content_css: false, // karena kita import manual
+        license_key: 'gpl',
+        content_style: `
+            body {
+              padding-left: 20px;
+              padding-right: 20px;
+              padding-bottom: 20px;
+              padding-top: 20px;
+            }
+          `,
+        setup: function (editor) {
+            // Tambahkan tombol kustom ke toolbar
+            editor.on('init', function () {
+                $('#editor-loading').hide();
+                $('.tox-promotion').hide();
+            });
         },
-        theme: 'snow'
-    });
-
-    quill.on("text-change", function () {
-        $("#editor_quil").val(quill.root.innerHTML);
+        onchange_callback: function(editor) {
+            tinyMCE.triggerSave();
+            $("#" + editor.id).valid();
+        }
     });
 
     $.validator.addMethod("filesize", function(value, element, param) {
@@ -41,19 +48,14 @@ $(document).ready(function () {
         return $.inArray(extension, param) !== -1;
     }, "Tipe file tidak diperbolehkan.");
 
-    // Custom validator untuk Quill Editor
-    $.validator.addMethod("quillRequired", function (value, element) {
-        return value !== "<p><br></p>" && value !== "";
-    }, "Konten tidak boleh kosong");
-
     $("#formPengumuman").validate({
         ignore: "",
         rules: {
             judul: {
                 required: true
             },
-            editor_quil: {
-                quillRequired: true
+            editor_pengumuman: {
+                required: true
             },
             gambar_header: {
                 required: true,
@@ -65,7 +67,7 @@ $(document).ready(function () {
             judul: {
                 required: "Judul wajib diisi"
             },
-            editor_quil: {
+            editor_pengumuman: {
                 required: "Konten tidak boleh kosong"
             },
             gambar_header: {
@@ -76,7 +78,7 @@ $(document).ready(function () {
         },
         errorPlacement: function(error, element) {
             // Menentukan lokasi error berdasarkan id atau atribut lain
-            if (element.attr("name") === "editor_quil") {
+            if (element.attr("name") === "editor_pengumuman") {
                 error.appendTo("#error-quil");
             } else {
                 // Default: tampilkan setelah elemen
