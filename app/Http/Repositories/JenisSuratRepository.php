@@ -32,7 +32,7 @@ class JenisSuratRepository
 
         $dataPengumuman = JenisSurat::find($idJenisSurat);
         $dataPengumuman->nama = $request->nama_jenis;
-        $dataPengumuman->default_form = $request->editor_quil;
+        $dataPengumuman->default_form = $request->editor;
         $dataPengumuman->updated_at = now();
         $dataPengumuman->updater = auth()->user()->id;
         $dataPengumuman->save();

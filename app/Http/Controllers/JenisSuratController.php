@@ -123,11 +123,11 @@ class JenisSuratController extends Controller
             $request->validate([
                 'id_jenissurat' => ['required'],
                 'nama_jenis' => ['required'],
-                'editor_quil' => ['required']
+                'editor' => ['required', 'string', 'min:10']
             ],[
                 'id_jenissurat.required' => 'Id Jenis Surat tidak ada.',
                 'nama_jenis.required' => 'Nama jenis surat wajib diisi.',
-                'editor_quil.required' => 'Template wajib diisi.'
+                'editor.required' => 'Template wajib diisi.'
             ]);
 
             DB::beginTransaction();

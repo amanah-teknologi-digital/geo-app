@@ -2,25 +2,29 @@ $(document).ready(function () {
     tinymce.init({
         selector: '#editor',
         plugins: 'link image code table lists wordcount',
-        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
-        menubar: true,
+        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist',
+        menubar: 'file edit insert format table',
         skin: false, // karena kita import manual
         content_css: false, // karena kita import manual
         license_key: 'gpl',
-        images_upload_handler: function (blobInfo, success, failure) {
-            // base64 (contoh simple)
-            success('data:' + blobInfo.blob().type + ';base64,' + blobInfo.base64());
-        },
+        content_style: `
+            body {
+              padding-left: 20px;
+              padding-right: 20px;
+              padding-bottom: 20px;
+              padding-top: 20px;
+            }
+          `,
         setup: function (editor) {
+            // Tambahkan tombol kustom ke toolbar
             editor.on('init', function () {
-                // Sembunyikan spinner setelah editor siap
-                const loadingEl = document.getElementById('editor-loading');
-                if (loadingEl) {
-                    loadingEl.style.display = 'none';
-                }else {
-
-                }
+                $('#editor-loading').hide();
+                $('.tox-promotion').hide();
             });
+        },
+        onchange_callback: function(editor) {
+            tinyMCE.triggerSave();
+            $("#" + editor.id).valid();
         }
     });
     // const quill = new Quill('#editor_template', {
@@ -43,32 +47,27 @@ $(document).ready(function () {
     //     $("#editor_quil").val(quill.root.innerHTML);
     // });
 
-    // Custom validator untuk Quill Editor
-    $.validator.addMethod("quillRequired", function (value, element) {
-        return value !== "<p><br></p>" && value !== "";
-    }, "Konten tidak boleh kosong");
-
-    $("#formPengumuman").validate({
+    $("#formJenisSurat").validate({
         ignore: "",
         rules: {
             nama_jenis: {
                 required: true
             },
-            editor_quil: {
-                quillRequired: true
+            editor: {
+                required: true
             }
         },
         messages: {
             nama_jenis: {
                 required: "Nama jenis surat wajib diisi"
             },
-            editor_quil: {
+            editor: {
                 required: "Template tidak boleh kosong"
             }
         },
         errorPlacement: function(error, element) {
             // Menentukan lokasi error berdasarkan id atau atribut lain
-            if (element.attr("name") === "editor_quil") {
+            if (element.attr("name") === "editor") {
                 error.appendTo("#error-quil");
             } else {
                 // Default: tampilkan setelah elemen

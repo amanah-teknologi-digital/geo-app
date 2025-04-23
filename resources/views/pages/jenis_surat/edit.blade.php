@@ -62,14 +62,12 @@
                             </div>
                             <div>
                                 <label for="isi_template" class="form-label">Template Surat <span class="text-danger">*</span></label>
-{{--                                <div id="editor_template" style="height: 700px;">{!! $dataJenisSurat->default_form !!}</div>--}}
                                 <div id="editor-loading" class="text-center">
                                     <div class="spinner-border spinner-border-sm text-primary" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
-                                <textarea id="editor" style="height: 700px;"></textarea>
-                                <input type="hidden" name="editor_quil" id="editor_quil" value="{{ $dataJenisSurat->default_form }}">
+                                <textarea id="editor" name="editor" style="height: 700px;">{!! $dataJenisSurat->default_form !!}</textarea>
                                 <div class="error-container" id="error-quil"></div>
                             </div>
                         </div>
