@@ -67,7 +67,7 @@
                                         ? route('file.getpublicfile', $file)
                                         : asset('assets/img/no_image.jpg');
                                 @endphp
-                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xxl-3">
                                     <div class="card p-2 h-100 shadow border mh-100">
                                         <div class="rounded-2 p-2 text-center mb-4 border-bottom">
                                             <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"><img class="img-fluid " style="height: 9rem;aspect-ratio: 4 / 3;border-radius: 8px;object-fit: cover;width: 100%;" src="{{ $imageUrl }}" alt="{{ $ruang->nama }}"></a>
