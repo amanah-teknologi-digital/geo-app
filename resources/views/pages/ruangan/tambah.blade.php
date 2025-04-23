@@ -56,12 +56,21 @@
                             @csrf
                             <div class="row g-6">
                                 <div>
-                                    <label for="kode_ruangan" class="form-label">Kode Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: TG-301)</i></label>
+                                    <label for="kode_ruangan" class="form-label">Kode Ruangan <span class="text-danger">*</span>&nbsp;<i class="text-muted"><b>(Contoh: TG-301)</b></i></label>
                                     <input type="text" class="form-control" id="kode_ruangan" name="kode_ruangan" placeholder="Kode Ruangan (harus unik dari lainya)" required autocomplete="off" autofocus>
                                 </div>
                                 <div>
-                                    <label for="nama_ruangan" class="form-label">Nama Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: Ruangan TG-301)</i></label>
+                                    <label for="nama_ruangan" class="form-label">Nama Ruangan <span class="text-danger">*</span>&nbsp;<i class="text-muted"><b>(Contoh: Ruangan TG-301)</b></i></label>
                                     <input type="text" class="form-control" id="nama_ruangan" name="nama_ruangan" placeholder="Nama Ruangan" required autocomplete="off">
+                                </div>
+                                <div>
+                                    <label for="jenis_ruangan" class="form-label">Jenis Ruangan <span class="text-danger">*</span></label>
+                                    <select name="jenis_ruangan" id="jenis_ruangan" class="form-control" required>
+                                        <option value="" selected disabled>-- Pilih Jenis Ruangan --</option>
+                                        @foreach($dataJenisRuangan as $jenis)
+                                            <option value="{{ $jenis->nama }}" >{{ $jenis->nama }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div>
                                     <label for="lokasi" class="form-label">Lokasi <span class="text-danger">*</span></label>
@@ -72,7 +81,7 @@
                                     <input type="number" class="form-control" name="kapasitas" id="kapasitas" placeholder="Kapasitas" required autocomplete="off">
                                 </div>
                                 <div>
-                                    <label for="fasilitas" class="form-label">Fasilitas Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Pilih minimal 1)</i></label>
+                                    <label for="fasilitas" class="form-label">Fasilitas Ruangan <span class="text-danger">*</span>&nbsp;<i class="text-muted"><b>(Pilih minimal 1)</b></i></label>
                                     <select id="fasilitas" name="fasilitas[]" class="form-control" multiple="multiple" required>
                                         @foreach ($dataFasilitas as $kategori => $fasilitas)
                                             <optgroup label="{{ $kategori }}">

@@ -57,30 +57,49 @@
                         <input type="hidden" name="id_ruangan" value="{{ $idRuangan }}" required>
                         <div class="row g-6">
                             <div>
-                                <label for="kode_ruangan" class="form-label">Kode Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: TG-301)</i></label>
+                                <label for="kode_ruangan" class="form-label">Kode Ruangan <span class="text-danger">*</span>&nbsp;<i class="text-muted"><b>(Contoh: TG-301)</b></i></label>
                                 <input type="text" class="form-control" id="kode_ruangan" name="kode_ruangan" placeholder="Kode Ruangan (harus unik dari lainya)" value="{{ $dataRuangan->kode_ruangan }}" required autocomplete="off" autofocus>
                             </div>
                             <div>
-                                <label for="nama_ruangan" class="form-label">Nama Ruangan <span class="text-danger">*</span>&nbsp;<i class="small">(Contoh: Ruangan TG-301)</i></label>
+                                <label for="nama_ruangan" class="form-label">Nama Ruangan <span class="text-danger">*</span>&nbsp;<i class="text-muted"><b>(Contoh: Ruangan TG-301)</b></i></label>
                                 <input type="text" class="form-control" id="nama_ruangan" name="nama_ruangan" placeholder="Nama Ruangan" value="{{ $dataRuangan->nama }}" required autocomplete="off">
                             </div>
                             <div>
-                                <label for="lantai" class="form-label">Lantai <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="lantai" id="lantai" placeholder="Lantai" value="{{ $dataRuangan->lantai }}" required autocomplete="off">
+                                <label for="jenis_ruangan" class="form-label">Jenis Ruangan <span class="text-danger">*</span></label>
+                                <select name="jenis_ruangan" id="jenis_ruangan" class="form-control" required>
+                                    <option value="" selected disabled>-- Pilih Jenis Ruangan --</option>
+                                    @foreach($dataJenisRuangan as $jenis)
+                                        <option value="{{ $jenis->nama }}" {{ $jenis->nama == $dataRuangan->jenis_ruangan? 'selected':'' }}>{{ $jenis->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="lokasi" class="form-label">Lokasi <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="Lokasi" value="{{ $dataRuangan->lokasi }}" required autocomplete="off">
                             </div>
                             <div>
                                 <label for="kapasitas" class="form-label">Kapasitas <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="kapasitas" id="kapasitas" placeholder="Kapasitas" value="{{ $dataRuangan->kapasitas }}" required autocomplete="off">
                             </div>
                             <div>
+                                @php $selected = collect(json_decode($dataRuangan->fasilitas))->pluck('id')->toArray(); @endphp
+                                <label for="fasilitas" class="form-label">Fasilitas Ruangan <span class="text-danger">*</span>&nbsp;<i class="text-muted"><b>(Pilih minimal 1)</b></i></label>
+                                <select id="fasilitas" name="fasilitas[]" class="form-control" multiple="multiple" required>
+                                    @foreach ($dataFasilitas as $kategori => $fasilitas)
+                                        <optgroup label="{{ $kategori }}">
+                                            @foreach ($fasilitas as $item)
+                                                <option value="{{ $item['id'] }}" {{ in_array($item['id'], $selected) ? 'selected' : '' }} data-icon="{{ $item['icon'] }}">{{ $item['text'] }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
+                                <div class="error-container" id="error-fasilitas"></div>
+                            </div>
+                            <div>
                                 <label for="is_aktif" class="form-label">Apakah aktif ? <span class="text-danger">*</span></label>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" name="is_aktif" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataRuangan->is_aktif? 'checked':'' ?> >
                                 </div>
-                            </div>
-                            <div>
-                                <label for="deskripsi" class="form-label">Deskripsi Ruangan <span class="text-danger">*</span></label>
-                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="5" placeholder="Contoh: Ruangan Kelas Teknik Geofisika ITS" required>{{ $dataRuangan->deskripsi }}</textarea>
                             </div>
                             <div>
                                 <label for="keterangan" class="form-label">Keterangan Ruangan <span class="text-danger">*</span></label>

@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\Files;
+use App\Models\JenisRuangan;
 use App\Models\JenisSurat;
 use App\Models\Ruangan;
 
@@ -20,15 +21,22 @@ class RuanganRepository
         return $data;
     }
 
+    public function getJenisRuangan(){
+        $data = JenisRuangan::get();
+
+        return $data;
+    }
+
     public function tambahRuangan($request, $idRuangan, $idFileGambar){
         Ruangan::create([
             'id_ruangan' => $idRuangan,
             'kode_ruangan' => $request->kode_ruangan,
             'nama' => $request->nama_ruangan,
-            'deskripsi' => $request->deskripsi,
+            'jenis_ruangan' => $request->jenis_ruangan,
+            'fasilitas' => $request->fasilitas,
             'keterangan' => $request->keterangan,
             'kapasitas' => $request->kapasitas,
-            'lantai' => $request->lantai,
+            'lokasi' => $request->lokasi,
             'gambar_file' => $idFileGambar,
             'is_aktif' => 1,
             'created_at' => now(),
@@ -70,10 +78,11 @@ class RuanganRepository
         $dataRuangan = Ruangan::find($idRuangan);
         $dataRuangan->kode_ruangan = $request->kode_ruangan;
         $dataRuangan->nama = $request->nama_ruangan;
-        $dataRuangan->deskripsi = $request->deskripsi;
+        $dataRuangan->jenis_ruangan = $request->jenis_ruangan;
+        $dataRuangan->fasilitas = $request->fasilitas;
         $dataRuangan->keterangan = $request->keterangan;
         $dataRuangan->kapasitas = $request->kapasitas;
-        $dataRuangan->lantai = $request->lantai;
+        $dataRuangan->lokasi = $request->lokasi;
         $dataRuangan->is_aktif = $aktif;
         $dataRuangan->updated_at = now();
         $dataRuangan->updater = auth()->user()->id;

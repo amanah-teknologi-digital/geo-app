@@ -29,8 +29,9 @@ class RuanganController extends Controller
     public function tambahRuangan(){
         $title = "Tambah Ruangan";
         $dataFasilitas = config('listfasilitas', []);
+        $dataJenisRuangan = $this->service->getJenisRuangan();
 
-        return view('pages.ruangan.tambah', compact('title','dataFasilitas'));
+        return view('pages.ruangan.tambah', compact('title','dataFasilitas','dataJenisRuangan'));
     }
 
     public function doTambahRuangan(Request $request){
@@ -38,20 +39,21 @@ class RuanganController extends Controller
             $request->validate([
                 'kode_ruangan' => ['required', Rule::unique('ruangan', 'kode_ruangan')],
                 'nama_ruangan' => ['required'],
-                'lantai' => ['required', 'integer'],
+                'lokasi' => ['required'],
+                'jenis_ruangan' => ['required'],
                 'kapasitas' => ['required', 'integer'],
-                'deskripsi' => ['required'],
+                'fasilitas' => ['required'],
                 'keterangan' => ['required'],
                 'gambar_ruangan' => ['required', 'file', 'image', 'max:5048']
             ],[
                 'kode_ruangan.required' => 'Kode ruangan wajib diisi.',
                 'kode_ruangan.unique' => 'Kode ruangan sudah terdaftar.',
                 'nama_ruangan.required' => 'Nama ruangan wajib diisi.',
-                'lantai.required' => 'Lantai wajib diisi.',
-                'lantai.integer' => 'Lantai harus numeric.',
+                'lokasi.required' => 'Lokasi wajib diisi.',
+                'jenis_ruangan.required' => 'Jenis ruangan wajib diisi.',
                 'kapasitas.required' => 'Kapasitas wajib diisi.',
                 'kapasitas.integer' => 'Kapasitas harus numeric.',
-                'deskripsi.required' => 'Deskripsi wajib diisi.',
+                'fasilitas.required' => 'Fasilitas wajib diisi.',
                 'keterangan.required' => 'Keterangan wajib diisi.',
                 'gambar_ruangan.required' => 'Gambar Ruangan wajib diisi.',
                 'gambar_ruangan.file' => 'File yang diunggah tidak valid.',
@@ -84,9 +86,11 @@ class RuanganController extends Controller
         $title = "Detail Ruangan";
         $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
         $dataRuangan = $this->service->getDataRuangan($idRuangan);
+        $dataFasilitas = config('listfasilitas', []);
+        $dataJenisRuangan = $this->service->getJenisRuangan();
 
         if ($isEdit){
-            return view('pages.ruangan.edit', compact('title','dataRuangan','idRuangan'));
+            return view('pages.ruangan.edit', compact('title','dataRuangan','idRuangan','dataFasilitas','dataJenisRuangan'));
         }else{
             return view('pages.ruangan.detail', compact('title','dataRuangan'));
         }
@@ -97,20 +101,21 @@ class RuanganController extends Controller
             $request->validate([
                 'kode_ruangan' => ['required', Rule::unique('ruangan', 'kode_ruangan')->ignore($request->id_ruangan,'id_ruangan')],
                 'nama_ruangan' => ['required'],
-                'lantai' => ['required', 'integer'],
+                'lokasi' => ['required'],
+                'jenis_ruangan' => ['required'],
                 'kapasitas' => ['required', 'integer'],
-                'deskripsi' => ['required'],
+                'fasilitas' => ['required'],
                 'keterangan' => ['required'],
                 'gambar_ruangan' => ['file', 'image', 'max:5048']
             ],[
                 'kode_ruangan.required' => 'Kode ruangan wajib diisi.',
                 'kode_ruangan.unique' => 'Kode ruangan sudah terdaftar.',
                 'nama_ruangan.required' => 'Nama ruangan wajib diisi.',
-                'lantai.required' => 'Lantai wajib diisi.',
-                'lantai.integer' => 'Lantai harus numeric.',
+                'jenis_ruangan.required' => 'Jenis ruangan wajib diisi.',
+                'lokasi.required' => 'Lokasi wajib diisi.',
                 'kapasitas.required' => 'Kapasitas wajib diisi.',
                 'kapasitas.integer' => 'Kapasitas harus numeric.',
-                'deskripsi.required' => 'Deskripsi wajib diisi.',
+                'fasilitas.required' => 'Deskripsi wajib diisi.',
                 'keterangan.required' => 'Keterangan wajib diisi.',
                 'gambar_ruangan.file' => 'File yang diunggah tidak valid.',
                 'gambar_ruangan.image' => 'File harus berupa gambar.',

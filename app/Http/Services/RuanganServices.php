@@ -20,6 +20,12 @@ class RuanganServices
         return $data;
     }
 
+    public function getJenisRuangan(){
+        $data = $this->repository->getJenisRuangan();
+
+        return $data;
+    }
+
     public function checkAksesTambah($idAkses){
         if (in_array($idAkses,[1,3])){ //cuma bisa super admin & admin
             $isTambah = true;
@@ -59,6 +65,8 @@ class RuanganServices
 
     public function tambahRuangan($request, $idRuangan, $idFileGambar){
         try {
+            $request->fasilitas = $this->getDataJsonFasilitas($request->fasilitas);
+
             $this->repository->tambahRuangan($request, $idRuangan, $idFileGambar);
         }catch (Exception $e) {
             Log::error($e->getMessage());
@@ -66,8 +74,40 @@ class RuanganServices
         }
     }
 
+    public function getDataJsonFasilitas($dataFasilitas){
+        $configFasilitas = config('listfasilitas', []);
+        $flatFasilitas = [];
+
+        // Flatten semua fasilitas jadi key => full data
+        foreach ($configFasilitas as $kategori => $items) {
+            foreach ($items as $item) {
+                $flatFasilitas[$item['id']] = $item;
+            }
+        }
+
+        // Ambil fasilitas yang dipilih dan buat array final
+        $result = [];
+
+        foreach ($dataFasilitas as $id) {
+            if (isset($flatFasilitas[$id])) {
+                $result[] = [
+                    'id'   => $id,
+                    'text' => $flatFasilitas[$id]['text'],
+                    'icon' => $flatFasilitas[$id]['icon'],
+                ];
+            }
+        }
+
+        // Simpan sebagai JSON
+        $jsonFasilitas = json_encode($result, JSON_PRETTY_PRINT);
+
+        return $jsonFasilitas;
+    }
+
     public function updateRuangan($request, $idRuangan){
         try {
+            $request->fasilitas = $this->getDataJsonFasilitas($request->fasilitas);
+
             $this->repository->updateRuangan($request, $idRuangan);
         }catch (Exception $e) {
             Log::error($e->getMessage());

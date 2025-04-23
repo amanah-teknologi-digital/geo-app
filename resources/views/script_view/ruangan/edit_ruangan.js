@@ -27,15 +27,17 @@ $(document).ready(function () {
             nama_ruangan: {
                 required: true
             },
-            lantai: {
-                required: true,
-                number: true
+            jenis_ruangan: {
+                required: true
+            },
+            lokasi: {
+                required: true
             },
             kapasitas: {
                 required: true,
                 number: true
             },
-            deskripsi: {
+            fasilitas: {
                 required: true
             },
             keterangan: {
@@ -53,16 +55,18 @@ $(document).ready(function () {
             nama_ruangan: {
                 required: "Nama ruangan wajib diisi"
             },
-            lantai: {
-                required: "Lantai ruangan wajib diisi",
-                number: "Lantai harus berupa angka"
+            jenis_ruangan: {
+                required: "Jenis ruangan wajib diisi"
+            },
+            lokasi: {
+                required: "Lokasi ruangan wajib diisi"
             },
             kapasitas: {
                 required: "Kapasitas ruangan wajib diisi",
                 number: "Kapasitas harus berupa angka"
             },
-            deskripsi: {
-                required: "Deskripsi ruangan wajib diisi"
+            fasilitas: {
+                required: "Fasilitas ruangan wajib diisi"
             },
             keterangan: {
                 required: "Keterangan ruangan wajib diisi"
@@ -72,8 +76,30 @@ $(document).ready(function () {
                 fileextension: "Hanya file JPG, JPEG, PNG yang diperbolehkan"
             }
         },
+        errorPlacement: function(error, element) {
+        // Menentukan lokasi error berdasarkan id atau atribut lain
+        if (element.attr("name") === "fasilitas") {
+            error.appendTo("#error-fasilitas");
+        } else {
+            // Default: tampilkan setelah elemen
+            error.insertAfter(element);
+        }
+    },
         submitHandler: function (form) {
             form.submit();
         }
     });
+
+    $('#fasilitas').select2({
+        width: '100%',
+        templateResult: formatFasilitas,
+        templateSelection: formatFasilitas
+    });
+
+    // Fungsi untuk format hasil pilih dengan ikon
+    function formatFasilitas(facility) {
+        if (!facility.id) return facility.text; // Menampilkan hanya teks jika tidak ada ID
+        var $span = $('<span><i class="bx ' + $(facility.element).data('icon') + '"></i> ' + facility.text + '</span>');
+        return $span;
+    }
 })

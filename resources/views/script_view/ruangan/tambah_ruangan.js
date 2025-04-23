@@ -30,6 +30,9 @@ $(document).ready(function () {
             lokasi: {
                 required: true
             },
+            jenis_ruangan: {
+                required: true
+            },
             kapasitas: {
                 required: true,
                 number: true
@@ -52,6 +55,9 @@ $(document).ready(function () {
             },
             nama_ruangan: {
                 required: "Nama ruangan wajib diisi"
+            },
+            jenis_ruangan: {
+                required: "Jenis ruangan wajib diisi"
             },
             lokasi: {
                 required: "Lokasi ruangan wajib diisi"
