@@ -8,7 +8,8 @@
   'resources/assets/vendor/js/menu.js',
   'resources/assets/vendor/libs/jquery-validation/jquery-validation.js',
   'resources/assets/vendor/libs/datatable/datatable.js',
-  'resources/assets/vendor/libs/select2/select2.js'
+  'resources/assets/vendor/libs/select2/select2.js',
+  'resources/assets/vendor/libs/tinymce/tinymce.js'
 ])
 
 @yield('vendor-script')
