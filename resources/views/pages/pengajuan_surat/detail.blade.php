@@ -144,10 +144,13 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="isi_surat" class="form-label">Form Isi Surat <span
-                                        class="text-danger">*</span></label>
-                                <div id="editor_surat" style="height: 500px;">{!! $dataPengajuan->data_form !!}</div>
-                                <input type="hidden" name="editor_quil" id="editor_quil" value="{{ $dataPengajuan->data_form }}">
+                                <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
+                                <div id="editor-loading" class="text-center">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <textarea id="editor_surat" name="editor_surat" style="height: 500px;">{!! $dataPengajuan->data_form !!}</textarea>
                                 <div class="error-container" id="error-quil"></div>
                             </div>
                             <div>
@@ -163,10 +166,7 @@
                     </form>
                     <ul class="fa-ul ml-auto float-end mt-5">
                         <li>
-                            <small><em>Dengan <b>ajukan pengajuan</b>, pengajuan akan <b>diverifikasi</b> oleh admin. Pengajuan yang berstatus <b>Draft</b> masih bisa <b>dihapus/dibatalkan</b></em></small>
-                        </li>
-                        <li>
-                            <small><em>Selama berstatus <b>Diajukan</b>, maka tidak diperbolehkan <b>mengupdate</b> pengajuan kecuali ada <b>revisi dari admin</b>.</em></small>
+                            <small><em>Ganti text yang <b>bewarna kuning</b> sesuai data yang akan diajukan!.</em></small>
                         </li>
                         <li>
                             <small><em>Jika ada <b>revisi dari admin</b>, maka update data <b>pengajuan</b> atau <b>biodata</b> sesuai dengan <b>arahan revisi</b> pada histori persetujuan.</em></small>

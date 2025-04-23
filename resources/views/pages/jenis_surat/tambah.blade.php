@@ -61,8 +61,12 @@
                                 </div>
                                 <div>
                                     <label for="isi_template" class="form-label">Template Surat <span class="text-danger">*</span></label>
-                                    <div id="editor_template" style="height: 700px;"></div>
-                                    <input type="hidden" name="editor_quil" id="editor_quil">
+                                    <div id="editor-loading" class="text-center">
+                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <textarea id="editor" name="editor" style="height: 700px;"></textarea>
                                     <div class="error-container" id="error-quil"></div>
                                 </div>
                             </div>

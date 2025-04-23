@@ -81,7 +81,7 @@ class PengajuanPersuratanRepository
             'email' => auth()->user()->email,
             'kartu_id' => auth()->user()->kartu_id,
             'keterangan' => $request->keterangan,
-            'data_form' => $request->editor_quil,
+            'data_form' => $request->editor_surat,
             'created_at' => now(),
             'updater' => auth()->user()->id
         ]);

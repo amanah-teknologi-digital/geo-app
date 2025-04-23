@@ -20,7 +20,7 @@ class JenisSuratRepository
         JenisSurat::create([
             'id_jenissurat' => $idJenisSurat,
             'nama' => $request->nama_jenis,
-            'default_form' => $request->editor_quil,
+            'default_form' => $request->editor,
             'is_aktif' => 1,
             'created_at' => now(),
             'updater' => auth()->user()->id

@@ -27,25 +27,6 @@ $(document).ready(function () {
             $("#" + editor.id).valid();
         }
     });
-    // const quill = new Quill('#editor_template', {
-    //     bounds: '#full-editor',
-    //     modules: {
-    //         toolbar: [
-    //             [{ 'header': '1'}, {'header': '2'}, { 'font': [] }, { 'size': [] }],
-    //             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-    //             ['bold', 'italic', 'underline'],
-    //             [{ 'align': [] }],
-    //             ['link'],
-    //             ['image'],
-    //             ['blockquote']
-    //         ]
-    //     },
-    //     theme: 'snow'
-    // });
-    //
-    // quill.on("text-change", function () {
-    //     $("#editor_quil").val(quill.root.innerHTML);
-    // });
 
     $("#formJenisSurat").validate({
         ignore: "",

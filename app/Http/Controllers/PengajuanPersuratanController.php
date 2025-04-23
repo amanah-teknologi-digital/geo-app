@@ -98,11 +98,11 @@ class PengajuanPersuratanController extends Controller
         try {
             $request->validate([
                 'jenis_surat' => ['required'],
-                'editor_quil' => ['required'],
+                'editor_surat' => ['required', 'string', 'min:10'],
                 'keterangan' => ['required']
             ],[
                 'jenis_surat.required' => 'Jenis Surat wajib diisi.',
-                'editor_quil.required' => 'Konten wajib diisi.',
+                'editor_surat.required' => 'Surat wajib diisi.',
                 'keterangan.required' => 'Keterangan wajib diisi.'
             ]);
 

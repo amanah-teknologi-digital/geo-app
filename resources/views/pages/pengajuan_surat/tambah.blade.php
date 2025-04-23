@@ -45,73 +45,82 @@
                 </div>
             @endif
             <div class="card mb-6">
-                    <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                        <h5 class="card-title mb-0"><i class="bx bx-plus mb-1"></i>&nbsp;Tambah Pengajuan</h5>
-                        <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary btn-sm">
-                            <i class="bx bx-arrow-back"></i>&nbsp;Kembali
-                        </a>
-                    </div>
-                    <div class="card-body pt-4">
-                        <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.dotambah') }}">
-                            @csrf
-                            <div class="row g-6">
-                                <div>
-                                    <label for="nama_pengaju" class="form-label">Nama Pengaju <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ Auth()->user()->name }}" readonly>
+                <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
+                    <h5 class="card-title mb-0"><i class="bx bx-plus mb-1"></i>&nbsp;Tambah Pengajuan</h5>
+                    <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary btn-sm">
+                        <i class="bx bx-arrow-back"></i>&nbsp;Kembali
+                    </a>
+                </div>
+                <div class="card-body pt-4">
+                    <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.dotambah') }}">
+                        @csrf
+                        <div class="row g-6">
+                            <div>
+                                <label for="nama_pengaju" class="form-label">Nama Pengaju <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="{{ Auth()->user()->name }}" readonly>
+                            </div>
+                            <div>
+                                <label for="kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="{{ Auth()->user()->kartu_id }}" readonly>
+                            </div>
+                            <div>
+                                <label for="file_kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
+                                @php
+                                    $file = auth()->user()->file_kartuid;
+                                    $filePath = auth()->user()->files->location;
+                                    $imageUrl = Storage::disk('local')->exists($filePath)
+                                        ? route('file.getprivatefile', $file)
+                                        : asset('assets/img/no_image.jpg');
+                                @endphp
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modals-transparent">
+                                        Lihat file
+                                    </button>
                                 </div>
-                                <div>
-                                    <label for="kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ Auth()->user()->kartu_id }}" readonly>
-                                </div>
-                                <div>
-                                    <label for="file_kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
-                                    @php
-                                        $file = auth()->user()->file_kartuid;
-                                        $filePath = auth()->user()->files->location;
-                                        $imageUrl = Storage::disk('local')->exists($filePath)
-                                            ? route('file.getprivatefile', $file)
-                                            : asset('assets/img/no_image.jpg');
-                                    @endphp
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modals-transparent">
-                                            Lihat file
-                                        </button>
+                            </div>
+                            <div>
+                                <label for="no_hp" class="form-label">No. Hp <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="{{ Auth()->user()->no_hp }}" readonly>
+                            </div>
+                            <div>
+                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="{{ Auth()->user()->email }}" readonly>
+                            </div>
+                            <div>
+                                <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
+                                    <option value="" selected disabled>-- Pilih Jenis Surat --</option>
+                                    @foreach($dataJenisSurat as $row)
+                                        <option value="{{ $row->id_jenissurat }}">{{ $row->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
+                                <div id="editor-loading" class="text-center">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
-                                <div>
-                                    <label for="no_hp" class="form-label">No. Hp <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ Auth()->user()->no_hp }}" readonly>
-                                </div>
-                                <div>
-                                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ Auth()->user()->email }}" readonly>
-                                </div>
-                                <div>
-                                    <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                    <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
-                                        <option value="" selected disabled>-- Pilih Jenis Surat --</option>
-                                        @foreach($dataJenisSurat as $row)
-                                            <option value="{{ $row->id_jenissurat }}">{{ $row->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
-                                    <div id="editor_surat" style="height: 250px;"></div>
-                                    <input type="hidden" name="editor_quil" id="editor_quil">
-                                    <div class="error-container" id="error-quil"></div>
-                                </div>
-                                <div>
-                                    <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
-                                    <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required></textarea>
-                                </div>
+                                <textarea id="editor_surat" name="editor_surat" style="height: 500px;"></textarea>
+                                <div class="error-container" id="error-quil"></div>
                             </div>
-                            <div class="mt-6">
-                                <button type="submit" class="btn btn-primary me-3"><i class="bx bx-save"></i>&nbsp;Tambah Pengajuan</button>
+                            <div>
+                                <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
+                                <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required></textarea>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="btn btn-primary me-3"><i class="bx bx-save"></i>&nbsp;Tambah Pengajuan</button>
+                        </div>
+                    </form>
+                    <ul class="fa-ul ml-auto float-end mt-5">
+                        <li>
+                            <small><em>Ganti text yang <b>bewarna kuning</b> sesuai data yang akan diajukan!.</em></small>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
