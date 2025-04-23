@@ -85,7 +85,7 @@
                                     <div class="row align-items-center gx-4 mt-4">
                                         <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
                                             <span class="badge bg-label-primary small" style="font-size: 0.8125rem !important;">{{ $dataRuangan->jenis_ruangan }}</span>
-                                            <p class="text-nowrap mb-2"><i class="icon-base bx bx-group me-2 align-bottom"></i>Kapasitas: {{ $dataRuangan->kapasitas }} Orang</p>
+                                            <p class="text-nowrap mb-2 small"><i class="icon-base bx bx-group me-2 align-bottom"></i>Kapasitas: {{ $dataRuangan->kapasitas }} Orang</p>
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +103,7 @@
                                     </div>
                                     <hr class="my-6">
                                     <h5>Keterangan</h5>
-                                    <p class="mb-0">{!! nl2br(e($dataRuangan->keterangan)) !!}</p>
+                                    <p class="mb-0 small text-muted">{!! nl2br(e($dataRuangan->keterangan)) !!}</p>
                                 </div>
                             </div>
                         </div>
