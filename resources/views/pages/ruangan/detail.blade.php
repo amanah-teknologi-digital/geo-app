@@ -58,6 +58,11 @@
                             <p class="mb-0 w-100 text-truncate">{{ $dataRuangan->deskripsi }}</p>
                         </div>
                         <div class="d-flex align-items-center">
+                            @if($dataRuangan->is_aktif)
+                                <a class="btn btn-sm btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $dataRuangan->id_ruangan) }}"> <i class="icon-base bx bx-cart-add icon-sm lh-1 scaleX-n1-rtl me-2"></i><span class="me-2">Booking Ruangan</span></a>
+                            @else
+                                <a class="disabled btn btn-sm btn-danger d-flex align-items-center" href="javascript:void(0)"> <i class="icon-base bx bx-x icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Tidak Tersedia</span> </a>
+                            @endif
 {{--                            <span class="badge bg-label-danger">UI/UX</span>--}}
 {{--                            <i class="icon-base bx bx-share-alt icon-lg mx-4"></i>--}}
 {{--                            <i class="icon-base bx bx-bookmarks icon-lg"></i>--}}
@@ -78,25 +83,27 @@
                                         <img class="img-fluid w-100" style="border-radius: 8px;object-fit: cover;" src="{{ $imageUrl }}" alt="{{ $dataRuangan->nama }}">
                                     </a>
                                     <div class="row align-items-center gx-4 mt-4">
-                                        <div class="col-12 d-flex flex-wrap gap-2">
-                                            @if($dataRuangan->is_aktif)
-                                                <a class="btn btn-sm btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $dataRuangan->id_ruangan) }}"> <i class="icon-base bx bx-cart-add icon-sm lh-1 scaleX-n1-rtl me-2"></i><span class="me-2">Booking Ruangan</span></a>
-                                            @else
-                                                <a class="disabled btn btn-sm btn-danger d-flex align-items-center" href="javascript:void(0)"> <i class="icon-base bx bx-x icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Nonaktif</span> </a>
-                                            @endif
+                                        <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
+                                            <span class="badge bg-label-primary small" style="font-size: 0.8125rem !important;">{{ $dataRuangan->jenis_ruangan }}</span>
+                                            <p class="text-nowrap mb-2"><i class="icon-base bx bx-group me-2 align-bottom"></i>Kapasitas: {{ $dataRuangan->kapasitas }} Orang</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h5>Keterangan Ruangan</h5>
-                                    <p class="mb-0">{!! nl2br(e($dataRuangan->keterangan)) !!}</p>
+                                    <h5>Lokasi</h5>
+                                    <p class="mb-0">{{ $dataRuangan->lokasi }}</p>
                                     <hr class="my-6">
-                                    <div class="row align-items-center gx-4">
-                                        <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
-                                            <p class="text-nowrap mb-2"><i class="icon-base bx bx-group me-2 align-bottom"></i>Kapasitas: {{ $dataRuangan->kapasitas }} Orang</p>
-                                            <p class="text-nowrap mb-2"><i class="icon-base bx bx-current-location me-2 align-top"></i>Posisi: Lantai {{ $dataRuangan->lantai }}</p>
-                                        </div>
+                                    <h5>Fasilitas</h5>
+                                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2">
+                                        @foreach(json_decode($dataRuangan->fasilitas, true) as $item)
+                                            <div class="col">
+                                                <p class="mb-2"><i class="icon-base bx <?= $item['icon'] ?> me-2 align-bottom"></i>&nbsp;{{ $item['text'] }}</p>
+                                            </div>
+                                        @endforeach
                                     </div>
+                                    <hr class="my-6">
+                                    <h5>Keterangan</h5>
+                                    <p class="mb-0">{!! nl2br(e($dataRuangan->keterangan)) !!}</p>
                                 </div>
                             </div>
                         </div>

@@ -57,7 +57,7 @@
                             </div>
                         @endif
                     </div>
-                    <div class="row gy-12 gx-12 mb-6">
+                    <div class="row gy-6 mb-6">
                         @if($dataRuangan->isNotEmpty())
                             @foreach($dataRuangan as $ruang)
                                 @php
@@ -67,7 +67,7 @@
                                         ? route('file.getpublicfile', $file)
                                         : asset('assets/img/no_image.jpg');
                                 @endphp
-                                <div class="col-sm-4 col-lg-4">
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                     <div class="card p-2 h-100 shadow border mh-100">
                                         <div class="rounded-2 p-2 text-center mb-4 border-bottom">
                                             <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"><img class="img-fluid " style="height: 9rem;aspect-ratio: 4 / 3;border-radius: 8px;object-fit: cover;width: 100%;" src="{{ $imageUrl }}" alt="{{ $ruang->nama }}"></a>
@@ -75,7 +75,7 @@
                                         <div class="card-body p-2 pt-0">
                                             <a href="{{ route('ruangan.detail', $ruang->id_ruangan) }}" class="h6 w-100 text-truncate">{{ $ruang->nama }}&nbsp;<span class="badge rounded-pill <?= $ruang->is_aktif? 'bg-success':'bg-danger' ?> mb-3">{{ $ruang->kode_ruangan }}</span></a>
                                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                                <span class="badge bg-label-primary small" style="font-size: 0.8125rem !important;">Lantai {{ $ruang->lantai }}</span>
+                                                <span class="badge bg-label-primary small" style="font-size: 0.8125rem !important;">{{ $ruang->jenis_ruangan }}</span>
                                                 <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
                                                     <span class="fw-normal small w-100 text-muted">Kapasitas {{ $ruang->kapasitas }} Orang</span>
                                                 </p>
@@ -86,7 +86,7 @@
                                                     @if($ruang->is_aktif)
                                                         <a class="btn btn-sm btn-outline-success d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <i class="icon-base bx bx-calendar icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Jadwal</span> </a>
                                                     @else
-                                                        <a class="disabled btn btn-sm btn-danger d-flex align-items-center" href="javascript:void(0)"> <i class="icon-base bx bx-x icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Nonaktif</span> </a>
+                                                        <a class="disabled btn btn-sm btn-danger d-flex align-items-center" href="javascript:void(0)"> <i class="icon-base bx bx-x icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Tidak Tersedia</span> </a>
                                                     @endif
                                                     <a class="btn btn-sm btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <span class="me-2">Detail</span><i class="icon-base bx bx-chevron-right icon-sm lh-1 scaleX-n1-rtl"></i> </a>
                                                 </div>
