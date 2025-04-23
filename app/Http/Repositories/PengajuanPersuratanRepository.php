@@ -100,7 +100,7 @@ class PengajuanPersuratanRepository
         $dataPengajuan->email = $dataUser->email;
         $dataPengajuan->id_jenissurat = $request->jenis_surat;
         $dataPengajuan->keterangan = $request->keterangan;
-        $dataPengajuan->data_form = $request->editor_quil;
+        $dataPengajuan->data_form = $request->editor_surat;
         $dataPengajuan->updated_at = now();
         $dataPengajuan->updater = auth()->user()->id;
         $dataPengajuan->save();
