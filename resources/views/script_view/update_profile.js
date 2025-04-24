@@ -41,6 +41,10 @@ $(document).ready(function () {
                 required: true,
                 email: true
             },
+            email_its: {
+                required: true,
+                email: true
+            },
             no_telepon: {
                 required: true,
                 number: true,
@@ -57,6 +61,10 @@ $(document).ready(function () {
             },
             email: {
                 required: "Email wajib diisi",
+                email: "Format email tidak valid"
+            },
+            email_its: {
+                required: "Email ITS wajib diisi",
                 email: "Format email tidak valid"
             },
             file_kartuid: {

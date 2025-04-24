@@ -91,6 +91,10 @@
                                     <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" value="{{ $dataPengajuan->email }}" readonly>
                                 </div>
+                                <div>
+                                    <label for="email_its" class="form-label">Email ITS<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" value="{{ $dataPengajuan->email_its }}" readonly>
+                                </div>
                             </div>
                         </div>
                     </div>

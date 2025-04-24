@@ -46,6 +46,7 @@ class ProfileController extends Controller
             $request->validate([
                 'nama_lengkap' => ['required'],
                 'email' => ['required', 'string', 'lowercase', 'email', Rule::unique('users', 'email')->ignore(auth()->user()->id)],
+                'email_its' => ['required', 'string', 'lowercase', 'email', Rule::unique('users', 'email_its')->ignore(auth()->user()->id)],
                 'no_kartuid' => ['required', Rule::unique('users', 'kartu_id')->ignore(auth()->user()->id)],
                 'no_telepon' => ['required', 'string', 'max:13', Rule::unique('users', 'no_hp')->ignore(auth()->user()->id)],
                 'file_kartuid' => ['file', 'image', 'max:5120'],
@@ -56,6 +57,11 @@ class ProfileController extends Controller
                 'email.lowercase'       => 'Email harus dalam huruf kecil.',
                 'email.email'           => 'Format email tidak valid.',
                 'email.unique'          => 'Email sudah terdaftar.',
+                'email_its.required'    => 'Email ITS wajib diisi.',
+                'email_its.string'      => 'Email ITS harus berupa teks.',
+                'email_its.lowercase'   => 'Email ITS harus dalam huruf kecil.',
+                'email_its.email'       => 'Format email tidak valid.',
+                'email_its.unique'      => 'Email ITS sudah terdaftar.',
                 'no_kartuid.required'   => 'Nomor kartu ID wajib diisi.',
                 'no_kartuid.unique'     => 'Kartu ID sudah terdaftar.',
                 'no_telepon.required'   => 'Nomor telepon wajib diisi.',
@@ -94,6 +100,7 @@ class ProfileController extends Controller
 
             $user = User::find(auth()->user()->id);
             $user->email = $request->email;
+            $user->email_its = $request->email_its;
             if ($user->isDirty('email')) {
                 $user->email_verified_at = null;
             }

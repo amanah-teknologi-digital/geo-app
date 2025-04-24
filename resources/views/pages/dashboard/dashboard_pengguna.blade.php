@@ -26,6 +26,13 @@
             </select>
         </div>
     </div>
+    @if(empty(auth()->user()->email_its))
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+            <div class="alert alert-danger w-100" role="alert">
+                Data email ITS anda belum ada, silahkan klik <a href="{{ route('profile.edit') }}" class="text-danger fw-bold">disini</a> untuk melengkapi.
+            </div>
+        </div>
+    @endif
     <div class="row mb-6 pt-2 g-6">
         <div class="col-sm-6 col-xl-3">
             <div class="card">

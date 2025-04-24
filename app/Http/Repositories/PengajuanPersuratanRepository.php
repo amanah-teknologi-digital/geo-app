@@ -79,6 +79,7 @@ class PengajuanPersuratanRepository
             'nama_pengaju' => auth()->user()->name,
             'no_hp' => auth()->user()->no_hp,
             'email' => auth()->user()->email,
+            'email_its' => auth()->user()->email_its,
             'kartu_id' => auth()->user()->kartu_id,
             'keterangan' => $request->keterangan,
             'data_form' => $request->editor_surat,
@@ -98,6 +99,7 @@ class PengajuanPersuratanRepository
         $dataPengajuan->kartu_id = $dataUser->kartu_id;
         $dataPengajuan->no_hp = $dataUser->no_hp;
         $dataPengajuan->email = $dataUser->email;
+        $dataPengajuan->email_its = $dataUser->email_its;
         $dataPengajuan->id_jenissurat = $request->jenis_surat;
         $dataPengajuan->keterangan = $request->keterangan;
         $dataPengajuan->data_form = $request->editor_surat;
@@ -115,6 +117,7 @@ class PengajuanPersuratanRepository
         $dataPengajuan->kartu_id = $dataUser->kartu_id;
         $dataPengajuan->no_hp = $dataUser->no_hp;
         $dataPengajuan->email = $dataUser->email;
+        $dataPengajuan->email_its = $dataUser->email_its;
         $dataPengajuan->save();
     }
 

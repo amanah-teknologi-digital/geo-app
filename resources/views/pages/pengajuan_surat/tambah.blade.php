@@ -88,6 +88,10 @@
                                 <input type="text" class="form-control" value="{{ Auth()->user()->email }}" readonly>
                             </div>
                             <div>
+                                <label for="email" class="form-label">Email ITS<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" value="{{ Auth()->user()->email_its }}" readonly>
+                            </div>
+                            <div>
                                 <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
                                 <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
                                     <option value="" selected disabled>-- Pilih Jenis Surat --</option>

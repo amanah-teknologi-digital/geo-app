@@ -101,6 +101,10 @@
                                 @endif
                             </div>
                             <div>
+                                <label for="email_its" class="form-label">Email ITS<span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email_its" name="email_its" placeholder="Email ITS" value="{{ old('email_its', $user->email_its) }}" required autocomplete="off">
+                            </div>
+                                <div>
                                 <label for="no_telepon" class="form-label">No. Telepon <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="no_telepon" name="no_telepon" placeholder="contoh: 085924315876" value="{{ old('no_telepon', $user->no_hp) }}" required autocomplete="off">
                             </div>
@@ -125,7 +129,7 @@
                             </div>
                         </div>
                         <div class="mt-6">
-                            <button type="submit" class="btn btn-primary me-3">Simpan Perubahan</button>
+                            <button type="submit" class="btn btn-primary me-3"><span class="bx bx-save"></span>&nbsp;Simpan Perubahan</button>
                         </div>
                     </form>
                 </div>
@@ -168,7 +172,7 @@
                                 <div class="error-container" id="error-konfirmasipass"></div>
                             </div>
                             <div class="mt-6">
-                                <button type="submit" class="btn btn-primary me-3">Update Password</button>
+                                <button type="submit" class="btn btn-primary me-3"><span class="bx bx-save"></span>&nbsp;Update Password</button>
                             </div>
                         </div>
                     </form>
