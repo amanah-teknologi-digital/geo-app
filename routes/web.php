@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\ManajemenFileTinyMceController;
 use App\Http\Controllers\PengajuanGeoFacilityController;
 use App\Http\Controllers\PengajuanPersuratanController;
 use App\Http\Controllers\PengajuanGeoRoomController;
@@ -22,6 +23,7 @@ Route::get('/pengumuman/list', [LandingPageController::class, 'listPengumuman'])
 Route::get('/pengumuman/getlist', [LandingPageController::class, 'getListPengumuman'])->name('pengumuman.getlistpengumuman');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/upload-gambar-tinymce', [ManajemenFileTinyMceController::class, 'uploadGambarTinymce'])->name('upload.gambartinymce');
     Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
     Route::get('/dashboard/getdatanotifikasi', [DashboardController::class, 'getDataNotifikasi'])->name('dashboard.getdatanotifikasi');
     Route::get('/dashboard-surat', [DashboardController::class, 'surat'])->middleware('role:1,2,5,6,7')->name('dashboard.surat');

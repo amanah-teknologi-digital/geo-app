@@ -2,7 +2,7 @@ $(document).ready(function () {
     tinymce.init({
         selector: '#editor_surat',
         plugins: 'link image code table lists wordcount',
-        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist',
+        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | image',
         menubar: 'file edit insert format table',
         skin: false, // karena kita import manual
         content_css: false, // karena kita import manual
@@ -29,6 +29,78 @@ $(document).ready(function () {
         onchange_callback: function(editor) {
             tinyMCE.triggerSave();
             $("#" + editor.id).valid();
+        },
+        automatic_uploads: true,
+        images_upload_url: routeUploadGambarTinymce,
+        file_picker_types: 'image',
+        file_picker_callback: function (cb, value, meta) {
+            // Hanya untuk gambar
+            if (meta.filetype === 'image') {
+                const input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*'); // hanya gambar
+
+                input.onchange = function () {
+                    const file = this.files[0];
+
+                    // Opsional: validasi manual di sisi klien
+                    if (!file.type.startsWith('image/')) {
+                        alert('Hanya file gambar yang diperbolehkan.');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('id_user', idUser); // sesuaikan
+                    formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+
+                    fetch(routeUploadGambarTinymce, {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.location) {
+                                cb(data.location, { title: file.name }); // WAJIB ini!
+                            } else {
+                                alert('Upload gagal: location tidak ditemukan.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            alert('Upload error: ' + error.message);
+                        });
+                };
+
+                input.click();
+            }
+        },
+        images_upload_handler: function (blobInfo, success, failure) {
+            const formData = new FormData();
+            formData.append('file', blobInfo.blob());
+            formData.append('id_user', idUser);
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+
+            return fetch(routeUploadGambarTinymce, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Server response:', data);  // Debugging
+                    let jsonObject = JSON.parse(data);
+                    let jsonArray = data.entries(jsonObject);
+                    console.log(jsonArray)
+
+                    if (data.location && data.location.indexOf('http') !== -1) {  // Cek URL valid
+                        success(data.location);  // Kembali ke TinyMCE dengan URL gambar
+                    } else {
+                        failure('Upload failed: No valid location returned');
+                    }
+                })
+                .catch(error => {
+                    failure('Upload error: ' + error.message);
+                });
         }
     });
 

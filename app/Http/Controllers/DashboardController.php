@@ -14,6 +14,7 @@ class DashboardController extends Controller{
         $this->service = new DashboardServices(new DashboardRepository());
         $this->istilahPersuratan = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
     }
+
     public function pengguna(){
         $title = 'Dashboard Pengguna';
         $istilahPersuratan = $this->istilahPersuratan;
