@@ -386,9 +386,6 @@
 @section('page-script')
     <script>
         let isEdit = {{ $isEdit ? 'true' : 'false' }};
-        let routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
-        let routeUploadGambarTinymce = "{{ route('upload.gambartinymce') }}";
-        let idUser = "{{ Auth()->user()->id }}";
     </script>
     @vite('resources/views/script_view/pengajuan_surat/detail_pengajuan.js')
 @endsection

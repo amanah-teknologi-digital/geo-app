@@ -23,7 +23,6 @@ Route::get('/pengumuman/list', [LandingPageController::class, 'listPengumuman'])
 Route::get('/pengumuman/getlist', [LandingPageController::class, 'getListPengumuman'])->name('pengumuman.getlistpengumuman');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::post('/upload-gambar-tinymce', [ManajemenFileTinyMceController::class, 'uploadGambarTinymce'])->name('upload.gambartinymce');
     Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
     Route::get('/dashboard/getdatanotifikasi', [DashboardController::class, 'getDataNotifikasi'])->name('dashboard.getdatanotifikasi');
     Route::get('/dashboard-surat', [DashboardController::class, 'surat'])->middleware('role:1,2,5,6,7')->name('dashboard.surat');
