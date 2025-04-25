@@ -316,10 +316,10 @@
     </div>
     <div class="modal fade" id="modal-hapusfile" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengajuansurat.ajukan') }}" method="POST">
+            <form action="{{ route('pengajuansurat.hapusfile') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
-                <input type="hidden" name="id_akses" id="id_akses_ajukan" >
+                <input type="hidden" name="id_file" id="id_filehapus" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel2">Hapus File</h5>

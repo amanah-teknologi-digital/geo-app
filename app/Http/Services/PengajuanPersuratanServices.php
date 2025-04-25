@@ -38,6 +38,12 @@ class PengajuanPersuratanServices
         return $data;
     }
 
+    public function getDataFile($idFile){
+        $data = $this->repository->getDataFile($idFile);
+
+        return $data;
+    }
+
     public function updatePengajuan($request){
         try {
             $this->repository->updatePengajuan($request);
@@ -289,6 +295,18 @@ class PengajuanPersuratanServices
 
             //save file data ke database
             $this->repository->tambahFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function hapusFile($idPengajuan, $idFile, $location){
+        try {
+            Storage::disk('public')->delete($location);
+
+            //hapus file dari database
+            $this->repository->hapusFilePengajuan($idPengajuan, $idFile);
         }catch(Exception $e){
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

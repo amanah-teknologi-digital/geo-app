@@ -147,6 +147,12 @@ $(document).ready(function () {
         $('#id_akses_ajukan').val(dataId); // Masukkan ke modal
     });
 
+    $('#modal-hapusfile').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_file'); // Ambil nilai data-id
+        $('#id_filehapus').val(dataId); // Masukkan ke modal
+    });
+
     $('#modal-setujui').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Ambil tombol yang diklik
         var dataId = button.data('id_akses_setujui'); // Ambil nilai data-id

@@ -153,6 +153,37 @@ class PengajuanPersuratanController extends Controller
         }
     }
 
+    public function hapusFile(Request $request){
+        try {
+            $request->validate([
+                'id_file' => ['required'],
+                'id_pengajuan' => ['required'],
+            ],[
+                'id_file.required' => 'Id Pengajuan tidak ada.',
+                'id_pengajuan.required' => 'Id File tidak ada.',
+            ]);
+
+            $dataFile = $this->service->getDataFile($request->id_file);
+            $location = $dataFile->location;
+
+            DB::beginTransaction();
+
+            $this->service->hapusFile($request->id_pengajuan, $request->id_file, $location);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Berhasil Hapus File.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     public function detailPengajuan($id_pengajuan){
         $title = "Detail Pengajuan";
 

@@ -71,6 +71,12 @@ class PengajuanPersuratanRepository
         return $data;
     }
 
+    public function getDataFile($idFile){
+        $data = Files::find($idFile);
+
+        return $data;
+    }
+
     public function tambahPengajuan($request, $id_pengajuan){
         PengajuanPersuratan::create([
             'id_pengajuan' => $id_pengajuan,
@@ -208,6 +214,18 @@ class PengajuanPersuratanRepository
                 'is_private' => 0,
                 'updater' => auth()->user()->id
             ]);
+        }
+    }
+
+    public function hapusFilePengajuan($idPengajuan, $idFile){
+        $filePengajuanSurat = FilePengajuanSurat::where('id_pengajuan',$idPengajuan)->where('id_file', $idFile)->first();
+        if ($filePengajuanSurat){
+            $filePengajuanSurat->delete();
+        }
+
+        $files = Files::find($idFile);
+        if ($files){
+            $files->delete();
         }
     }
 
