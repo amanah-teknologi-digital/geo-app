@@ -48,6 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/pengajuan-surat/sudahrevisi', [PengajuanPersuratanController::class, 'sudahRevisiPengajuan'])->name('pengajuansurat.sudahrevisi');
         Route::post('/pengajuan-surat/tolak', [PengajuanPersuratanController::class, 'tolakPengajuan'])->name('pengajuansurat.tolak');
         Route::post('/pengajuan-surat/hapusfile', [PengajuanPersuratanController::class, 'hapusFile'])->name('pengajuansurat.hapusfile');
+        Route::post('/pengajuan-surat/uploadFile', [PengajuanPersuratanController::class, 'uploadFile'])->name('pengajuansurat.uploadfile');
 
         Route::middleware('role:1,2')->group(function () { //bisa manajemen jenis surat
             Route::get('/jenis-surat', [JenisSuratController::class, 'index'])->name('jenissurat');

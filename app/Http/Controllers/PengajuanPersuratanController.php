@@ -188,6 +188,48 @@ class PengajuanPersuratanController extends Controller
         }
     }
 
+    public function uploadFile(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+                'filesuratupload.*' => ['required', 'file', 'mimes:pdf', 'max:5048'],
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.',
+                'filesuratupload.*.required' => 'File kosong.',
+                'filesuratupload.*.file' => 'File yang diunggah tidak valid.',
+                'filesuratupload.*.max' => 'Ukuran akumulasi file tidak boleh lebih dari 5 MB.',
+            ]);
+
+            $id_pengajuan = $request->id_pengajuan;
+            $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+
+            if (in_array(auth()->user()->id_akses, [1,2]) && $dataPengajuan->id_statuspengajuan == 1) {
+                DB::beginTransaction();
+
+                $listFile = $request->file('filesuratupload');
+                foreach ($listFile as $file){
+                    $idFile = strtoupper(Uuid::uuid4()->toString());
+                    $this->service->tambahFile($file, $idFile);
+                    $this->service->tambahFileSurat($id_pengajuan, $idFile);
+                }
+
+                DB::commit();
+
+                return redirect()->back()->with('success', 'Berhasil Upload File.');
+            }else{
+                return redirect()->back()->with('error', 'Tidak ada akses untuk mengupload!.');
+            }
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     public function detailPengajuan($id_pengajuan){
         $title = "Detail Pengajuan";
 

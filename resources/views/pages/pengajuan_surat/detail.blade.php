@@ -193,6 +193,19 @@
                             </div>
                         @endif
                     </form>
+                    @if(in_array(auth()->user()->id_akses, [1,2]) && $dataPengajuan->id_statuspengajuan == 1)
+                        <div class="mt-6">
+                            <label for="uploadhasilsurat" class="form-label">Upload Hasil Surat <i class="text-muted fw-bold">(Opsional & bisa lebih dari 1, PDF Max 5 MB)</i></label>
+                            <form id="frmUploadFile" action="{{ route('pengajuansurat.uploadfile') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                                <div class="input-group">
+                                    <input type="file" class="form-control" name="filesuratupload[]" id="filesuratupload" accept="application/pdf" multiple>
+                                    <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
                     <ul class="fa-ul ml-auto float-end mt-5">
                         <li>
                             <small><em>Ganti text yang <b>bewarna kuning</b> sesuai data yang akan diajukan!.</em></small>
@@ -350,7 +363,7 @@
                     <div class="modal-body">
                         <p>Apakah yakin menyetujui pengajuan ini?</p>
                         <div>
-                            <label for="filesurat" class="form-label">File Surat <i class="text-muted fw-bold">(Opsional & bisa lebih dari 1, PDF Max 5 MB)</i></label>
+                            <label for="filesurat" class="form-label">File Hasil Surat <i class="text-muted fw-bold">(Opsional & bisa lebih dari 1, PDF Max 5 MB)</i></label>
                             <input type="file" class="form-control" name="filesurat[]" id="filesurat" accept="application/pdf" multiple autofocus>
                         </div>
                     </div>

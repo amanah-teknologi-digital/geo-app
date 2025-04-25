@@ -120,6 +120,26 @@ $(document).ready(function () {
         }
     });
 
+    $("#frmUploadFile").validate({
+        rules: {
+            "filesuratupload[]": {
+                required: true,
+                fileextension: ['pdf', 'PDF'],
+                maxTotalSize: 5242880 // 5MB dalam byte
+            }
+        },
+        messages: {
+            "filesuratupload[]": {
+                required: "File tidak boleh kosong.",
+                fileextension: "Hanya file PDF yang diizinkan.",
+                maxTotalSize: "Total akumulasi ukuran file harus kurang dari 5 MB."
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
     $('#jenis_surat').on('change', function() {
         let id_jenissurat = $(this).val();
 
