@@ -163,16 +163,20 @@ class PengajuanPersuratanController extends Controller
                 'id_pengajuan.required' => 'Id File tidak ada.',
             ]);
 
-            $dataFile = $this->service->getDataFile($request->id_file);
-            $location = $dataFile->location;
+            if (in_array(auth()->user()->id_akses, [1,2])) {
+                $dataFile = $this->service->getDataFile($request->id_file);
+                $location = $dataFile->location;
 
-            DB::beginTransaction();
+                DB::beginTransaction();
 
-            $this->service->hapusFile($request->id_pengajuan, $request->id_file, $location);
+                $this->service->hapusFile($request->id_pengajuan, $request->id_file, $location);
 
-            DB::commit();
+                DB::commit();
 
-            return redirect()->back()->with('success', 'Berhasil Hapus File.');
+                return redirect()->back()->with('success', 'Berhasil Hapus File.');
+            }else{
+                return redirect()->back()->with('error', 'Tidak ada akses untuk menghapus!.');
+            }
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();
