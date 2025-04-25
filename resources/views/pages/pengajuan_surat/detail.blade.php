@@ -203,8 +203,8 @@
                                     <input type="file" class="form-control" name="filesuratupload[]" id="filesuratupload" accept="application/pdf" multiple required>
                                     <button class="btn btn-outline-primary" type="submit"><i class="bx bx-save"></i>&nbsp;Upload File</button>
                                 </div>
+                                <div class="error-container" id="error-uploadfile"></div>
                             </form>
-                            <div class="error-container" id="error-uploadfile"></div>
                         </div>
                     @endif
                     <ul class="fa-ul ml-auto float-end mt-5">
