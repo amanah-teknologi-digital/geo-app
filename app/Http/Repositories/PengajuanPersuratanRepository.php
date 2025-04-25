@@ -2,6 +2,7 @@
 
 namespace App\Http\Repositories;
 
+use App\Models\FilePengajuanSurat;
 use App\Models\Files;
 use App\Models\JenisSurat;
 use App\Models\PengajuanPersuratan;
@@ -189,6 +190,31 @@ class PengajuanPersuratanRepository
             'nama_penyetuju' => auth()->user()->name,
             'keterangan' => $keterangan,
             'created_at' => now()
+        ]);
+    }
+
+    public function tambahFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize){
+        $file = Files::find($id_file);
+
+        if (!$file) {
+            Files::create([
+                'id_file' => $id_file,
+                'file_name' => $fileName,
+                'location' => $filePath,
+                'mime' => $fileMime,
+                'ext' => $fileExt,
+                'file_size' => $fileSize,
+                'created_at' => now(),
+                'is_private' => 0,
+                'updater' => auth()->user()->id
+            ]);
+        }
+    }
+
+    public function tambahFileSurat($idPengajuan, $idFile){
+        FilePengajuanSurat::create([
+            'id_pengajuan' => $idPengajuan,
+            'id_file' => $idFile
         ]);
     }
 }

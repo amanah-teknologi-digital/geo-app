@@ -290,8 +290,8 @@
         </div>
     </div>
     <div class="modal fade" id="modal-setujui" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengajuansurat.setujui') }}" method="POST">
+        <div class="modal-dialog modal-md" role="document">
+            <form id="frmSetujuiPengajuan" action="{{ route('pengajuansurat.setujui') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_setujui" >
@@ -302,6 +302,10 @@
                     </div>
                     <div class="modal-body">
                         <p>Apakah yakin menyetujui pengajuan ini?</p>
+                        <div>
+                            <label for="filesurat" class="form-label">File Surat <i class="text-muted fw-bold">(Opsional & bisa lebih dari 1, PDF Max 5 MB)</i></label>
+                            <input type="file" class="form-control" name="filesurat[]" id="filesurat" accept="application/pdf" multiple autofocus>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>

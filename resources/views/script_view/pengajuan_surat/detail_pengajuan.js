@@ -32,6 +32,32 @@ $(document).ready(function () {
         }
     });
 
+    $.validator.addMethod("maxTotalSize", function(value, element, param) {
+        // Pastikan ada file
+        if (element.files.length === 0) return true;
+
+        let totalSize = 0;
+        for (let i = 0; i < element.files.length; i++) {
+            totalSize += element.files[i].size;
+        }
+
+        // Bandingkan dengan limit (dalam byte)
+        return totalSize <= param;
+    }, function(param, element) {
+        const sizeMB = (param / (1024 * 1024)).toFixed(2);
+        return `Total file size must not exceed ${sizeMB} MB.`;
+    });
+
+    $.validator.addMethod("fileextension", function(value, element, param) {
+        if(element.files.length === 0){
+            return true;
+        }
+        // Dapatkan nama file dan ekstrak ekstensi
+        var fileName = element.files[0].name;
+        var extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+        return $.inArray(extension, param) !== -1;
+    }, "Tipe file tidak diperbolehkan.");
+
     $("#formPengajuan").validate({
         ignore: "",
         rules: {
@@ -69,6 +95,24 @@ $(document).ready(function () {
             } else {
                 // Default: tampilkan setelah elemen
                 error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+    $("#frmSetujuiPengajuan").validate({
+        rules: {
+            "filesurat[]": {
+                fileextension: ['pdf', 'PDF'],
+                maxTotalSize: 5242880 // 5MB dalam byte
+            }
+        },
+        messages: {
+            "filesurat[]": {
+                fileextension: "Hanya file PDF yang diizinkan.",
+                maxTotalSize: "Total akumulasi ukuran file harus kurang dari 5 MB."
             }
         },
         submitHandler: function (form) {

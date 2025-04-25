@@ -252,9 +252,12 @@ class PengajuanPersuratanController extends Controller
     public function setujuiPengajuan(Request $request){
         try {
             $request->validate([
-                'id_pengajuan' => ['required']
+                'id_pengajuan' => ['required'],
+                'filesurat.*' => ['file', 'mimes:pdf', 'max:5048'],
             ],[
-                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.'
+                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.',
+                'filesurat.*.file' => 'File yang diunggah tidak valid.',
+                'filesurat.*.max' => 'Ukuran akumulasi file tidak boleh lebih dari 5 MB.',
             ]);
 
             $id_pengajuan = $request->id_pengajuan;
@@ -270,6 +273,14 @@ class PengajuanPersuratanController extends Controller
             if ($dataPengajuan->id_statuspengajuan == 2 || $dataPengajuan->id_statuspengajuan == 5) {
                 if ($id_akses == 2) { //jika admin
                     $this->service->setujuiPengajuan($id_pengajuan); //ubah status pengajuan
+                    if ($request->hasFile('filesurat')) {
+                        $listFile = $request->file('filesurat');
+                        foreach ($listFile as $file){
+                            $idFile = strtoupper(Uuid::uuid4()->toString());
+                            $this->service->tambahFile($file, $idFile);
+                            $this->service->tambahFileSurat($id_pengajuan, $idFile);
+                        }
+                    }
                 }else{
                     $this->service->ajukanPengajuan($id_pengajuan); //ubah ke status diajukan
                 }

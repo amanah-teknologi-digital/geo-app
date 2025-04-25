@@ -4,7 +4,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\LandingPageController;
-use App\Http\Controllers\ManajemenFileTinyMceController;
 use App\Http\Controllers\PengajuanGeoFacilityController;
 use App\Http\Controllers\PengajuanPersuratanController;
 use App\Http\Controllers\PengajuanGeoRoomController;

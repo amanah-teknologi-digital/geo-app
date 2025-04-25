@@ -277,4 +277,30 @@ class PengajuanPersuratanServices
             throw new Exception($e->getMessage());
         }
     }
+
+    public function tambahFile($file, $id_file){
+        try {
+            $fileName = $file->getClientOriginalName();
+            $fileMime = $file->getClientMimeType();
+            $fileExt = $file->getClientOriginalExtension();
+            $newFileName = $id_file.'.'.$fileExt;
+            $fileSize = $file->getSize();
+            $filePath = $file->storeAs('file_surat', $newFileName, 'public');
+
+            //save file data ke database
+            $this->repository->tambahFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function tambahFileSurat($idPengajuan, $idFile){
+        try {
+            $this->repository->tambahFileSurat($idPengajuan, $idFile);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
 }
