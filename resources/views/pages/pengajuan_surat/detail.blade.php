@@ -71,12 +71,12 @@
                                     @php
                                         $file = $dataPengajuan->pihakpengaju->file_kartuid;
                                         $filePath = $dataPengajuan->pihakpengaju->files->location;
-                                        $imageUrl = Storage::disk('local')->exists($filePath)
+                                        $imageUrl2 = Storage::disk('local')->exists($filePath)
                                             ? route('file.getprivatefile', $file)
                                             : asset('assets/img/no_image.jpg');
                                     @endphp
                                     <div class="d-flex align-items-center gap-2">
-                                        <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
+                                        <img src="{{ $imageUrl2 }}" class="d-block h-px-100 rounded">
                                         <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                                 data-bs-target="#modals-transparent">
                                             Lihat file
@@ -161,6 +161,31 @@
                                 <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
                                 <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required {{ $isEdit? '':'readonly' }} >{{ $dataPengajuan->keterangan }}</textarea>
                             </div>
+                            @if($dataPengajuan->filesurat->isNotEmpty())
+                                <div>
+                                    <label for="filehasil" class="form-label fw-bold">File Surat: </label>
+                                    @foreach($dataPengajuan->filesurat as $file)
+                                        @php
+                                            $filePath = optional($file->file)->location ?? 'no-exist';
+                                            $fileId = optional($file->file)->id_file ?? -1;
+                                            $imageUrl = Storage::disk('public')->exists($filePath)
+                                                ? route('file.getpublicfile', $fileId)
+                                                : false;
+                                        @endphp
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <a href="{{ $imageUrl }}" target="_blank">
+                                                <div class="d-flex align-items-center gap-2 flex-wrap"><span class="text-success small fw-semibold">
+                                                    <i class="bx bxs-file-archive me-1"></i>{{ $file->file->file_name }}</span>
+                                                    <i class="small text-secondary">(<span >{{ formatBytes($file->file->file_size) }}</span>)</i>
+                                                </div>
+                                            </a>
+                                            @if(in_array(auth()->user()->id_akses, [1,2]))
+                                                <span class="bx bx-x text-danger cursor-pointer" data-id_file="{{ $file->file->id_file }}" data-bs-toggle="modal" data-bs-target="#modal-hapusfile"></span>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                         @if($isEdit)
                             <div class="mt-6">
@@ -262,7 +287,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
                 <div class="modal-body">
-                    <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
+                    <img id="kartu_idmodal" src="{{ $imageUrl2 }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
                 </div>
             </div>
         </div>
@@ -280,6 +305,28 @@
                     </div>
                     <div class="modal-body">
                         <p>Apakah yakin mengajukan pengajuan ini?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">Iya</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-hapusfile" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('pengajuansurat.ajukan') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_akses" id="id_akses_ajukan" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Hapus File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah yakin menghapus file ini?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>

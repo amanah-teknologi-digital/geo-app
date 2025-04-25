@@ -56,4 +56,9 @@ class PengajuanPersuratan extends Model
         return $this->hasMany(PersetujuanPersuratan::class, 'id_pengajuan', 'id_pengajuan')->orderBy('created_at');
     }
 
+    public function filesurat()
+    {
+        return $this->hasMany(FilePengajuanSurat::class, 'id_pengajuan', 'id_pengajuan');
+    }
+
 }
