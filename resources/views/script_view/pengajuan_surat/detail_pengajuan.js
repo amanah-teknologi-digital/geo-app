@@ -135,6 +135,15 @@ $(document).ready(function () {
                 maxTotalSize: "Total akumulasi ukuran file harus kurang dari 5 MB."
             }
         },
+        errorPlacement: function(error, element) {
+            // Menentukan lokasi error berdasarkan id atau atribut lain
+            if (element.attr("name") === "filesuratupload[]") {
+                error.appendTo("#error-uploadfile");
+            } else {
+                // Default: tampilkan setelah elemen
+                error.insertAfter(element);
+            }
+        },
         submitHandler: function (form) {
             form.submit();
         }

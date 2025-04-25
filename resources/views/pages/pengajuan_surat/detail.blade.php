@@ -194,16 +194,17 @@
                         @endif
                     </form>
                     @if(in_array(auth()->user()->id_akses, [1,2]) && $dataPengajuan->id_statuspengajuan == 1)
-                        <div class="mt-6">
+                        <div class="mt-6 mb-10">
                             <label for="uploadhasilsurat" class="form-label">Upload Hasil Surat <i class="text-muted fw-bold">(Opsional & bisa lebih dari 1, PDF Max 5 MB)</i></label>
                             <form id="frmUploadFile" action="{{ route('pengajuansurat.uploadfile') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
                                 <div class="input-group">
-                                    <input type="file" class="form-control" name="filesuratupload[]" id="filesuratupload" accept="application/pdf" multiple>
-                                    <button class="btn btn-outline-primary" type="button" id="inputGroupFileAddon04">Upload</button>
+                                    <input type="file" class="form-control" name="filesuratupload[]" id="filesuratupload" accept="application/pdf" multiple required>
+                                    <button class="btn btn-outline-primary" type="submit"><i class="bx bx-save"></i>&nbsp;Upload File</button>
                                 </div>
                             </form>
+                            <div class="error-container" id="error-uploadfile"></div>
                         </div>
                     @endif
                     <ul class="fa-ul ml-auto float-end mt-5">
