@@ -72,7 +72,7 @@
                                     </div>
 
                                     <div class="app-calendar-events-filter text-heading">
-                                        <div class="form-check form-check-danger mb-5 ms-2">
+                                        <div class="form-check form-check-success mb-5 ms-2">
                                             <input class="form-check-input input-filter" type="checkbox" id="select-personal" data-value="personal" checked="">
                                             <label class="form-check-label" for="select-personal">Jadwal Kuliah</label>
                                         </div>
