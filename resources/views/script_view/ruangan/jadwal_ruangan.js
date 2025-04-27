@@ -1,19 +1,20 @@
 $(document).ready(function () {
     function I() {
         var e = document.querySelector(".fc-sidebarToggle-button");
-        for (e.classList.remove("fc-button-primary"),
-                 e.classList.add("d-lg-none", "d-inline-block", "ps-0", "btn-toggle-sidebar"); e.firstChild; )
-            e.firstChild.remove();
-            e.setAttribute("data-bs-toggle", "sidebar"),
-            e.setAttribute("data-overlay", ""),
-            e.setAttribute("data-target", "#app-calendar-sidebar"),
-            e.insertAdjacentHTML("beforeend", '<i class="icon-base bx bx-menu icon-lg text-heading"></i>')
-    }
+        if (e) {
+            e.classList.remove("fc-button-primary");
+            e.classList.add("d-lg-none", "d-inline-block", "ps-0");
 
-    let t = document.querySelector(".app-calendar-sidebar");
-    var x = document.getElementById("addEventSidebar");
-    let n = document.querySelector(".app-overlay");
-    var T = document.querySelector(".btn-toggle-sidebar");
+            while (e.firstChild) {
+                e.removeChild(e.firstChild);
+            }
+
+            e.setAttribute("data-bs-toggle", "sidebar");
+            e.setAttribute("data-overlay", "");
+            e.setAttribute("data-target", "#app-calendar-sidebar");
+            e.insertAdjacentHTML("beforeend", '<i class="icon-base bx bx-menu icon-lg text-heading"></i>');
+        }
+    }
 
     let calendarEl = document.getElementById('calendar');
     let eventsData = [
@@ -30,7 +31,7 @@ $(document).ready(function () {
         eventResizableFromStart: !0,
         customButtons: {
             sidebarToggle: {
-                text: "Sidebar"
+                text: ""
             }
         },
         headerToolbar: {
@@ -59,12 +60,24 @@ $(document).ready(function () {
 
     calendar.render();
     I();
-    x.addEventListener("hidden.bs.offcanvas", function() {
-        F()
-    });
-    T.addEventListener("click", e => {
-        console.log('oke')
-        t.classList.remove("show");
-        n.classList.remove("show");
-    });
+    document.querySelectorAll('[data-bs-toggle="sidebar"]').forEach((function(e) {
+            e.addEventListener("click", (function() {
+                    var t = e.getAttribute("data-target")
+                        , n = e.getAttribute("data-overlay")
+                        , o = document.querySelectorAll(".app-overlay");
+                    document.querySelectorAll(t).forEach((function(e) {
+                            e.classList.toggle("show"),
+                            null != n && !1 !== n && void 0 !== o && (e.classList.contains("show") ? o[0].classList.add("show") : o[0].classList.remove("show"),
+                                o[0].addEventListener("click", (function(t) {
+                                        t.currentTarget.classList.remove("show"),
+                                            e.classList.remove("show")
+                                    }
+                                )))
+                        }
+                    ))
+                }
+            ))
+        }
+    ))
 });
+

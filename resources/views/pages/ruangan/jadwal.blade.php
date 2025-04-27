@@ -89,6 +89,7 @@
                                         <div id="calendar"></div>
                                     </div>
                                 </div>
+                                <div class="app-overlay"></div>
                             </div>
                         </div>
                     </div>
