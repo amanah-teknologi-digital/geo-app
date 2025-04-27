@@ -1,4 +1,15 @@
 $(document).ready(function () {
+    function I() {
+        var e = document.querySelector(".fc-sidebarToggle-button");
+        for (e.classList.remove("fc-button-primary"),
+                 e.classList.add("d-lg-none", "d-inline-block", "ps-0"); e.firstChild; )
+            e.firstChild.remove();
+        e.setAttribute("data-bs-toggle", "sidebar"),
+            e.setAttribute("data-overlay", ""),
+            e.setAttribute("data-target", "#app-calendar-sidebar"),
+            e.insertAdjacentHTML("beforeend", '<i class="icon-base bx bx-menu icon-lg text-heading"></i>')
+    }
+
     let calendarEl = document.getElementById('calendar');
     let eventsData = [
         { title: 'Meeting with John', date: '2025-04-28', category: 'meeting' },
@@ -9,10 +20,17 @@ $(document).ready(function () {
     let calendar = new Calendar(calendarEl, {
         plugins: [ dayGridPlugin, timegridPlugin, listPlugin],
         initialView: 'dayGridMonth',
+        editable: !0,
+        dragScroll: !0,
+        eventResizableFromStart: !0,
+        customButtons: {
+            sidebarToggle: {
+                text: "Sidebar"
+            }
+        },
         headerToolbar: {
-            left: 'prev,next',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,listWeek'
+            start: "sidebarToggle, prev,next, title",
+            end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
         },
         events: eventsData,
             eventClick: function(info) {
@@ -35,6 +53,7 @@ $(document).ready(function () {
     });
 
     calendar.render();
+    I();
 
     document.addEventListener("DOMContentLoaded", function() {
         let k = "rtl";

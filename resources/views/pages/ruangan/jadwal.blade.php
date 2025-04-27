@@ -51,8 +51,8 @@
                         <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                     </a>
                 </div>
-                <div class="card-body pt-4">
-                    <div class="card app-calendar-wrapper">
+                <div class="card-body p-0">
+                    <div class="card shadow-none app-calendar-wrapper">
                         <div class="row g-0">
                             <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
                                 <div class="border-bottom p-6 my-sm-0 mb-4">
