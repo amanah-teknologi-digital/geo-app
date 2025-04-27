@@ -126,6 +126,3 @@
         </div>
     </div>
 @endsection
-@section('page-script')
-    @vite('resources/views/script_view/ruangan/detail_ruangan.js')
-@endsection

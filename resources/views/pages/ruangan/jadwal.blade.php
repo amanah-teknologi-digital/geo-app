@@ -127,5 +127,5 @@
     </div>
 @endsection
 @section('page-script')
-    @vite('resources/views/script_view/ruangan/detail_ruangan.js')
+    @vite('resources/views/script_view/ruangan/jadwal_ruangan.js')
 @endsection

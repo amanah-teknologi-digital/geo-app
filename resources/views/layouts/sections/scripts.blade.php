@@ -9,7 +9,8 @@
   'resources/assets/vendor/libs/jquery-validation/jquery-validation.js',
   'resources/assets/vendor/libs/datatable/datatable.js',
   'resources/assets/vendor/libs/select2/select2.js',
-  'resources/assets/vendor/libs/tinymce/tinymce.js'
+  'resources/assets/vendor/libs/tinymce/tinymce.js',
+  'resources/assets/vendor/libs/fullcalendar/fullcalendar.js'
 ])
 
 @yield('vendor-script')
