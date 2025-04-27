@@ -46,63 +46,49 @@
             @endif
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                    <h5 class="card-title mb-0"><i class="bx bx-building-house mb-1"></i>&nbsp;Detail Ruangan</h5>
+                    <h5 class="card-title mb-0"><i class="bx bx-calendar mb-1"></i>&nbsp;Jadwal {{ $dataRuangan->nama }}</h5>
                     <a href="{{ route('ruangan') }}" class="btn btn-sm btn-secondary btn-sm mb-0">
                         <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                     </a>
                 </div>
                 <div class="card-body pt-4">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap mb-6 gap-2">
-                        <div class="me-1">
-                            <h5 class="mb-0">{{ $dataRuangan->nama }}&nbsp;<span class="badge rounded-pill <?= $dataRuangan->is_aktif? 'bg-success':'bg-danger' ?> mb-3">{{ $dataRuangan->kode_ruangan }}</span></h5>
-                            <p class="mb-0 w-100 text-truncate">{{ $dataRuangan->deskripsi }}</p>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            @if($dataRuangan->is_aktif)
-                                <a class="btn btn-sm btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $dataRuangan->id_ruangan) }}"> <i class="icon-base bx bx-cart-add icon-sm lh-1 scaleX-n1-rtl me-2"></i><span class="me-2">Booking Ruangan</span></a>
-                            @else
-                                <a class="disabled btn btn-sm btn-danger d-flex align-items-center" href="javascript:void(0)"> <i class="icon-base bx bx-x icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Tidak Tersedia</span> </a>
-                            @endif
-                                {{--                            <span class="badge bg-label-danger">UI/UX</span>--}}
-{{--                            <i class="icon-base bx bx-share-alt icon-lg mx-4"></i>--}}
-{{--                            <i class="icon-base bx bx-bookmarks icon-lg"></i>--}}
-                        </div>
-                    </div>
-                    <div class="card academy-content shadow-none border">
-                        @php
-                            $file = $dataRuangan->gambar_file;
-                            $filePath = $dataRuangan->gambar->location;
-                            $imageUrl = Storage::disk('public')->exists($filePath)
-                                ? route('file.getpublicfile', $file)
-                                : asset('assets/img/no_image.jpg');
-                        @endphp
-                        <div class="card-body pt-4">
-                            <div class="row">
-                                <div class="col-md-4 mb-3 mb-md-0">
-                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modals-transparent">
-                                        <img class="img-fluid w-100" style="border-radius: 8px;object-fit: cover;" src="{{ $imageUrl }}" alt="{{ $dataRuangan->nama }}">
-                                    </a>
-                                    <div class="row align-items-center gx-4 mt-4">
-                                        <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
-                                            <p class="text-nowrap mb-2"><i class="icon-base bx bx-group me-2 align-bottom"></i>Kapasitas: {{ $dataRuangan->kapasitas }} Orang</p>
+                    <div class="card app-calendar-wrapper">
+                        <div class="row g-0">
+                            <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
+                                <div class="border-bottom p-6 my-sm-0 mb-4">
+                                    <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="offcanvas" data-bs-target="#addEventSidebar" aria-controls="addEventSidebar">
+                                        <i class="icon-base bx bx-plus icon-16px me-2"></i>
+                                        <span class="align-middle">Tambah Jadwal</span>
+                                    </button>
+                                </div>
+                                <div class="px-6 pb-2">
+                                    <!-- Filter -->
+                                    <div>
+                                        <h5>Event Filters</h5>
+                                    </div>
+
+                                    <div class="form-check form-check-secondary mb-5 ms-2">
+                                        <input class="form-check-input select-all" type="checkbox" id="selectAll" data-value="all" checked="">
+                                        <label class="form-check-label" for="selectAll">View All</label>
+                                    </div>
+
+                                    <div class="app-calendar-events-filter text-heading">
+                                        <div class="form-check form-check-danger mb-5 ms-2">
+                                            <input class="form-check-input input-filter" type="checkbox" id="select-personal" data-value="personal" checked="">
+                                            <label class="form-check-label" for="select-personal">Jadwal Kuliah</label>
+                                        </div>
+                                        <div class="form-check mb-5 ms-2">
+                                            <input class="form-check-input input-filter" type="checkbox" id="select-business" data-value="business" checked="">
+                                            <label class="form-check-label" for="select-business">Jadwal Booking</label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <h5>Lokasi <span class="badge bg-label-primary small" style="font-size: 0.8125rem !important;">{{ $dataRuangan->jenis_ruangan }}</span></h5>
-                                    <p class="mb-0">{{ $dataRuangan->lokasi }}</p>
-                                    <hr class="my-6">
-                                    <h5>Fasilitas</h5>
-                                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xxl-3 g-2">
-                                        @foreach(json_decode($dataRuangan->fasilitas, true) as $item)
-                                            <div class="col">
-                                                <p class="mb-2"><i class="icon-base bx <?= $item['icon'] ?> me-2 align-bottom"></i>&nbsp;{{ $item['text'] }}</p>
-                                            </div>
-                                        @endforeach
+                            </div>
+                            <div class="col app-calendar-content">
+                                <div class="card shadow-none border-0">
+                                    <div class="card-body pb-0">
+                                        <div id="calendar"></div>
                                     </div>
-                                    <hr class="my-6">
-                                    <h5>Keterangan</h5>
-                                    <p class="mb-0">{!! nl2br(e($dataRuangan->keterangan)) !!}</p>
                                 </div>
                             </div>
                         </div>
@@ -116,16 +102,36 @@
             </div>
         </div>
     </div>
-    <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
-        <div class="modal-dialog">
-            <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
-                <div class="modal-body">
-                    <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
+    <div class="offcanvas offcanvas-end event-sidebar" tabindex="-1" id="addEventSidebar" aria-labelledby="addEventSidebarLabel" >
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title" id="addEventSidebarLabel">Tambah Jadwal</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" data-select2-id="7">
+            <form class="event-form pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eventForm" onsubmit="return false" novalidate="novalidate" data-select2-id="eventForm">
+                <div class="mb-6 form-control-validation fv-plugins-icon-container">
+                    <label class="form-label" for="eventTitle">Keterangan</label>
+                    <input type="text" class="form-control" id="eventTitle" name="eventTitle" placeholder="Event Title">
                 </div>
-            </div>
+                <div class="mb-6 form-control-validation fv-plugins-icon-container fv-plugins-bootstrap5-row-valid">
+                    <label class="form-label" for="eventStartDate">Start Date</label>
+                    <div class="flatpickr-wrapper">
+                        <input type="text" class="form-control flatpickr-input active" id="eventStartDate" name="eventStartDate" placeholder="Start Date" readonly="readonly">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-sm-between justify-content-start mt-6 gap-2">
+                    <div class="d-flex">
+                        <button type="submit" id="addEventBtn" class="btn btn-primary me-4 btn-add-event">Add</button>
+                        <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1" data-bs-dismiss="offcanvas">Cancel</button>
+                    </div>
+                    <button class="btn btn-label-danger btn-delete-event d-none">Delete</button>
+                </div>
+                <input type="hidden"></form>
         </div>
     </div>
 @endsection
 @section('page-script')
-    @vite('resources/views/script_view/ruangan/jadwal_ruangan.js')
+    @vite([
+        'resources/views/script_view/ruangan/jadwal_ruangan.js'
+    ])
 @endsection

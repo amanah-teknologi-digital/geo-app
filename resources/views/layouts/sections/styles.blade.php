@@ -19,7 +19,8 @@
     'resources/assets/vendor/libs/datatable/datatable.scss',
     'resources/assets/vendor/libs/select2/select2.css',
     'resources/assets/vendor/libs/tinymce/tinymce.scss',
-    'resources/assets/vendor/libs/fullcalendar/fullcalendar.scss'
+    'resources/assets/vendor/libs/fullcalendar/fullcalendar.scss',
+    'resources/assets/vendor/libs/flatpickr/flatpickr.scss',
     ])
 @yield('vendor-style')
 

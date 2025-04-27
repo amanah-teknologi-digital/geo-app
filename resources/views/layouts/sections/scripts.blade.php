@@ -10,7 +10,8 @@
   'resources/assets/vendor/libs/datatable/datatable.js',
   'resources/assets/vendor/libs/select2/select2.js',
   'resources/assets/vendor/libs/tinymce/tinymce.js',
-  'resources/assets/vendor/libs/fullcalendar/fullcalendar.js'
+  'resources/assets/vendor/libs/fullcalendar/fullcalendar.js',
+  'resources/assets/vendor/libs/flatpickr/flatpickr.js',
 ])
 
 @yield('vendor-script')
