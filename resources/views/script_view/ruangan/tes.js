@@ -1,0 +1,17 @@
+var w = document.getElementById("calendar");
+let t = document.querySelector(".app-calendar-sidebar");
+var x = document.getElementById("addEventSidebar");
+let n = document.querySelector(".app-overlay")
+    , a = document.querySelector(".offcanvas-title");
+var T = document.querySelector(".btn-toggle-sidebar");
+let l = document.getElementById("addEventBtn")
+    , i = document.querySelector(".btn-delete-event")
+    , r = document.querySelector(".btn-cancel")
+    , d = document.getElementById("eventTitle")
+    , o = document.getElementById("eventStartDate")
+    , s = document.getElementById("eventEndDate")
+    , c = document.getElementById("eventURL")
+    , u = document.getElementById("eventLocation")
+    , v = document.getElementById("eventDescription")
+    , m = document.querySelector(".allDay-switch")
+    , p = document.querySelector(".select-all");
