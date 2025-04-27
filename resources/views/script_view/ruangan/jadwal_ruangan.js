@@ -4,7 +4,7 @@ $(document).ready(function () {
         for (e.classList.remove("fc-button-primary"),
                  e.classList.add("d-lg-none", "d-inline-block", "ps-0"); e.firstChild; )
             e.firstChild.remove();
-        e.setAttribute("data-bs-toggle", "sidebar"),
+            e.setAttribute("data-bs-toggle", "sidebar"),
             e.setAttribute("data-overlay", ""),
             e.setAttribute("data-target", "#app-calendar-sidebar"),
             e.insertAdjacentHTML("beforeend", '<i class="icon-base bx bx-menu icon-lg text-heading"></i>')
