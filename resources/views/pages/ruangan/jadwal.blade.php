@@ -93,7 +93,7 @@
                             </div>
                         </div>
                     </div>
-                    <ul class="fa-ul ml-auto float-end mt-5">
+                    <ul class="fa-ul ml-auto float-end mt-5 p-4">
                         <li>
                             <small><em>Hanya ruangan berstatus <b>aktif</b> yang bisa dibooking!.</em></small>
                         </li>
