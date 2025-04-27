@@ -81,6 +81,7 @@
         ]
     },
     "dependencies": {
+        "@fullcalendar/bootstrap5": "^6.1.17",
         "@fullcalendar/core": "^6.1.17",
         "@fullcalendar/daygrid": "^6.1.17",
         "@fullcalendar/list": "^6.1.17",
@@ -88,6 +89,7 @@
         "@popperjs/core": "^2.11.8",
         "apexcharts-clevision": "^3.28.5",
         "bootstrap": "~5.3.3",
+        "bootstrap-icons": "^1.11.3",
         "boxicons": "~2.1.4",
         "datatables.net-bs5": "^2.2.2",
         "datatables.net-buttons-bs5": "^3.2.2",
