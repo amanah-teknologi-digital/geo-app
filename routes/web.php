@@ -66,6 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //ruangan
     Route::get('/ruangan', [RuanganController::class, 'index'])->name('ruangan');
     Route::get('/ruangan/detail/{id_ruangan}', [RuanganController::class, 'detailRuangan'])->name('ruangan.detail');
+    Route::get('/ruangan/jadwal/{id_ruangan}', [RuanganController::class, 'jadwalRuangan'])->name('ruangan.jadwal');
     Route::middleware('role:1,3,6,7,8')->group(function () {
         Route::get('/pengajuan-ruangan', [PengajuanGeoRoomController::class, 'index'])->name('pengajuanruangan');
         Route::middleware('role:1,3')->group(function () { //bisa manajemen ruangan

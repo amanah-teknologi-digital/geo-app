@@ -147,4 +147,16 @@ class RuanganController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function jadwalRuangan($idRuangan){
+        $title = "Jadwal Ruangan";
+        $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
+        $dataRuangan = $this->service->getDataRuangan($idRuangan);
+
+        if ($dataRuangan->is_aktif == 0){
+            return redirect(route('ruangan'))->with('error', "Ruangan sudah tidak aktif.");
+        }
+
+        return view('pages.ruangan.jadwal', compact('title','dataRuangan','idRuangan','isEdit'));
+    }
 }

@@ -85,7 +85,7 @@
                                             <div class="row align-items-center gx-4">
                                                 <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
                                                     @if($ruang->is_aktif)
-                                                        <a class="btn btn-sm btn-outline-success d-flex align-items-center" href="{{ route('ruangan.detail', $ruang->id_ruangan) }}"> <i class="icon-base bx bx-calendar icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Jadwal</span> </a>
+                                                        <a class="btn btn-sm btn-outline-success d-flex align-items-center" href="{{ route('ruangan.jadwal', $ruang->id_ruangan) }}"> <i class="icon-base bx bx-calendar icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Jadwal</span> </a>
                                                     @else
                                                         <a class="disabled btn btn-sm btn-danger d-flex align-items-center" href="javascript:void(0)"> <i class="icon-base bx bx-x icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Tidak Tersedia</span> </a>
                                                     @endif
