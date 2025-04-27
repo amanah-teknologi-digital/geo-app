@@ -1,4 +1,3 @@
-@php use Illuminate\Support\Facades\Storage; @endphp
 @extends('layouts/contentNavbarLayout')
 
 @section('title', $title.' • '.config('variables.templateName'))
