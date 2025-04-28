@@ -92,7 +92,7 @@ $(document).ready(function () {
             }
         },
         locale: 'id',
-        dayMaxEvents: 3,
+        dayMaxEvents: 2,
         headerToolbar: {
             start: "sidebarToggle, prev,next, title",
             end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
