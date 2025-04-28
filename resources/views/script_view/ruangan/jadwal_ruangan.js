@@ -94,16 +94,25 @@ $(document).ready(function () {
         },
         events: eventsData,
         eventClick: function(info) {
-            // Display event details in a console log
-            console.log('Event clicked: ', info.event.title);
-            console.log('Start time: ', info.event.start);
-            console.log('End time: ', info.event.end);
+            const start = info.event.start;
+            const end = info.event.end;
 
-            // Optionally, show a modal with event details
+            const formatDateTime = (date) => {
+                if (!date) return '';
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${day}/${month}/${year} ${hours}:${minutes}`;
+                // Kalau mau tahun di depan, ganti jadi: `${year}-${month}-${day} ${hours}:${minutes}`;
+            };
+
             $('#eventModalTitle').text(info.event.title);
-            $('#eventModalStart').text(info.event.start.toLocaleString());
-            $('#eventModalEnd').text(info.event.end ? info.event.end.toLocaleString() : 'No end time');
-            $('#eventModal').modal('show');  // Assuming you're using a modal from Bootstrap
+            $('#eventModalStart').text(formatDateTime(start));
+            $('#eventModalEnd').text(formatDateTime(end));
+            $('#eventModal').modal('show');
+
         },
         eventClassNames: function({ event }) {
             return [

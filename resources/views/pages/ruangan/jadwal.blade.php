@@ -130,17 +130,30 @@
         </div>
     </div>
     <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="eventModalTitle"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title" >Detail Jadwal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Start Time:</strong> <span id="eventModalStart"></span></p>
-                    <p><strong>End Time:</strong> <span id="eventModalEnd"></span></p>
+                    <table class="w-100 p-5">
+                        <tr>
+                            <td style="width: 25%">Nama Jadwal</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 74%">&nbsp;<span class="fw-bold" id="eventModalTitle"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 25%">Waktu Mulai</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 74%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalStart"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 25%">Waktu Selesai</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 74%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalEnd"></span></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
