@@ -19,31 +19,57 @@ $(document).ready(function () {
     let calendarEl = document.getElementById('calendar');
     let eventsData = [
         {
-            title: 'Dinner',
-            start: '2025-04-17T00:00:00',
+            id: '1',
+            title: 'Design Review',
+            start: '2025-04-29T14:00:00',
+            end: '2025-04-29T15:00:00',
             extendedProps: {
-                calendar: 'warning'
+                calendar: 'primary'
             }
         },
         {
-            title: 'Dart Game?',
-            start: '2025-04-17T02:00:00',
+            id: '2',
+            title: 'Team Standup',
+            start: '2025-04-29T09:00:00',
+            end: '2025-04-29T09:30:00',
             extendedProps: {
                 calendar: 'info'
             }
         },
         {
-            title: 'Meditation',
-            start: '2025-04-17T04:00:00',
+            id: '3',
+            title: 'Client Call',
+            start: '2025-04-29T16:00:00',
+            end: '2025-04-29T17:00:00',
+            extendedProps: {
+                calendar: 'warning'
+            }
+        },
+        {
+            id: '4',
+            title: 'Lunch Break',
+            start: '2025-04-29T12:00:00',
+            end: '2025-04-29T13:00:00',
+            extendedProps: {
+                calendar: 'success'
+            }
+        },
+        {
+            id: '5',
+            title: 'Project Planning',
+            start: '2025-04-29T10:30:00',
+            end: '2025-04-29T12:00:00',
             extendedProps: {
                 calendar: 'danger'
             }
         },
         {
-            title: 'Product Review',
-            start: '2025-04-17T06:00:00',
+            id: '6',
+            title: 'Project Planning',
+            start: '2025-04-30T10:30:00',
+            end: '2025-04-30T12:00:00',
             extendedProps: {
-                calendar: 'primary'
+                calendar: 'danger'
             }
         }
     ];
@@ -76,12 +102,25 @@ $(document).ready(function () {
             ];
         },
         eventContent: function(arg) {
+            const start = arg.event.start;
+            const end = arg.event.end;
+
+            const formatTime = (date) => {
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${hours}:${minutes}`;
+            };
+
+            const startTime = start ? formatTime(start) : '';
+            const endTime = end ? formatTime(end) : '';
+            const timeRange = (startTime && endTime) ? `${startTime} - ${endTime}` : (startTime || '');
+
+
             return {
                 html: `
-      <div>
-        ${arg.timeText ? `<span>${arg.timeText} </span>` : ''}${arg.event.title}
-      </div>
-    `
+                   <div>
+                        ${arg.event.title}:${timeRange ? ` <span>${timeRange} </span>` : ''}
+                   </div>`
             };
         },
         selectable: true,
