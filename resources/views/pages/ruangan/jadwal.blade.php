@@ -162,6 +162,7 @@
 @section('page-script')
     <script>
         let urlGetData = '{{ route('ruangan.getdatajadwal') }}';
+        let idRuangan = '{{ $idRuangan }}';
     </script>
     @vite([
         'resources/views/script_view/ruangan/jadwal_ruangan.js'

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    let eventsData = [];
     function I() {
         var e = document.querySelector(".fc-sidebarToggle-button");
         if (e) {
@@ -17,68 +18,6 @@ $(document).ready(function () {
     }
 
     let calendarEl = document.getElementById('calendar');
-    let eventsData = [
-        {
-            id: '1',
-            title: 'Design Review',
-            start: '2025-04-29T14:00:00',
-            end: '2025-04-29T15:00:00',
-            extendedProps: {
-                calendar: 'primary',
-                type: 'booking'
-            }
-        },
-        {
-            id: '2',
-            title: 'Team Standup',
-            start: '2025-04-29T09:00:00',
-            end: '2025-04-29T09:30:00',
-            extendedProps: {
-                calendar: 'primary',
-                type: 'booking'
-            }
-        },
-        {
-            id: '3',
-            title: 'Client Call',
-            start: '2025-04-29T16:00:00',
-            end: '2025-04-29T17:00:00',
-            extendedProps: {
-                calendar: 'success',
-                type: 'jadwal'
-            }
-        },
-        {
-            id: '4',
-            title: 'Lunch Break',
-            start: '2025-04-29T12:00:00',
-            end: '2025-04-29T13:00:00',
-            extendedProps: {
-                calendar: 'success',
-                type: 'jadwal'
-            }
-        },
-        {
-            id: '5',
-            title: 'Project Planning',
-            start: '2025-04-29T10:30:00',
-            end: '2025-04-29T12:00:00',
-            extendedProps: {
-                calendar: 'success',
-                type: 'jadwal'
-            }
-        },
-        {
-            id: '6',
-            title: 'Project Planning',
-            start: '2025-04-30T10:30:00',
-            end: '2025-04-30T12:00:00',
-            extendedProps: {
-                calendar: 'success',
-                type: 'jadwal'
-            }
-        }
-    ];
 
     let calendar = new Calendar(calendarEl, {
         plugins: [ dayGridPlugin, timegridPlugin, listPlugin],
@@ -214,26 +153,25 @@ $(document).ready(function () {
         loadFilteredEvents();
     });
 
-    loadFilteredEvents()
-    getDataJadwal()
-});
-
-function getDataJadwal(){
     $.ajax({
-        url: '/get-jadwal',  // Ganti dengan URL API yang sesuai
+        url: urlGetData,  // Ganti dengan URL API yang sesuai
         method: 'GET',
         dataType: 'json',
+        data:{
+            'id_ruangan': idRuangan
+        },
         success: function(response) {
-            // response adalah data yang diterima dalam format JSON
-            let eventsData = generateRecurringEvents(response);  // Panggil fungsi untuk generate events
-            console.log(eventsData); // Cek data yang sudah di-generate
-            // Lanjutkan untuk menampilkan ke kalender
-            $('#calendar').fullCalendar('removeEvents');  // Hapus event lama
-            $('#calendar').fullCalendar('addEventSource', eventsData);  // Masukkan event baru
+            eventsData = [
+                ...response.jadwal,  // Data jadwal
+                ...response.booking  // Data booking
+            ];
+
+            loadFilteredEvents();
         },
         error: function(xhr, status, error) {
-            console.error('Terjadi kesalahan:', error);
+            eventsData = [];
+            loadFilteredEvents();
         }
     });
-}
+});
 

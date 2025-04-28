@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\RuanganRepository;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -117,7 +118,43 @@ class RuanganServices
 
     public function getDataJadwal($idRuangan){
         $data = $this->repository->getDataJadwal($idRuangan);
+        $events = [];
+        $daysOfWeekMapping = [
+            0 => 'Monday',
+            1 => 'Tuesday',
+            2 => 'Wednesday',
+            3 => 'Thursday',
+            4 => 'Friday',
+            5 => 'Saturday',
+            6 => 'Sunday'
+        ];
 
-        return $data;
+        foreach ($data as $item) {
+            // Menentukan tanggal mulai dan selesai
+            $startDate = Carbon::parse($item->tgl_mulai);
+            $endDate = Carbon::parse($item->tgl_selesai);
+            $dayOfWeek = $daysOfWeekMapping[$item->day_of_week]; // Bisa jadi integer atau string seperti "Senin", "Selasa", dst.
+
+            // Mengulang dari tgl_mulai hingga tgl_selesai
+            while ($startDate <= $endDate) {
+                // Jika hari ini adalah hari yang sesuai (berdasarkan day_of_week)
+                if ($startDate->format('l') === $dayOfWeek) {
+                    $events[] = [
+                        'id' => $item->id_jadwal,
+                        'title' => $item->keterangan,
+                        'start' => $startDate->toDateString() . 'T' . $item->jam_mulai,
+                        'end' => $startDate->toDateString() . 'T' . $item->jam_selesai,
+                        'extendedProps' => [
+                            'calendar' => 'success',
+                            'type' => 'jadwal'
+                        ]
+                    ];
+                }
+                // Pindah ke hari berikutnya
+                $startDate->addDay();
+            }
+        }
+
+        return $events;
     }
 }
