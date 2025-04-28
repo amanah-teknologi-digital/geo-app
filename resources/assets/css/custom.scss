@@ -133,3 +133,60 @@
         transform: translateY(-8px);
     }
 }
+
+.form-check {
+    display: block;
+    min-height: 1.3754296875rem;
+    padding-left: 1.8em;
+    margin-bottom: .5rem
+}
+
+.form-check {
+    position: relative;
+    padding-inline:1.8em 0
+}
+
+.form-check-input:checked[type=checkbox] {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='17' viewBox='0 0 15 14' fill='none'%3E%3Cpath d='M3.41667 7L6.33333 9.91667L12.1667 4.08333' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+}
+
+.form-check-success .form-check-input {
+    --bs-form-check-input-checked-bg: var(--bs-success);
+    --bs-form-check-input-checked-border-color: var(--bs-success);
+    --bs-form-check-shadow-color: rgb(113, 221, 55)
+}
+
+.form-check-primary .form-check-input {
+    --bs-form-check-input-checked-bg: rgb(8, 60, 132);
+    --bs-form-check-input-checked-border-color: rgb(8, 60, 132);
+    --bs-form-check-shadow-color: rgb(8, 60, 132)
+}
+
+.form-check-warning .form-check-input {
+    --bs-form-check-input-checked-bg: var(--bs-warning);
+    --bs-form-check-input-checked-border-color: var(--bs-warning);
+    --bs-form-check-shadow-color: var(--bs-warning);
+}
+
+.form-check-input:checked {
+    border-color: var(--bs-form-check-input-checked-border-color);
+    background-color: var(--bs-form-check-input-checked-bg);
+    box-shadow: var(--bs-form-check-box-shadow)
+}
+
+.form-check .form-check-input {
+    float: inline-start;
+    margin-inline-start:-1.8em}
+
+.form-check-input[type=checkbox] {
+    border-radius: .267em
+}
+
+.form-check .form-check-input {
+    float: left;
+    margin-left: -1.8em
+}
+
+
+
+

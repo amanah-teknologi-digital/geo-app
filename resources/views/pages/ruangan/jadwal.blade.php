@@ -60,25 +60,25 @@
                                         <span class="align-middle">Tambah Jadwal</span>
                                     </button>
                                 </div>
-                                <div class="px-6 pb-2">
+                                <div class="px-6 pb-2 my-sm-0 p-4">
                                     <!-- Filter -->
                                     <div>
-                                        <h5>Event Filters</h5>
+                                        <h5>Filter Jadwal</h5>
                                     </div>
 
-                                    <div class="form-check form-check-secondary mb-5 ms-2">
+                                    <div class="form-check form-check-primary mb-5 ms-2">
                                         <input class="form-check-input select-all" type="checkbox" id="selectAll" data-value="all" checked="">
-                                        <label class="form-check-label" for="selectAll">View All</label>
+                                        <label class="form-check-label" for="selectAll">Tampilkan Semua</label>
                                     </div>
 
                                     <div class="app-calendar-events-filter text-heading">
                                         <div class="form-check form-check-success mb-5 ms-2">
-                                            <input class="form-check-input input-filter" type="checkbox" id="select-personal" data-value="personal" checked="">
-                                            <label class="form-check-label" for="select-personal">Jadwal Kuliah</label>
+                                            <input class="form-check-input input-filter" type="checkbox" id="select-kuliah" data-value="kuliah" checked="">
+                                            <label class="form-check-label" for="select-kuliah">Jadwal Kuliah</label>
                                         </div>
-                                        <div class="form-check mb-5 ms-2">
-                                            <input class="form-check-input input-filter" type="checkbox" id="select-business" data-value="business" checked="">
-                                            <label class="form-check-label" for="select-business">Jadwal Booking</label>
+                                        <div class="form-check form-check-warning mb-5 ms-2">
+                                            <input class="form-check-input input-filter" type="checkbox" id="select-booking" data-value="booking" checked="">
+                                            <label class="form-check-label" for="select-booking">Jadwal Booking</label>
                                         </div>
                                     </div>
                                 </div>
