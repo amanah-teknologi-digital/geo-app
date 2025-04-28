@@ -139,19 +139,19 @@
                 <div class="modal-body">
                     <table class="w-100 p-5">
                         <tr>
-                            <td style="width: 25%">Nama Jadwal</td>
+                            <td style="width: 35%">Nama Jadwal</td>
                             <td style="width: 1%">:</td>
-                            <td style="width: 74%">&nbsp;<span class="fw-bold" id="eventModalTitle"></span></td>
+                            <td style="width: 64%">&nbsp;<span class="fw-bold" id="eventModalTitle"></span></td>
                         </tr>
                         <tr>
-                            <td style="width: 25%">Waktu Mulai</td>
+                            <td style="width: 35%">Waktu Mulai</td>
                             <td style="width: 1%">:</td>
-                            <td style="width: 74%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalStart"></span></td>
+                            <td style="width: 64%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalStart"></span></td>
                         </tr>
                         <tr>
-                            <td style="width: 25%">Waktu Selesai</td>
+                            <td style="width: 35%">Waktu Selesai</td>
                             <td style="width: 1%">:</td>
-                            <td style="width: 74%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalEnd"></span></td>
+                            <td style="width: 64%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalEnd"></span></td>
                         </tr>
                     </table>
                 </div>
