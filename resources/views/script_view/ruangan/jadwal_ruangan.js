@@ -24,7 +24,7 @@ $(document).ready(function () {
             start: '2025-04-29T14:00:00',
             end: '2025-04-29T15:00:00',
             extendedProps: {
-                calendar: 'primary'
+                calendar: ''
             }
         },
         {
@@ -85,14 +85,25 @@ $(document).ready(function () {
                 text: ""
             }
         },
+        locale: 'id',
         dayMaxEvents: 3,
+        eventLimitClick: 'popover',
         headerToolbar: {
             start: "sidebarToggle, prev,next, title",
             end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
         },
         events: eventsData,
-            eventClick: function(info) {
-            alert('Event: ' + info.event.title);
+        eventClick: function(info) {
+            // Display event details in a console log
+            console.log('Event clicked: ', info.event.title);
+            console.log('Start time: ', info.event.start);
+            console.log('End time: ', info.event.end);
+
+            // Optionally, show a modal with event details
+            $('#eventModalTitle').text(info.event.title);
+            $('#eventModalStart').text(info.event.start.toLocaleString());
+            $('#eventModalEnd').text(info.event.end ? info.event.end.toLocaleString() : 'No end time');
+            $('#eventModal').modal('show');  // Assuming you're using a modal from Bootstrap
         },
         eventClassNames: function({ event }) {
             return [
