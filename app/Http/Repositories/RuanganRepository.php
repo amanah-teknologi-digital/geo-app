@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\Files;
+use App\Models\JadwalRuangan;
 use App\Models\JenisRuangan;
 use App\Models\JenisSurat;
 use App\Models\Ruangan;
@@ -23,6 +24,12 @@ class RuanganRepository
 
     public function getJenisRuangan(){
         $data = JenisRuangan::get();
+
+        return $data;
+    }
+
+    public function getDataJadwal($idRuangan){
+        $data = JadwalRuangan::where('id_ruangan', $idRuangan)->get();
 
         return $data;
     }

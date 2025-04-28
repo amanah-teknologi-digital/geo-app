@@ -160,6 +160,9 @@
     </div>
 @endsection
 @section('page-script')
+    <script>
+        let urlGetData = '{{ route('ruangan.getdatajadwal') }}';
+    </script>
     @vite([
         'resources/views/script_view/ruangan/jadwal_ruangan.js'
     ])

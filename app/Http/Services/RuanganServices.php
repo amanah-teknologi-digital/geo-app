@@ -115,30 +115,9 @@ class RuanganServices
         }
     }
 
-    public function hapusJenisSurat($idJenisSurat){
-        try {
-            $this->repository->hapusJenisSurat($idJenisSurat);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
-    }
+    public function getDataJadwal($idRuangan){
+        $data = $this->repository->getDataJadwal($idRuangan);
 
-    public function aktifkanJenisSurat($idJenisSurat){
-        try {
-            $this->repository->aktifkanJenisSurat($idJenisSurat);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function nonAktifkanJenisSurat($idJenisSurat){
-        try {
-            $this->repository->nonAktifkanJenisSurat($idJenisSurat);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
+        return $data;
     }
 }

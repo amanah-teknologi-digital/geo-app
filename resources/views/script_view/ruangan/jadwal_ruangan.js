@@ -197,7 +197,7 @@ $(document).ready(function () {
         calendar.addEventSource(filteredEvents);
     }
 
-// "Tampilkan Semua" checkbox
+    // "Tampilkan Semua" checkbox
     $('#selectAll').on('change', function() {
         let isChecked = $(this).is(':checked');
 
@@ -206,7 +206,7 @@ $(document).ready(function () {
         loadFilteredEvents();
     });
 
-// Checkbox individu (jadwal kuliah, jadwal booking)
+    // Checkbox individu (jadwal kuliah, jadwal booking)
     $('.input-filter').on('change', function() {
         let allChecked = $('.input-filter').length === $('.input-filter:checked').length;
         $('#selectAll').prop('checked', allChecked);
@@ -215,5 +215,25 @@ $(document).ready(function () {
     });
 
     loadFilteredEvents()
+    getDataJadwal()
 });
+
+function getDataJadwal(){
+    $.ajax({
+        url: '/get-jadwal',  // Ganti dengan URL API yang sesuai
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            // response adalah data yang diterima dalam format JSON
+            let eventsData = generateRecurringEvents(response);  // Panggil fungsi untuk generate events
+            console.log(eventsData); // Cek data yang sudah di-generate
+            // Lanjutkan untuk menampilkan ke kalender
+            $('#calendar').fullCalendar('removeEvents');  // Hapus event lama
+            $('#calendar').fullCalendar('addEventSource', eventsData);  // Masukkan event baru
+        },
+        error: function(xhr, status, error) {
+            console.error('Terjadi kesalahan:', error);
+        }
+    });
+}
 
