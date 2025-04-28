@@ -66,17 +66,17 @@
                                         <h5>Filter Jadwal</h5>
                                     </div>
 
-                                    <div class="form-check form-check-primary mb-5 ms-2">
+                                    <div class="form-check form-check-secondary mb-5 ms-2">
                                         <input class="form-check-input select-all" type="checkbox" id="selectAll" data-value="all" checked="">
                                         <label class="form-check-label" for="selectAll">Tampilkan Semua</label>
                                     </div>
 
                                     <div class="app-calendar-events-filter text-heading">
                                         <div class="form-check form-check-success mb-5 ms-2">
-                                            <input class="form-check-input input-filter" type="checkbox" id="select-kuliah" data-value="kuliah" checked="">
-                                            <label class="form-check-label" for="select-kuliah">Jadwal Kuliah</label>
+                                            <input class="form-check-input input-filter" type="checkbox" id="select-jadwal" data-value="jadwal" checked="">
+                                            <label class="form-check-label" for="select-jadwal">Jadwal Kuliah</label>
                                         </div>
-                                        <div class="form-check form-check-warning mb-5 ms-2">
+                                        <div class="form-check form-check-primary mb-5 ms-2">
                                             <input class="form-check-input input-filter" type="checkbox" id="select-booking" data-value="booking" checked="">
                                             <label class="form-check-label" for="select-booking">Jadwal Booking</label>
                                         </div>

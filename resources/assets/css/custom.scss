@@ -162,10 +162,10 @@
     --bs-form-check-shadow-color: rgb(8, 60, 132)
 }
 
-.form-check-warning .form-check-input {
-    --bs-form-check-input-checked-bg: var(--bs-warning);
-    --bs-form-check-input-checked-border-color: var(--bs-warning);
-    --bs-form-check-shadow-color: var(--bs-warning);
+.form-check-secondary .form-check-input {
+    --bs-form-check-input-checked-bg: var(--bs-secondary);
+    --bs-form-check-input-checked-border-color: var(--bs-secondary);
+    --bs-form-check-shadow-color: var(--bs-secondary);
 }
 
 .form-check-input:checked {

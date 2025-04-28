@@ -24,7 +24,8 @@ $(document).ready(function () {
             start: '2025-04-29T14:00:00',
             end: '2025-04-29T15:00:00',
             extendedProps: {
-                calendar: ''
+                calendar: 'primary',
+                type: 'booking'
             }
         },
         {
@@ -33,7 +34,8 @@ $(document).ready(function () {
             start: '2025-04-29T09:00:00',
             end: '2025-04-29T09:30:00',
             extendedProps: {
-                calendar: 'info'
+                calendar: 'primary',
+                type: 'booking'
             }
         },
         {
@@ -42,7 +44,8 @@ $(document).ready(function () {
             start: '2025-04-29T16:00:00',
             end: '2025-04-29T17:00:00',
             extendedProps: {
-                calendar: 'warning'
+                calendar: 'success',
+                type: 'jadwal'
             }
         },
         {
@@ -51,7 +54,8 @@ $(document).ready(function () {
             start: '2025-04-29T12:00:00',
             end: '2025-04-29T13:00:00',
             extendedProps: {
-                calendar: 'success'
+                calendar: 'success',
+                type: 'jadwal'
             }
         },
         {
@@ -60,7 +64,8 @@ $(document).ready(function () {
             start: '2025-04-29T10:30:00',
             end: '2025-04-29T12:00:00',
             extendedProps: {
-                calendar: 'danger'
+                calendar: 'success',
+                type: 'jadwal'
             }
         },
         {
@@ -69,7 +74,8 @@ $(document).ready(function () {
             start: '2025-04-30T10:30:00',
             end: '2025-04-30T12:00:00',
             extendedProps: {
-                calendar: 'danger'
+                calendar: 'success',
+                type: 'jadwal'
             }
         }
     ];
@@ -180,5 +186,44 @@ $(document).ready(function () {
             ))
         }
     ))
+    function loadFilteredEvents() {
+        let selectedTypes = [];
+
+        $('.input-filter:checked').each(function() {
+            selectedTypes.push($(this).data('value'));
+        });
+
+        let filteredEvents = [];
+
+        if (selectedTypes.length > 0) {
+            // Ada filter aktif, tampilkan event yang cocok
+            filteredEvents = eventsData.filter(function(event) {
+                return selectedTypes.includes(event.extendedProps?.type);
+            });
+        }
+        // else (kalau kosong, biarkan filteredEvents kosong)
+
+        calendar.removeAllEvents();
+        calendar.addEventSource(filteredEvents);
+    }
+
+// "Tampilkan Semua" checkbox
+    $('#selectAll').on('change', function() {
+        let isChecked = $(this).is(':checked');
+
+        $('.input-filter').prop('checked', isChecked);
+
+        loadFilteredEvents();
+    });
+
+// Checkbox individu (jadwal kuliah, jadwal booking)
+    $('.input-filter').on('change', function() {
+        let allChecked = $('.input-filter').length === $('.input-filter:checked').length;
+        $('#selectAll').prop('checked', allChecked);
+
+        loadFilteredEvents();
+    });
+
+    loadFilteredEvents()
 });
 
