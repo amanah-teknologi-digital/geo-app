@@ -93,7 +93,6 @@ $(document).ready(function () {
         },
         locale: 'id',
         dayMaxEvents: 3,
-        eventLimitClick: 'popover',
         headerToolbar: {
             start: "sidebarToggle, prev,next, title",
             end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
@@ -114,7 +113,12 @@ $(document).ready(function () {
                 // Kalau mau tahun di depan, ganti jadi: `${year}-${month}-${day} ${hours}:${minutes}`;
             };
 
-            $('#eventModalTitle').text(info.event.title);
+            const type = info.event.extendedProps?.type || '';
+
+            // Tambahkan (booking) ke judul kalau type booking
+            const title = info.event.title + (type === 'booking' ? ' (booking)' : '');
+
+            $('#eventModalTitle').text(title);
             $('#eventModalStart').text(formatDateTime(start));
             $('#eventModalEnd').text(formatDateTime(end));
             $('#eventModal').modal('show');
@@ -140,29 +144,15 @@ $(document).ready(function () {
             const startTime = start ? formatTime(start) : '';
             const endTime = end ? formatTime(end) : '';
             const timeRange = (startTime && endTime) ? `${startTime} - ${endTime}` : (startTime || '');
-
+            const typeLabel = (arg.event.extendedProps?.type === 'booking') ? ' (booking)' : '';
 
             return {
                 html: `
                    <div>
-                        ${arg.event.title}:${timeRange ? ` <span>${timeRange} </span>` : ''}
+                        ${arg.event.title}${typeLabel}:${timeRange ? ` <span>${timeRange} </span>` : ''}
                    </div>`
             };
-        },
-        selectable: true,
-        select: function(info) {
-            // Open a prompt to add an event
-            let eventTitle = prompt("Enter event title:");
-            if (eventTitle) {
-                let newEvent = {
-                    title: eventTitle,
-                    start: info.startStr,
-                    end: info.endStr
-                };
-                eventsData.push(newEvent);
-                calendar.addEvent(newEvent);
-            }
-        },
+        }
     });
 
     calendar.render();
