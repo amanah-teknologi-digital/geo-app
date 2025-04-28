@@ -256,7 +256,11 @@
 }
 
 .fc .fc-day-today:not(.fc-col-header-cell) .fc-popover-body {
-    background-color: var(--bs-paper-bg)
+    background-color: white;
+}
+
+.fc .fc-more-popover .fc-popover-body {
+    background-color: white;
 }
 
 .fc .fc-divider {

@@ -18,9 +18,34 @@ $(document).ready(function () {
 
     let calendarEl = document.getElementById('calendar');
     let eventsData = [
-        { title: 'Meeting with John', date: '2025-04-28', category: 'meeting' },
-        { title: 'Workshop on React', date: '2025-04-30', category: 'workshop' },
-        { title: 'Team Building', date: '2025-05-02', category: 'meeting' },
+        {
+            title: 'Dinner',
+            start: '2025-04-17T00:00:00',
+            extendedProps: {
+                calendar: 'warning'
+            }
+        },
+        {
+            title: 'Dart Game?',
+            start: '2025-04-17T02:00:00',
+            extendedProps: {
+                calendar: 'info'
+            }
+        },
+        {
+            title: 'Meditation',
+            start: '2025-04-17T04:00:00',
+            extendedProps: {
+                calendar: 'danger'
+            }
+        },
+        {
+            title: 'Product Review',
+            start: '2025-04-17T06:00:00',
+            extendedProps: {
+                calendar: 'primary'
+            }
+        }
     ];
 
     let calendar = new Calendar(calendarEl, {
@@ -34,6 +59,7 @@ $(document).ready(function () {
                 text: ""
             }
         },
+        dayMaxEvents: 3,
         headerToolbar: {
             start: "sidebarToggle, prev,next, title",
             end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
@@ -41,6 +67,22 @@ $(document).ready(function () {
         events: eventsData,
             eventClick: function(info) {
             alert('Event: ' + info.event.title);
+        },
+        eventClassNames: function({ event }) {
+            return [
+                'rounded-2', 'p-1', 'px-2', 'fw-semibold', 'small', 'text-nowrap',
+                'bg-label-' + (event.extendedProps.calendar || 'primary'),  // default ke primary
+                'text-truncate text-' + (event.extendedProps.calendar || 'primary')       // text color ikut calendar
+            ];
+        },
+        eventContent: function(arg) {
+            return {
+                html: `
+      <div>
+        ${arg.timeText ? `<span>${arg.timeText} </span>` : ''}${arg.event.title}
+      </div>
+    `
+            };
         },
         selectable: true,
         select: function(info) {
