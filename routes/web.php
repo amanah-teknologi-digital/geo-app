@@ -6,7 +6,7 @@ use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PengajuanGeoFacilityController;
 use App\Http\Controllers\PengajuanPersuratanController;
-use App\Http\Controllers\PengajuanGeoRoomController;
+use App\Http\Controllers\PengajuanRuanganController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PeralatanController;
@@ -69,7 +69,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/ruangan/jadwal/{id_ruangan}', [RuanganController::class, 'jadwalRuangan'])->name('ruangan.jadwal');
     Route::get('/ruangan/getdatajadwal', [RuanganController::class, 'getDataJadwal'])->name('ruangan.getdatajadwal');
     Route::middleware('role:1,3,6,7,8')->group(function () {
-        Route::get('/pengajuan-ruangan', [PengajuanGeoRoomController::class, 'index'])->name('pengajuanruangan');
+        Route::get('/pengajuan-ruangan', [PengajuanRuanganController::class, 'index'])->name('pengajuanruangan');
+        Route::get('/pengajuan-ruangan/getdata', [PengajuanRuanganController::class, 'getData'])->name('pengajuanruangan.getdata');
         Route::middleware('role:1,3')->group(function () { //bisa manajemen ruangan
             Route::get('/ruangan/tambah', [RuanganController::class, 'tambahRuangan'])->name('ruangan.tambah');
             Route::post('/ruangan/dotambah', [RuanganController::class, 'doTambahRuangan'])->name('ruangan.dotambah');
