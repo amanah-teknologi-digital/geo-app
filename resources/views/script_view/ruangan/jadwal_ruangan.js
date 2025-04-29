@@ -324,6 +324,7 @@ function resetInputUpdate(){
 function inisiasiTanggal(dom){
     return flatpickr(dom, {
         mode: "range",
+        locale: Indonesian,
         dateFormat: "d-m-Y",
         onChange: function(selectedDates, dateStr, instance) {
             // Jika ada dua tanggal yang dipilih, ubah 'to' menjadi 's/d'
