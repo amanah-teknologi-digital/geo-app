@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Repositories\RuanganRepository;
 use App\Http\Services\RuanganServices;
+use App\Rules\CekHariDalamRange;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -187,7 +188,6 @@ class RuanganController extends Controller
             $request->validate([
                 'idRuangan' => ['required'],
                 'keterangan' => ['required'],
-                'hari' => ['required', 'integer', 'between:1,7'],
                 'jam_mulai' => ['required', 'date_format:H:i'],
                 'jam_selesai' => ['required', 'date_format:H:i', 'after:jam_mulai'],
                 'tgl_jadwal' => [
@@ -213,7 +213,10 @@ class RuanganController extends Controller
                             }
                         }
                     }
-                ]
+                ],
+                'hari' => ['required', 'integer', 'between:1,7',
+                    new CekHariDalamRange($request->tgl_jadwal)
+                ],
             ],[
                 'idRuangan.required' => 'Id ruangan wajib diisi.',
                 'keterangan.required' => 'Keterangan jadwal wajib diisi.',

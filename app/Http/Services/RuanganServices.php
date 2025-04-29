@@ -148,14 +148,20 @@ class RuanganServices
             while ($startDate <= $endDate) {
                 // Jika hari ini adalah hari yang sesuai (berdasarkan day_of_week)
                 if ($startDate->format('l') === $dayOfWeek) {
+                    if ($item->tipe_jadwal == 'jadwal'){
+                        $cal = 'success';
+                    }else{
+                        $cal = 'primary';
+                    }
+
                     $events[] = [
                         'id' => $item->id_jadwal,
                         'title' => $item->keterangan,
                         'start' => $startDate->toDateString() . 'T' . $item->jam_mulai,
                         'end' => $startDate->toDateString() . 'T' . $item->jam_selesai,
                         'extendedProps' => [
-                            'calendar' => 'success',
-                            'type' => 'jadwal'
+                            'calendar' => $cal,
+                            'type' => $item->tipe_jadwal
                         ]
                     ];
                 }

@@ -18,6 +18,7 @@ class JadwalRuangan extends Model
         'jam_selesai',
         'tgl_mulai',
         'tgl_selesai',
+        'tipe_jadwal',
         'created_at',
         'updated_at',
         'updater'

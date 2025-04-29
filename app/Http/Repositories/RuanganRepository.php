@@ -97,33 +97,6 @@ class RuanganRepository
         $dataRuangan->save();
     }
 
-    public function hapusJenisSurat($idJenisSurat){
-        $JenisSurat = JenisSurat::find($idJenisSurat);
-        if ($JenisSurat) {
-            $JenisSurat->delete();
-        }
-    }
-
-    public function aktifkanJenisSurat($idJenisSurat){
-        $JenisSurat = JenisSurat::find($idJenisSurat);
-        if ($JenisSurat) {
-            $JenisSurat->is_aktif = 1;
-            $JenisSurat->updated_at = now();
-            $JenisSurat->updater = auth()->user()->id;
-            $JenisSurat->save();
-        }
-    }
-
-    public function nonAktifkanJenisSurat($idJenisSurat){
-        $JenisSurat = JenisSurat::find($idJenisSurat);
-        if ($JenisSurat) {
-            $JenisSurat->is_aktif = 0;
-            $JenisSurat->updated_at = now();
-            $JenisSurat->updater = auth()->user()->id;
-            $JenisSurat->save();
-        }
-    }
-
     public function cekJadwalRuanganBentrok($idRuangan, $hari, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai){
         // Parse input tanggal
         $tglMulai = Carbon::createFromFormat('d-m-Y', $tglMulai)->format('Y-m-d');
@@ -163,6 +136,7 @@ class RuanganRepository
             'tgl_selesai' => Carbon::createFromFormat('d-m-Y', $tgl_selesai),
             'jam_mulai' => Carbon::createFromFormat('H:i', $jam_mulai),
             'jam_selesai' => Carbon::createFromFormat('H:i', $jam_selesai),
+            'tipe_jadwal' => 'jadwal',
             'created_at' => now(),
             'updater' => auth()->user()->id
         ]);
