@@ -1,25 +1,115 @@
+let eventsData = [];
+let calendarEl;
+let calendar;
+
 $(document).ready(function () {
-    let eventsData = [];
-    function I() {
-        var e = document.querySelector(".fc-sidebarToggle-button");
-        if (e) {
-            e.classList.remove("fc-button-primary");
-            e.classList.add("d-lg-none", "d-inline-block", "ps-0");
-
-            while (e.firstChild) {
-                e.removeChild(e.firstChild);
-            }
-
-            e.setAttribute("data-bs-toggle", "sidebar");
-            e.setAttribute("data-overlay", "");
-            e.setAttribute("data-target", "#app-calendar-sidebar");
-            e.insertAdjacentHTML("beforeend", '<i class="icon-base bx bx-menu icon-lg text-heading"></i>');
+    inisiasiTanggal();
+    inisiasiJam();
+    calendarEl = document.getElementById('calendar');
+    inisiasiCalendar();
+    I();
+    document.querySelectorAll('[data-bs-toggle="sidebar"]').forEach((function(e) {
+            e.addEventListener("click", (function() {
+                    var t = e.getAttribute("data-target")
+                        , n = e.getAttribute("data-overlay")
+                        , o = document.querySelectorAll(".app-overlay");
+                    document.querySelectorAll(t).forEach((function(e) {
+                            e.classList.toggle("show"),
+                            null != n && !1 !== n && void 0 !== o && (e.classList.contains("show") ? o[0].classList.add("show") : o[0].classList.remove("show"),
+                                o[0].addEventListener("click", (function(t) {
+                                        t.currentTarget.classList.remove("show"),
+                                            e.classList.remove("show")
+                                    }
+                                )))
+                        }
+                    ))
+                }
+            ))
         }
-    }
+    ));
 
-    let calendarEl = document.getElementById('calendar');
+    // "Tampilkan Semua" checkbox
+    $('#selectAll').on('change', function() {
+        let isChecked = $(this).is(':checked');
 
-    let calendar = new Calendar(calendarEl, {
+        $('.input-filter').prop('checked', isChecked);
+
+        loadFilteredEvents();
+    });
+
+    // Checkbox individu (jadwal kuliah, jadwal booking)
+    $('.input-filter').on('change', function() {
+        let allChecked = $('.input-filter').length === $('.input-filter:checked').length;
+        $('#selectAll').prop('checked', allChecked);
+
+        loadFilteredEvents();
+    });
+
+    $('#addEventSidebar').on('shown.bs.offcanvas', function () {
+        // Reset form atau elemen lainnya
+        resetInputTambah()
+    });
+
+    $("#tambahJadwal").validate({
+        rules: {
+            keterangan: {
+                required: true
+            },
+            hari: {
+                required: true
+            },
+            tgl_jadwal: {
+                required: true
+            },
+            jam_mulai: {
+                required: true,
+                time:true
+            },
+            jam_selesai: {
+                required: true,
+                time:true
+            }
+        },
+        messages: {
+            keterangan: {
+                required: "Keterangan jadwal wajib diisi"
+            },
+            hari: {
+                required: "Hari wajib diisi"
+            },
+            tgl_jadwal: {
+                required: "Tanggal jadwal wajib diisi"
+            },
+            jam_mulai: {
+                required: "Jam mulai wajib diisi",
+                time: "Format jam tidak valid"
+            },
+            jam_selesai: {
+                required: "Jam selesai wajib diisi",
+                time: "Format jam tidak valid"
+            }
+        },
+        errorPlacement: function(error, element) {
+            // Menentukan lokasi error berdasarkan id atau atribut lain
+            if (element.attr("name") === "jam_mulai") {
+                error.appendTo("#error-jammulai");
+            }else if (element.attr("name") === "jam_selesai") {
+                error.appendTo("#error-jamselesai");
+            } else {
+                // Default: tampilkan setelah elemen
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+    getDataJadwal();
+});
+
+function inisiasiCalendar() {
+    calendar = new Calendar(calendarEl, {
         plugins: [ dayGridPlugin, timegridPlugin, listPlugin],
         initialView: 'dayGridMonth',
         editable: !0,
@@ -95,64 +185,83 @@ $(document).ready(function () {
     });
 
     calendar.render();
-    I();
-    document.querySelectorAll('[data-bs-toggle="sidebar"]').forEach((function(e) {
-            e.addEventListener("click", (function() {
-                    var t = e.getAttribute("data-target")
-                        , n = e.getAttribute("data-overlay")
-                        , o = document.querySelectorAll(".app-overlay");
-                    document.querySelectorAll(t).forEach((function(e) {
-                            e.classList.toggle("show"),
-                            null != n && !1 !== n && void 0 !== o && (e.classList.contains("show") ? o[0].classList.add("show") : o[0].classList.remove("show"),
-                                o[0].addEventListener("click", (function(t) {
-                                        t.currentTarget.classList.remove("show"),
-                                            e.classList.remove("show")
-                                    }
-                                )))
-                        }
-                    ))
-                }
-            ))
+}
+
+function I() {
+    var e = document.querySelector(".fc-sidebarToggle-button");
+    if (e) {
+        e.classList.remove("fc-button-primary");
+        e.classList.add("d-lg-none", "d-inline-block", "ps-0");
+
+        while (e.firstChild) {
+            e.removeChild(e.firstChild);
         }
-    ))
-    function loadFilteredEvents() {
-        let selectedTypes = [];
 
-        $('.input-filter:checked').each(function() {
-            selectedTypes.push($(this).data('value'));
-        });
-
-        let filteredEvents = [];
-
-        if (selectedTypes.length > 0) {
-            // Ada filter aktif, tampilkan event yang cocok
-            filteredEvents = eventsData.filter(function(event) {
-                return selectedTypes.includes(event.extendedProps?.type);
-            });
-        }
-        // else (kalau kosong, biarkan filteredEvents kosong)
-
-        calendar.removeAllEvents();
-        calendar.addEventSource(filteredEvents);
+        e.setAttribute("data-bs-toggle", "sidebar");
+        e.setAttribute("data-overlay", "");
+        e.setAttribute("data-target", "#app-calendar-sidebar");
+        e.insertAdjacentHTML("beforeend", '<i class="icon-base bx bx-menu icon-lg text-heading"></i>');
     }
+}
 
-    // "Tampilkan Semua" checkbox
-    $('#selectAll').on('change', function() {
-        let isChecked = $(this).is(':checked');
+function resetInputTambah(){
+    $('#keterangan').val('');
+    $('#hari').val('');
+    $('#tgl_jadwal').val('');
+    $('#jam_mulai').val('');
+    $('#jam_selesai').val('');
+}
 
-        $('.input-filter').prop('checked', isChecked);
+function inisiasiTanggal(){
+    flatpickr("#tgl_jadwal", {
+        mode: "range",
+        dateFormat: "d-m-Y",
+        onChange: function(selectedDates, dateStr, instance) {
+            // Jika ada dua tanggal yang dipilih, ubah 'to' menjadi 's/d'
+            if (selectedDates.length === 2) {
+                // Ubah teks di dalam input menjadi "Tanggal Mulai s/d Tanggal Selesai"
+                let startDate = formatDate(selectedDates[0]);  // Format tanggal mulai
+                let endDate = formatDate(selectedDates[1]);    // Format tanggal selesai
 
-        loadFilteredEvents();
+                instance.input.value = `${startDate} s/d ${endDate}`;
+            }
+        }
+    });
+}
+
+function inisiasiJam(){
+    flatpickr("#jam_mulai", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        onChange: function(selectedDates, dateStr, instance) {
+            // Set default waktu selesai menjadi waktu mulai
+            let endTime = new Date(selectedDates[0].getTime());
+            endTime.setMinutes(endTime.getMinutes() + 30);  // Waktu selesai default 30 menit setelah mulai
+            document.getElementById("jam_selesai")._flatpickr.setDate(endTime); // Set waktu selesai otomatis
+        }
     });
 
-    // Checkbox individu (jadwal kuliah, jadwal booking)
-    $('.input-filter').on('change', function() {
-        let allChecked = $('.input-filter').length === $('.input-filter:checked').length;
-        $('#selectAll').prop('checked', allChecked);
+    flatpickr("#jam_selesai", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        onChange: function(selectedDates, dateStr, instance) {
+            let startTime = new Date(document.getElementById("jam_mulai")._flatpickr.selectedDates[0].getTime());
+            let endTime = selectedDates[0];
 
-        loadFilteredEvents();
+            if (endTime < startTime) {
+                alert("Jam selesai tidak boleh lebih awal dari jam mulai!");
+                instance.clear(); // Hapus pilihan jika selesai < mulai
+                $('#jam_mulai').val('');
+            }
+        }
     });
+}
 
+function getDataJadwal(){
     $.ajax({
         url: urlGetData,  // Ganti dengan URL API yang sesuai
         method: 'GET',
@@ -173,5 +282,33 @@ $(document).ready(function () {
             loadFilteredEvents();
         }
     });
-});
+}
+
+function loadFilteredEvents() {
+    let selectedTypes = [];
+
+    $('.input-filter:checked').each(function() {
+        selectedTypes.push($(this).data('value'));
+    });
+
+    let filteredEvents = [];
+
+    if (selectedTypes.length > 0) {
+        // Ada filter aktif, tampilkan event yang cocok
+        filteredEvents = eventsData.filter(function(event) {
+            return selectedTypes.includes(event.extendedProps?.type);
+        });
+    }
+    // else (kalau kosong, biarkan filteredEvents kosong)
+
+    calendar.removeAllEvents();
+    calendar.addEventSource(filteredEvents);
+}
+
+function formatDate(date) {
+    let day = String(date.getDate()).padStart(2, '0');
+    let month = String(date.getMonth() + 1).padStart(2, '0');  // Bulan dimulai dari 0
+    let year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+}
 

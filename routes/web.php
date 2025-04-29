@@ -74,6 +74,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/ruangan/tambah', [RuanganController::class, 'tambahRuangan'])->name('ruangan.tambah');
             Route::post('/ruangan/dotambah', [RuanganController::class, 'doTambahRuangan'])->name('ruangan.dotambah');
             Route::post('/ruangan/doupdate', [RuanganController::class, 'doUpdateRuangan'])->name('ruangan.doupdate');
+            Route::post('/ruangan/dotambahjadwal', [RuanganController::class, 'doTambahJadwal'])->name('ruangan.dotambahjadwal');
+            Route::post('/ruangan/doupdatejadwal', [RuanganController::class, 'doUpdateJadwal'])->name('ruangan.doupdatejadwal');
         });
     });
 

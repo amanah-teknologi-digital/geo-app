@@ -152,12 +152,21 @@ class RuanganController extends Controller
         $title = "Jadwal Ruangan";
         $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
         $dataRuangan = $this->service->getDataRuangan($idRuangan);
+        $hari = [
+            2 => 'Senin',
+            3 => 'Selasa',
+            4 => 'Rabu',
+            5 => 'Kamis',
+            6 => 'Jumat',
+            7 => 'Sabtu',
+            1 => 'Minggu',
+        ];
 
         if ($dataRuangan->is_aktif == 0){
             return redirect(route('ruangan'))->with('error', "Ruangan sudah tidak aktif.");
         }
 
-        return view('pages.ruangan.jadwal', compact('title','dataRuangan','idRuangan','isEdit'));
+        return view('pages.ruangan.jadwal', compact('title','dataRuangan','idRuangan','isEdit','hari'));
     }
 
     public function getDataJadwal(Request $request){
@@ -171,5 +180,9 @@ class RuanganController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    public function doTambahJadwal(Request $request){
+        dd($request->input());
     }
 }

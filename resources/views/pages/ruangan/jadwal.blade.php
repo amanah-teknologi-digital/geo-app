@@ -108,25 +108,43 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body" data-select2-id="7">
-            <form class="event-form pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eventForm" onsubmit="return false" novalidate="novalidate" data-select2-id="eventForm">
-                <div class="mb-6 form-control-validation fv-plugins-icon-container">
-                    <label class="form-label" for="eventTitle">Keterangan</label>
-                    <input type="text" class="form-control" id="eventTitle" name="eventTitle" placeholder="Event Title">
+            <form id="tambahJadwal" method="POST" action="{{ route('ruangan.dotambahjadwal') }}">
+                @csrf
+                <input type="hidden" name="idRuangan" value="{{ $idRuangan }}" required>
+                <div class="mb-6">
+                    <label class="form-label" for="keterangan">Keterangan Jadwal <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="keterangan" name="keterangan" autocomplete="off" autofocus placeholder="keterangan jadwal" required>
                 </div>
-                <div class="mb-6 form-control-validation fv-plugins-icon-container fv-plugins-bootstrap5-row-valid">
-                    <label class="form-label" for="eventStartDate">Start Date</label>
-                    <div class="flatpickr-wrapper">
-                        <input type="text" class="form-control flatpickr-input active" id="eventStartDate" name="eventStartDate" placeholder="Start Date" readonly="readonly">
+                <div class="mb-6">
+                    <label class="form-label" for="hari">Pilih Hari <span class="text-danger">*</span></label>
+                    <select class="form-control" name="hari" id="hari" required>
+                        <option value="" selected disabled>-- pilih hari --</option>
+                        @foreach ($hari as $value => $label)
+                            <option value="{{ $value }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="form-label" for="tgl_jadwal">Pilih Tanggal <span class="text-danger">*</span></label>
+                    <input type="text" id="tgl_jadwal" class="form-control" name="tgl_jadwal" required placeholder="pilih tanggal mulai - selesai">
+                </div>
+                <div class="mb-6">
+                    <label class="form-label" for="jam_jadwal">Pilih Waktu <span class="text-danger">*</span></label>
+                    <div class="d-inline-flex gap-2">
+                        <input type="text" id="jam_mulai" class="form-control jam_jadwal" name="jam_mulai" placeholder="pilih jam mulai">
+                        <input type="text" id="jam_selesai" class="form-control jam_jadwal" name="jam_selesai" placeholder="pilih jam selesai">
                     </div>
+                    <div class="error-container" id="error-jammulai"></div>
+                    <div class="error-container" id="error-jamselesai"></div>
                 </div>
                 <div class="d-flex justify-content-sm-between justify-content-start mt-6 gap-2">
                     <div class="d-flex">
-                        <button type="submit" id="addEventBtn" class="btn btn-primary me-4 btn-add-event">Add</button>
-                        <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1" data-bs-dismiss="offcanvas">Cancel</button>
+                        <button type="submit" id="addEventBtn" class="btn btn-primary me-4 btn-add-event"><span class="bx bx-save"></span>&nbsp;Tambah</button>
+                        <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1" data-bs-dismiss="offcanvas">Batal</button>
                     </div>
                     <button class="btn btn-label-danger btn-delete-event d-none">Delete</button>
                 </div>
-                <input type="hidden"></form>
+            </form>
         </div>
     </div>
     <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
