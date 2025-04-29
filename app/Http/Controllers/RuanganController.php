@@ -231,7 +231,12 @@ class RuanganController extends Controller
                 'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.'
             ]);
 
+            $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
             $idRuangan = $request->idRuangan;
+            if (!$isEdit) {
+                return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Anda tidak punya otoritas.');
+            }
+
             $dataJadwal = explode(' s/d ', $request->tgl_jadwal);
             $tgl_mulai = $dataJadwal[0];
             $tgl_selesai = $dataJadwal[1];
@@ -314,7 +319,12 @@ class RuanganController extends Controller
                 'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.'
             ]);
 
+            $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
             $idRuangan = $request->idRuangan;
+            if (!$isEdit) {
+                return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Anda tidak punya otoritas.');
+            }
+
             $idJadwal = $request->idJadwal;
             $dataJadwal = explode(' s/d ', $request->tgl_jadwal);
             $tgl_mulai = $dataJadwal[0];
@@ -323,18 +333,23 @@ class RuanganController extends Controller
             $jam_selesai = $request->jam_selesai;
 
             $cekJadwalBentrok = $this->service->cekJadwalRuanganBentrok($idRuangan, $request->hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai, $idJadwal);
+            $dataJadwal = $this->service->getDataJadwalByIdJadwal($idJadwal);
 
-            if ($cekJadwalBentrok){
-                return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Jadwal yang diinputkan bentrok dengan jadwal yang sudah ada.');
+            if ($dataJadwal->tipe_jadwal == 'jadwal') {
+                if ($cekJadwalBentrok) {
+                    return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Jadwal yang diinputkan bentrok dengan jadwal yang sudah ada.');
+                }
+
+                DB::beginTransaction();
+
+                $this->service->updateJadwalRuangan($idJadwal, $request->keterangan, $request->hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai);
+
+                DB::commit();
+
+                return redirect(route('ruangan.jadwal', $idRuangan))->with('success', 'Berhasil Update Jadwal.');
+            }else{
+                return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Jadwal Booking tidak bisa diubah.');
             }
-
-            DB::beginTransaction();
-
-            $this->service->updateJadwalRuangan($idJadwal, $request->keterangan, $request->hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai);
-
-            DB::commit();
-
-            return redirect(route('ruangan.jadwal', $idRuangan))->with('success', 'Berhasil Update Jadwal.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();

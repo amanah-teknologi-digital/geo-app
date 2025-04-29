@@ -193,37 +193,11 @@ function inisiasiCalendar() {
         },
         events: eventsData,
         eventClick: function(info) {
-            if (isEdit){
-                resetInputUpdate();
-                setDataUpdateJadwal(info);
+            resetInputUpdate();
+            setDataUpdateJadwal(info);
 
-                var offcanvas = new bootstrap.Offcanvas(document.getElementById('addEventSidebarUpdate'));
-                offcanvas.show();
-            }else {
-                const start = info.event.start;
-                const end = info.event.end;
-
-                const formatDateTime = (date) => {
-                    if (!date) return '';
-                    const year = date.getFullYear();
-                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                    const day = String(date.getDate()).padStart(2, '0');
-                    const hours = String(date.getHours()).padStart(2, '0');
-                    const minutes = String(date.getMinutes()).padStart(2, '0');
-                    return `${day}/${month}/${year} ${hours}:${minutes}`;
-                    // Kalau mau tahun di depan, ganti jadi: `${year}-${month}-${day} ${hours}:${minutes}`;
-                };
-
-                const type = info.event.extendedProps?.type || '';
-
-                // Tambahkan (booking) ke judul kalau type booking
-                const title = info.event.title + (type === 'booking' ? ' (booking)' : '');
-
-                $('#eventModalTitle').text(title);
-                $('#eventModalStart').text(formatDateTime(start));
-                $('#eventModalEnd').text(formatDateTime(end));
-                $('#eventModal').modal('show');
-            }
+            var offcanvas = new bootstrap.Offcanvas(document.getElementById('addEventSidebarUpdate'));
+            offcanvas.show();
         },
         eventClassNames: function({ event }) {
             return [
@@ -284,7 +258,7 @@ function setDataUpdateJadwal(data){
     let tgl_selesai = new Date(data.event.extendedProps.tgl_selesai);
     let type = data.event.extendedProps.type;
 
-    if (type === "jadwal"){
+    if (type === "jadwal" && isEdit){
         $('#tombolHapus').removeClass('d-none');
         $('#addEventBtnUpdate').removeClass('d-none');
     }
@@ -292,6 +266,29 @@ function setDataUpdateJadwal(data){
     instanceJadwalUpdate.setDate([tgl_mulai, tgl_selesai], true)
     instanceJamMulaiUpdate.setDate(data.event.extendedProps.jam_mulai)
     instanceJamSelesaiUpdate.setDate(data.event.extendedProps.jam_selesai)
+
+    if (!isEdit || type === "booking") {
+        $('#addEventSidebarUpdateLabel').html('Detail Jadwal')
+        instanceJadwalUpdate.destroy();
+        instanceJamMulaiUpdate.destroy();
+        instanceJamSelesaiUpdate.destroy();
+        instanceJadwalUpdate = null;
+        instanceJamMulaiUpdate = null;
+        instanceJamSelesaiUpdate = null;
+        $('#idJadwal').val('');
+        $('#keterangan_update').prop('disabled', true);
+        $('#hari_update').prop('disabled', true);
+        $('#tgl_jadwal_update').prop('disabled', true);
+        $('#jam_mulai_update').prop('disabled', true);
+        $('#jam_selesai_update').prop('disabled', true);
+    }else{
+        $('#addEventSidebarUpdateLabel').html('Update Jadwal');
+        $('#keterangan_update').prop('disabled', false);
+        $('#hari_update').prop('disabled', false);
+        $('#tgl_jadwal_update').prop('disabled', false);
+        $('#jam_mulai_update').prop('disabled', false);
+        $('#jam_selesai_update').prop('disabled', false);
+    }
 }
 
 function resetInputTambah(){
@@ -304,6 +301,16 @@ function resetInputTambah(){
 }
 
 function resetInputUpdate(){
+    if (!instanceJadwalUpdate) {
+        instanceJadwalUpdate = inisiasiTanggal("#tgl_jadwal_update");
+    }
+    if (!instanceJamMulaiUpdate) {
+        instanceJamMulaiUpdate = inisiasiJamMulai('jam_mulai_update', 'jam_selesai_update');
+    }
+    if (!instanceJamSelesaiUpdate) {
+        instanceJamSelesaiUpdate = inisiasiJamSelesai('jam_mulai_update', 'jam_selesai_update');
+    }
+
     $("#updateJadwal").validate().resetForm();
     $('#keterangan_update').val('');
     $('#hari_update').val('');

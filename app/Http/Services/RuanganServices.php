@@ -21,6 +21,12 @@ class RuanganServices
         return $data;
     }
 
+    public function getDataJadwalByIdJadwal($idJadwal){
+        $data = $this->repository->getDataJadwalByIdJadwal($idJadwal);
+
+        return $data;
+    }
+
     public function getJenisRuangan(){
         $data = $this->repository->getJenisRuangan();
 

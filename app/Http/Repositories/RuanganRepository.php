@@ -23,6 +23,12 @@ class RuanganRepository
         return $data;
     }
 
+    public function getDataJadwalByIdJadwal($idJadwal){
+        $data = JadwalRuangan::find($idJadwal);
+
+        return $data;
+    }
+
     public function getJenisRuangan(){
         $data = JenisRuangan::get();
 
