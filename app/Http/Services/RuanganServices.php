@@ -81,6 +81,15 @@ class RuanganServices
         }
     }
 
+    public function hapusJadwalRuangan($idJadwal){
+        try {
+            $this->repository->hapusJadwalRuangan($idJadwal);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function getDataJsonFasilitas($dataFasilitas){
         $configFasilitas = config('listfasilitas', []);
         $flatFasilitas = [];

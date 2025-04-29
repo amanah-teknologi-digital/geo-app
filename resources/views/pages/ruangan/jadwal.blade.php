@@ -187,9 +187,31 @@
                 <div class="d-flex justify-content-sm-between justify-content-start mt-6 gap-2">
                     <div class="d-flex">
                         <button type="submit" id="addEventBtnUpdate" class="btn btn-warning text-black me-4 d-none"><span class="bx bx-save"></span>&nbsp;Update</button>
-                        <button class="btn btn-danger d-none" id="tombolHapus"><span class="bx bx-trash"></span>&nbsp;Hapus</button>
+                        <a href="javascript:void(0)" class="btn btn-danger d-none" id="tombolHapus" data-bs-toggle="modal" data-bs-target="#modal-hapus" data-id="" ><span class="bx bx-trash"></span>&nbsp;Hapus</a>
                     </div>
                     <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1" data-bs-dismiss="offcanvas">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-hapus" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('ruangan.dohapusjadwal') }}" method="POST">
+                @csrf
+                <input type="hidden" name="idRuangan" value="{{ $idRuangan }}" required>
+                <input type="hidden" name="idJadwal" id="idHapus" required>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Hapus Jadwal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah yakin menghapus jadwal ini?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </div>
                 </div>
             </form>
         </div>

@@ -168,4 +168,12 @@ class RuanganRepository
             $jadwalRuangan->save();
         }
     }
+
+    public function hapusJadwalRuangan($idJadwal){
+        $jadwalRuangan = JadwalRuangan::find($idJadwal);
+
+        if ($jadwalRuangan) {
+            $jadwalRuangan->delete();
+        }
+    }
 }

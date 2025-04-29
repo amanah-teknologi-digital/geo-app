@@ -170,6 +170,12 @@ $(document).ready(function () {
         }
     });
 
+    $('#modal-hapus').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id'); // Ambil nilai data-id
+        $('#idHapus').val(dataId); // Masukkan ke modal
+    });
+
     getDataJadwal();
 });
 
@@ -254,6 +260,8 @@ function setDataUpdateJadwal(data){
     $('#idJadwal').val(data.event.id);
     $('#keterangan_update').val(data.event.extendedProps.keterangan);
     $('#hari_update').val(data.event.extendedProps.day_of_week);
+    $('#tombolHapus').attr('data-id', data.event.id);
+
     let tgl_mulai = new Date(data.event.extendedProps.tgl_mulai);
     let tgl_selesai = new Date(data.event.extendedProps.tgl_selesai);
     let type = data.event.extendedProps.type;
@@ -281,6 +289,7 @@ function setDataUpdateJadwal(data){
         $('#tgl_jadwal_update').prop('disabled', true);
         $('#jam_mulai_update').prop('disabled', true);
         $('#jam_selesai_update').prop('disabled', true);
+        $('#tombolHapus').attr('data-id', '');
     }else{
         $('#addEventSidebarUpdateLabel').html('Update Jadwal');
         $('#keterangan_update').prop('disabled', false);
@@ -315,6 +324,7 @@ function resetInputUpdate(){
     $('#keterangan_update').val('');
     $('#hari_update').val('');
     $('#tombolHapus').addClass('d-none');
+    $('#tombolHapus').attr('data-id', '');
     $('#addEventBtnUpdate').addClass('d-none');
     instanceJadwalUpdate.clear();
     instanceJamMulaiUpdate.clear();

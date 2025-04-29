@@ -76,6 +76,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/ruangan/doupdate', [RuanganController::class, 'doUpdateRuangan'])->name('ruangan.doupdate');
             Route::post('/ruangan/dotambahjadwal', [RuanganController::class, 'doTambahJadwal'])->name('ruangan.dotambahjadwal');
             Route::post('/ruangan/doupdatejadwal', [RuanganController::class, 'doUpdateJadwal'])->name('ruangan.doupdatejadwal');
+            Route::post('/ruangan/dohapusjadwal', [RuanganController::class, 'doHapusJadwal'])->name('ruangan.dohapusjadwal');
         });
     });
 

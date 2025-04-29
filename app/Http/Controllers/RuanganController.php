@@ -360,4 +360,45 @@ class RuanganController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function doHapusJadwal(Request $request){
+        try {
+            $request->validate([
+                'idRuangan' => ['required'],
+                'idJadwal' => ['required']
+            ],[
+                'idRuangan.required' => 'Id ruangan wajib diisi.',
+                'idJadwal.required' => 'Id jadwal wajib diisi.'
+            ]);
+
+            $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
+            $idRuangan = $request->idRuangan;
+            if (!$isEdit) {
+                return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Anda tidak punya otoritas.');
+            }
+
+            $idJadwal = $request->idJadwal;
+            $dataJadwal = $this->service->getDataJadwalByIdJadwal($idJadwal);
+
+            if ($dataJadwal->tipe_jadwal == 'jadwal') {
+                DB::beginTransaction();
+
+                $this->service->hapusJadwalRuangan($idJadwal);
+
+                DB::commit();
+
+                return redirect(route('ruangan.jadwal', $idRuangan))->with('success', 'Berhasil Hapus Jadwal.');
+            }else{
+                return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Jadwal Booking tidak bisa dihapus.');
+            }
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }
