@@ -20,7 +20,7 @@ class PengajuanRuanganController extends Controller
         $title = $this->subtitle;
         $isTambah = $this->service->checkAksesTambah(Auth()->user()->id_akses);
 
-        return view('pages.pengajuan_surat.index', compact('isTambah','title'));
+        return view('pages.pengajuan_ruangan.index', compact('isTambah','title'));
     }
 
     public function getData(Request $request){
