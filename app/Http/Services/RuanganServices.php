@@ -116,24 +116,33 @@ class RuanganServices
         }
     }
 
+    public function tambahJadwalRuangan($idJadwal, $idRuangan, $keterangan, $hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai){
+        try {
+            $this->repository->tambahJadwalRuangan($idJadwal, $idRuangan, $keterangan, $hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function getDataJadwal($idRuangan){
         $data = $this->repository->getDataJadwal($idRuangan);
         $events = [];
         $daysOfWeekMapping = [
-            0 => 'Monday',
-            1 => 'Tuesday',
-            2 => 'Wednesday',
-            3 => 'Thursday',
-            4 => 'Friday',
-            5 => 'Saturday',
-            6 => 'Sunday'
+            0 => 'Sunday',
+            1 => 'Monday',
+            2 => 'Tuesday',
+            3 => 'Wednesday',
+            4 => 'Thursday',
+            5 => 'Friday',
+            6 => 'Saturday'
         ];
 
         foreach ($data as $item) {
             // Menentukan tanggal mulai dan selesai
             $startDate = Carbon::parse($item->tgl_mulai);
             $endDate = Carbon::parse($item->tgl_selesai);
-            $dayOfWeek = $daysOfWeekMapping[$item->day_of_week]; // Bisa jadi integer atau string seperti "Senin", "Selasa", dst.
+            $dayOfWeek = $daysOfWeekMapping[$item->day_of_week - 1]; // Bisa jadi integer atau string seperti "Senin", "Selasa", dst.
 
             // Mengulang dari tgl_mulai hingga tgl_selesai
             while ($startDate <= $endDate) {
@@ -156,5 +165,11 @@ class RuanganServices
         }
 
         return $events;
+    }
+
+    public function cekJadwalRuanganBentrok($idRuangan, $hari, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai){
+        $data = $this->repository->cekJadwalRuanganBentrok($idRuangan, $hari, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai);
+
+        return $data;
     }
 }

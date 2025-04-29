@@ -275,6 +275,8 @@ function getDataJadwal(){
                 ...response.booking  // Data booking
             ];
 
+            console.log(eventsData)
+
             loadFilteredEvents();
         },
         error: function(xhr, status, error) {
