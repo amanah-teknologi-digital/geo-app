@@ -54,12 +54,14 @@
                     <div class="card shadow-none app-calendar-wrapper">
                         <div class="row g-0">
                             <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
-                                <div class="border-bottom p-6 my-sm-0 mb-4">
-                                    <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="offcanvas" data-bs-target="#addEventSidebar" aria-controls="addEventSidebar">
-                                        <i class="icon-base bx bx-plus icon-16px me-2"></i>
-                                        <span class="align-middle">Tambah Jadwal</span>
-                                    </button>
-                                </div>
+                                @if($isEdit)
+                                    <div class="border-bottom p-6 my-sm-0 mb-4">
+                                        <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="offcanvas" data-bs-target="#addEventSidebar" aria-controls="addEventSidebar">
+                                            <i class="icon-base bx bx-plus icon-16px me-2"></i>
+                                            <span class="align-middle">Tambah Jadwal</span>
+                                        </button>
+                                    </div>
+                                @endif
                                 <div class="px-6 pb-2 my-sm-0 p-4">
                                     <!-- Filter -->
                                     <div>
@@ -126,13 +128,13 @@
                 </div>
                 <div class="mb-6">
                     <label class="form-label" for="tgl_jadwal">Pilih Tanggal <span class="text-danger">*</span></label>
-                    <input type="text" id="tgl_jadwal" class="form-control" name="tgl_jadwal" required placeholder="pilih tanggal mulai - selesai">
+                    <input type="text" id="tgl_jadwal" class="form-control" name="tgl_jadwal" required placeholder="pilih tanggal mulai - selesai" autocomplete="off">
                 </div>
                 <div class="mb-6">
                     <label class="form-label" for="jam_jadwal">Pilih Waktu <span class="text-danger">*</span></label>
                     <div class="d-inline-flex gap-2">
-                        <input type="text" id="jam_mulai" class="form-control jam_jadwal" name="jam_mulai" placeholder="pilih jam mulai">
-                        <input type="text" id="jam_selesai" class="form-control jam_jadwal" name="jam_selesai" placeholder="pilih jam selesai">
+                        <input type="text" id="jam_mulai" class="form-control jam_jadwal" name="jam_mulai" placeholder="pilih jam mulai" autocomplete="off">
+                        <input type="text" id="jam_selesai" class="form-control jam_jadwal" name="jam_selesai" placeholder="pilih jam selesai" autocomplete="off">
                     </div>
                     <div class="error-container" id="error-jammulai"></div>
                     <div class="error-container" id="error-jamselesai"></div>
@@ -142,7 +144,52 @@
                         <button type="submit" id="addEventBtn" class="btn btn-primary me-4 btn-add-event"><span class="bx bx-save"></span>&nbsp;Tambah</button>
                         <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1" data-bs-dismiss="offcanvas">Batal</button>
                     </div>
-                    <button class="btn btn-label-danger btn-delete-event d-none">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="offcanvas offcanvas-end event-sidebar" tabindex="-1" id="addEventSidebarUpdate" aria-labelledby="addEventSidebarUpdateLabel" >
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title" id="addEventSidebarUpdateLabel">Update Jadwal</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" data-select2-id="7">
+            <form id="updateJadwal" method="POST" action="{{ route('ruangan.doupdatejadwal') }}">
+                @csrf
+                <input type="hidden" name="idRuangan" value="{{ $idRuangan }}" required>
+                <input type="hidden" name="idJadwal" id="idJadwal" required>
+                <div class="mb-6">
+                    <label class="form-label" for="keterangan_update">Keterangan Jadwal <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="keterangan_update" name="keterangan" autocomplete="off" autofocus placeholder="keterangan jadwal" required>
+                </div>
+                <div class="mb-6">
+                    <label class="form-label" for="hari_update">Pilih Hari <span class="text-danger">*</span></label>
+                    <select class="form-control" name="hari" id="hari_update" required>
+                        <option value="" selected disabled>-- pilih hari --</option>
+                        @foreach ($hari as $value => $label)
+                            <option value="{{ $value }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="form-label" for="tgl_jadwal_update">Pilih Tanggal <span class="text-danger">*</span></label>
+                    <input type="text" id="tgl_jadwal_update" class="form-control" name="tgl_jadwal" required placeholder="pilih tanggal mulai - selesai" autocomplete="off">
+                </div>
+                <div class="mb-6">
+                    <label class="form-label" for="jam_jadwal_update">Pilih Waktu <span class="text-danger">*</span></label>
+                    <div class="d-inline-flex gap-2">
+                        <input type="text" id="jam_mulai_update" class="form-control jam_jadwal_update" name="jam_mulai" placeholder="pilih jam mulai" autocomplete="off">
+                        <input type="text" id="jam_selesai_update" class="form-control jam_jadwal_update" name="jam_selesai" placeholder="pilih jam selesai" autocomplete="off">
+                    </div>
+                    <div class="error-container" id="error-jammulai_update"></div>
+                    <div class="error-container" id="error-jamselesai_update"></div>
+                </div>
+                <div class="d-flex justify-content-sm-between justify-content-start mt-6 gap-2">
+                    <div class="d-flex">
+                        <button type="submit" id="addEventBtnUpdate" class="btn btn-warning text-black me-4 d-none"><span class="bx bx-save"></span>&nbsp;Update</button>
+                        <button class="btn btn-danger d-none" id="tombolHapus"><span class="bx bx-trash"></span>&nbsp;Hapus</button>
+                    </div>
+                    <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1" data-bs-dismiss="offcanvas">Batal</button>
                 </div>
             </form>
         </div>
@@ -180,6 +227,7 @@
 @section('page-script')
     <script>
         let urlGetData = '{{ route('ruangan.getdatajadwal') }}';
+        let isEdit = {{ $isEdit ? 'true' : 'false' }};
         let idRuangan = '{{ $idRuangan }}';
     </script>
     @vite([

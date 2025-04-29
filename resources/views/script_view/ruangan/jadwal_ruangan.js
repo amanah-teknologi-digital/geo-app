@@ -1,22 +1,28 @@
 let eventsData = [];
 let calendarEl;
 let calendar;
+let instanceJadwal, instanceJadwalUpdate, instanceJamMulai, instanceJamSelesai, instanceJamMulaiUpdate, instanceJamSelesaiUpdate;
 
 $(document).ready(function () {
-    inisiasiTanggal();
-    inisiasiJam();
+    instanceJadwal =  inisiasiTanggal("#tgl_jadwal");
+    instanceJadwalUpdate = inisiasiTanggal("#tgl_jadwal_update");
+    instanceJamMulai = inisiasiJamMulai('jam_mulai', 'jam_selesai');
+    instanceJamSelesai = inisiasiJamSelesai('jam_mulai', 'jam_selesai');
+    instanceJamMulaiUpdate = inisiasiJamMulai('jam_mulai_update', 'jam_selesai_update');
+    instanceJamSelesaiUpdate = inisiasiJamSelesai('jam_mulai_update', 'jam_selesai_update');
+
     calendarEl = document.getElementById('calendar');
     inisiasiCalendar();
     I();
-    document.querySelectorAll('[data-bs-toggle="sidebar"]').forEach((function(e) {
-            e.addEventListener("click", (function() {
+    document.querySelectorAll('[data-bs-toggle="sidebar"]').forEach((function (e) {
+            e.addEventListener("click", (function () {
                     var t = e.getAttribute("data-target")
                         , n = e.getAttribute("data-overlay")
                         , o = document.querySelectorAll(".app-overlay");
-                    document.querySelectorAll(t).forEach((function(e) {
+                    document.querySelectorAll(t).forEach((function (e) {
                             e.classList.toggle("show"),
                             null != n && !1 !== n && void 0 !== o && (e.classList.contains("show") ? o[0].classList.add("show") : o[0].classList.remove("show"),
-                                o[0].addEventListener("click", (function(t) {
+                                o[0].addEventListener("click", (function (t) {
                                         t.currentTarget.classList.remove("show"),
                                             e.classList.remove("show")
                                     }
@@ -50,6 +56,10 @@ $(document).ready(function () {
         resetInputTambah()
     });
 
+    $.validator.addMethod("time24", function(value, element) {
+        return this.optional(element) || /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/.test(value); // Format 24 jam: HH:mm
+    }, "Please enter a valid time in 24-hour format (HH:mm).");
+
     $("#tambahJadwal").validate({
         rules: {
             keterangan: {
@@ -63,11 +73,11 @@ $(document).ready(function () {
             },
             jam_mulai: {
                 required: true,
-                time:true
+                time24:true
             },
             jam_selesai: {
                 required: true,
-                time:true
+                time24:true
             }
         },
         messages: {
@@ -82,11 +92,11 @@ $(document).ready(function () {
             },
             jam_mulai: {
                 required: "Jam mulai wajib diisi",
-                time: "Format jam tidak valid"
+                time24: "Format jam tidak valid"
             },
             jam_selesai: {
                 required: "Jam selesai wajib diisi",
-                time: "Format jam tidak valid"
+                time24: "Format jam tidak valid"
             }
         },
         errorPlacement: function(error, element) {
@@ -95,6 +105,61 @@ $(document).ready(function () {
                 error.appendTo("#error-jammulai");
             }else if (element.attr("name") === "jam_selesai") {
                 error.appendTo("#error-jamselesai");
+            } else {
+                // Default: tampilkan setelah elemen
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+    $("#updateJadwal").validate({
+        rules: {
+            keterangan: {
+                required: true
+            },
+            hari: {
+                required: true
+            },
+            tgl_jadwal: {
+                required: true
+            },
+            jam_mulai: {
+                required: true,
+                time24:true
+            },
+            jam_selesai: {
+                required: true,
+                time24:true
+            }
+        },
+        messages: {
+            keterangan: {
+                required: "Keterangan jadwal wajib diisi"
+            },
+            hari: {
+                required: "Hari wajib diisi"
+            },
+            tgl_jadwal: {
+                required: "Tanggal jadwal wajib diisi"
+            },
+            jam_mulai: {
+                required: "Jam mulai wajib diisi",
+                time24: "Format jam tidak valid"
+            },
+            jam_selesai: {
+                required: "Jam selesai wajib diisi",
+                time24: "Format jam tidak valid"
+            }
+        },
+        errorPlacement: function(error, element) {
+            // Menentukan lokasi error berdasarkan id atau atribut lain
+            if (element.attr("name") === "jam_mulai") {
+                error.appendTo("#error-jammulai_update");
+            }else if (element.attr("name") === "jam_selesai") {
+                error.appendTo("#error-jamselesai_update");
             } else {
                 // Default: tampilkan setelah elemen
                 error.insertAfter(element);
@@ -128,30 +193,37 @@ function inisiasiCalendar() {
         },
         events: eventsData,
         eventClick: function(info) {
-            const start = info.event.start;
-            const end = info.event.end;
+            if (isEdit){
+                resetInputUpdate();
+                setDataUpdateJadwal(info);
 
-            const formatDateTime = (date) => {
-                if (!date) return '';
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                return `${day}/${month}/${year} ${hours}:${minutes}`;
-                // Kalau mau tahun di depan, ganti jadi: `${year}-${month}-${day} ${hours}:${minutes}`;
-            };
+                var offcanvas = new bootstrap.Offcanvas(document.getElementById('addEventSidebarUpdate'));
+                offcanvas.show();
+            }else {
+                const start = info.event.start;
+                const end = info.event.end;
 
-            const type = info.event.extendedProps?.type || '';
+                const formatDateTime = (date) => {
+                    if (!date) return '';
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    return `${day}/${month}/${year} ${hours}:${minutes}`;
+                    // Kalau mau tahun di depan, ganti jadi: `${year}-${month}-${day} ${hours}:${minutes}`;
+                };
 
-            // Tambahkan (booking) ke judul kalau type booking
-            const title = info.event.title + (type === 'booking' ? ' (booking)' : '');
+                const type = info.event.extendedProps?.type || '';
 
-            $('#eventModalTitle').text(title);
-            $('#eventModalStart').text(formatDateTime(start));
-            $('#eventModalEnd').text(formatDateTime(end));
-            $('#eventModal').modal('show');
+                // Tambahkan (booking) ke judul kalau type booking
+                const title = info.event.title + (type === 'booking' ? ' (booking)' : '');
 
+                $('#eventModalTitle').text(title);
+                $('#eventModalStart').text(formatDateTime(start));
+                $('#eventModalEnd').text(formatDateTime(end));
+                $('#eventModal').modal('show');
+            }
         },
         eventClassNames: function({ event }) {
             return [
@@ -204,20 +276,54 @@ function I() {
     }
 }
 
-function resetInputTambah(){
-    $('#keterangan').val('');
-    $('#hari').val('');
-    $('#tgl_jadwal').val('');
-    $('#jam_mulai').val('');
-    $('#jam_selesai').val('');
+function setDataUpdateJadwal(data){
+    $('#idJadwal').val(data.event.id);
+    $('#keterangan_update').val(data.event.extendedProps.keterangan);
+    $('#hari_update').val(data.event.extendedProps.day_of_week);
+    let tgl_mulai = new Date(data.event.extendedProps.tgl_mulai);
+    let tgl_selesai = new Date(data.event.extendedProps.tgl_selesai);
+    let type = data.event.extendedProps.type;
+
+    if (type === "jadwal"){
+        $('#tombolHapus').removeClass('d-none');
+        $('#addEventBtnUpdate').removeClass('d-none');
+    }
+
+    instanceJadwalUpdate.setDate([tgl_mulai, tgl_selesai], true)
+    instanceJamMulaiUpdate.setDate(data.event.extendedProps.jam_mulai)
+    instanceJamSelesaiUpdate.setDate(data.event.extendedProps.jam_selesai)
 }
 
-function inisiasiTanggal(){
-    flatpickr("#tgl_jadwal", {
+function resetInputTambah(){
+    $("#tambahJadwal").validate().resetForm();
+    $('#keterangan').val('');
+    $('#hari').val('');
+    instanceJadwal.clear();
+    instanceJamMulai.clear();
+    instanceJamSelesai.clear();
+}
+
+function resetInputUpdate(){
+    $("#updateJadwal").validate().resetForm();
+    $('#keterangan_update').val('');
+    $('#hari_update').val('');
+    $('#tombolHapus').addClass('d-none');
+    $('#addEventBtnUpdate').addClass('d-none');
+    instanceJadwalUpdate.clear();
+    instanceJamMulaiUpdate.clear();
+    instanceJamSelesaiUpdate.clear();
+}
+
+function inisiasiTanggal(dom){
+    return flatpickr(dom, {
         mode: "range",
         dateFormat: "d-m-Y",
         onChange: function(selectedDates, dateStr, instance) {
             // Jika ada dua tanggal yang dipilih, ubah 'to' menjadi 's/d'
+            if (selectedDates.length === 0 || !selectedDates[0]) {
+                return; // Jangan lakukan apa-apa kalau kosong
+            }
+
             if (selectedDates.length === 2) {
                 // Ubah teks di dalam input menjadi "Tanggal Mulai s/d Tanggal Selesai"
                 let startDate = formatDate(selectedDates[0]);  // Format tanggal mulai
@@ -229,33 +335,42 @@ function inisiasiTanggal(){
     });
 }
 
-function inisiasiJam(){
-    flatpickr("#jam_mulai", {
+function inisiasiJamMulai(dom_mulai, dom_selesai) {
+    return flatpickr("#" + dom_mulai, {
         enableTime: true,
         noCalendar: true,
         dateFormat: "H:i",
         time_24hr: true,
-        onChange: function(selectedDates, dateStr, instance) {
+        onChange: function (selectedDates, dateStr, instance) {
+            if (selectedDates.length === 0 || !selectedDates[0]) {
+                return; // Jangan lakukan apa-apa kalau kosong
+            }
             // Set default waktu selesai menjadi waktu mulai
             let endTime = new Date(selectedDates[0].getTime());
             endTime.setMinutes(endTime.getMinutes() + 30);  // Waktu selesai default 30 menit setelah mulai
-            document.getElementById("jam_selesai")._flatpickr.setDate(endTime); // Set waktu selesai otomatis
+            document.getElementById(dom_selesai)._flatpickr.setDate(endTime); // Set waktu selesai otomatis
         }
     });
+}
 
-    flatpickr("#jam_selesai", {
+function inisiasiJamSelesai(dom_mulai, dom_selesai) {
+    return flatpickr("#"+dom_selesai, {
         enableTime: true,
         noCalendar: true,
         dateFormat: "H:i",
         time_24hr: true,
         onChange: function(selectedDates, dateStr, instance) {
-            let startTime = new Date(document.getElementById("jam_mulai")._flatpickr.selectedDates[0].getTime());
+            if (selectedDates.length === 0 || !selectedDates[0]) {
+                return; // Jangan lakukan apa-apa kalau kosong
+            }
+
+            let startTime = new Date(document.getElementById(dom_mulai)._flatpickr.selectedDates[0].getTime());
             let endTime = selectedDates[0];
 
             if (endTime < startTime) {
                 alert("Jam selesai tidak boleh lebih awal dari jam mulai!");
                 instance.clear(); // Hapus pilihan jika selesai < mulai
-                $('#jam_mulai').val('');
+                $('#'+dom_mulai).val('');
             }
         }
     });
@@ -274,8 +389,6 @@ function getDataJadwal(){
                 ...response.jadwal,  // Data jadwal
                 ...response.booking  // Data booking
             ];
-
-            console.log(eventsData)
 
             loadFilteredEvents();
         },

@@ -125,6 +125,15 @@ class RuanganServices
         }
     }
 
+    public function updateJadwalRuangan($idJadwal, $keterangan, $hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai){
+        try {
+            $this->repository->updateJadwalRuangan($idJadwal, $keterangan, $hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function getDataJadwal($idRuangan){
         $data = $this->repository->getDataJadwal($idRuangan);
         $events = [];
@@ -161,7 +170,13 @@ class RuanganServices
                         'end' => $startDate->toDateString() . 'T' . $item->jam_selesai,
                         'extendedProps' => [
                             'calendar' => $cal,
-                            'type' => $item->tipe_jadwal
+                            'type' => $item->tipe_jadwal,
+                            'keterangan' => $item->keterangan,
+                            'day_of_week' => $item->day_of_week,
+                            'jam_mulai' => $item->jam_mulai,
+                            'jam_selesai' => $item->jam_selesai,
+                            'tgl_mulai' => $item->tgl_mulai,
+                            'tgl_selesai' => $item->tgl_selesai
                         ]
                     ];
                 }
@@ -173,8 +188,8 @@ class RuanganServices
         return $events;
     }
 
-    public function cekJadwalRuanganBentrok($idRuangan, $hari, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai){
-        $data = $this->repository->cekJadwalRuanganBentrok($idRuangan, $hari, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai);
+    public function cekJadwalRuanganBentrok($idRuangan, $hari, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai, $idJadwal = null){
+        $data = $this->repository->cekJadwalRuanganBentrok($idRuangan, $hari, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai, $idJadwal);
 
         return $data;
     }

@@ -97,7 +97,7 @@ class RuanganRepository
         $dataRuangan->save();
     }
 
-    public function cekJadwalRuanganBentrok($idRuangan, $hari, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai){
+    public function cekJadwalRuanganBentrok($idRuangan, $hari, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai, $idJadwal){
         // Parse input tanggal
         $tglMulai = Carbon::createFromFormat('d-m-Y', $tglMulai)->format('Y-m-d');
         $tglSelesai = Carbon::createFromFormat('d-m-Y', $tglSelesai)->format('Y-m-d');
@@ -119,9 +119,13 @@ class RuanganRepository
             ->where(function($query) use ($jamMulai, $jamSelesai) {
                 $query->where('jam_mulai', '<', $jamSelesai)
                     ->where('jam_selesai', '>', $jamMulai);
-            })
-            ->exists();
+            });
 
+        if (!empty($idJadwal)){
+            $jadwalBentrok = $jadwalBentrok->where('id_jadwal', '!=', $idJadwal)->exists();
+        }else{
+            $jadwalBentrok = $jadwalBentrok->exists();
+        }
 
         return $jadwalBentrok;
     }
@@ -140,5 +144,22 @@ class RuanganRepository
             'created_at' => now(),
             'updater' => auth()->user()->id
         ]);
+    }
+
+    public function updateJadwalRuangan($idJadwal, $keterangan, $hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai){
+        $jadwalRuangan = JadwalRuangan::find($idJadwal);
+
+        if ($jadwalRuangan) {
+            $jadwalRuangan->id_jadwal = $idJadwal;
+            $jadwalRuangan->keterangan = $keterangan;
+            $jadwalRuangan->day_of_week = $hari;
+            $jadwalRuangan->tgl_mulai = Carbon::createFromFormat('d-m-Y', $tgl_mulai);
+            $jadwalRuangan->tgl_selesai = Carbon::createFromFormat('d-m-Y', $tgl_selesai);
+            $jadwalRuangan->jam_mulai = Carbon::createFromFormat('H:i', $jam_mulai);
+            $jadwalRuangan->jam_selesai = Carbon::createFromFormat('H:i', $jam_selesai);
+            $jadwalRuangan->updated_at = now();
+            $jadwalRuangan->updater = auth()->user()->id;
+            $jadwalRuangan->save();
+        }
     }
 }

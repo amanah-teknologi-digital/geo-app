@@ -263,4 +263,86 @@ class RuanganController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function doUpdateJadwal(Request $request){
+        try {
+            $request->validate([
+                'idRuangan' => ['required'],
+                'idJadwal' => ['required'],
+                'keterangan' => ['required'],
+                'jam_mulai' => ['required', 'date_format:H:i'],
+                'jam_selesai' => ['required', 'date_format:H:i', 'after:jam_mulai'],
+                'tgl_jadwal' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        $parts = explode(' s/d ', $value);
+
+                        // Cek harus ada 2 tanggal
+                        if (count($parts) !== 2) {
+                            return $fail('Format tanggal harus "dd-mm-YYYY s/d dd-mm-YYYY".');
+                        }
+
+                        foreach ($parts as $part) {
+                            $date = \DateTime::createFromFormat('d-m-Y', trim($part));
+                            if (!$date) {
+                                return $fail('Tanggal harus dalam format dd-mm-YYYY.');
+                            }
+
+                            // Tambahan pengecekan error format
+                            $errors = \DateTime::getLastErrors();
+                            if (!empty($errors['warning_count']) || !empty($errors['error_count'])) {
+                                return $fail('Tanggal tidak valid.');
+                            }
+                        }
+                    }
+                ],
+                'hari' => ['required', 'integer', 'between:1,7',
+                    new CekHariDalamRange($request->tgl_jadwal)
+                ],
+            ],[
+                'idRuangan.required' => 'Id ruangan wajib diisi.',
+                'idJadwal.required' => 'Id jadwal wajib diisi.',
+                'keterangan.required' => 'Keterangan jadwal wajib diisi.',
+                'hari.required' => 'Hari wajib diisi.',
+                'hari.integer' => 'Hari tidak valid.',
+                'hari.between' => 'Hari harus antara senin - minggu.',
+                'tgl_jadwal.required' => 'Data tanggal wajib diisi.',
+                'jam_mulai.required' => 'Jam mulai wajib diisi.',
+                'jam_mulai.date_format' => 'Format jam mulai harus HH:MM (contoh: 14:30).',
+                'jam_selesai.required' => 'Jam selesai wajib diisi.',
+                'jam_selesai.date_format' => 'Format jam selesai harus HH:MM (contoh: 14:30).',
+                'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.'
+            ]);
+
+            $idRuangan = $request->idRuangan;
+            $idJadwal = $request->idJadwal;
+            $dataJadwal = explode(' s/d ', $request->tgl_jadwal);
+            $tgl_mulai = $dataJadwal[0];
+            $tgl_selesai = $dataJadwal[1];
+            $jam_mulai = $request->jam_mulai;
+            $jam_selesai = $request->jam_selesai;
+
+            $cekJadwalBentrok = $this->service->cekJadwalRuanganBentrok($idRuangan, $request->hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai, $idJadwal);
+
+            if ($cekJadwalBentrok){
+                return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Jadwal yang diinputkan bentrok dengan jadwal yang sudah ada.');
+            }
+
+            DB::beginTransaction();
+
+            $this->service->updateJadwalRuangan($idJadwal, $request->keterangan, $request->hari, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai);
+
+            DB::commit();
+
+            return redirect(route('ruangan.jadwal', $idRuangan))->with('success', 'Berhasil Update Jadwal.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }
