@@ -145,7 +145,7 @@
                                 <small>Input Jadwal Booking.</small>
                             </div>
                             <div class="row g-6 mt-4 app-calendar-wrapper">
-                                <div class="row g-0">
+                                <div class="row g-0 w-100">
                                     <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
                                         <div class="px-6 pb-2 my-sm-0 p-4">
                                             <!-- Filter -->
