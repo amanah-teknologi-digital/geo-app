@@ -1,11 +1,17 @@
+let stepper;
 $(document).ready(function () {
-    const stepper = new Stepper(document.querySelector('#wizard'), {
-        linear: false,
-        animation: true
-    });
+    const stepperEl = document.querySelector('.bs-stepper');
+    if (stepperEl) {
+        stepper = new Stepper(stepperEl, {
+            linear: false,
+            animation: true
+        });
 
-    $('#btn-next-1').click(() => stepper.next());
-    $('#btn-next-2').click(() => stepper.next());
-    $('#btn-prev-2').click(() => stepper.previous());
-    $('#btn-prev-3').click(() => stepper.previous());
+        $('#btn-next-1').click(() => stepper.to(2));
+        $('#btn-prev-1').click(() => stepper.to(1));
+        $('#btn-prev-2').click(() => stepper.to(2));
+        $('#btn-next-2').click(() => stepper.to(3));
+    } else {
+        console.error('Stepper element not found!');
+    }
 });

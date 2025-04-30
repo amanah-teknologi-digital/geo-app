@@ -52,27 +52,27 @@
                     </a>
                 </div>
             </div>
-            <div id="#wizard" class="bs-stepper mt-2 linear">
+            <div class="bs-stepper mt-2">
                 <div class="bs-stepper-header">
-                    <div class="step active" data-target="#data-pemohon">
-                        <button type="button" class="step-trigger" aria-selected="true"><span class="bs-stepper-circle">1</span><span class="bs-stepper-label"><span class="bs-stepper-title">Data Pemohon</span><span class="bs-stepper-subtitle">Detail Data Pemohon</span></span></button>
+                    <div class="step" data-target="#data-pemohon">
+                        <button type="button" class="step-trigger"><span class="bs-stepper-circle">1</span><span class="bs-stepper-label"><span class="bs-stepper-title">Data Pemohon</span><span class="bs-stepper-subtitle">Detail Data Pemohon</span></span></button>
                     </div>
                     <div class="line">
                         <i class="icon-base bx bx-chevron-right icon-md"></i>
                     </div>
                     <div class="step" data-target="#data-ruangan">
-                        <button type="button" class="step-trigger" aria-selected="false" disabled="disabled"><span class="bs-stepper-circle">2</span><span class="bs-stepper-label"><span class="bs-stepper-title">Pilih Ruangan</span><span class="bs-stepper-subtitle">Input Jadwal Booking</span></span></button>
+                        <button type="button" class="step-trigger" ><span class="bs-stepper-circle">2</span><span class="bs-stepper-label"><span class="bs-stepper-title">Pilih Ruangan</span><span class="bs-stepper-subtitle">Input Jadwal Booking</span></span></button>
                     </div>
                     <div class="line">
                         <i class="icon-base bx bx-chevron-right icon-md"></i>
                     </div>
                     <div class="step" data-target="#data-pengajuan">
-                        <button type="button" class="step-trigger" aria-selected="false" disabled="disabled"><span class="bs-stepper-circle">3</span><span class="bs-stepper-label"><span class="bs-stepper-title">Data Pengajuan</span><span class="bs-stepper-subtitle">Input Detail Pengajuan</span></span></button>
+                        <button type="button" class="step-trigger"><span class="bs-stepper-circle">3</span><span class="bs-stepper-label"><span class="bs-stepper-title">Data Pengajuan</span><span class="bs-stepper-subtitle">Input Detail Pengajuan</span></span></button>
                     </div>
                 </div>
                 <div class="bs-stepper-content">
                     <form id="wizard-validation" action="{{ route('pengajuanruangan.dotambah') }}" onsubmit="return false">
-                        <div id="data-pemohon" class="content active">
+                        <div id="data-pemohon" class="content">
                             <div class="content-header mb-4">
                                 <h6 class="mb-0">Data Pemohon</h6>
                                 <small>Input Detail Data Pemohon.</small>
@@ -125,9 +125,61 @@
                                 </div>
                                 <div class="col-12 d-flex justify-content-between">
                                     <div></div>
-                                    <button class="btn btn-primary btn-next">
+                                    <button class="btn btn-primary btn-next" id="btn-next-1">
                                         <span class="align-middle d-sm-inline-block d-none me-sm-2">Selanjutnya</span>
                                         <i class="icon-base bx bx-chevron-right icon-sm me-sm-n2"></i>
+                                    </button>
+                                </div>
+                                <div class="col-12">
+                                    <ul class="fa-ul ml-auto float-end mt-5">
+                                        <li>
+                                            <small><em>Jadwal yang tersedia adalah <b>H + 1</b> dari waktu pengajuan.</em></small>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="data-ruangan" class="content">
+                            <div class="content-header mb-4">
+                                <h6 class="mb-0">Data Pemohon</h6>
+                                <small>Input Detail Data Pemohon.</small>
+                            </div>
+                            <div class="row g-6">
+
+                                <div class="col-12 d-flex justify-content-between">
+                                    <button class="btn btn-secondary btn-prev" id="btn-prev-1">
+                                        <i class="icon-base bx bx-chevron-left icon-sm ms-sm-n2 me-sm-2"></i>
+                                        <span class="align-middle d-sm-inline-block">Sebelumnya</span>
+                                    </button>
+                                    <button class="btn btn-primary btn-next" id="btn-next-2">
+                                        <span class="align-middle d-sm-inline-block d-none me-sm-2">Selanjutnya</span>
+                                        <i class="icon-base bx bx-chevron-right icon-sm me-sm-n2"></i>
+                                    </button>
+                                </div>
+                                <div class="col-12">
+                                    <ul class="fa-ul ml-auto float-end mt-5">
+                                        <li>
+                                            <small><em>Jadwal yang tersedia adalah <b>H + 1</b> dari waktu pengajuan.</em></small>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="data-pengajuan" class="content">
+                            <div class="content-header mb-4">
+                                <h6 class="mb-0">Data Pengajuan</h6>
+                                <small>Input Detail Data Pemohon.</small>
+                            </div>
+                            <div class="row g-6">
+
+                                <div class="col-12 d-flex justify-content-between">
+                                    <button class="btn btn-secondary btn-prev" id="btn-prev-2">
+                                        <i class="icon-base bx bx-chevron-left icon-sm ms-sm-n2 me-sm-2"></i>
+                                        <span class="align-middle d-sm-inline-block">Sebelumnya</span>
+                                    </button>
+                                    <button class="btn btn-success" id="btn-save">
+                                        <i class="icon-base bx bx-save icon-sm"></i>&nbsp;
+                                        <span class="align-middle d-sm-inline-block">Ajukan Data</span>
                                     </button>
                                 </div>
                                 <div class="col-12">
