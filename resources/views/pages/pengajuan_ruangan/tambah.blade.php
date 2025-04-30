@@ -54,77 +54,79 @@
             </div>
             <div id="#wizard" class="bs-stepper mt-2 linear">
                 <div class="bs-stepper-header">
-                    <div class="step active" data-target="#account-details-validation">
-                        <button type="button" class="step-trigger" aria-selected="true">
-                            <span class="bs-stepper-circle">1</span>
-                            <span class="bs-stepper-label">
-                                    <span class="bs-stepper-title">Account Details</span>
-                                    <span class="bs-stepper-subtitle">Setup Account Details</span>
-                                    </span>
-                        </button>
+                    <div class="step active" data-target="#data-pemohon">
+                        <button type="button" class="step-trigger" aria-selected="true"><span class="bs-stepper-circle">1</span><span class="bs-stepper-label"><span class="bs-stepper-title">Data Pemohon</span><span class="bs-stepper-subtitle">Detail Data Pemohon</span></span></button>
                     </div>
                     <div class="line">
                         <i class="icon-base bx bx-chevron-right icon-md"></i>
                     </div>
-                    <div class="step" data-target="#personal-info-validation">
-                        <button type="button" class="step-trigger" aria-selected="false" disabled="disabled">
-                            <span class="bs-stepper-circle">2</span>
-                            <span class="bs-stepper-label">
-                                    <span class="bs-stepper-title">Personal Info</span>
-                                    <span class="bs-stepper-subtitle">Add personal info</span>
-                                    </span>
-                        </button>
+                    <div class="step" data-target="#data-ruangan">
+                        <button type="button" class="step-trigger" aria-selected="false" disabled="disabled"><span class="bs-stepper-circle">2</span><span class="bs-stepper-label"><span class="bs-stepper-title">Pilih Ruangan</span><span class="bs-stepper-subtitle">Input Jadwal Booking</span></span></button>
                     </div>
                     <div class="line">
                         <i class="icon-base bx bx-chevron-right icon-md"></i>
                     </div>
-                    <div class="step" data-target="#social-links-validation">
-                        <button type="button" class="step-trigger" aria-selected="false" disabled="disabled">
-                            <span class="bs-stepper-circle">3</span>
-                            <span class="bs-stepper-label">
-                                    <span class="bs-stepper-title">Social Links</span>
-                                    <span class="bs-stepper-subtitle">Add social links</span>
-                                    </span>
-                        </button>
+                    <div class="step" data-target="#data-pengajuan">
+                        <button type="button" class="step-trigger" aria-selected="false" disabled="disabled"><span class="bs-stepper-circle">3</span><span class="bs-stepper-label"><span class="bs-stepper-title">Data Pengajuan</span><span class="bs-stepper-subtitle">Input Detail Pengajuan</span></span></button>
                     </div>
                 </div>
                 <div class="bs-stepper-content">
                     <form id="wizard-validation" action="{{ route('pengajuanruangan.dotambah') }}" onsubmit="return false">
-                        <div id="account-details-validation" class="content active dstepper-block fv-plugins-bootstrap5 fv-plugins-framework">
+                        <div id="data-pemohon" class="content active">
                             <div class="content-header mb-4">
-                                <h6 class="mb-0">Account Details</h6>
-                                <small>Enter Your Account Details.</small>
+                                <h6 class="mb-0">Data Pemohon</h6>
+                                <small>Input Detail Data Pemohon.</small>
                             </div>
                             <div class="row g-6">
-                                <div class="col-sm-6 form-control-validation fv-plugins-icon-container">
-                                    <label class="form-label" for="formValidationUsername">Username</label>
-                                    <input type="text" name="formValidationUsername" id="formValidationUsername" class="form-control" placeholder="johndoe">
-                                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div></div>
-                                <div class="col-sm-6 form-control-validation fv-plugins-icon-container">
-                                    <label class="form-label" for="formValidationEmail">Email</label>
-                                    <input type="email" name="formValidationEmail" id="formValidationEmail" class="form-control" placeholder="john.doe@email.com" aria-label="john.doe">
-                                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div></div>
-                                <div class="col-sm-6 form-control-validation form-password-toggle fv-plugins-icon-container">
-                                    <label class="form-label" for="formValidationPass">Password</label>
-                                    <div class="input-group input-group-merge has-validation">
-                                        <input type="password" id="formValidationPass" name="formValidationPass" class="form-control" placeholder="············" aria-describedby="formValidationPass2">
-                                        <span class="input-group-text cursor-pointer" id="formValidationPass2"><i class="icon-base bx bx-hide"></i></span>
-                                    </div><div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
+                                <div class="col-sm-6">
+                                    <label class="form-label" >Nama Pengaju <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" placeholder="nama pengaju" readonly value="{{ auth()->user()->name }}">
                                 </div>
-                                <div class="col-sm-6 form-control-validation form-password-toggle fv-plugins-icon-container">
-                                    <label class="form-label" for="formValidationConfirmPass">Confirm Password</label>
-                                    <div class="input-group input-group-merge has-validation">
-                                        <input type="password" id="formValidationConfirmPass" name="formValidationConfirmPass" class="form-control" placeholder="············" aria-describedby="formValidationConfirmPass2">
-                                        <span class="input-group-text cursor-pointer" id="formValidationConfirmPass2"><i class="icon-base bx bx-hide"></i></span>
-                                    </div><div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
+                                <div class="col-sm-6">
+                                    <label class="form-label" >Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" placeholder="nomor kartu id (NRP/KTP)" readonly value="{{ auth()->user()->kartu_id }}">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label  class="form-label">No. Hp <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" value="{{ Auth()->user()->no_hp }}" readonly>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="form-label">Email <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" value="{{ Auth()->user()->email }}" readonly>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="form-label">Email ITS<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" value="{{ Auth()->user()->email_its }}" readonly>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="form-label">Status Peminjam<span class="text-danger">*</span></label>
+                                    <select class="form-control" name="status_peminjam" id="status_peminjam" required>
+                                        <option value="" selected disabled>-- Pilih Status Peminjam --</option>
+                                        @foreach($dataStatusPeminjam as $status)
+                                            <option value="{{ $status->id_statuspengaju }}">{{ $status->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div  class="col-sm-6">
+                                    <label class="form-label">File Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
+                                    @php
+                                        $file = auth()->user()->file_kartuid;
+                                        $filePath = auth()->user()->files->location;
+                                        $imageUrl = Storage::disk('local')->exists($filePath)
+                                            ? route('file.getprivatefile', $file)
+                                            : asset('assets/img/no_image.jpg');
+                                    @endphp
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modals-transparent">
+                                            Lihat file
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="col-12 d-flex justify-content-between">
-                                    <button class="btn btn-label-secondary btn-prev" disabled="">
-                                        <i class="icon-base bx bx-chevron-left icon-sm ms-sm-n2 me-sm-2"></i>
-                                        <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                                    </button>
+                                    <div></div>
                                     <button class="btn btn-primary btn-next">
-                                        <span class="align-middle d-sm-inline-block d-none me-sm-2">Next</span>
+                                        <span class="align-middle d-sm-inline-block d-none me-sm-2">Selanjutnya</span>
                                         <i class="icon-base bx bx-chevron-right icon-sm me-sm-n2"></i>
                                     </button>
                                 </div>
@@ -142,15 +144,15 @@
             </div>
         </div>
     </div>
-{{--    <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">--}}
-{{--        <div class="modal-dialog modal-lg">--}}
-{{--            <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">--}}
-{{--                <div class="modal-body">--}}
-{{--                    <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
+                <div class="modal-body">
+                    <img id="kartu_idmodal" src="{{ $imageUrl }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('page-script')
     <script>

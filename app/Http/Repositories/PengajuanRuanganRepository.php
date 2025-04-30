@@ -9,6 +9,7 @@ use App\Models\PengajuanPersuratan;
 use App\Models\PengajuanRuangan;
 use App\Models\Pengumuman;
 use App\Models\PersetujuanPersuratan;
+use App\Models\StatusPengaju;
 use App\Models\User;
 use Ramsey\Uuid\Nonstandard\Uuid;
 
@@ -56,17 +57,8 @@ class PengajuanRuanganRepository
         return $data;
     }
 
-    public function getJenisSurat($id_jenissurat, $isEdit){
-        $data = JenisSurat::select('id_jenissurat', 'nama', 'default_form', 'created_at', 'updated_at')->orderBy('created_at');
-        if (!empty($id_jenissurat)) {
-            $data = $data->where('id_jenissurat', $id_jenissurat)->first();
-        }else{
-            if ($isEdit){
-                $data = $data->where('is_aktif', 1)->get();
-            }else{
-                $data = $data->get();
-            }
-        }
+    public function getDataStatusPeminjam(){
+        $data = StatusPengaju::get();
 
         return $data;
     }

@@ -77,8 +77,8 @@ class PengajuanRuanganController extends Controller
     public function tambahPengajuan(){
         $title = "Tambah Pengajuan";
 
-        $dataJenisSurat = $this->service->getJenisSurat(isEdit: true);
+        $dataStatusPeminjam = $this->service->getDataStatusPeminjam();
 
-        return view('pages.pengajuan_ruangan.tambah', compact('title', 'dataJenisSurat'));
+        return view('pages.pengajuan_ruangan.tambah', compact('title', 'dataStatusPeminjam'));
     }
 }

@@ -32,8 +32,8 @@ class PengajuanRuanganServices
         }
     }
 
-    public function getJenisSurat($id_jenissurat = null, $isEdit = false){
-        $data = $this->repository->getJenisSurat($id_jenissurat, $isEdit);
+    public function getDataStatusPeminjam(){
+        $data = $this->repository->getDataStatusPeminjam();
 
         return $data;
     }
