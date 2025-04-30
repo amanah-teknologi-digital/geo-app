@@ -21,6 +21,7 @@
     'resources/assets/vendor/libs/tinymce/tinymce.scss',
     'resources/assets/vendor/libs/fullcalendar/fullcalendar.scss',
     'resources/assets/vendor/libs/flatpickr/flatpickr.scss',
+    'resources/assets/vendor/libs/bs-stepper/bs-stepper.scss',
     ])
 @yield('vendor-style')
 

@@ -12,6 +12,7 @@
   'resources/assets/vendor/libs/tinymce/tinymce.js',
   'resources/assets/vendor/libs/fullcalendar/fullcalendar.js',
   'resources/assets/vendor/libs/flatpickr/flatpickr.js',
+  'resources/assets/vendor/libs/bs-stepper/bs-stepper.js',
 ])
 
 @yield('vendor-script')
