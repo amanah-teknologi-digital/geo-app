@@ -79,6 +79,6 @@ class PengajuanRuanganController extends Controller
 
         $dataJenisSurat = $this->service->getJenisSurat(isEdit: true);
 
-        return view('pages.pengajuan_surat.tambah', compact('title', 'dataJenisSurat'));
+        return view('pages.pengajuan_ruangan.tambah', compact('title', 'dataJenisSurat'));
     }
 }
