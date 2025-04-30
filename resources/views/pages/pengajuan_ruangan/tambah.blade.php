@@ -133,7 +133,7 @@
                                 <div class="col-12">
                                     <ul class="fa-ul ml-auto float-end mt-5">
                                         <li>
-                                            <small><em>Jadwal yang tersedia adalah <b>H + 1</b> dari waktu pengajuan.</em></small>
+                                            <small><em>Mohon periksa <b>data diri anda</b> sebelum melanjutkan ke tahap berikutnya.</em></small>
                                         </li>
                                     </ul>
                                 </div>
@@ -141,8 +141,8 @@
                         </div>
                         <div id="data-ruangan" class="content">
                             <div class="content-header mb-4">
-                                <h6 class="mb-0">Data Pemohon</h6>
-                                <small>Input Detail Data Pemohon.</small>
+                                <h6 class="mb-0">Pilih Ruangan</h6>
+                                <small>Input Jadwal Booking.</small>
                             </div>
                             <div class="row g-6">
 
@@ -168,10 +168,9 @@
                         <div id="data-pengajuan" class="content">
                             <div class="content-header mb-4">
                                 <h6 class="mb-0">Data Pengajuan</h6>
-                                <small>Input Detail Data Pemohon.</small>
+                                <small>Input Detail Pengajuan.</small>
                             </div>
                             <div class="row g-6">
-
                                 <div class="col-12 d-flex justify-content-between">
                                     <button class="btn btn-secondary btn-prev" id="btn-prev-2">
                                         <i class="icon-base bx bx-chevron-left icon-sm ms-sm-n2 me-sm-2"></i>
