@@ -101,7 +101,7 @@
                                 <div class="col-sm-6">
                                     <label class="form-label">Status Peminjam<span class="text-danger">*</span></label>
                                     <select class="form-control" name="status_peminjam" id="status_peminjam" required>
-                                        <option value="" selected disabled>-- Pilih Status Peminjam --</option>
+                                        <option value="" selected disabled>-- pilih status peminjam --</option>
                                         @foreach($dataStatusPeminjam as $status)
                                             <option value="{{ $status->id_statuspengaju }}">{{ $status->nama }}</option>
                                         @endforeach
