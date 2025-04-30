@@ -52,7 +52,7 @@
                     </a>
                 </div>
             </div>
-            <div class="bs-stepper mt-2">
+            <div class="bs-stepper mt-2" id="wizard">
                 <div class="bs-stepper-header">
                     <div class="step" data-target="#data-pemohon">
                         <button type="button" class="step-trigger"><span class="bs-stepper-circle">1</span><span class="bs-stepper-label"><span class="bs-stepper-title">Data Pemohon</span><span class="bs-stepper-subtitle">Detail Data Pemohon</span></span></button>
@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="form-label">Status Peminjam<span class="text-danger">*</span></label>
-                                    <select class="form-control" name="status_peminjam" id="status_peminjam" required>
+                                    <select class="form-control" name="status_peminjam" id="status_peminjam">
                                         <option value="" selected disabled>-- pilih status peminjam --</option>
                                         @foreach($dataStatusPeminjam as $status)
                                             <option value="{{ $status->id_statuspengaju }}">{{ $status->nama }}</option>
@@ -144,7 +144,41 @@
                                 <h6 class="mb-0">Pilih Ruangan</h6>
                                 <small>Input Jadwal Booking.</small>
                             </div>
-                            <div class="row g-6">
+                            <div class="row g-6 mt-4 app-calendar-wrapper">
+                                <div class="row g-0">
+                                    <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
+                                        <div class="px-6 pb-2 my-sm-0 p-4">
+                                            <!-- Filter -->
+                                            <div>
+                                                <h5>Filter Jadwal</h5>
+                                            </div>
+
+                                            <div class="form-check form-check-secondary mb-5 ms-2">
+                                                <input class="form-check-input select-all" type="checkbox" id="selectAll" data-value="all" checked="">
+                                                <label class="form-check-label" for="selectAll">Tampilkan Semua</label>
+                                            </div>
+
+                                            <div class="app-calendar-events-filter text-heading">
+                                                <div class="form-check form-check-success mb-5 ms-2">
+                                                    <input class="form-check-input input-filter" type="checkbox" id="select-jadwal" data-value="jadwal" checked="">
+                                                    <label class="form-check-label" for="select-jadwal">Jadwal Kuliah</label>
+                                                </div>
+                                                <div class="form-check form-check-primary mb-5 ms-2">
+                                                    <input class="form-check-input input-filter" type="checkbox" id="select-booking" data-value="booking" checked="">
+                                                    <label class="form-check-label" for="select-booking">Jadwal Booking</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col app-calendar-content">
+                                        <div class="card shadow-none border-0">
+                                            <div class="card-body pb-0">
+                                                <div id="calendar"></div>
+                                            </div>
+                                        </div>
+                                        <div class="app-overlay"></div>
+                                    </div>
+                                </div>
 
                                 <div class="col-12 d-flex justify-content-between">
                                     <button class="btn btn-secondary btn-prev" id="btn-prev-1">
