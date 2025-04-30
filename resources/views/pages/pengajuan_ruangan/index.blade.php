@@ -48,7 +48,7 @@
                             <thead>
                             <tr>
                                 <th style="border-top-width: 1px" nowrap class="text-center">No</th>
-                                <th style="border-top-width: 1px" nowrap>Jenis Surat</th>
+                                <th style="border-top-width: 1px" nowrap>Nama Ruangan</th>
                                 <th style="border-top-width: 1px">Data Pengaju</th>
                                 <th style="border-top-width: 1px">Keterangan</th>
                                 <th style="border-top-width: 1px" nowrap>Status Pengajuan</th>
@@ -93,8 +93,8 @@
     <script>
         let title = "{{ $title }}";
         let isTambah = "{{ $isTambah }}";
-        let routeName = "{{ route('pengajuansurat.getdata') }}"; // Ensure route name is valid
-        let routeTambah = "{{ route('pengajuansurat.tambah') }}"
+        let routeName = "{{ route('pengajuanruangan.getdata') }}"; // Ensure route name is valid
+        let routeTambah = "{{ route('pengajuanruangan.tambah') }}"
     </script>
     @vite('resources/views/script_view/pengajuan_ruangan/list_pengajuan.js')
 @endsection

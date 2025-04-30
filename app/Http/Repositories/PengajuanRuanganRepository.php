@@ -6,6 +6,7 @@ use App\Models\FilePengajuanSurat;
 use App\Models\Files;
 use App\Models\JenisSurat;
 use App\Models\PengajuanPersuratan;
+use App\Models\PengajuanRuangan;
 use App\Models\Pengumuman;
 use App\Models\PersetujuanPersuratan;
 use App\Models\User;
@@ -14,8 +15,7 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class PengajuanRuanganRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
-        $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'email_its', 'kartu_id', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
-            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat']);
+        $data = PengajuanRuangan::with(['pihakpengaju','pihakupdater','statuspengaju','ruangan','statuspengajuan','persetujuan','pengajuandetail']);
 
         $id_pengguna = auth()->user()->id;
         if ($id_akses == 8){ //pengguna
@@ -29,7 +29,7 @@ class PengajuanRuanganRepository
 
         if ($id_akses == 2){ // admin geo harus status tidak draft
             $data = $data->where('id_statuspengajuan', '!=', 0)
-                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_surat WHERE persetujuan_surat.id_pengajuan = pengajuan_surat.id_pengajuan AND persetujuan_surat.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
+                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_ruangan WHERE persetujuan_ruangan.id_pengajuan = pengajuan_ruangan.id_pengajuan AND persetujuan_ruangan.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
                 ->orderByRaw('CASE
                     WHEN id_statuspengajuan = 5 THEN 0
                     ELSE 1
@@ -38,7 +38,7 @@ class PengajuanRuanganRepository
 
         if ($id_akses == 1){ //super admin
             $data = $data
-                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_surat WHERE persetujuan_surat.id_pengajuan = pengajuan_surat.id_pengajuan AND persetujuan_surat.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
+                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_ruangan WHERE persetujuan_ruangan.id_pengajuan = pengajuan_ruangan.id_pengajuan AND persetujuan_ruangan.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
                 ->orderByRaw('CASE
                     WHEN id_statuspengajuan = 0 THEN 0
                     WHEN id_statuspengajuan = 4 THEN 1

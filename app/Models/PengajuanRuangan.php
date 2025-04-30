@@ -47,6 +47,11 @@ class PengajuanRuangan extends Model
         return $this->belongsTo(User::class, 'updater', 'id');
     }
 
+    public function ruangan()
+    {
+        return $this->belongsTo(Ruangan::class, 'id_ruangan', 'id_ruangan');
+    }
+
     public function statuspengaju()
     {
         return $this->belongsTo(StatusPengaju::class, 'id_statuspengaju', 'id_statuspengaju');

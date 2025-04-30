@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Repositories\PengajuanRuanganRepository;
 use App\Http\Services\PengajuanRuanganServices;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class PengajuanRuanganController extends Controller
 {
@@ -71,5 +72,13 @@ class PengajuanRuanganController extends Controller
         }
 
         return response()->json(['message' => 'Invalid request'], 400);
+    }
+
+    public function tambahPengajuan(){
+        $title = "Tambah Pengajuan";
+
+        $dataJenisSurat = $this->service->getJenisSurat(isEdit: true);
+
+        return view('pages.pengajuan_surat.tambah', compact('title', 'dataJenisSurat'));
     }
 }
