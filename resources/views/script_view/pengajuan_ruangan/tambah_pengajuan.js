@@ -96,7 +96,7 @@ function stepperHandler(){
     $('#btn-next-2').click(() => {
         if (formValidation.form()){
             checkAvaliableJadwal();
-            stepper.to(3);
+            //stepper.to(3);
         }
     });
 
@@ -151,10 +151,12 @@ function validasiForm() {
                 required: true
             },
             jam_mulai: {
-                required: true
+                required: true,
+                time24:true
             },
             jam_selesai: {
-                required: true
+                required: true,
+                time24:true
             }
         },
         messages: {
@@ -377,25 +379,27 @@ function getDataJadwal(){
 
 function checkAvaliableJadwal(){
     let idRuangan = $('#ruangan').val();
+    let tanggalBooking = $('#tanggal_booking').val();
+    let jamMulai = $('#jam_mulai').val();
+    let jamSelesai = $('#jam_selesai').val();
 
     $.ajax({
-        url: urlGetData,  // Ganti dengan URL API yang sesuai
+        url: urlCheckJadwalRuangan,  // Ganti dengan URL API yang sesuai
         method: 'GET',
         dataType: 'json',
         data:{
-            'id_ruangan': idRuangan
+            'id_ruangan': idRuangan,
+            'tanggal_booking': tanggalBooking,
+            'jam_mulai': jamMulai,
+            'jam_selesai': jamSelesai
         },
         success: function(response) {
-            eventsData = [
-                ...response.jadwal,  // Data jadwal
-                ...response.booking  // Data booking
-            ];
-
-            loadFilteredEvents();
+            console.log(response);
         },
         error: function(xhr, status, error) {
-            eventsData = [];
-            loadFilteredEvents();
+            instanceJadwal.clear();
+            instanceJamMulai.clear();
+            instanceJamSelesai.clear();
         }
     });
 }
