@@ -168,16 +168,29 @@
                                                     <label class="form-check-label" for="select-booking">Jadwal Booking</label>
                                                 </div>
                                             </div>
-
-                                            <div>
-                                                <h5>Pilih Ruangan</h5>
+                                            <hr>
+                                            <div class="mb-6">
+                                                <label class="form-label" for="ruangan">Pilih Ruangan <span class="text-danger">*</span></label>
+                                                <select name="ruangan" id="ruangan" class="form-control">
+                                                    <option value="" selected disabled>-- Pilih Ruangan --</option>
+                                                    @foreach($dataRuangan as $ruangan)
+                                                        <option value="{{ $ruangan->id_ruangan }}">{{ $ruangan->kode_ruangan.' - '.$ruangan->nama }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
-                                            <select name="ruangan" id="ruangan" class="form-control">
-                                                <option value="" selected disabled>-- Pilih Ruangan --</option>
-                                                @foreach($dataRuangan as $ruangan)
-                                                    <option value="{{ $ruangan->id_ruangan }}">{{ $ruangan->kode_ruangan.' - '.$ruangan->nama }}</option>
-                                                @endforeach
-                                            </select>
+                                            <div class="mb-6">
+                                                <label class="form-label" for="tanggal_booking">Pilih Tanggal <span class="text-danger">*</span></label>
+                                                <input type="text" name="tanggal_booking" id="tanggal_booking" class="form-control">
+                                            </div>
+                                            <div class="mb-6">
+                                                <label class="form-label" for="jam_jadwal">Pilih Waktu <span class="text-danger">*</span></label>
+                                                <div class="d-inline-flex gap-2">
+                                                    <input type="text" id="jam_mulai" class="form-control jam_jadwal" name="jam_mulai" placeholder="pilih jam mulai" autocomplete="off">
+                                                    <input type="text" id="jam_selesai" class="form-control jam_jadwal" name="jam_selesai" placeholder="pilih jam selesai" autocomplete="off">
+                                                </div>
+                                                <div class="error-container" id="error-jammulai"></div>
+                                                <div class="error-container" id="error-jamselesai"></div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col app-calendar-content">
@@ -248,10 +261,40 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" >Detail Jadwal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="w-100 p-5">
+                        <tr>
+                            <td style="width: 35%">Nama Jadwal</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 64%">&nbsp;<span class="fw-bold" id="eventModalTitle"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%">Waktu Mulai</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 64%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalStart"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%">Waktu Selesai</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 64%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalEnd"></span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('page-script')
     <script>
-        let routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
+        let urlGetData = '{{ route('ruangan.getdatajadwal') }}';
+        let urlCheckJadwalRuangan = '{{ route('ruangan.cekdatajadwal') }}';
     </script>
     @vite('resources/views/script_view/pengajuan_ruangan/tambah_pengajuan.js')
 @endsection

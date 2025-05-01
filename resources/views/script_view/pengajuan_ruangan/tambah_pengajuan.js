@@ -4,6 +4,7 @@ let calendar;
 let formValidationEL;
 let formValidation;
 let stepperEl;
+let instanceJadwal, instanceJamMulai, instanceJamSelesai;
 
 $(document).ready(function () {
     stepperEl = document.getElementById('wizard');
@@ -16,7 +17,23 @@ $(document).ready(function () {
     inisiasiCalendar();
     I();
     filterHandler();
-    // $('#ruangan').select2({width:'100%', dropdownPosition: 'below'})
+    instanceJadwal =  inisiasiTanggal("#tanggal_booking");
+    instanceJamMulai = inisiasiJamMulai('jam_mulai', 'jam_selesai');
+    instanceJamSelesai = inisiasiJamSelesai('jam_mulai', 'jam_selesai');
+
+    $('#ruangan').on('change', function() {
+        let value = $(this).val();
+        instanceJadwal.clear();
+        instanceJamMulai.clear();
+        instanceJamSelesai.clear();
+
+        if (value){
+            getDataJadwal();
+        }else{
+            eventsData = [];
+            loadFilteredEvents();
+        }
+    });
 });
 
 function filterHandler(){
@@ -78,6 +95,7 @@ function stepperHandler(){
 
     $('#btn-next-2').click(() => {
         if (formValidation.form()){
+            checkAvaliableJadwal();
             stepper.to(3);
         }
     });
@@ -100,6 +118,9 @@ function hiddenStep1(){
 
 function hiddenStep2(){
     $('#ruangan').hide();
+    $('#tanggal_booking').hide();
+    $('#jam_mulai').hide();
+    $('#jam_selesai').hide();
 }
 
 function showStep1(){
@@ -108,6 +129,9 @@ function showStep1(){
 
 function showStep2(){
     $('#ruangan').show();
+    $('#tanggal_booking').show();
+    $('#jam_mulai').show();
+    $('#jam_selesai').show();
 }
 
 function validasiForm() {
@@ -118,9 +142,18 @@ function validasiForm() {
     formValidation = formValidationEL.validate({
         rules: {
             status_peminjam: {
-                required: true
+                required: false
             },
             ruangan: {
+                required: true
+            },
+            tanggal_booking: {
+                required: true
+            },
+            jam_mulai: {
+                required: true
+            },
+            jam_selesai: {
                 required: true
             }
         },
@@ -130,11 +163,27 @@ function validasiForm() {
             },
             ruangan: {
                 required: "Ruangan wajib diisi."
+            },
+            tanggal_booking: {
+                required: "Tanggal booking wajib diisi."
+            },
+            jam_mulai: {
+                required: "Jam mulai wajib diisi."
+            },
+            jam_selesai: {
+                required: "Jam selesai wajib diisi."
             }
         },
         ignore: ":hidden",
         errorPlacement: function (error, element) {
-            error.insertAfter(element);
+            if (element.attr("name") === "jam_mulai") {
+                error.appendTo("#error-jammulai");
+            }else if (element.attr("name") === "jam_selesai") {
+                error.appendTo("#error-jamselesai");
+            } else {
+                // Default: tampilkan setelah elemen
+                error.insertAfter(element);
+            }
         }
     });
 }
@@ -161,11 +210,30 @@ function inisiasiCalendar() {
         },
         events: eventsData,
         eventClick: function(info) {
-            resetInputUpdate();
-            setDataUpdateJadwal(info);
+            const start = info.event.start;
+            const end = info.event.end;
 
-            var offcanvas = new bootstrap.Offcanvas(document.getElementById('addEventSidebarUpdate'));
-            offcanvas.show();
+            const formatDateTime = (date) => {
+                if (!date) return '';
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${day}/${month}/${year} ${hours}:${minutes}`;
+                // Kalau mau tahun di depan, ganti jadi: `${year}-${month}-${day} ${hours}:${minutes}`;
+            };
+
+            const type = info.event.extendedProps?.type || '';
+
+            // Tambahkan (booking) ke judul kalau type booking
+            const title = info.event.title + (type === 'booking' ? ' (booking)' : '');
+
+            $('#eventModalTitle').text(title);
+            $('#eventModalStart').text(formatDateTime(start));
+            $('#eventModalEnd').text(formatDateTime(end));
+            $('#eventModal').modal('show');
+
         },
         eventClassNames: function({ event }) {
             return [
@@ -221,6 +289,7 @@ function I() {
 function inisiasiTanggal(dom){
     return flatpickr(dom, {
         mode: "range",
+        minDate: new Date().fp_incr(1), // today + 1 day
         locale: Indonesian,
         dateFormat: "d-m-Y",
         onChange: function(selectedDates, dateStr, instance) {
@@ -282,6 +351,33 @@ function inisiasiJamSelesai(dom_mulai, dom_selesai) {
 }
 
 function getDataJadwal(){
+    let idRuangan = $('#ruangan').val();
+
+    $.ajax({
+        url: urlGetData,  // Ganti dengan URL API yang sesuai
+        method: 'GET',
+        dataType: 'json',
+        data:{
+            'id_ruangan': idRuangan
+        },
+        success: function(response) {
+            eventsData = [
+                ...response.jadwal,  // Data jadwal
+                ...response.booking  // Data booking
+            ];
+
+            loadFilteredEvents();
+        },
+        error: function(xhr, status, error) {
+            eventsData = [];
+            loadFilteredEvents();
+        }
+    });
+}
+
+function checkAvaliableJadwal(){
+    let idRuangan = $('#ruangan').val();
+
     $.ajax({
         url: urlGetData,  // Ganti dengan URL API yang sesuai
         method: 'GET',

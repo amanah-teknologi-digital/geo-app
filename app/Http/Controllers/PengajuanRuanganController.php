@@ -82,4 +82,8 @@ class PengajuanRuanganController extends Controller
 
         return view('pages.pengajuan_ruangan.tambah', compact('title', 'dataStatusPeminjam', 'dataRuangan'));
     }
+
+    public function cekDataJadwal(Request $request){
+        dd($request);
+    }
 }
