@@ -61,15 +61,19 @@ function filterHandler(){
 function stepperHandler(){
     // Tombol custom (jika dipakai)
     $('#btn-next-1').click(() => {
-        console.log($('#status_peminjam').rules());
         if (formValidation.form()){
             stepper.to(2);
             calendar.updateSize();
+            setTimeout(function() {
+                showStep2();
+            }, 100);
         }
     });
 
     $('#btn-prev-1').click(() => {
         stepper.to(1)
+        hiddenStep2();
+        resetErrorForm();
     });
 
     $('#btn-next-2').click(() => {
@@ -81,7 +85,13 @@ function stepperHandler(){
     $('#btn-prev-2').click(() => {
         stepper.to(2)
         calendar.updateSize();
+        resetErrorForm();
     });
+}
+
+function resetErrorForm(){
+    formValidation.resetForm();
+    formValidationEL.find(".error").removeClass("error");
 }
 
 function hiddenStep1(){
@@ -108,10 +118,10 @@ function validasiForm() {
     formValidation = formValidationEL.validate({
         rules: {
             status_peminjam: {
-                required: false
+                required: true
             },
             ruangan: {
-                required: false
+                required: true
             }
         },
         messages: {
@@ -122,7 +132,7 @@ function validasiForm() {
                 required: "Ruangan wajib diisi."
             }
         },
-        ignore: ":hidden:not(.select2-hidden-accessible)",
+        ignore: ":hidden",
         errorPlacement: function (error, element) {
             error.insertAfter(element);
         }
