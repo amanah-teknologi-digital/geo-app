@@ -61,7 +61,7 @@
                         <i class="icon-base bx bx-chevron-right icon-md"></i>
                     </div>
                     <div class="step" data-target="#data-ruangan">
-                        <button type="button" class="step-trigger" ><span class="bs-stepper-circle">2</span><span class="bs-stepper-label"><span class="bs-stepper-title">Pilih Ruangan</span><span class="bs-stepper-subtitle">Input Jadwal Booking</span></span></button>
+                        <button type="button" class="step-trigger" ><span class="bs-stepper-circle">2</span><span class="bs-stepper-label"><span class="bs-stepper-title">Jadwal & Ruangan</span><span class="bs-stepper-subtitle">Input Jadwal Booking</span></span></button>
                     </div>
                     <div class="line">
                         <i class="icon-base bx bx-chevron-right icon-md"></i>
@@ -101,7 +101,7 @@
                                 <div class="col-sm-6">
                                     <label class="form-label">Status Peminjam<span class="text-danger">*</span></label>
                                     <select class="form-control" name="status_peminjam" id="status_peminjam">
-                                        <option value="" selected disabled>-- pilih status peminjam --</option>
+                                        <option value="" selected disabled>-- Pilih Status Peminjam --</option>
                                         @foreach($dataStatusPeminjam as $status)
                                             <option value="{{ $status->id_statuspengaju }}">{{ $status->nama }}</option>
                                         @endforeach
@@ -141,15 +141,15 @@
                         </div>
                         <div id="data-ruangan" class="content">
                             <div class="content-header mb-4">
-                                <h6 class="mb-0">Pilih Ruangan</h6>
-                                <small>Input Jadwal Booking.</small>
+                                <h6 class="mb-0">Menentukan Jadwal & Ruangan</h6>
+                                <small>Pilih ruangan terlebih dahulu.</small>
                             </div>
                             <div class="row g-6 mt-4 app-calendar-wrapper">
                                 <div class="row g-0 w-100">
                                     <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
-                                        <div class="px-6 pb-2 my-sm-0 p-4">
+                                        <div class="px-6 pb-2 my-sm-0 p-4" id="filterbar">
                                             <!-- Filter -->
-                                            <div>
+                                            <div class="mt-4">
                                                 <h5>Filter Jadwal</h5>
                                             </div>
 
@@ -168,6 +168,16 @@
                                                     <label class="form-check-label" for="select-booking">Jadwal Booking</label>
                                                 </div>
                                             </div>
+
+                                            <div>
+                                                <h5>Pilih Ruangan</h5>
+                                            </div>
+                                            <select name="ruangan" id="ruangan" class="form-control">
+                                                <option value="" selected disabled>-- Pilih Ruangan --</option>
+                                                @foreach($dataRuangan as $ruangan)
+                                                    <option value="{{ $ruangan->id_ruangan }}">{{ $ruangan->kode_ruangan.' - '.$ruangan->nama }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col app-calendar-content">

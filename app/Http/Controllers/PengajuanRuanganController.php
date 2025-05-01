@@ -78,7 +78,8 @@ class PengajuanRuanganController extends Controller
         $title = "Tambah Pengajuan";
 
         $dataStatusPeminjam = $this->service->getDataStatusPeminjam();
+        $dataRuangan = $this->service->getDataRuanganAktif();
 
-        return view('pages.pengajuan_ruangan.tambah', compact('title', 'dataStatusPeminjam'));
+        return view('pages.pengajuan_ruangan.tambah', compact('title', 'dataStatusPeminjam', 'dataRuangan'));
     }
 }

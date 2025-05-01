@@ -1,18 +1,22 @@
 let stepper;
 let eventsData = [];
 let calendar;
+let formValidationEL;
 let formValidation;
 let stepperEl;
 
 $(document).ready(function () {
     stepperEl = document.getElementById('wizard');
-    formValidation = $('#wizard-validation');
-    stepper = new Stepper(stepperEl, { linear: false, animation: true });
+    formValidationEL = $('#wizard-validation');
+    stepper = new Stepper(stepperEl, { linear: true, animation: true });
+    showStep1()
+    hiddenStep2()
     validasiForm();
     stepperHandler();
     inisiasiCalendar();
     I();
     filterHandler();
+    // $('#ruangan').select2({width:'100%', dropdownPosition: 'below'})
 });
 
 function filterHandler(){
@@ -55,33 +59,23 @@ function filterHandler(){
 }
 
 function stepperHandler(){
-    // Tangkap saat user klik step header
-    stepperEl.addEventListener('show.bs-stepper', function (event) {
-        const fromStep = event.detail.from;
-        const toStep = event.detail.indexStep;
-
-        if (toStep > fromStep) {
-            // hanya validasi saat maju
-            const valid = formValidation.valid();
-
-            if (!valid) {
-                event.preventDefault(); // batal pindah step
-            }
-        }
-    });
-
     // Tombol custom (jika dipakai)
     $('#btn-next-1').click(() => {
-        if (formValidation.valid()){
+        console.log($('#status_peminjam').rules());
+        if (formValidation.form()){
             stepper.to(2);
             calendar.updateSize();
         }
     });
 
-    $('#btn-prev-1').click(() => stepper.to(1));
+    $('#btn-prev-1').click(() => {
+        stepper.to(1)
+    });
 
     $('#btn-next-2').click(() => {
-        if (formValidation.valid()) stepper.to(3);
+        if (formValidation.form()){
+            stepper.to(3);
+        }
     });
 
     $('#btn-prev-2').click(() => {
@@ -90,21 +84,47 @@ function stepperHandler(){
     });
 }
 
+function hiddenStep1(){
+    $('#status_peminjam').hide();
+}
+
+function hiddenStep2(){
+    $('#ruangan').hide();
+}
+
+function showStep1(){
+    $('#status_peminjam').show();
+}
+
+function showStep2(){
+    $('#ruangan').show();
+}
+
 function validasiForm() {
     $.validator.addMethod("time24", function(value, element) {
         return this.optional(element) || /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/.test(value); // Format 24 jam: HH:mm
     }, "Please enter a valid time in 24-hour format (HH:mm).");
 
-    formValidation.validate({
+    formValidation = formValidationEL.validate({
         rules: {
             status_peminjam: {
+                required: false
+            },
+            ruangan: {
                 required: false
             }
         },
         messages: {
             status_peminjam: {
                 required: "Status peminjam wajib diisi."
+            },
+            ruangan: {
+                required: "Ruangan wajib diisi."
             }
+        },
+        ignore: ":hidden:not(.select2-hidden-accessible)",
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
         }
     });
 }

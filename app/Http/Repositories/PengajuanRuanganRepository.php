@@ -9,6 +9,7 @@ use App\Models\PengajuanPersuratan;
 use App\Models\PengajuanRuangan;
 use App\Models\Pengumuman;
 use App\Models\PersetujuanPersuratan;
+use App\Models\Ruangan;
 use App\Models\StatusPengaju;
 use App\Models\User;
 use Ramsey\Uuid\Nonstandard\Uuid;
@@ -59,6 +60,17 @@ class PengajuanRuanganRepository
 
     public function getDataStatusPeminjam(){
         $data = StatusPengaju::get();
+
+        return $data;
+    }
+
+    public function getDataRuanganAktif($idRuangan){
+        $data = Ruangan::where('is_aktif', 1);
+        if (!empty($idRuangan)) {
+            $data = $data->where('id', $idRuangan)->first();
+        }else{
+            $data = $data->get();
+        }
 
         return $data;
     }

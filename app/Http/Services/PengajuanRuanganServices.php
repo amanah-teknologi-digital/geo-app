@@ -38,6 +38,12 @@ class PengajuanRuanganServices
         return $data;
     }
 
+    public function getDataRuanganAktif($idRuangan = null){
+        $data = $this->repository->getDataRuanganAktif($idRuangan);
+
+        return $data;
+    }
+
     public function getDataFile($idFile){
         $data = $this->repository->getDataFile($idFile);
 
