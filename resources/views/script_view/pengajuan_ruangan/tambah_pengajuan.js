@@ -72,7 +72,10 @@ function stepperHandler(){
 
     // Tombol custom (jika dipakai)
     $('#btn-next-1').click(() => {
-        if (formValidation.valid()) stepper.to(2);
+        if (formValidation.valid()){
+            stepper.to(2);
+            calendar.updateSize();
+        }
     });
 
     $('#btn-prev-1').click(() => stepper.to(1));
@@ -81,7 +84,10 @@ function stepperHandler(){
         if (formValidation.valid()) stepper.to(3);
     });
 
-    $('#btn-prev-2').click(() => stepper.to(2));
+    $('#btn-prev-2').click(() => {
+        stepper.to(2)
+        calendar.updateSize();
+    });
 }
 
 function validasiForm() {
@@ -108,6 +114,7 @@ function inisiasiCalendar() {
     calendar = new Calendar(calendarEl, {
         plugins: [ dayGridPlugin, timegridPlugin, listPlugin],
         initialView: 'dayGridMonth',
+        height: '100%',
         editable: !0,
         dragScroll: !0,
         eventResizableFromStart: !0,

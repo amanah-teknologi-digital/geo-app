@@ -126,7 +126,7 @@
                                 <div class="col-12 d-flex justify-content-between">
                                     <div></div>
                                     <button class="btn btn-primary btn-next" id="btn-next-1">
-                                        <span class="align-middle d-sm-inline-block d-none me-sm-2">Selanjutnya</span>
+                                        <span class="align-middle d-sm-inline-block">Selanjutnya</span>
                                         <i class="icon-base bx bx-chevron-right icon-sm me-sm-n2"></i>
                                     </button>
                                 </div>
@@ -173,7 +173,7 @@
                                     <div class="col app-calendar-content">
                                         <div class="card shadow-none border-0">
                                             <div class="card-body pb-0">
-                                                <div id="calendar"></div>
+                                                <div id="calendar" style="width: 100%"></div>
                                             </div>
                                         </div>
                                         <div class="app-overlay"></div>
@@ -186,8 +186,8 @@
                                         <span class="align-middle d-sm-inline-block">Sebelumnya</span>
                                     </button>
                                     <button class="btn btn-primary btn-next" id="btn-next-2">
-                                        <span class="align-middle d-sm-inline-block d-none me-sm-2">Selanjutnya</span>
-                                        <i class="icon-base bx bx-chevron-right icon-sm me-sm-n2"></i>
+                                        <span class="align-middle d-sm-inline-block">Selanjutnya</span>
+                                        <i class="icon-base bx bx-chevron-right icon-sm me-sm-n2 me-sm-2"></i>
                                     </button>
                                 </div>
                                 <div class="col-12">
