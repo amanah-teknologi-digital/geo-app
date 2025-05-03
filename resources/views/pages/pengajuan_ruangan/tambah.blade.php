@@ -209,8 +209,11 @@
                                         <span class="align-middle d-sm-inline-block">Sebelumnya</span>
                                     </button>
                                     <button class="btn btn-primary btn-next" id="btn-next-2">
-                                        <span class="align-middle d-sm-inline-block">Selanjutnya</span>
-                                        <i class="icon-base bx bx-chevron-right icon-sm me-sm-n2 me-sm-2"></i>
+                                        <span class="spinner-border me-2 spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                        <span class="btn-text">
+                                            <span class="align-middle d-sm-inline-block">Selanjutnya</span>
+                                            <i class="icon-base bx bx-chevron-right icon-sm me-sm-n2 me-sm-2"></i>
+                                        </span>
                                     </button>
                                 </div>
                                 <div class="col-12">
@@ -250,6 +253,16 @@
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+        <div id="liveToast" class="bs-toast toast fade" role="alert">
+            <div class="toast-header">
+                <i class="icon-base bx bx-bell me-2"></i>
+                <div class="me-auto fw-medium">Notifikasi</div>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast-message"></div>
         </div>
     </div>
     <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">

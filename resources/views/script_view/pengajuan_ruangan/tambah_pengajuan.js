@@ -5,8 +5,12 @@ let formValidationEL;
 let formValidation;
 let stepperEl;
 let instanceJadwal, instanceJamMulai, instanceJamSelesai;
+let toast;
 
 $(document).ready(function () {
+    const toastLive = document.getElementById('liveToast')
+    toast = new bootstrap.Toast(toastLive)
+
     stepperEl = document.getElementById('wizard');
     formValidationEL = $('#wizard-validation');
     stepper = new Stepper(stepperEl, { linear: true, animation: true });
@@ -384,6 +388,7 @@ function checkAvaliableJadwal(){
     let jamMulai = $('#jam_mulai').val();
     let jamSelesai = $('#jam_selesai').val();
 
+    setLoadingButton('btn-next-2', true);
     $.ajax({
         url: urlCheckJadwalRuangan,  // Ganti dengan URL API yang sesuai
         method: 'GET',
@@ -394,16 +399,16 @@ function checkAvaliableJadwal(){
             'jam_selesai': jamSelesai
         },
         success: function(response) {
+            setLoadingButton('btn-next-2', false);
             if (response){
                 stepper.to(3);
             }else{
-                alert('Jadwal Bentrok dengan Jadwal Lain')
-                instanceJadwal.clear();
-                instanceJamMulai.clear();
-                instanceJamSelesai.clear();
+                showToast('Jadwal bentrok dengan jadwal lain!', 'bg-danger')
             }
         },
         error: function(xhr, status, error) {
+            setLoadingButton('btn-next-2', false);
+            showToast('Error mendapatkan data!', 'bg-danger')
             instanceJadwal.clear();
             instanceJamMulai.clear();
             instanceJamSelesai.clear();
@@ -437,4 +442,36 @@ function formatDate(date) {
     let month = String(date.getMonth() + 1).padStart(2, '0');  // Bulan dimulai dari 0
     let year = date.getFullYear();
     return `${day}-${month}-${year}`;
+}
+
+function showToast(keterangan, bgClassColor){
+    const toastEl = document.getElementById('liveToast');
+    const toastBody = document.getElementById('toast-message');
+
+    // Ganti teks toast
+    toastBody.innerText = keterangan;
+
+    // Hapus semua class bg-* yang mungkin ada sebelumnya
+    toastEl.classList.remove('bg-primary', 'bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-dark');
+
+    // Tambahkan class warna baru
+    toastEl.classList.add(bgClassColor);
+
+    toast.show()
+}
+
+function setLoadingButton(btnId, loading = true) {
+    const btn = document.getElementById(btnId);
+    const spinner = btn.querySelector('.spinner-border');
+    const text = btn.querySelector('.btn-text');
+
+    if (loading) {
+        spinner.classList.remove('d-none');
+        text.innerText = 'Mengecek Jadwal ...';
+        btn.disabled = true;
+    } else {
+        spinner.classList.add('d-none');
+        text.innerHTML = '<span class="align-middle d-sm-inline-block">Selanjutnya</span><i class="icon-base bx bx-chevron-right icon-sm me-sm-n2 me-sm-2"></i>';
+        btn.disabled = false;
+    }
 }
