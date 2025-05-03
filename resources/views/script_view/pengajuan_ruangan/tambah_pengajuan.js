@@ -96,7 +96,6 @@ function stepperHandler(){
     $('#btn-next-2').click(() => {
         if (formValidation.form()){
             checkAvaliableJadwal();
-            //stepper.to(3);
         }
     });
 
@@ -396,7 +395,7 @@ function checkAvaliableJadwal(){
         },
         success: function(response) {
             if (response){
-                alert('ok')
+                stepper.to(3);
             }else{
                 alert('Jadwal Bentrok dengan Jadwal Lain')
                 instanceJadwal.clear();
