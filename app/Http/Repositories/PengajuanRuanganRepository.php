@@ -214,7 +214,7 @@ class PengajuanRuanganRepository
         $jamMulai = Carbon::createFromFormat('H:i', $jamMulai)->format('H:i:s');
         $jamSelesai = Carbon::createFromFormat('H:i', $jamSelesai)->format('H:i:s');
 
-        $jadwalBentrok = JadwalRuangan::where('id_ruangan', $idRuangan)
+        $jadwalBentrok = JadwalRuangan::whereIn('id_ruangan', $idRuangan)
             ->where(function($query) use ($tglMulai, $tglSelesai, $jamMulai, $jamSelesai) {
                 $query->whereBetween('tgl_mulai', [$tglMulai, $tglSelesai])
                     ->orWhereBetween('tgl_selesai', [$tglMulai, $tglSelesai])
@@ -231,5 +231,11 @@ class PengajuanRuanganRepository
         $jadwalBentrok = $jadwalBentrok->exists();
 
         return $jadwalBentrok;
+    }
+
+    public function getDataJadwal($idRuangan){
+        $data = JadwalRuangan::with('ruangan')->whereIn('id_ruangan', $idRuangan)->get();
+
+        return $data;
     }
 }

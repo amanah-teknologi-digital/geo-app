@@ -149,4 +149,17 @@ class PengajuanRuanganController extends Controller
             return response()->json(false);
         }
     }
+
+    public function getDataJadwal(Request $request){
+        $idRuangan = $request->id_ruangan;
+        $dataJadwal = $this->service->getDataJadwal($idRuangan);
+        $dataBooking = [];
+
+        $data = [
+            'jadwal' => $dataJadwal,
+            'booking' => $dataBooking,
+        ];
+
+        return response()->json($data);
+    }
 }

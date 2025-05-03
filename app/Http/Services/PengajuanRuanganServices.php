@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\PengajuanRuanganRepository;
 use App\Models\Files;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -295,5 +296,60 @@ class PengajuanRuanganServices
         $data = $this->repository->cekJadwalRuanganBentrok($idRuangan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai);
 
         return $data;
+    }
+
+    public function getDataJadwal($idRuangan){
+        $data = $this->repository->getDataJadwal($idRuangan);
+        $events = [];
+        $daysOfWeekMapping = [
+            0 => 'Sunday',
+            1 => 'Monday',
+            2 => 'Tuesday',
+            3 => 'Wednesday',
+            4 => 'Thursday',
+            5 => 'Friday',
+            6 => 'Saturday'
+        ];
+
+        foreach ($data as $item) {
+            // Menentukan tanggal mulai dan selesai
+            $startDate = Carbon::parse($item->tgl_mulai);
+            $endDate = Carbon::parse($item->tgl_selesai);
+            $dayOfWeek = $daysOfWeekMapping[$item->day_of_week - 1]; // Bisa jadi integer atau string seperti "Senin", "Selasa", dst.
+
+            // Mengulang dari tgl_mulai hingga tgl_selesai
+            while ($startDate <= $endDate) {
+                // Jika hari ini adalah hari yang sesuai (berdasarkan day_of_week)
+                if ($startDate->format('l') === $dayOfWeek) {
+                    if ($item->tipe_jadwal == 'jadwal'){
+                        $cal = 'success';
+                    }else{
+                        $cal = 'primary';
+                    }
+
+                    $events[] = [
+                        'id' => $item->id_jadwal,
+                        'title' => $item->keterangan,
+                        'start' => $startDate->toDateString() . 'T' . $item->jam_mulai,
+                        'end' => $startDate->toDateString() . 'T' . $item->jam_selesai,
+                        'extendedProps' => [
+                            'calendar' => $cal,
+                            'type' => $item->tipe_jadwal,
+                            'keterangan' => $item->keterangan,
+                            'nama_ruangan' => $item->ruangan->nama.' ('.$item->ruangan->kode_ruangan.')',
+                            'day_of_week' => $item->day_of_week,
+                            'jam_mulai' => $item->jam_mulai,
+                            'jam_selesai' => $item->jam_selesai,
+                            'tgl_mulai' => $item->tgl_mulai,
+                            'tgl_selesai' => $item->tgl_selesai
+                        ]
+                    ];
+                }
+                // Pindah ke hari berikutnya
+                $startDate->addDay();
+            }
+        }
+
+        return $events;
     }
 }

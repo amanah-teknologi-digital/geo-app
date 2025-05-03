@@ -68,7 +68,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/ruangan/detail/{id_ruangan}', [RuanganController::class, 'detailRuangan'])->name('ruangan.detail');
     Route::get('/ruangan/jadwal/{id_ruangan}', [RuanganController::class, 'jadwalRuangan'])->name('ruangan.jadwal');
     Route::get('/ruangan/getdatajadwal', [RuanganController::class, 'getDataJadwal'])->name('ruangan.getdatajadwal');
-    Route::get('/ruangan/cekdatajadwal', [PengajuanRuanganController::class, 'cekDataJadwal'])->name('ruangan.cekdatajadwal');
+    Route::post('/pengajuan-ruangan/cekdatajadwal', [PengajuanRuanganController::class, 'cekDataJadwal'])->name('pengajuanruangan.cekdatajadwal');
+    Route::post('/pengajuan-ruangan/getdatajadwal', [PengajuanRuanganController::class, 'getDataJadwal'])->name('pengajuanruangan.getdatajadwal');
     Route::middleware('role:1,3,6,7,8')->group(function () {
         Route::get('/pengajuan-ruangan', [PengajuanRuanganController::class, 'index'])->name('pengajuanruangan');
         Route::get('/pengajuan-ruangan/getdata', [PengajuanRuanganController::class, 'getData'])->name('pengajuanruangan.getdata');

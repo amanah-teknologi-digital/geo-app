@@ -73,11 +73,7 @@
                 <div class="bs-stepper-content">
                     <form id="wizard-validation" action="{{ route('pengajuanruangan.dotambah') }}" onsubmit="return false">
                         <div id="data-pemohon" class="content">
-                            <div class="content-header mb-4">
-                                <h6 class="mb-0">Data Pemohon</h6>
-                                <small>Input Detail Data Pemohon.</small>
-                            </div>
-                            <div class="row g-6">
+                            <div class="row g-4">
                                 <div class="col-sm-6">
                                     <label class="form-label" >Nama Pengaju <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" placeholder="nama pengaju" readonly value="{{ auth()->user()->name }}">
@@ -140,49 +136,24 @@
                             </div>
                         </div>
                         <div id="data-ruangan" class="content">
-                            <div class="content-header mb-4">
-                                <h6 class="mb-0">Menentukan Jadwal & Ruangan</h6>
-                                <small>Pilih ruangan terlebih dahulu.</small>
-                            </div>
-                            <div class="row g-6 mt-4 app-calendar-wrapper">
+                            <div class="row g-6 app-calendar-wrapper">
                                 <div class="row g-0 w-100">
                                     <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
-                                        <div class="px-6 pb-2 my-sm-0 p-4" id="filterbar">
-                                            <!-- Filter -->
-                                            <div class="mt-4">
-                                                <h5>Filter Jadwal</h5>
-                                            </div>
-
-                                            <div class="form-check form-check-secondary mb-5 ms-2">
-                                                <input class="form-check-input select-all" type="checkbox" id="selectAll" data-value="all" checked="">
-                                                <label class="form-check-label" for="selectAll">Tampilkan Semua</label>
-                                            </div>
-
-                                            <div class="app-calendar-events-filter text-heading">
-                                                <div class="form-check form-check-success mb-5 ms-2">
-                                                    <input class="form-check-input input-filter" type="checkbox" id="select-jadwal" data-value="jadwal" checked="">
-                                                    <label class="form-check-label" for="select-jadwal">Jadwal Kuliah</label>
-                                                </div>
-                                                <div class="form-check form-check-primary mb-5 ms-2">
-                                                    <input class="form-check-input input-filter" type="checkbox" id="select-booking" data-value="booking" checked="">
-                                                    <label class="form-check-label" for="select-booking">Jadwal Booking</label>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="mb-6">
+                                        <div class="px-6 pb-2 my-sm-0 p-4">
+                                            <div class="mb-4">
                                                 <label class="form-label" for="ruangan">Pilih Ruangan <span class="text-danger">*</span></label>
-                                                <select name="ruangan" id="ruangan" class="form-control">
-                                                    <option value="" selected disabled>-- Pilih Ruangan --</option>
+                                                <select name="ruangan[]" id="ruangan" class="form-control" multiple>
                                                     @foreach($dataRuangan as $ruangan)
                                                         <option value="{{ $ruangan->id_ruangan }}">{{ $ruangan->kode_ruangan.' - '.$ruangan->nama }}</option>
                                                     @endforeach
                                                 </select>
+                                                <div class="error-container" id="error-ruangan"></div>
                                             </div>
-                                            <div class="mb-6">
+                                            <div class="mb-4">
                                                 <label class="form-label" for="tanggal_booking">Pilih Tanggal <span class="text-danger">*</span></label>
                                                 <input type="text" name="tanggal_booking" id="tanggal_booking" class="form-control">
                                             </div>
-                                            <div class="mb-6">
+                                            <div class="mb-4">
                                                 <label class="form-label" for="jam_jadwal">Pilih Waktu <span class="text-danger">*</span></label>
                                                 <div class="d-inline-flex gap-2">
                                                     <input type="text" id="jam_mulai" class="form-control jam_jadwal" name="jam_mulai" placeholder="pilih jam mulai" autocomplete="off">
@@ -195,8 +166,8 @@
                                     </div>
                                     <div class="col app-calendar-content">
                                         <div class="card shadow-none border-0">
-                                            <div class="card-body pb-0">
-                                                <div id="calendar" style="width: 100%"></div>
+                                            <div class="card-body pb-0 border-bottom">
+                                                <div id="calendar" style="width: 100%;"></div>
                                             </div>
                                         </div>
                                         <div class="app-overlay"></div>
@@ -231,6 +202,15 @@
                                 <small>Input Detail Pengajuan.</small>
                             </div>
                             <div class="row g-6">
+                                <div class="col-sm-12">
+                                    <label class="form-label" for="nama_kegiatan">Nama Kegiatan <span class="text-danger">*</span></label>
+                                    <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" placeholder="nama kegiatan">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="form-label" for="deskripsi_kegiatan">Deskripsi Kegiatan <span class="text-danger">*</span></label>
+                                    <textarea rows="5" cols="5" name="deskripsi_kegiatan" id="deskripsi_kegiatan" class="form-control" placeholder="nama kegiatan"></textarea>
+                                </div>
+
                                 <div class="col-12 d-flex justify-content-between">
                                     <button class="btn btn-secondary btn-prev" id="btn-prev-2">
                                         <i class="icon-base bx bx-chevron-left icon-sm ms-sm-n2 me-sm-2"></i>
@@ -284,9 +264,14 @@
                 <div class="modal-body">
                     <table class="w-100 p-5">
                         <tr>
-                            <td style="width: 35%">Nama Jadwal</td>
+                            <td style="width: 35%">Nama Ruangan</td>
                             <td style="width: 1%">:</td>
-                            <td style="width: 64%">&nbsp;<span class="fw-bold" id="eventModalTitle"></span></td>
+                            <td style="width: 64%">&nbsp;<span class="fw-bold" id="eventModalNamaRuangan"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%">Keterangan</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 64%">&nbsp;<span class="fst-italic" id="eventModalTitle"></span></td>
                         </tr>
                         <tr>
                             <td style="width: 35%">Waktu Mulai</td>
@@ -306,8 +291,8 @@
 @endsection
 @section('page-script')
     <script>
-        let urlGetData = '{{ route('ruangan.getdatajadwal') }}';
-        let urlCheckJadwalRuangan = '{{ route('ruangan.cekdatajadwal') }}';
+        const urlGetData = '{{ route('pengajuanruangan.getdatajadwal') }}';
+        const urlCheckJadwalRuangan = '{{ route('pengajuanruangan.cekdatajadwal') }}';
     </script>
     @vite('resources/views/script_view/pengajuan_ruangan/tambah_pengajuan.js')
 @endsection

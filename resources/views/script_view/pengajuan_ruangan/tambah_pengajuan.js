@@ -38,6 +38,8 @@ $(document).ready(function () {
             loadFilteredEvents();
         }
     });
+
+    $('#ruangan').select2({width:'100%'})
 });
 
 function filterHandler(){
@@ -60,23 +62,6 @@ function filterHandler(){
             ))
         }
     ));
-
-    // "Tampilkan Semua" checkbox
-    $('#selectAll').on('change', function() {
-        let isChecked = $(this).is(':checked');
-
-        $('.input-filter').prop('checked', isChecked);
-
-        loadFilteredEvents();
-    });
-
-    // Checkbox individu (jadwal kuliah, jadwal booking)
-    $('.input-filter').on('change', function() {
-        let allChecked = $('.input-filter').length === $('.input-filter:checked').length;
-        $('#selectAll').prop('checked', allChecked);
-
-        loadFilteredEvents();
-    });
 }
 
 function stepperHandler(){
@@ -147,7 +132,7 @@ function validasiForm() {
             status_peminjam: {
                 required: false
             },
-            ruangan: {
+            'ruangan[]': {
                 required: true
             },
             tanggal_booking: {
@@ -166,7 +151,7 @@ function validasiForm() {
             status_peminjam: {
                 required: "Status peminjam wajib diisi."
             },
-            ruangan: {
+            'ruangan[]': {
                 required: "Ruangan wajib diisi."
             },
             tanggal_booking: {
@@ -187,6 +172,8 @@ function validasiForm() {
                 error.appendTo("#error-jammulai");
             }else if (element.attr("name") === "jam_selesai") {
                 error.appendTo("#error-jamselesai");
+            }else if (element.attr("name") === "ruangan[]") {
+                error.appendTo("#error-ruangan");
             } else {
                 // Default: tampilkan setelah elemen
                 error.insertAfter(element);
@@ -200,7 +187,7 @@ function inisiasiCalendar() {
     calendar = new Calendar(calendarEl, {
         plugins: [ dayGridPlugin, timegridPlugin, listPlugin],
         initialView: 'dayGridMonth',
-        height: '100%',
+        height: '80%',
         editable: !0,
         dragScroll: !0,
         eventResizableFromStart: !0,
@@ -234,8 +221,10 @@ function inisiasiCalendar() {
             const type = info.event.extendedProps?.type || '';
 
             // Tambahkan (booking) ke judul kalau type booking
+            const namaruangan = info.event.extendedProps.nama_ruangan;
             const title = info.event.title + (type === 'booking' ? ' (booking)' : '');
 
+            $('#eventModalNamaRuangan').text(namaruangan);
             $('#eventModalTitle').text(title);
             $('#eventModalStart').text(formatDateTime(start));
             $('#eventModalEnd').text(formatDateTime(end));
@@ -267,7 +256,7 @@ function inisiasiCalendar() {
             return {
                 html: `
                    <div>
-                        ${arg.event.title}${typeLabel}:${timeRange ? ` <span>${timeRange} </span>` : ''}
+                        ${arg.event.extendedProps.nama_ruangan} - ${arg.event.title}${typeLabel}:${timeRange ? ` <span>${timeRange} </span>` : ''}
                    </div>`
             };
         }
@@ -360,26 +349,38 @@ function inisiasiJamSelesai(dom_mulai, dom_selesai) {
 function getDataJadwal(){
     let idRuangan = $('#ruangan').val();
 
-    $.ajax({
-        url: urlGetData,  // Ganti dengan URL API yang sesuai
-        method: 'GET',
-        dataType: 'json',
-        data:{
-            'id_ruangan': idRuangan
-        },
-        success: function(response) {
-            eventsData = [
-                ...response.jadwal,  // Data jadwal
-                ...response.booking  // Data booking
-            ];
+    if (idRuangan) {
+        $.ajax({
+            url: urlGetData,  // Ganti dengan URL API yang sesuai
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: 'json',
+            data: {
+                'id_ruangan': idRuangan
+            },
+            success: function (response) {
+                eventsData = [
+                    ...response.jadwal,  // Data jadwal
+                    ...response.booking  // Data booking
+                ];
 
-            loadFilteredEvents();
-        },
-        error: function(xhr, status, error) {
-            eventsData = [];
-            loadFilteredEvents();
-        }
-    });
+                loadFilteredEvents();
+            },
+            error: function (xhr, status, error) {
+                eventsData = [];
+                $('#ruangan').val('')
+                loadFilteredEvents();
+            }
+        });
+    }else{
+        instanceJadwal.clear();
+        instanceJamMulai.clear();
+        instanceJamSelesai.clear();
+        eventsData = [];
+        loadFilteredEvents();
+    }
 }
 
 function checkAvaliableJadwal(){
@@ -391,7 +392,10 @@ function checkAvaliableJadwal(){
     setLoadingButton('btn-next-2', true);
     $.ajax({
         url: urlCheckJadwalRuangan,  // Ganti dengan URL API yang sesuai
-        method: 'GET',
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         data:{
             'id_ruangan': idRuangan,
             'tanggal_booking': tanggalBooking,
@@ -417,24 +421,8 @@ function checkAvaliableJadwal(){
 }
 
 function loadFilteredEvents() {
-    let selectedTypes = [];
-
-    $('.input-filter:checked').each(function() {
-        selectedTypes.push($(this).data('value'));
-    });
-
-    let filteredEvents = [];
-
-    if (selectedTypes.length > 0) {
-        // Ada filter aktif, tampilkan event yang cocok
-        filteredEvents = eventsData.filter(function(event) {
-            return selectedTypes.includes(event.extendedProps?.type);
-        });
-    }
-    // else (kalau kosong, biarkan filteredEvents kosong)
-
     calendar.removeAllEvents();
-    calendar.addEventSource(filteredEvents);
+    calendar.addEventSource(eventsData);
 }
 
 function formatDate(date) {
