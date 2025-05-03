@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Repositories\PengajuanRuanganRepository;
 use App\Http\Services\PengajuanRuanganServices;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\DataTables;
 
 class PengajuanRuanganController extends Controller
@@ -84,6 +86,67 @@ class PengajuanRuanganController extends Controller
     }
 
     public function cekDataJadwal(Request $request){
-        dd($request);
+        try {
+            $request->validate([
+                'id_ruangan' => ['required'],
+                'jam_mulai' => ['required', 'date_format:H:i'],
+                'jam_selesai' => ['required', 'date_format:H:i', 'after:jam_mulai'],
+                'tanggal_booking' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        $parts = explode(' s/d ', $value);
+
+                        // Cek harus ada 2 tanggal
+                        if (count($parts) !== 2) {
+                            return $fail('Format tanggal harus "dd-mm-YYYY s/d dd-mm-YYYY".');
+                        }
+
+                        foreach ($parts as $part) {
+                            $date = \DateTime::createFromFormat('d-m-Y', trim($part));
+                            if (!$date) {
+                                return $fail('Tanggal harus dalam format dd-mm-YYYY.');
+                            }
+
+                            // Tambahan pengecekan error format
+                            $errors = \DateTime::getLastErrors();
+                            if (!empty($errors['warning_count']) || !empty($errors['error_count'])) {
+                                return $fail('Tanggal tidak valid.');
+                            }
+                        }
+                    }
+                ]
+            ],[
+                'id_ruangan.required' => 'Id ruangan wajib diisi.',
+                'tanggal_booking.required' => 'Data tanggal wajib diisi.',
+                'jam_mulai.required' => 'Jam mulai wajib diisi.',
+                'jam_mulai.date_format' => 'Format jam mulai harus HH:MM (contoh: 14:30).',
+                'jam_selesai.required' => 'Jam selesai wajib diisi.',
+                'jam_selesai.date_format' => 'Format jam selesai harus HH:MM (contoh: 14:30).',
+                'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.'
+            ]);
+
+            $isEdit = $this->service->checkAksesTambah(Auth()->user()->id_akses);
+            $idRuangan = $request->id_ruangan;
+            if (!$isEdit) {
+                return response()->json(false);
+            }
+
+            $dataJadwal = explode(' s/d ', $request->tanggal_booking);
+            $tgl_mulai = $dataJadwal[0];
+            $tgl_selesai = $dataJadwal[1];
+            $jam_mulai = $request->jam_mulai;
+            $jam_selesai = $request->jam_selesai;
+
+            $cekJadwalBentrok = $this->service->cekJadwalRuanganBentrok($idRuangan, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai);
+            if ($cekJadwalBentrok) {
+                return response()->json(false);
+            }else{
+                return response()->json(true);
+            }
+        } catch (ValidationException $e) {
+            return response()->json(false);
+        } catch (Exception $e) {
+            return response()->json(false);
+        }
     }
 }

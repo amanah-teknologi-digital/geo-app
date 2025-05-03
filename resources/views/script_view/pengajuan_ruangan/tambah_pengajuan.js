@@ -170,10 +170,12 @@ function validasiForm() {
                 required: "Tanggal booking wajib diisi."
             },
             jam_mulai: {
-                required: "Jam mulai wajib diisi."
+                required: "Jam mulai wajib diisi.",
+                time24: "Waktu tidak valid."
             },
             jam_selesai: {
-                required: "Jam selesai wajib diisi."
+                required: "Jam selesai wajib diisi.",
+                time24: "Waktu tidak valid."
             }
         },
         ignore: ":hidden",
@@ -386,7 +388,6 @@ function checkAvaliableJadwal(){
     $.ajax({
         url: urlCheckJadwalRuangan,  // Ganti dengan URL API yang sesuai
         method: 'GET',
-        dataType: 'json',
         data:{
             'id_ruangan': idRuangan,
             'tanggal_booking': tanggalBooking,
@@ -394,7 +395,14 @@ function checkAvaliableJadwal(){
             'jam_selesai': jamSelesai
         },
         success: function(response) {
-            console.log(response);
+            if (response){
+                alert('ok')
+            }else{
+                alert('Jadwal Bentrok dengan Jadwal Lain')
+                instanceJadwal.clear();
+                instanceJamMulai.clear();
+                instanceJamSelesai.clear();
+            }
         },
         error: function(xhr, status, error) {
             instanceJadwal.clear();

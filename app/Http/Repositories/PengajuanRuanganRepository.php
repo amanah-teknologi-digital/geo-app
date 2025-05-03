@@ -4,6 +4,7 @@ namespace App\Http\Repositories;
 
 use App\Models\FilePengajuanSurat;
 use App\Models\Files;
+use App\Models\JadwalRuangan;
 use App\Models\JenisSurat;
 use App\Models\PengajuanPersuratan;
 use App\Models\PengajuanRuangan;
@@ -12,6 +13,7 @@ use App\Models\PersetujuanPersuratan;
 use App\Models\Ruangan;
 use App\Models\StatusPengaju;
 use App\Models\User;
+use Carbon\Carbon;
 use Ramsey\Uuid\Nonstandard\Uuid;
 
 class PengajuanRuanganRepository
@@ -203,40 +205,31 @@ class PengajuanRuanganRepository
         ]);
     }
 
-    public function tambahFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize){
-        $file = Files::find($id_file);
+    public function cekJadwalRuanganBentrok($idRuangan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai){
+        // Parse input tanggal
+        $tglMulai = Carbon::createFromFormat('d-m-Y', $tglMulai)->format('Y-m-d');
+        $tglSelesai = Carbon::createFromFormat('d-m-Y', $tglSelesai)->format('Y-m-d');
 
-        if (!$file) {
-            Files::create([
-                'id_file' => $id_file,
-                'file_name' => $fileName,
-                'location' => $filePath,
-                'mime' => $fileMime,
-                'ext' => $fileExt,
-                'file_size' => $fileSize,
-                'created_at' => now(),
-                'is_private' => 0,
-                'updater' => auth()->user()->id
-            ]);
-        }
-    }
+        // Parse input jam
+        $jamMulai = Carbon::createFromFormat('H:i', $jamMulai)->format('H:i:s');
+        $jamSelesai = Carbon::createFromFormat('H:i', $jamSelesai)->format('H:i:s');
 
-    public function hapusFilePengajuan($idPengajuan, $idFile){
-        $filePengajuanSurat = FilePengajuanSurat::where('id_pengajuan',$idPengajuan)->where('id_file', $idFile)->first();
-        if ($filePengajuanSurat){
-            $filePengajuanSurat->delete();
-        }
+        $jadwalBentrok = JadwalRuangan::where('id_ruangan', $idRuangan)
+            ->where(function($query) use ($tglMulai, $tglSelesai, $jamMulai, $jamSelesai) {
+                $query->whereBetween('tgl_mulai', [$tglMulai, $tglSelesai])
+                    ->orWhereBetween('tgl_selesai', [$tglMulai, $tglSelesai])
+                    ->orWhere(function($q) use ($tglMulai, $tglSelesai) {
+                        $q->where('tgl_mulai', '<=', $tglMulai)
+                            ->where('tgl_selesai', '>=', $tglSelesai);
+                    });
+            })
+            ->where(function($query) use ($jamMulai, $jamSelesai) {
+                $query->where('jam_mulai', '<', $jamSelesai)
+                    ->where('jam_selesai', '>', $jamMulai);
+            });
 
-        $files = Files::find($idFile);
-        if ($files){
-            $files->delete();
-        }
-    }
+        $jadwalBentrok = $jadwalBentrok->exists();
 
-    public function tambahFileSurat($idPengajuan, $idFile){
-        FilePengajuanSurat::create([
-            'id_pengajuan' => $idPengajuan,
-            'id_file' => $idFile
-        ]);
+        return $jadwalBentrok;
     }
 }

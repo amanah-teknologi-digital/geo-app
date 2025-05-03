@@ -281,50 +281,19 @@ class PengajuanRuanganServices
         return $html;
     }
 
-    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan = null){
+    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan = null)
+    {
         try {
             $this->repository->tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());
         }
     }
 
-    public function tambahFile($file, $id_file){
-        try {
-            $fileName = $file->getClientOriginalName();
-            $fileMime = $file->getClientMimeType();
-            $fileExt = $file->getClientOriginalExtension();
-            $newFileName = $id_file.'.'.$fileExt;
-            $fileSize = $file->getSize();
-            $filePath = $file->storeAs('file_surat', $newFileName, 'public');
+    public function cekJadwalRuanganBentrok($idRuangan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai){
+        $data = $this->repository->cekJadwalRuanganBentrok($idRuangan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai);
 
-            //save file data ke database
-            $this->repository->tambahFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function hapusFile($idPengajuan, $idFile, $location){
-        try {
-            Storage::disk('public')->delete($location);
-
-            //hapus file dari database
-            $this->repository->hapusFilePengajuan($idPengajuan, $idFile);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function tambahFileSurat($idPengajuan, $idFile){
-        try {
-            $this->repository->tambahFileSurat($idPengajuan, $idFile);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
+        return $data;
     }
 }
