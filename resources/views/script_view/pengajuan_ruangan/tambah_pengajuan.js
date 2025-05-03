@@ -49,6 +49,7 @@ $(document).ready(function () {
     stepper = new Stepper(stepperEl, { linear: true, animation: true });
     showStep1()
     hiddenStep2()
+    hiddenStep3()
     validasiForm();
     stepperHandler();
     inisiasiCalendar();
@@ -121,6 +122,9 @@ function stepperHandler(){
             $('#tabelPeminjaman').html("");
             nomorPeralatan = 2;
             generateTablePeminjaman();
+            setTimeout(function() {
+                showStep3();
+            }, 100);
         }
     });
 
@@ -128,6 +132,7 @@ function stepperHandler(){
         stepper.to(2)
         calendar.updateSize();
         resetErrorForm();
+        hiddenStep3()
     });
 }
 
@@ -147,6 +152,13 @@ function hiddenStep2(){
     $('#jam_selesai').hide();
 }
 
+function hiddenStep3(){
+    $('#nama_kegiatan').hide();
+    $('#deskripsi_kegiatan').hide();
+    $('input[name="peralatan_nama[]"]').hide();
+    $('input[name="peralatan_jumlah[]"]').hide();
+}
+
 function showStep1(){
     $('#status_peminjam').show();
 }
@@ -156,6 +168,13 @@ function showStep2(){
     $('#tanggal_booking').show();
     $('#jam_mulai').show();
     $('#jam_selesai').show();
+}
+
+function showStep3(){
+    $('#nama_kegiatan').show();
+    $('#deskripsi_kegiatan').show();
+    $('input[name="peralatan_nama[]"]').show();
+    $('input[name="peralatan_jumlah[]"]').show();
 }
 
 function validasiForm() {
@@ -181,6 +200,12 @@ function validasiForm() {
             jam_selesai: {
                 required: false,
                 time24: false
+            },
+            'peralatan_nama[]': {
+                required: true
+            },
+            'peralatan_jumlah[]': {
+                required: true
             }
         },
         messages: {
@@ -200,6 +225,12 @@ function validasiForm() {
             jam_selesai: {
                 required: "Jam selesai wajib diisi.",
                 time24: "Waktu tidak valid."
+            },
+            'peralatan_nama[]': {
+                required: "Nama peralatan wajib diisi"
+            },
+            'peralatan_jumlah[]': {
+                required: "Jumlah wajib diisi"
             }
         },
         ignore: ":hidden",
@@ -509,8 +540,8 @@ function generateTableHeader(){
                 <thead>
                     <tr style="background-color: rgba(8, 60, 132, 0.16) !important">
                         <td class="fw-bold" nowrap style="width: 5%; color: rgb(8, 60, 132)" align="center">No</td>
-                        <td class="fw-bold" style="width: 80%; color: rgb(8, 60, 132)" align="center">Nama Sarana/Prasarana</td>
-                        <td class="fw-bold" nowrap style="width: 10%; color: rgb(8, 60, 132)" align="center">Jumlah</td>
+                        <td class="fw-bold" style="width: 70%; color: rgb(8, 60, 132)" align="center">Nama Sarana/Prasarana</td>
+                        <td class="fw-bold" nowrap style="width: 20%; color: rgb(8, 60, 132)" align="center">Jumlah</td>
                         <td class="fw-bold" nowrap style="width: 5%; color: rgb(8, 60, 132)" align="center">Aksi</td>
                     </tr>
                 </thead>
@@ -567,12 +598,17 @@ function generateTablePeminjaman(){
 }
 
 function getBarisPeralatan(no) {
+    let btnHapus = ``;
+    if (no !== 1){
+        btnHapus = `<span class="text-danger cursor-pointer btnHapusBaris"><i class="bx bx-trash"></i></span>`;
+    }
+
     return `
         <tr class="baris-peralatan" id="peralatan-${no}">
-            <td align="center">${no}</td>
-            <td><input type="text" name="peralatan_nama[]" class="form-control" placeholder="Nama Peralatan"></td>
-            <td><input type="number" name="peralatan_jumlah[]" class="form-control" placeholder="Jumlah"></td>
-            <td><span class="text-danger cursor-pointer btnHapusBaris"><i class="bx bx-trash"></i></span></td>
+            <td class="nomor-peralatan" align="center">${no}</td>
+            <td><input type="text" name="peralatan_nama[]" class="form-control" placeholder="Nama Peralatan" style="display: none"></td>
+            <td><input type="number" name="peralatan_jumlah[]" class="form-control" placeholder="Jumlah" style="display: none"></td>
+            <td>`+ btnHapus +`</td>
         </tr>
     `;
 }
