@@ -66,6 +66,12 @@ class PengajuanRuanganRepository
         return $data;
     }
 
+    public function getDataRuangan($idRuangan){
+        $data = Ruangan::whereIn('id_ruangan', $idRuangan)->get();
+
+        return $data;
+    }
+
     public function getDataRuanganAktif($idRuangan){
         $data = Ruangan::where('is_aktif', 1);
         if (!empty($idRuangan)) {

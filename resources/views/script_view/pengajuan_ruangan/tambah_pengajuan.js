@@ -6,6 +6,39 @@ let formValidation;
 let stepperEl;
 let instanceJadwal, instanceJamMulai, instanceJamSelesai;
 let toast;
+let nomorPeralatan;
+let dataRuangan = [
+    {
+        "id_ruangan": "4AB09A82-2901-4791-9695-CDDD51037631",
+        "gambar_file": "E06A013D-DBA0-416E-8828-3F634660B907",
+        "kode_ruangan": "TG-302",
+        "nama": "Ruangan TG-302",
+        "jenis_ruangan": "Ruang Kuliah",
+        "fasilitas": "[\n    {\n        \"id\": \"meja_dosen\",\n        \"text\": \"Meja Dosen\",\n        \"icon\": \"bx-user-voice\"\n    },\n    {\n        \"id\": \"charger\",\n        \"text\": \"Charging Station\",\n        \"icon\": \"bx-battery\"\n    },\n    {\n        \"id\": \"meja_lab\",\n        \"text\": \"Meja Lab Tahan Kimia\",\n        \"icon\": \"bx-lock\"\n    },\n    {\n        \"id\": \"dispenser\",\n        \"text\": \"Dispenser \\/ Galon\",\n        \"icon\": \"bx-droplet\"\n    },\n    {\n        \"id\": \"reservasi_digital\",\n        \"text\": \"Reservasi Digital\",\n        \"icon\": \"bx-calendar\"\n    }\n]",
+        "kapasitas": 50,
+        "lokasi": "Gedung teknik geofisika lt 2",
+        "is_aktif": 1,
+        "keterangan": "Ruangan ber-AC, dilengkapi proyektor dan sound system. Cocok untuk kegiatan rapat, pelatihan, atau seminar dengan kapasitas maksimal 50 orang.",
+        "created_at": "2025-04-21T05:27:51.000000Z",
+        "updated_at": "2025-04-23T03:52:17.000000Z",
+        "updater": 24
+    },
+    {
+        "id_ruangan": "DA08FCE9-7AFB-4425-9AF1-963F9C1A31B8",
+        "gambar_file": "A15E0551-FE09-4E49-80E0-09BB7B09F980",
+        "kode_ruangan": "TG-304",
+        "nama": "Ruangan TG-304",
+        "jenis_ruangan": "Ruang Kuliah",
+        "fasilitas": "[\n    {\n        \"id\": \"kursi_mahasiswa\",\n        \"text\": \"Kursi Mahasiswa\",\n        \"icon\": \"bx-chair\"\n    },\n    {\n        \"id\": \"meja_mahasiswa\",\n        \"text\": \"Meja Mahasiswa\",\n        \"icon\": \"bx-table\"\n    },\n    {\n        \"id\": \"whiteboard\",\n        \"text\": \"Whiteboard \\/ Papan Tulis\",\n        \"icon\": \"bx-edit-alt\"\n    },\n    {\n        \"id\": \"karpet\",\n        \"text\": \"Karpet \\/ Lantai\",\n        \"icon\": \"bx-grid-alt\"\n    },\n    {\n        \"id\": \"monitor\",\n        \"text\": \"LCD Monitor\",\n        \"icon\": \"bx-desktop\"\n    },\n    {\n        \"id\": \"wifi\",\n        \"text\": \"Wi-Fi \\/ LAN\",\n        \"icon\": \"bx-wifi\"\n    },\n    {\n        \"id\": \"speaker\",\n        \"text\": \"Speaker \\/ Sound System\",\n        \"icon\": \"bx-speaker\"\n    },\n    {\n        \"id\": \"mikrofon\",\n        \"text\": \"Mikrofon\",\n        \"icon\": \"bx-microphone\"\n    },\n    {\n        \"id\": \"cctv\",\n        \"text\": \"Kamera CCTV\",\n        \"icon\": \"bx-camera-home\"\n    },\n    {\n        \"id\": \"apar\",\n        \"text\": \"APAR (Pemadam Api)\",\n        \"icon\": \"bxs-hot\"\n    },\n    {\n        \"id\": \"rfid\",\n        \"text\": \"Kartu Akses \\/ RFID\",\n        \"icon\": \"bx-id-card\"\n    }\n]",
+        "kapasitas": 100,
+        "lokasi": "Gedung Teknik Geofisika ITS lt 2",
+        "is_aktif": 1,
+        "keterangan": "1. Ruangan hanya boleh digunakan sesuai waktu yang telah disepakati dalam jadwal sewa.\r\n2. Penyewa wajib menjaga kebersihan dan kerapihan ruangan selama dan setelah penggunaan.\r\n3. Dilarang merokok, membawa makanan berat, atau minuman beralkohol ke dalam ruangan.\r\n4. Fasilitas di dalam ruangan (AC, proyektor, meja, kursi, dll) harus digunakan dengan hati-hati.\r\n5. Jika terjadi kerusakan pada fasilitas selama masa sewa, penyewa wajib bertanggung jawab atas penggantiannya.\r\n6. Penggunaan ruangan di luar waktu yang ditentukan akan dikenakan biaya tambahan.\r\n7. Penyewa wajib meninggalkan ruangan dalam kondisi seperti semula.\r\n8. Pembatalan sewa minimal 1 hari sebelum waktu penggunaan. Pembatalan mendadak akan tetap dikenakan biaya sewa.",
+        "created_at": "2025-04-23T03:29:52.000000Z",
+        "updated_at": "2025-04-23T10:35:49.000000Z",
+        "updater": 24
+    }
+];
 
 $(document).ready(function () {
     const toastLive = document.getElementById('liveToast')
@@ -84,7 +117,10 @@ function stepperHandler(){
 
     $('#btn-next-2').click(() => {
         if (formValidation.form()){
-            checkAvaliableJadwal();
+            stepper.to(3)
+            $('#tabelPeminjaman').html("");
+            nomorPeralatan = 2;
+            generateTablePeminjaman();
         }
     });
 
@@ -133,18 +169,18 @@ function validasiForm() {
                 required: false
             },
             'ruangan[]': {
-                required: true
+                required: false
             },
             tanggal_booking: {
-                required: true
+                required: false
             },
             jam_mulai: {
-                required: true,
-                time24:true
+                required: false,
+                time24: false
             },
             jam_selesai: {
-                required: true,
-                time24:true
+                required: false,
+                time24: false
             }
         },
         messages: {
@@ -403,8 +439,11 @@ function checkAvaliableJadwal(){
             'jam_selesai': jamSelesai
         },
         success: function(response) {
+            let status = response.status;
+            dataRuangan = response.dataRuangan;
+
             setLoadingButton('btn-next-2', false);
-            if (response){
+            if (status){
                 stepper.to(3);
             }else{
                 showToast('Jadwal bentrok dengan jadwal lain!', 'bg-danger')
@@ -462,4 +501,86 @@ function setLoadingButton(btnId, loading = true) {
         text.innerHTML = '<span class="align-middle d-sm-inline-block">Selanjutnya</span><i class="icon-base bx bx-chevron-right icon-sm me-sm-n2 me-sm-2"></i>';
         btn.disabled = false;
     }
+}
+
+function generateTableHeader(){
+    return `
+            <table id="dataSarpras" class="table table-bordered table-sm">
+                <thead>
+                    <tr style="background-color: rgba(8, 60, 132, 0.16) !important">
+                        <td class="fw-bold" nowrap style="width: 5%; color: rgb(8, 60, 132)" align="center">No</td>
+                        <td class="fw-bold" style="width: 80%; color: rgb(8, 60, 132)" align="center">Nama Sarana/Prasarana</td>
+                        <td class="fw-bold" nowrap style="width: 10%; color: rgb(8, 60, 132)" align="center">Jumlah</td>
+                        <td class="fw-bold" nowrap style="width: 5%; color: rgb(8, 60, 132)" align="center">Aksi</td>
+                    </tr>
+                </thead>
+                <tbody id="tbodySarpras">
+                    <tr>
+                        <td class="fw-bold fst-italic">A.</td>
+                        <td class="fw-bold fst-italic" colspan="3">Ruangan</td>
+                    </tr>
+    `;
+}
+
+function generateTablePeminjaman(){
+    let html = generateTableHeader();
+    $.each(dataRuangan, function (index, item) {
+        html += `
+            <tr>
+                <td align="center">${index + 1}</td>
+                <td>${item.kode_ruangan} - ${item.nama}</td>
+                <td align="center">1</td>
+                <td align="center"></td>
+            </tr>
+        `;
+    });
+
+    // Bagian B: Peralatan (judul)
+    html += `
+        <tr>
+            <td class="fw-bold fst-italic">B.</td>
+            <td class="fw-bold" colspan="3" style="vertical-align: middle"><span style="font-style: italic; line-height: 2">Peralatan</span>
+                <span id="btnTambahPeralatan" class="btn btn-sm btn-primary float-end">+ Tambah Peralatan</span>
+            </td>
+        </tr>
+    `;
+
+    // Baris awal peralatan (kosong)
+    html += getBarisPeralatan(1);
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+    $('#tabelPeminjaman').html(html);
+
+    $('#btnTambahPeralatan').click(() => {
+        $('#tbodySarpras').append(getBarisPeralatan(nomorPeralatan));
+        nomorPeralatan++;
+    });
+
+    $(document).on('click', '.btnHapusBaris', function () {
+        $(this).closest('tr').remove(); // hapus baris tempat tombol itu berada
+        updateNomorBarisPeralatan();   // update ulang nomor
+    });
+}
+
+function getBarisPeralatan(no) {
+    return `
+        <tr class="baris-peralatan" id="peralatan-${no}">
+            <td align="center">${no}</td>
+            <td><input type="text" name="peralatan_nama[]" class="form-control" placeholder="Nama Peralatan"></td>
+            <td><input type="number" name="peralatan_jumlah[]" class="form-control" placeholder="Jumlah"></td>
+            <td><span class="text-danger cursor-pointer btnHapusBaris"><i class="bx bx-trash"></i></span></td>
+        </tr>
+    `;
+}
+
+function updateNomorBarisPeralatan() {
+    $('.baris-peralatan').each(function (i) {
+        $(this).find('.nomor-peralatan').text(i + 1);
+    });
+
+    nomorPeralatan = $('.baris-peralatan').length + 1;
 }

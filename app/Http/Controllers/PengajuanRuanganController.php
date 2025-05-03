@@ -128,7 +128,7 @@ class PengajuanRuanganController extends Controller
             $isEdit = $this->service->checkAksesTambah(Auth()->user()->id_akses);
             $idRuangan = $request->id_ruangan;
             if (!$isEdit) {
-                return response()->json(false);
+                return response()->json(['status' => false, 'dataRuangan' => []]);
             }
 
             $dataJadwal = explode(' s/d ', $request->tanggal_booking);
@@ -139,14 +139,15 @@ class PengajuanRuanganController extends Controller
 
             $cekJadwalBentrok = $this->service->cekJadwalRuanganBentrok($idRuangan, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai);
             if ($cekJadwalBentrok) {
-                return response()->json(false);
+                return response()->json(['status' => false, 'dataRuangan' => []]);
             }else{
-                return response()->json(true);
+                $dataRuangan = $this->service->getDataRuangan($idRuangan);
+                return response()->json(['status' => true, 'dataRuangan' => $dataRuangan]);
             }
         } catch (ValidationException $e) {
-            return response()->json(false);
+            return response()->json(['status' => false, 'dataRuangan' => []]);
         } catch (Exception $e) {
-            return response()->json(false);
+            return response()->json(['status' => false, 'dataRuangan' => []]);
         }
     }
 

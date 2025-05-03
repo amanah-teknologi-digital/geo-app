@@ -210,6 +210,12 @@
                                     <label class="form-label" for="deskripsi_kegiatan">Deskripsi Kegiatan <span class="text-danger">*</span></label>
                                     <textarea rows="5" cols="5" name="deskripsi_kegiatan" id="deskripsi_kegiatan" class="form-control" placeholder="nama kegiatan"></textarea>
                                 </div>
+                                <div class="col-sm-12">
+                                    <label class="form-label" for="deskripsi_kegiatan">Data Peminjaman Sarana & Prasarana <span class="text-danger">*</span></label>
+                                    <div class="table-responsive" id="tabelPeminjaman">
+
+                                    </div>
+                                </div>
 
                                 <div class="col-12 d-flex justify-content-between">
                                     <button class="btn btn-secondary btn-prev" id="btn-prev-2">

@@ -298,6 +298,12 @@ class PengajuanRuanganServices
         return $data;
     }
 
+    public function getDataRuangan($idRuangan){
+        $data = $this->repository->getDataRuangan($idRuangan);
+
+        return $data;
+    }
+
     public function getDataJadwal($idRuangan){
         $data = $this->repository->getDataJadwal($idRuangan);
         $events = [];
