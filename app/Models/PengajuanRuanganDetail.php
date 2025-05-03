@@ -13,18 +13,11 @@ class PengajuanRuanganDetail extends Model
     protected $fillable = [
         'id_pengajuanruangan_detail',
         'id_pengajuan',
-        'id_jenissarana',
-        'nama_sarana',
-        'jumlah'
+        'id_ruangan'
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
-
-    public function jenissarana()
+    public function ruangan()
     {
-        return $this->belongsTo(JenisSarana::class, 'id_jenissarana', 'id_jenissarana');
+        return $this->belongsTo(Ruangan::class, 'id_ruangan', 'id_ruangan');
     }
 }

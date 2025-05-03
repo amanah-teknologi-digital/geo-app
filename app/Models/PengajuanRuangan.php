@@ -12,7 +12,6 @@ class PengajuanRuangan extends Model
     public $incrementing = false;
     protected $fillable = [
         'id_pengajuan',
-        'id_ruangan',
         'pengaju',
         'id_statuspengajuan',
         'id_statuspengaju',
@@ -47,11 +46,6 @@ class PengajuanRuangan extends Model
         return $this->belongsTo(User::class, 'updater', 'id');
     }
 
-    public function ruangan()
-    {
-        return $this->belongsTo(Ruangan::class, 'id_ruangan', 'id_ruangan');
-    }
-
     public function statuspengaju()
     {
         return $this->belongsTo(StatusPengaju::class, 'id_statuspengaju', 'id_statuspengaju');
@@ -67,9 +61,14 @@ class PengajuanRuangan extends Model
         return $this->hasMany(PersetujuanRuangan::class, 'id_pengajuan', 'id_pengajuan')->orderBy('created_at');
     }
 
-    public function pengajuandetail()
+    public function pengajuanruangandetail()
     {
         return $this->hasMany(PengajuanRuanganDetail::class, 'id_pengajuan', 'id_pengajuan');
+    }
+
+    public function pengajuanperalatandetail()
+    {
+        return $this->hasMany(PengajuanPeralatanRuangan::class, 'id_pengajuan', 'id_pengajuan');
     }
 
 }
