@@ -91,10 +91,10 @@
 @endsection
 @section('page-script')
     <script>
-        let title = "{{ $title }}";
-        let isTambah = "{{ $isTambah }}";
-        let routeName = "{{ route('pengajuanruangan.getdata') }}"; // Ensure route name is valid
-        let routeTambah = "{{ route('pengajuanruangan.tambah') }}"
+        const title = "{{ $title }}";
+        const isTambah = "{{ $isTambah }}";
+        const routeName = "{{ route('pengajuanruangan.getdata') }}"; // Ensure route name is valid
+        const routeTambah = "{{ route('pengajuanruangan.tambah') }}"
     </script>
     @vite('resources/views/script_view/pengajuan_ruangan/list_pengajuan.js')
 @endsection

@@ -140,7 +140,7 @@
 @endsection
 @section('page-script')
     <script>
-        let routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
+        const routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
     </script>
     @vite('resources/views/script_view/pengajuan_surat/tambah_pengajuan.js')
 @endsection

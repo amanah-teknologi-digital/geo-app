@@ -132,9 +132,9 @@
 @endsection
 @section('page-script')
     <script>
-        let title = "{{ $title }}";
-        let routeName = "{{ route('jenissurat.getdata') }}"; // Ensure route name is valid
-        let routeTambah = "{{ route('jenissurat.tambah') }}"
+        const title = "{{ $title }}";
+        const routeName = "{{ route('jenissurat.getdata') }}"; // Ensure route name is valid
+        const routeTambah = "{{ route('jenissurat.tambah') }}"
     </script>
     @vite('resources/views/script_view/jenis_surat/list_jenissurat.js')
 @endsection

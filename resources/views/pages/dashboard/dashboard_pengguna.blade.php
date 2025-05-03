@@ -125,9 +125,9 @@
 @endsection
 @section('page-script')
     <script>
-        let routeGetDataSurat = "{{ route('dashboard.suratgetdatapengguna') }}";
-        let istilahPersuratan = "{{ $istilahPersuratan }}";
-        let idUser = "{{ Auth()->user()->id }}";
+        const routeGetDataSurat = "{{ route('dashboard.suratgetdatapengguna') }}";
+        const istilahPersuratan = "{{ $istilahPersuratan }}";
+        const idUser = "{{ Auth()->user()->id }}";
     </script>
     @vite('resources/views/script_view/dashboard_pengguna/script.js')
 @endsection

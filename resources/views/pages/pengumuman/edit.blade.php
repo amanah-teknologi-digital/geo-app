@@ -126,7 +126,7 @@
 @endsection
 @section('page-script')
     <script>
-        let isEdit = {{ $is_edit ? 'true' : 'false' }};
+        const isEdit = {{ $is_edit ? 'true' : 'false' }};
     </script>
     @vite('resources/views/script_view/edit_pengumuman.js')
 @endsection

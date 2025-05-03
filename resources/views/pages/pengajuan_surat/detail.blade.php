@@ -454,7 +454,7 @@
 @endsection
 @section('page-script')
     <script>
-        let isEdit = {{ $isEdit ? 'true' : 'false' }};
+        const isEdit = {{ $isEdit ? 'true' : 'false' }};
     </script>
     @vite('resources/views/script_view/pengajuan_surat/detail_pengajuan.js')
 @endsection

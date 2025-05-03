@@ -219,9 +219,9 @@
 @endsection
 @section('page-script')
     <script>
-        let urlGetData = '{{ route('ruangan.getdatajadwal') }}';
-        let isEdit = {{ $isEdit ? 'true' : 'false' }};
-        let idRuangan = '{{ $idRuangan }}';
+        const urlGetData = '{{ route('ruangan.getdatajadwal') }}';
+        const isEdit = {{ $isEdit ? 'true' : 'false' }};
+        const idRuangan = '{{ $idRuangan }}';
     </script>
     @vite([
         'resources/views/script_view/ruangan/jadwal_ruangan.js'

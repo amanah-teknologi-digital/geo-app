@@ -135,9 +135,9 @@
 @endsection
 @section('page-script')
     <script>
-        let title = "{{ $title }}";
-        let routeName = "{{ route('pengumuman.getdata') }}"; // Ensure route name is valid
-        let routeTambah = "{{ route('pengumuman.tambah') }}"
+        const title = "{{ $title }}";
+        const routeName = "{{ route('pengumuman.getdata') }}"; // Ensure route name is valid
+        const routeTambah = "{{ route('pengumuman.tambah') }}"
     </script>
     @vite('resources/views/script_view/list_pengumuman.js')
 @endsection
