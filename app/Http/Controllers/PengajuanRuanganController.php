@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Repositories\PengajuanRuanganRepository;
 use App\Http\Services\PengajuanRuanganServices;
+use App\Rules\CekHariDalamRange;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Ramsey\Uuid\Nonstandard\Uuid;
 use Yajra\DataTables\DataTables;
 
 class PengajuanRuanganController extends Controller
@@ -152,7 +156,97 @@ class PengajuanRuanganController extends Controller
     }
 
     public function doTambahPengajuan(Request $request){
-        dd($request->input());
+        try {
+            $request->validate([
+                'status_peminjam' => ['required'],
+                'ruangan' => ['required','array'],
+                'jam_mulai' => ['required', 'date_format:H:i'],
+                'jam_selesai' => ['required', 'date_format:H:i', 'after:jam_mulai'],
+                'tanggal_booking' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        $parts = explode(' s/d ', $value);
+
+                        // Cek harus ada 2 tanggal
+                        if (count($parts) !== 2) {
+                            return $fail('Format tanggal harus "dd-mm-YYYY s/d dd-mm-YYYY".');
+                        }
+
+                        foreach ($parts as $part) {
+                            $date = \DateTime::createFromFormat('d-m-Y', trim($part));
+                            if (!$date) {
+                                return $fail('Tanggal harus dalam format dd-mm-YYYY.');
+                            }
+
+                            // Tambahan pengecekan error format
+                            $errors = \DateTime::getLastErrors();
+                            if (!empty($errors['warning_count']) || !empty($errors['error_count'])) {
+                                return $fail('Tanggal tidak valid.');
+                            }
+                        }
+                    }
+                ],
+                'nama_kegiatan' => ['required'],
+                'deskripsi_kegiatan' => ['required'],
+                'peralatan_nama' => ['required','array'],
+                'peralatan_jumlah' => ['required','array']
+            ],[
+                'ruangan.required' => 'Ruangan wajib diisi.',
+                'ruangan.array' => 'Ruangan tidak valid.',
+                'nama_kegiatan.required' => 'Nama kegiatan wajib diisi.',
+                'deskripsi_kegiatan.required' => 'Deskripsi kegiatan wajib diisi.',
+                'tanggal_booking.required' => 'Data tanggal wajib diisi.',
+                'jam_mulai.required' => 'Jam mulai wajib diisi.',
+                'jam_mulai.date_format' => 'Format jam mulai harus HH:MM (contoh: 14:30).',
+                'jam_selesai.required' => 'Jam selesai wajib diisi.',
+                'jam_selesai.date_format' => 'Format jam selesai harus HH:MM (contoh: 14:30).',
+                'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.',
+                'peralatan_nama.required' => 'Nama peralatan wajib diisi.',
+                'peralatan_nama.array' => 'Nama peralatan tidak valid.',
+                'peralatan_jumlah.required' => 'Jumlah peralatan wajib diisi.',
+                'peralatan_jumlah.array' => 'Jumlah peralatan tidak valid.',
+            ]);
+
+            $isTambah = $this->service->checkAksesTambah(Auth()->user()->id_akses);
+            if (!$isTambah) {
+                return redirect(route('pengajuanruangan'))->with('error', 'Anda tidak punya otoritas.');
+            }
+
+            $dataJadwal = explode(' s/d ', $request->tanggal_booking);
+            $tgl_mulai = $dataJadwal[0];
+            $tgl_selesai = $dataJadwal[1];
+            $jam_mulai = $request->jam_mulai;
+            $jam_selesai = $request->jam_selesai;
+            $idRuangan = $request->ruangan;
+            $peralatan = $request->peralatan_nama;
+            $jumlahPeralatan = $request->peralatan_jumlah;
+
+            $cekJadwalBentrok = $this->service->cekJadwalRuanganBentrok($idRuangan, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai);
+
+            if ($cekJadwalBentrok){
+                return redirect(route('pengajuanruangan.tambah'))->with('error', 'Jadwal yang diinputkan bentrok dengan jadwal yang sudah ada.');
+            }
+
+            DB::beginTransaction();
+
+            $idPengajuan = strtoupper(Uuid::uuid4()->toString());
+
+            $this->service->tambahDataPengajuan($tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai, $request->deskripsi_kegiatan, $request->nama_kegiatan);
+            $this->service->tambahDataRuangan($idPengajuan, $idRuangan);
+            $this->service->tambahDataPeralatan($idPengajuan, $peralatan, $jumlahPeralatan);
+
+            DB::commit();
+
+            return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('success', 'Berhasil Tambah Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function getDataJadwal(Request $request){
@@ -166,5 +260,9 @@ class PengajuanRuanganController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    public function detailPengajuan($idPengajuan){
+        dd($idPengajuan);
     }
 }
