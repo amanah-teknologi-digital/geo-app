@@ -100,7 +100,8 @@ function stepperHandler(){
 
     $('#btn-save').click(() => {
         if (formValidation.form()){
-            formValidationEL.submit(); // Ganti dengan ID form kamu
+            formValidationEL.off('submit'); // lepas block "return false"
+            formValidationEL.submit();
         }
     });
 }

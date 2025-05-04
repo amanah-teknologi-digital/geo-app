@@ -71,7 +71,8 @@
                     </div>
                 </div>
                 <div class="bs-stepper-content">
-                    <form id="wizard-validation" action="{{ route('pengajuanruangan.dotambah') }}" onsubmit="return false">
+                    <form method="POST" id="wizard-validation" action="{{ route('pengajuanruangan.dotambah') }}" onsubmit="return false">
+                        @csrf
                         <div id="data-pemohon" class="content">
                             <div class="row g-4">
                                 <div class="col-sm-6">
