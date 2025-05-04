@@ -52,7 +52,7 @@
                     </a>
                 </div>
             </div>
-            <div class="bs-stepper mt-2" id="wizard">
+            <div class="bs-stepper mt-2" id="wizard" style="font-size: 90% !important;">
                 <div class="bs-stepper-header">
                     <div class="step" data-target="#data-pemohon">
                         <button type="button" class="step-trigger"><span class="bs-stepper-circle">1</span><span class="bs-stepper-label"><span class="bs-stepper-title">Data Pemohon</span><span class="bs-stepper-subtitle">Detail Data Pemohon</span></span></button>
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="form-label">Status Peminjam<span class="text-danger">*</span></label>
-                                    <select class="form-control" name="status_peminjam" id="status_peminjam">
+                                    <select class="form-control" name="status_peminjam" id="status_peminjam" style="font-size: 100%">
                                         <option value="" selected disabled>-- Pilih Status Peminjam --</option>
                                         @foreach($dataStatusPeminjam as $status)
                                             <option value="{{ $status->id_statuspengaju }}">{{ $status->nama }}</option>
@@ -143,7 +143,7 @@
                                         <div class="px-6 pb-2 my-sm-0 p-4">
                                             <div class="mb-4">
                                                 <label class="form-label" for="ruangan">Pilih Ruangan <span class="text-danger">*</span></label>
-                                                <select name="ruangan[]" id="ruangan" class="form-control" multiple>
+                                                <select name="ruangan[]" id="ruangan" class="form-control" multiple style="font-size: 100%">
                                                     @foreach($dataRuangan as $ruangan)
                                                         <option value="{{ $ruangan->id_ruangan }}">{{ $ruangan->kode_ruangan.' - '.$ruangan->nama }}</option>
                                                     @endforeach
@@ -193,6 +193,9 @@
                                         <li>
                                             <small><em>Jadwal yang tersedia adalah <b>H + 1</b> dari waktu pengajuan.</em></small>
                                         </li>
+                                        <li>
+                                            <small><em>Jika hari bersifat <b>range</b> maka dibooking sesuai <b>waktu mulai dan selesai per hari & ruangan yang dipilih</b>.</em></small>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -211,11 +214,16 @@
                                     <label class="form-label" for="deskripsi_kegiatan">Deskripsi Kegiatan <span class="text-danger">*</span></label>
                                     <textarea rows="5" cols="5" name="deskripsi_kegiatan" id="deskripsi_kegiatan" class="form-control" placeholder="nama kegiatan"></textarea>
                                 </div>
-                                <div class="col-sm-12 mb-10">
+                                <div class="col-sm-12">
                                     <label class="form-label" for="deskripsi_kegiatan">Data Peminjaman Sarana/Prasarana <span class="text-danger">*</span></label>
-                                    <div class="table-responsive" id="tabelPeminjaman">
-
+                                    <div class="table-responsive" id="tabelPeminjaman"></div>
+                                </div>
+                                <div class="col-sm-12 mb-10">
+                                    <div class="form-check form-check-primary">
+                                        <input type="checkbox" class="form-check-input" id="terms" name="terms">
+                                        <label class="form-check-label" for="terms">Dengan ini, saya mengonfirmasi bahwa semua informasi yang diberikan adalah akurat dan lengkap.</label>
                                     </div>
+                                    <div class="error-container" id="error-terms"></div>
                                 </div>
 
                                 <div class="col-12 d-flex justify-content-between">
@@ -231,7 +239,7 @@
                                 <div class="col-12">
                                     <ul class="fa-ul ml-auto float-end mt-5">
                                         <li>
-                                            <small><em>Jadwal yang tersedia adalah <b>H + 1</b> dari waktu pengajuan.</em></small>
+                                            <small><em>Data peralatan bisa mengajukan <b>lebih dari 1</b> dengan menekan tombol <b>tambah peralatan</b>.</em></small>
                                         </li>
                                     </ul>
                                 </div>

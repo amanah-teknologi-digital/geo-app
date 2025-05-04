@@ -125,6 +125,7 @@ function hiddenStep2(){
 function hiddenStep3(){
     $('#nama_kegiatan').hide();
     $('#deskripsi_kegiatan').hide();
+    $('#terms').hide();
     $('input[name="peralatan_nama[]"]').hide();
     $('input[name="peralatan_jumlah[]"]').hide();
 }
@@ -143,6 +144,7 @@ function showStep2(){
 function showStep3(){
     $('#nama_kegiatan').show();
     $('#deskripsi_kegiatan').show();
+    $('#terms').show();
     $('input[name="peralatan_nama[]"]').show();
     $('input[name="peralatan_jumlah[]"]').show();
 }
@@ -182,6 +184,9 @@ function validasiForm() {
             },
             'peralatan_jumlah[]': {
                 required: true
+            },
+            terms:{
+                required: true
             }
         },
         messages: {
@@ -213,6 +218,9 @@ function validasiForm() {
             },
             'peralatan_jumlah[]': {
                 required: "Jumlah wajib diisi"
+            },
+            terms: {
+                required: "Pernyataan & kondisi belum dicentang."
             }
         },
         ignore: ":hidden",
@@ -223,6 +231,8 @@ function validasiForm() {
                 error.appendTo("#error-jamselesai");
             }else if (element.attr("name") === "ruangan[]") {
                 error.appendTo("#error-ruangan");
+            }else if (element.attr("name") === "terms") {
+                error.appendTo("#error-terms");
             } else {
                 // Default: tampilkan setelah elemen
                 error.insertAfter(element);
