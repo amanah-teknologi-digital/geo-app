@@ -100,7 +100,7 @@ function stepperHandler(){
 
     $('#btn-save').click(() => {
         if (formValidation.form()){
-            formValidationEL.off('submit'); // lepas block "return false"
+            formValidationEL.removeAttr('onsubmit');
             formValidationEL.submit();
         }
     });
@@ -594,8 +594,8 @@ function getBarisPeralatan(no) {
     return `
         <tr class="baris-peralatan" id="peralatan-${no}">
             <td class="nomor-peralatan" align="center">${no}</td>
-            <td><input type="text" name="peralatan_nama[]" class="form-control" placeholder="Nama Peralatan"></td>
-            <td><input type="number" name="peralatan_jumlah[]" class="form-control" placeholder="Jumlah"></td>
+            <td><input type="text" name="peralatan_nama[]" class="form-control" placeholder="Nama Peralatan" autocomplete="off"></td>
+            <td><input type="number" name="peralatan_jumlah[]" class="form-control" placeholder="Jumlah" autocomplete="off"></td>
             <td>`+ btnHapus +`</td>
         </tr>
     `;

@@ -205,7 +205,7 @@
                             <div class="row g-6">
                                 <div class="col-sm-12">
                                     <label class="form-label" for="nama_kegiatan">Nama Kegiatan <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" placeholder="nama kegiatan">
+                                    <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" placeholder="nama kegiatan" autocomplete="off">
                                 </div>
                                 <div class="col-sm-12">
                                     <label class="form-label" for="deskripsi_kegiatan">Deskripsi Kegiatan <span class="text-danger">*</span></label>
