@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Repositories\PengajuanRuanganRepository;
 use App\Http\Services\PengajuanRuanganServices;
 use App\Rules\CekHariDalamRange;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,15 +39,34 @@ class PengajuanRuanganController extends Controller
 
             return DataTables::of($data_pengajuan)
                 ->addIndexColumn()
-                ->addColumn('jenissurat', function ($data_pengajuan) {
-                    return '<b>'.$data_pengajuan->jenis_surat->nama.'</b>';
+                ->addColumn('namaruangan', function ($data_pengajuan) {
+                    $html = '<b class="small">';
+                    foreach ($data_pengajuan->pengajuanruangandetail as $ruangan){
+                        $html .= '&bullet;&nbsp;' . $ruangan->ruangan->nama . '<br>';
+                    }
+
+                    $html .= '</b>';
+
+                    return $html;
+                })
+                ->addColumn('tglbooking', function ($data_pengajuan) {
+                    $tanggalMulai = Carbon::parse($data_pengajuan->tgl_mulai)->translatedFormat('d F Y');
+                    $tanggalSelesai = Carbon::parse($data_pengajuan->tgl_selesai)->translatedFormat('d F Y');
+                    $jamMulai = Carbon::parse($data_pengajuan->jam_mulai)->translatedFormat('H:i');
+                    $jamSelesai = Carbon::parse($data_pengajuan->jam_selesai)->translatedFormat('H:i');
+
+                    if ($data_pengajuan->tgl_mulai == $data_pengajuan->tgl_selesai) {
+                        return "<i class='text-muted small'>$tanggalMulai, jam $jamMulai – $jamSelesai</i>";
+                    } else {
+                        return "<i class='text-muted small'>$tanggalMulai s/d $tanggalSelesai, <br>jam $jamMulai – $jamSelesai</i>";
+                    }
                 })
                 ->addColumn('pengaju', function ($data_pengajuan) {
-                    return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengajuan->nama_pengaju.
-                        ',<br> pada '.$data_pengajuan->created_at->format('d-m-Y H:i').'</span>';
+                    return '<span style="font-size: smaller;">'.$data_pengajuan->nama_pengaju.
+                        ',<br><span class="small"><i><b>'.$data_pengajuan->statuspengaju->nama.'</b></i></span>';
                 })
-                ->addColumn('keterangan', function ($data_pengajuan) {
-                    return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->keterangan.'</span>';
+                ->addColumn('namakegiatan', function ($data_pengajuan) {
+                    return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->nama_kegiatan.'</span>';
                 })
                 ->addColumn('status', function ($data_pengajuan) use($id_akses) {
                     $html = '<span style="font-size: smaller; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
@@ -62,17 +82,17 @@ class PengajuanRuanganController extends Controller
 
                     return $html;
                 })
-                ->rawColumns(['jenissurat', 'aksi', 'keterangan', 'pengaju', 'status']) // Untuk render tombol HTML
-                ->filterColumn('jenissurat', function($query, $keyword) {
-                    $query->whereHas('jenis_surat', function ($q) use ($keyword) {
-                        $q->where('jenis_surat.nama', 'like', "%{$keyword}%");
+                ->rawColumns(['namaruangan', 'tglbooking', 'aksi', 'namakegiatan', 'pengaju', 'status']) // Untuk render tombol HTML
+                ->filterColumn('namaruangan', function($query, $keyword) {
+                    $query->whereHas('pengajuanruangandetail', function ($q) use ($keyword) {
+                        $q->where('pengajuanruangandetail.nama', 'like', "%{$keyword}%");
                     });
                 })
-                ->filterColumn('keterangan', function($query, $keyword) {
-                    $query->where('pengajuan_surat.keterangan', 'LIKE', "%{$keyword}%");
+                ->filterColumn('namakegiatan', function($query, $keyword) {
+                    $query->where('pengajuan_ruangan.nama_kegiatan', 'LIKE', "%{$keyword}%");
                 })
                 ->filterColumn('pengaju', function($query, $keyword) {
-                    $query->where('pengajuan_surat.nama_pengaju', 'LIKE', "%{$keyword}%");
+                    $query->where('pengajuan_ruangan.nama_pengaju', 'LIKE', "%{$keyword}%");
                 })
                 ->toJson();
         }

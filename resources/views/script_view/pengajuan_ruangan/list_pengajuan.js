@@ -30,9 +30,10 @@ $(document).ready(function () {
         },
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'all text-center' },
-            { data: 'jenissurat', name: 'jenissurat', className: 'all', searchable: true },
-            { data: 'pengaju', name: 'pengaju', className: 'all text-nowrap', searchable: true },
-            { data: 'keterangan', name: 'keterangan', className: 'all', searchable: false },
+            { data: 'namaruangan', name: 'namaruangan', className: 'all text-start text-nowrap', searchable: true },
+            { data: 'tglbooking', name: 'tglbooking', className: 'all text-center text-nowrap', searchable: true },
+            { data: 'pengaju', name: 'pengaju', className: 'all text-nowrap text-center', searchable: true },
+            { data: 'namakegiatan', name: 'namakegiatan', className: 'all text-nowrap', searchable: true },
             { data: 'status', name: 'status', className: 'all text-center', searchable: false },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'all text-center text-nowrap' }
         ],

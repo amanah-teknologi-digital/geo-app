@@ -49,8 +49,9 @@
                             <tr>
                                 <th style="border-top-width: 1px" nowrap class="text-center">No</th>
                                 <th style="border-top-width: 1px" nowrap>Nama Ruangan</th>
+                                <th style="border-top-width: 1px" nowrap>Tgl Booking</th>
                                 <th style="border-top-width: 1px">Data Pengaju</th>
-                                <th style="border-top-width: 1px">Keterangan</th>
+                                <th style="border-top-width: 1px">Kegiatan</th>
                                 <th style="border-top-width: 1px" nowrap>Status Pengajuan</th>
                                 <th style="border-top-width: 1px" nowrap class="text-center">Aksi</th>
                             </tr>
