@@ -151,6 +151,10 @@ class PengajuanRuanganController extends Controller
         }
     }
 
+    public function doTambahPengajuan(Request $request){
+        dd($request->input());
+    }
+
     public function getDataJadwal(Request $request){
         $idRuangan = $request->id_ruangan;
         $dataJadwal = $this->service->getDataJadwal($idRuangan);

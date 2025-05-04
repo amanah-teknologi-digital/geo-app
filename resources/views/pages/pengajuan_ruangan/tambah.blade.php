@@ -224,7 +224,7 @@
                                     </button>
                                     <button class="btn btn-success" id="btn-save">
                                         <i class="icon-base bx bx-save icon-sm"></i>&nbsp;
-                                        <span class="align-middle d-sm-inline-block">Ajukan Data</span>
+                                        <span class="align-middle d-sm-inline-block">Tambah Pengajuan</span>
                                     </button>
                                 </div>
                                 <div class="col-12">

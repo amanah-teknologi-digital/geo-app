@@ -7,38 +7,7 @@ let stepperEl;
 let instanceJadwal, instanceJamMulai, instanceJamSelesai;
 let toast;
 let nomorPeralatan;
-let dataRuangan = [
-    {
-        "id_ruangan": "4AB09A82-2901-4791-9695-CDDD51037631",
-        "gambar_file": "E06A013D-DBA0-416E-8828-3F634660B907",
-        "kode_ruangan": "TG-302",
-        "nama": "Ruangan TG-302",
-        "jenis_ruangan": "Ruang Kuliah",
-        "fasilitas": "[\n    {\n        \"id\": \"meja_dosen\",\n        \"text\": \"Meja Dosen\",\n        \"icon\": \"bx-user-voice\"\n    },\n    {\n        \"id\": \"charger\",\n        \"text\": \"Charging Station\",\n        \"icon\": \"bx-battery\"\n    },\n    {\n        \"id\": \"meja_lab\",\n        \"text\": \"Meja Lab Tahan Kimia\",\n        \"icon\": \"bx-lock\"\n    },\n    {\n        \"id\": \"dispenser\",\n        \"text\": \"Dispenser \\/ Galon\",\n        \"icon\": \"bx-droplet\"\n    },\n    {\n        \"id\": \"reservasi_digital\",\n        \"text\": \"Reservasi Digital\",\n        \"icon\": \"bx-calendar\"\n    }\n]",
-        "kapasitas": 50,
-        "lokasi": "Gedung teknik geofisika lt 2",
-        "is_aktif": 1,
-        "keterangan": "Ruangan ber-AC, dilengkapi proyektor dan sound system. Cocok untuk kegiatan rapat, pelatihan, atau seminar dengan kapasitas maksimal 50 orang.",
-        "created_at": "2025-04-21T05:27:51.000000Z",
-        "updated_at": "2025-04-23T03:52:17.000000Z",
-        "updater": 24
-    },
-    {
-        "id_ruangan": "DA08FCE9-7AFB-4425-9AF1-963F9C1A31B8",
-        "gambar_file": "A15E0551-FE09-4E49-80E0-09BB7B09F980",
-        "kode_ruangan": "TG-304",
-        "nama": "Ruangan TG-304",
-        "jenis_ruangan": "Ruang Kuliah",
-        "fasilitas": "[\n    {\n        \"id\": \"kursi_mahasiswa\",\n        \"text\": \"Kursi Mahasiswa\",\n        \"icon\": \"bx-chair\"\n    },\n    {\n        \"id\": \"meja_mahasiswa\",\n        \"text\": \"Meja Mahasiswa\",\n        \"icon\": \"bx-table\"\n    },\n    {\n        \"id\": \"whiteboard\",\n        \"text\": \"Whiteboard \\/ Papan Tulis\",\n        \"icon\": \"bx-edit-alt\"\n    },\n    {\n        \"id\": \"karpet\",\n        \"text\": \"Karpet \\/ Lantai\",\n        \"icon\": \"bx-grid-alt\"\n    },\n    {\n        \"id\": \"monitor\",\n        \"text\": \"LCD Monitor\",\n        \"icon\": \"bx-desktop\"\n    },\n    {\n        \"id\": \"wifi\",\n        \"text\": \"Wi-Fi \\/ LAN\",\n        \"icon\": \"bx-wifi\"\n    },\n    {\n        \"id\": \"speaker\",\n        \"text\": \"Speaker \\/ Sound System\",\n        \"icon\": \"bx-speaker\"\n    },\n    {\n        \"id\": \"mikrofon\",\n        \"text\": \"Mikrofon\",\n        \"icon\": \"bx-microphone\"\n    },\n    {\n        \"id\": \"cctv\",\n        \"text\": \"Kamera CCTV\",\n        \"icon\": \"bx-camera-home\"\n    },\n    {\n        \"id\": \"apar\",\n        \"text\": \"APAR (Pemadam Api)\",\n        \"icon\": \"bxs-hot\"\n    },\n    {\n        \"id\": \"rfid\",\n        \"text\": \"Kartu Akses \\/ RFID\",\n        \"icon\": \"bx-id-card\"\n    }\n]",
-        "kapasitas": 100,
-        "lokasi": "Gedung Teknik Geofisika ITS lt 2",
-        "is_aktif": 1,
-        "keterangan": "1. Ruangan hanya boleh digunakan sesuai waktu yang telah disepakati dalam jadwal sewa.\r\n2. Penyewa wajib menjaga kebersihan dan kerapihan ruangan selama dan setelah penggunaan.\r\n3. Dilarang merokok, membawa makanan berat, atau minuman beralkohol ke dalam ruangan.\r\n4. Fasilitas di dalam ruangan (AC, proyektor, meja, kursi, dll) harus digunakan dengan hati-hati.\r\n5. Jika terjadi kerusakan pada fasilitas selama masa sewa, penyewa wajib bertanggung jawab atas penggantiannya.\r\n6. Penggunaan ruangan di luar waktu yang ditentukan akan dikenakan biaya tambahan.\r\n7. Penyewa wajib meninggalkan ruangan dalam kondisi seperti semula.\r\n8. Pembatalan sewa minimal 1 hari sebelum waktu penggunaan. Pembatalan mendadak akan tetap dikenakan biaya sewa.",
-        "created_at": "2025-04-23T03:29:52.000000Z",
-        "updated_at": "2025-04-23T10:35:49.000000Z",
-        "updater": 24
-    }
-];
+let dataRuangan=[];
 
 $(document).ready(function () {
     const toastLive = document.getElementById('liveToast')
@@ -118,13 +87,7 @@ function stepperHandler(){
 
     $('#btn-next-2').click(() => {
         if (formValidation.form()){
-            stepper.to(3)
-            $('#tabelPeminjaman').html("");
-            nomorPeralatan = 2;
-            generateTablePeminjaman();
-            setTimeout(function() {
-                showStep3();
-            }, 100);
+            checkAvaliableJadwal();
         }
     });
 
@@ -133,6 +96,12 @@ function stepperHandler(){
         calendar.updateSize();
         resetErrorForm();
         hiddenStep3()
+    });
+
+    $('#btn-save').click(() => {
+        if (formValidation.form()){
+            formValidationEL.submit(); // Ganti dengan ID form kamu
+        }
     });
 }
 
@@ -185,21 +154,27 @@ function validasiForm() {
     formValidation = formValidationEL.validate({
         rules: {
             status_peminjam: {
-                required: false
+                required: true
             },
             'ruangan[]': {
-                required: false
+                required: true
             },
             tanggal_booking: {
-                required: false
+                required: true
             },
             jam_mulai: {
-                required: false,
-                time24: false
+                required: true,
+                time24: true
             },
             jam_selesai: {
-                required: false,
-                time24: false
+                required: true,
+                time24: true
+            },
+            nama_kegiatan: {
+                required: true
+            },
+            deskripsi_kegiatan: {
+                required: true
             },
             'peralatan_nama[]': {
                 required: true
@@ -225,6 +200,12 @@ function validasiForm() {
             jam_selesai: {
                 required: "Jam selesai wajib diisi.",
                 time24: "Waktu tidak valid."
+            },
+            nama_kegiatan: {
+                required: "Nama Kegiatan wajib diisi.",
+            },
+            deskripsi_kegiatan: {
+                required: "Deskripsi Kegiatan wajib diisi.",
             },
             'peralatan_nama[]': {
                 required: "Nama peralatan wajib diisi"
@@ -475,7 +456,13 @@ function checkAvaliableJadwal(){
 
             setLoadingButton('btn-next-2', false);
             if (status){
-                stepper.to(3);
+                stepper.to(3)
+                $('#tabelPeminjaman').html("");
+                nomorPeralatan = 2;
+                setTimeout(function() {
+                    generateTablePeminjaman();
+                    showStep3();
+                }, 100);
             }else{
                 showToast('Jadwal bentrok dengan jadwal lain!', 'bg-danger')
             }
@@ -606,8 +593,8 @@ function getBarisPeralatan(no) {
     return `
         <tr class="baris-peralatan" id="peralatan-${no}">
             <td class="nomor-peralatan" align="center">${no}</td>
-            <td><input type="text" name="peralatan_nama[]" class="form-control" placeholder="Nama Peralatan" style="display: none"></td>
-            <td><input type="number" name="peralatan_jumlah[]" class="form-control" placeholder="Jumlah" style="display: none"></td>
+            <td><input type="text" name="peralatan_nama[]" class="form-control" placeholder="Nama Peralatan"></td>
+            <td><input type="number" name="peralatan_jumlah[]" class="form-control" placeholder="Jumlah"></td>
             <td>`+ btnHapus +`</td>
         </tr>
     `;
