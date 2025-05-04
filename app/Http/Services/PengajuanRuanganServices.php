@@ -24,9 +24,32 @@ class PengajuanRuanganServices
         return $data;
     }
 
-    public function tambahPengajuan($request, $id_pengajuan){
+    public function tambahDataPengajuan($idPengajuan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai, $statusPengaju, $deskripsiKegiatan, $namaKegiatan){
         try {
-            $this->repository->tambahPengajuan($request, $id_pengajuan);
+            $this->repository->tambahDataPengajuan($idPengajuan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai, $statusPengaju, $deskripsiKegiatan, $namaKegiatan);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function tambahDataRuangan($idPengajuan, $idRuangan){
+        try {
+            foreach ($idRuangan as $ruangan) {
+                $this->repository->tambahDataRuangan($idPengajuan, $ruangan);
+            }
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function tambahDataPeralatan($idPengajuan, $peralatan, $jumlahPeralatan){
+        try {
+            foreach ($peralatan as $key => $alat) {
+                $jumlah = $jumlahPeralatan[$key];
+                $this->repository->tambahDataPeralatan($idPengajuan, $alat, $jumlah);
+            }
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

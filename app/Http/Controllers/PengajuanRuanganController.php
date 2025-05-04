@@ -191,6 +191,7 @@ class PengajuanRuanganController extends Controller
                 'peralatan_nama' => ['required','array'],
                 'peralatan_jumlah' => ['required','array']
             ],[
+                'status_peminjam.required' => 'Status Peminjam wajib diisi.',
                 'ruangan.required' => 'Ruangan wajib diisi.',
                 'ruangan.array' => 'Ruangan tidak valid.',
                 'nama_kegiatan.required' => 'Nama kegiatan wajib diisi.',
@@ -231,7 +232,7 @@ class PengajuanRuanganController extends Controller
 
             $idPengajuan = strtoupper(Uuid::uuid4()->toString());
 
-            $this->service->tambahDataPengajuan($tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai, $request->deskripsi_kegiatan, $request->nama_kegiatan);
+            $this->service->tambahDataPengajuan($idPengajuan, $tgl_mulai, $tgl_selesai, $jam_mulai, $jam_selesai, $request->status_peminjam, $request->deskripsi_kegiatan, $request->nama_kegiatan);
             $this->service->tambahDataRuangan($idPengajuan, $idRuangan);
             $this->service->tambahDataPeralatan($idPengajuan, $peralatan, $jumlahPeralatan);
 

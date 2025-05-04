@@ -6,8 +6,10 @@ use App\Models\FilePengajuanSurat;
 use App\Models\Files;
 use App\Models\JadwalRuangan;
 use App\Models\JenisSurat;
+use App\Models\PengajuanPeralatanRuangan;
 use App\Models\PengajuanPersuratan;
 use App\Models\PengajuanRuangan;
+use App\Models\PengajuanRuanganDetail;
 use App\Models\Pengumuman;
 use App\Models\PersetujuanPersuratan;
 use App\Models\Ruangan;
@@ -89,21 +91,46 @@ class PengajuanRuanganRepository
         return $data;
     }
 
-    public function tambahPengajuan($request, $id_pengajuan){
-        PengajuanPersuratan::create([
-            'id_pengajuan' => $id_pengajuan,
+    public function tambahDataPengajuan($idPengajuan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai, $statusPengaju, $deskripsiKegiatan, $namaKegiatan){
+        PengajuanRuangan::create([
+            'id_pengajuan' => $idPengajuan,
             'pengaju' => auth()->user()->id,
             'id_statuspengajuan' => 0, //draft
-            'id_jenissurat' => $request->jenis_surat,
+            'id_statuspengaju' => $statusPengaju,
+            'nama_kegiatan' => $namaKegiatan,
+            'deskripsi' => $deskripsiKegiatan,
+            'tgl_mulai' => Carbon::createFromFormat('d-m-Y', $tglMulai),
+            'tgl_selesai' => Carbon::createFromFormat('d-m-Y', $tglSelesai),
+            'jam_mulai' => Carbon::createFromFormat('H:i', $jamMulai),
+            'jam_selesai' => Carbon::createFromFormat('H:i', $jamSelesai),
             'nama_pengaju' => auth()->user()->name,
             'no_hp' => auth()->user()->no_hp,
             'email' => auth()->user()->email,
             'email_its' => auth()->user()->email_its,
             'kartu_id' => auth()->user()->kartu_id,
-            'keterangan' => $request->keterangan,
-            'data_form' => $request->editor_surat,
             'created_at' => now(),
             'updater' => auth()->user()->id
+        ]);
+    }
+
+    public function tambahDataRuangan($idPengajuan, $ruangan){
+        $idPengajuanDetail = strtoupper(Uuid::uuid4()->toString());
+
+        PengajuanRuanganDetail::create([
+            'id_pengajuanruangan_detail' => $idPengajuanDetail,
+            'id_pengajuan' => $idPengajuan,
+            'id_ruangan' => $ruangan,
+        ]);
+    }
+
+    public function tambahDataPeralatan($idPengajuan, $alat, $jumlah){
+        $idPengajuanDetail = strtoupper(Uuid::uuid4()->toString());
+
+        PengajuanPeralatanRuangan::create([
+            'id_pengajuanperalatan_ruang' => $idPengajuanDetail,
+            'id_pengajuan' => $idPengajuan,
+            'nama_sarana' => $alat,
+            'jumlah' => $jumlah,
         ]);
     }
 
