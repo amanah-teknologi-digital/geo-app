@@ -70,7 +70,7 @@
     </div>
     <div class="modal fade" id="modal-hapus" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengajuansurat.hapus') }}" method="POST">
+            <form action="{{ route('pengajuanruangan.hapus') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id_pengajuan" id="id_hapus">
                 <div class="modal-content">

@@ -478,7 +478,7 @@ function checkAvaliableJadwal(){
             if (status){
                 stepper.to(3)
                 $('#tabelPeminjaman').html("");
-                nomorPeralatan = 2;
+                nomorPeralatan = (dataPeralatan.length+1);
                 setTimeout(function() {
                     generateTablePeminjaman();
                     showStep3();
@@ -584,7 +584,11 @@ function generateTablePeminjaman(){
     `;
 
     // Baris awal peralatan (kosong)
-    html += getBarisPeralatan(1);
+    console.log(dataPeralatan)
+    $.each(dataPeralatan, function (i,e){
+        console.log(e)
+        html += getBarisPeralatan((i+1), e['nama_sarana'], e['jumlah']);
+    })
 
     html += `
             </tbody>
@@ -604,7 +608,7 @@ function generateTablePeminjaman(){
     });
 }
 
-function getBarisPeralatan(no) {
+function getBarisPeralatan(no, nama = '', jumlah = '') {
     let btnHapus = ``;
     if (no !== 1){
         btnHapus = `<span class="text-danger cursor-pointer btnHapusBaris"><i class="bx bx-trash"></i></span>`;
@@ -613,8 +617,8 @@ function getBarisPeralatan(no) {
     return `
         <tr class="baris-peralatan" id="peralatan-${no}">
             <td class="nomor-peralatan" align="center">${no}</td>
-            <td><input type="text" name="peralatan_nama[]" class="form-control" placeholder="Nama Peralatan" autocomplete="off"></td>
-            <td><input type="number" name="peralatan_jumlah[]" class="form-control" placeholder="Jumlah" autocomplete="off"></td>
+            <td><input type="text" name="peralatan_nama[]" class="form-control" placeholder="Nama Peralatan" value="`+nama+`" autocomplete="off"></td>
+            <td><input type="number" name="peralatan_jumlah[]" class="form-control" value="`+jumlah+`" placeholder="Jumlah" autocomplete="off"></td>
             <td>`+ btnHapus +`</td>
         </tr>
     `;

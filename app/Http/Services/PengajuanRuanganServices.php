@@ -94,6 +94,8 @@ class PengajuanRuanganServices
 
     public function hapusPengajuan($id_pengajuan){
         try {
+            $this->repository->hapusDetailPengajuanRuangan($id_pengajuan);
+            $this->repository->hapusDetailPengajuanPeralatan($id_pengajuan);
             $this->repository->hapusPengajuan($id_pengajuan);
         }catch(Exception $e){
             Log::error($e->getMessage());

@@ -236,9 +236,9 @@
                                                             <i class="icon-base bx bx-chevron-left icon-sm ms-sm-n2 me-sm-2"></i>
                                                             <span class="align-middle d-sm-inline-block">Sebelumnya</span>
                                                         </button>
-                                                        <button class="btn btn-success" id="btn-save">
+                                                        <button class="btn btn-warning text-black" id="btn-save">
                                                             <i class="icon-base bx bx-save icon-sm"></i>&nbsp;
-                                                            <span class="align-middle d-sm-inline-block">Tambah Pengajuan</span>
+                                                            <span class="align-middle d-sm-inline-block">Update Pengajuan</span>
                                                         </button>
                                                     </div>
                                                     <div class="col-12">
@@ -458,6 +458,14 @@
             </form>
         </div>
     </div>
+    @php
+        $dataPeralatan = $dataPengajuan->pengajuanperalatandetail->map(function ($item) {
+            return [
+                'nama_sarana' => $item->nama_sarana,
+                'jumlah' => $item->jumlah,
+            ];
+        });
+    @endphp
 @endsection
 @section('page-script')
     <script>
@@ -467,7 +475,7 @@
         const jamMulai = '{{ $dataPengajuan->jam_mulai }}';
         const jamSelesai = '{{ $dataPengajuan->jam_selesai }}';
         const idRuangan = @json($dataPengajuan->pengajuanruangandetail->pluck('id_ruangan')->toArray());
-        const dataPeralatan = @json($dataPengajuan->pengajuanperalatandetail->pluck(['nama_sarana', 'jumlah'])->toArray());
+        const dataPeralatan = @json($dataPeralatan);
         const urlGetData = '{{ route('pengajuanruangan.getdatajadwal') }}';
         const urlCheckJadwalRuangan = '{{ route('pengajuanruangan.cekdatajadwal') }}';
     </script>

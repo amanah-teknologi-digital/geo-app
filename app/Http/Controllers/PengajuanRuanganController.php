@@ -311,6 +311,34 @@ class PengajuanRuanganController extends Controller
         return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'dataStatusPeminjam', 'dataRuangan', 'title'));
     }
 
+    public function doHapusPengajuan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan tidak ada.',
+            ]);
+
+            $dataPengajuan = $this->service->getDataPengajuan($request->id_pengajuan);
+
+            DB::beginTransaction();
+
+            $this->service->hapusPengajuan($dataPengajuan->id_pengajuan);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Berhasil Hapus Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     public function doUpdatePengajuan(Request $request){
         dd($request->input());
     }

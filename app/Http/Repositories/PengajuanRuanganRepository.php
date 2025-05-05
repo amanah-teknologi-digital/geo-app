@@ -172,10 +172,18 @@ class PengajuanRuanganRepository
     }
 
     public function hapusPengajuan($id_pengajuan){
-        $pengajuan = PengajuanPersuratan::where('id_pengajuan', $id_pengajuan)->where('id_statuspengajuan', 0)->first();
+        $pengajuan = PengajuanRuangan::where('id_pengajuan', $id_pengajuan)->where('id_statuspengajuan', 0)->first();
         if ($pengajuan) {
             $pengajuan->delete();
         }
+    }
+
+    public function hapusDetailPengajuanRuangan($id_pengajuan){
+        PengajuanRuanganDetail::where('id_pengajuan', $id_pengajuan)->delete();
+    }
+
+    public function hapusDetailPengajuanPeralatan($id_pengajuan){
+        PengajuanPeralatanRuangan::where('id_pengajuan', $id_pengajuan)->delete();
     }
 
     public function getPersetujuanTerakhir($id_pengajuan, $id_akses){
