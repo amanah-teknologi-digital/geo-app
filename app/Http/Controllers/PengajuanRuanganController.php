@@ -310,4 +310,8 @@ class PengajuanRuanganController extends Controller
 
         return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'dataStatusPeminjam', 'dataRuangan', 'title'));
     }
+
+    public function doUpdatePengajuan(Request $request){
+        dd($request->input());
+    }
 }

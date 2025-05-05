@@ -74,50 +74,50 @@
                                         </div>
                                     </div>
                                     <div class="bs-stepper-content">
-                                        <form method="POST" id="wizard-validation" action="{{ route('pengajuanruangan.dotambah') }}" onsubmit="return false">
+                                        <form method="POST" id="wizard-validation" action="{{ route('pengajuanruangan.doupdate') }}" onsubmit="return false">
                                             @csrf
                                             <div id="data-pemohon" class="content">
                                                 <div class="row g-4">
                                                     <div class="col-sm-6">
                                                         <label class="form-label" >Nama Pengaju <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" placeholder="nama pengaju" readonly value="{{ auth()->user()->name }}">
+                                                        <input type="text" class="form-control" placeholder="nama pengaju" readonly value="{{ $dataPengajuan->nama_pengaju }}">
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <label class="form-label" >Nomor Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" placeholder="nomor kartu id (NRP/KTP)" readonly value="{{ auth()->user()->kartu_id }}">
+                                                        <input type="text" class="form-control" placeholder="nomor kartu id (NRP/KTP)" readonly value="{{ $dataPengajuan->kartu_id }}">
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <label  class="form-label">No. Hp <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" value="{{ Auth()->user()->no_hp }}" readonly>
+                                                        <input type="text" class="form-control" value="{{ $dataPengajuan->no_hp }}" readonly>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <label class="form-label">Email <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" value="{{ Auth()->user()->email }}" readonly>
+                                                        <input type="text" class="form-control" value="{{ $dataPengajuan->email }}" readonly>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <label class="form-label">Email ITS<span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" value="{{ Auth()->user()->email_its }}" readonly>
+                                                        <input type="text" class="form-control" value="{{ $dataPengajuan->email_its }}" readonly>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <label class="form-label">Status Peminjam<span class="text-danger">*</span></label>
                                                         <select class="form-control" name="status_peminjam" id="status_peminjam" style="font-size: 100%">
                                                             <option value="" selected disabled>-- Pilih Status Peminjam --</option>
                                                             @foreach($dataStatusPeminjam as $status)
-                                                                <option value="{{ $status->id_statuspengaju }}">{{ $status->nama }}</option>
+                                                                <option value="{{ $status->id_statuspengaju }}" <?= $dataPengajuan->id_statuspengaju == $status->id_statuspengaju? 'selected':'' ?>>{{ $status->nama }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                     <div  class="col-sm-6">
                                                         <label class="form-label">File Kartu ID (NRP/KTP) <span class="text-danger">*</span></label>
                                                         @php
-                                                            $file = auth()->user()->file_kartuid;
-                                                            $filePath = auth()->user()->files->location;
-                                                            $imageUrl = Storage::disk('local')->exists($filePath)
+                                                            $file = $dataPengajuan->pihakpengaju->file_kartuid;
+                                                            $filePath = $dataPengajuan->pihakpengaju->files->location;
+                                                            $imageUrl2 = Storage::disk('local')->exists($filePath)
                                                                 ? route('file.getprivatefile', $file)
                                                                 : asset('assets/img/no_image.jpg');
                                                         @endphp
                                                         <div class="d-flex align-items-center gap-2">
-                                                            <img src="{{ $imageUrl }}" class="d-block h-px-100 rounded">
+                                                            <img src="{{ $imageUrl2 }}" class="d-block h-px-100 rounded">
                                                             <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modals-transparent">
                                                                 Lihat file
                                                             </button>
@@ -262,7 +262,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
                 <div class="modal-body">
-                    <img id="kartu_idmodal" src="" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
+                    <img id="kartu_idmodal" src="{{ $imageUrl2 }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
                 </div>
             </div>
         </div>
@@ -416,6 +416,14 @@
 @section('page-script')
     <script>
         const isEdit = {{ $isEdit ? 'true' : 'false' }};
+        const tglMulai = '{{ $dataPengajuan->tgl_mulai }}';
+        const tglSelesai = '{{ $dataPengajuan->tgl_selesai }}';
+        const jamMulai = '{{ $dataPengajuan->jam_mulai }}';
+        const jamSelesai = '{{ $dataPengajuan->jam_selesai }}';
+        const idRuangan = @json($dataPengajuan->pengajuanruangandetail->pluck('id_ruangan')->toArray());
+        const dataPeralatan = @json($dataPengajuan->pengajuanperalatandetail->pluck(['nama_sarana', 'jumlah'])->toArray());
+        const urlGetData = '{{ route('pengajuanruangan.getdatajadwal') }}';
+        const urlCheckJadwalRuangan = '{{ route('pengajuanruangan.cekdatajadwal') }}';
     </script>
     @vite('resources/views/script_view/pengajuan_ruangan/detail_pengajuan.js')
 @endsection

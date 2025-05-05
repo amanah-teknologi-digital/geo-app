@@ -43,7 +43,16 @@ $(document).ready(function () {
     });
 
     $('#ruangan').select2({width:'100%'})
+
+    setDataUpdate();
 });
+
+function setDataUpdate(){
+    $('#ruangan').val(idRuangan).trigger('change');
+    instanceJadwal.setDate([tglMulai, tglSelesai], true)
+    instanceJamMulai.setDate(jamMulai)
+    instanceJamSelesai.setDate(jamSelesai)
+}
 
 function filterHandler(){
     document.querySelectorAll('[data-bs-toggle="sidebar"]').forEach((function (e) {
