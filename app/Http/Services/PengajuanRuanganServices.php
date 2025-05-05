@@ -62,8 +62,8 @@ class PengajuanRuanganServices
         return $data;
     }
 
-    public function getDataRuanganAktif($idRuangan = null){
-        $data = $this->repository->getDataRuanganAktif($idRuangan);
+    public function getDataRuanganAktif($idRuangan = null, $isEdit = false){
+        $data = $this->repository->getDataRuanganAktif($idRuangan, $isEdit);
 
         return $data;
     }

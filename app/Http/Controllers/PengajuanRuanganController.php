@@ -75,7 +75,7 @@ class PengajuanRuanganController extends Controller
                     return $html;
                 })
                 ->addColumn('aksi', function ($data_pengajuan) {
-                    $html = '<a href="'.route('pengajuansurat.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>';
+                    $html = '<a href="'.route('pengajuanruangan.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>';
                     if ($data_pengajuan->id_statuspengajuan == 0) { //status draft bisa hapus
                         $html .= '&nbsp;&nbsp;<a href="javascript:;" data-id="' . $data_pengajuan->id_pengajuan . '" data-bs-toggle="modal" data-bs-target="#modal-hapus" class="btn btn-sm py-1 px-2 btn-danger"><span class="bx bx-trash"></span><span class="d-none d-lg-inline-block">&nbsp;Hapus</span></a>';
                     }
@@ -104,7 +104,7 @@ class PengajuanRuanganController extends Controller
         $title = "Tambah Pengajuan";
 
         $dataStatusPeminjam = $this->service->getDataStatusPeminjam();
-        $dataRuangan = $this->service->getDataRuanganAktif();
+        $dataRuangan = $this->service->getDataRuanganAktif(isEdit: true);
 
         return view('pages.pengajuan_ruangan.tambah', compact('title', 'dataStatusPeminjam', 'dataRuangan'));
     }
@@ -284,6 +284,30 @@ class PengajuanRuanganController extends Controller
     }
 
     public function detailPengajuan($idPengajuan){
-        dd($idPengajuan);
+        $title = "Detail Pengajuan";
+
+        $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
+        $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
+        $dataStatusPeminjam = $this->service->getDataStatusPeminjam();
+        $dataRuangan = $this->service->getDataRuanganAktif(isEdit: $isEdit);
+
+        //$isEdit = false;
+        if ($isEdit){
+            //update data pemohon pengajuan
+            try {
+                DB::beginTransaction();
+
+                $this->service->updateDataPemohon($idPengajuan);
+
+                DB::commit();
+            } catch (Exception $e) {
+                DB::rollBack();
+                Log::error($e->getMessage());
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
+        $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan);
+
+        return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'dataStatusPeminjam', 'dataRuangan', 'title'));
     }
 }

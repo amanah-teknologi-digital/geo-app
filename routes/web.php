@@ -73,7 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:1,3,6,7,8')->group(function () {
         Route::get('/pengajuan-ruangan', [PengajuanRuanganController::class, 'index'])->name('pengajuanruangan');
         Route::get('/pengajuan-ruangan/getdata', [PengajuanRuanganController::class, 'getData'])->name('pengajuanruangan.getdata');
-        Route::get('/pengajuan-ruangan/detail/{$id_pengajuan}', [PengajuanRuanganController::class, 'detailPengajuan'])->name('pengajuanruangan.detail');
+        Route::get('/pengajuan-ruangan/detail/{id_pengajuan}', [PengajuanRuanganController::class, 'detailPengajuan'])->name('pengajuanruangan.detail');
         Route::middleware('role:1,8')->group(function () { //yang bisa mengajukan
             Route::get('/pengajuan-ruangan/tambah', [PengajuanRuanganController::class, 'tambahPengajuan'])->name('pengajuanruangan.tambah');
             Route::post('/pengajuan-ruangan/dotambah', [PengajuanRuanganController::class, 'doTambahPengajuan'])->name('pengajuanruangan.dotambah');

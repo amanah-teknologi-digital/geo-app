@@ -74,12 +74,16 @@ class PengajuanRuanganRepository
         return $data;
     }
 
-    public function getDataRuanganAktif($idRuangan){
-        $data = Ruangan::where('is_aktif', 1);
+    public function getDataRuanganAktif($idRuangan, $isEdit){
+        $data = Ruangan::select('id_ruangan', 'nama');
         if (!empty($idRuangan)) {
             $data = $data->where('id', $idRuangan)->first();
         }else{
-            $data = $data->get();
+            if ($isEdit){
+                $data = $data->where('is_aktif', 1)->get();
+            }else{
+                $data = $data->get();
+            }
         }
 
         return $data;
@@ -158,7 +162,7 @@ class PengajuanRuanganRepository
         $dataPengajuan = $this->getDataPengajuan($id_pengajuan, auth()->user()->id_akses);
         $dataUser = User::find($dataPengajuan->pengaju);
 
-        $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
+        $dataPengajuan = PengajuanRuangan::find($id_pengajuan);
         $dataPengajuan->nama_pengaju = $dataUser->name;
         $dataPengajuan->kartu_id = $dataUser->kartu_id;
         $dataPengajuan->no_hp = $dataUser->no_hp;
