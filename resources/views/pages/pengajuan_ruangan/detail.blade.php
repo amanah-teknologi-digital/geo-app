@@ -211,19 +211,21 @@
                                                 <div class="row g-6">
                                                     <div class="col-sm-12">
                                                         <label class="form-label" for="nama_kegiatan">Nama Kegiatan <span class="text-danger">*</span></label>
-                                                        <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" placeholder="nama kegiatan" autocomplete="off">
+                                                        <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" placeholder="nama kegiatan" autocomplete="off" value="{{ $dataPengajuan->nama_kegiatan }}">
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <label class="form-label" for="deskripsi_kegiatan">Deskripsi Kegiatan <span class="text-danger">*</span></label>
-                                                        <textarea rows="5" cols="5" name="deskripsi_kegiatan" id="deskripsi_kegiatan" class="form-control" placeholder="nama kegiatan"></textarea>
+                                                        <textarea rows="5" cols="5" name="deskripsi_kegiatan" id="deskripsi_kegiatan" class="form-control" placeholder="deskripsi kegiatan">{{ $dataPengajuan->deskripsi }}</textarea>
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <label class="form-label" for="deskripsi_kegiatan">Data Peminjaman Sarana/Prasarana <span class="text-danger">*</span></label>
-                                                        <div class="table-responsive" id="tabelPeminjaman"></div>
+                                                        <div class="table-responsive" id="tabelPeminjaman">
+
+                                                        </div>
                                                     </div>
                                                     <div class="col-sm-12 mb-10">
                                                         <div class="form-check form-check-primary">
-                                                            <input type="checkbox" class="form-check-input" id="terms" name="terms">
+                                                            <input type="checkbox" class="form-check-input" id="terms" name="terms" checked>
                                                             <label class="form-check-label" for="terms">Dengan ini, saya mengonfirmasi bahwa semua informasi yang diberikan adalah akurat dan lengkap.</label>
                                                         </div>
                                                         <div class="error-container" id="error-terms"></div>
@@ -258,11 +260,55 @@
             </div>
         </div>
     </div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+        <div id="liveToast" class="bs-toast toast fade" role="alert">
+            <div class="toast-header">
+                <i class="icon-base bx bx-bell me-2"></i>
+                <div class="me-auto fw-medium">Notifikasi</div>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast-message"></div>
+        </div>
+    </div>
     <div class="modal modal-transparent fade" id="modals-transparent" tabindex="-1" style="border: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="background: rgba(0, 0, 0, 0);border: none;color: white;">
                 <div class="modal-body">
                     <img id="kartu_idmodal" src="{{ $imageUrl2 }}" class="img-fluid w-100 h-100 object-fit-cover" alt="kartu ID">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" >Detail Jadwal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="w-100 p-5">
+                        <tr>
+                            <td style="width: 35%">Nama Ruangan</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 64%">&nbsp;<span class="fw-bold" id="eventModalNamaRuangan"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%">Keterangan</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 64%">&nbsp;<span class="fst-italic" id="eventModalTitle"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%">Waktu Mulai</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 64%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalStart"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 35%">Waktu Selesai</td>
+                            <td style="width: 1%">:</td>
+                            <td style="width: 64%">&nbsp;<span class="text-muted fw-bold fst-italic" id="eventModalEnd"></span></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
