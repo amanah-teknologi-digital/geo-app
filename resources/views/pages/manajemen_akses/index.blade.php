@@ -18,7 +18,7 @@
                     <li class="breadcrumb-item">
                         <a href="#">Master Data</a>
                     </li>
-                    <li class="breadcrumb-item active">Pengumuman</li>
+                    <li class="breadcrumb-item active">Manajemen Akses</li>
                 </ol>
             </nav>
             @if ($errors->any())
@@ -48,9 +48,9 @@
                             <thead>
                             <tr>
                                 <th style="border-top-width: 1px" nowrap class="text-center">No</th>
-                                <th style="border-top-width: 1px" nowrap>Judul</th>
-                                <th style="border-top-width: 1px" nowrap>Pembuat</th>
-                                <th style="border-top-width: 1px" nowrap>Posting</th>
+                                <th style="border-top-width: 1px" nowrap>Nama Akses</th>
+                                <th style="border-top-width: 1px" nowrap>Status</th>
+                                <th style="border-top-width: 1px" nowrap>Jumlah User</th>
                                 <th style="border-top-width: 1px" nowrap class="text-center">Aksi</th>
                             </tr>
                             </thead>
@@ -58,10 +58,7 @@
                     </div>
                     <ul class="fa-ul ml-auto float-end mt-5">
                         <li>
-                            <small><em>Pengumuman yang statusnya posting saja, masuk di list landing page.</em></small>
-                        </li>
-                        <li>
-                            <small><em>Pengumuman yang sudah di posting tidak bisa diedit (harus <b>diunposting</b> terlebih dahulu).</em></small>
+                            <small><em>Hanya akses yang berstatus aktif yang bisa digunakan user.</em></small>
                         </li>
                     </ul>
                 </div>
@@ -139,5 +136,5 @@
         const routeName = "{{ route('pengumuman.getdata') }}"; // Ensure route name is valid
         const routeTambah = "{{ route('pengumuman.tambah') }}"
     </script>
-    @vite('resources/views/script_view/list_pengumuman.js')
+    @vite('resources/views/script_view/manajemen_akses/list_akses.js')
 @endsection

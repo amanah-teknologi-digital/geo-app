@@ -12,7 +12,8 @@ class Akses extends Model
     protected $fillable = [
         'id_akses',
         'nama',
-        'id_halaman'
+        'id_halaman',
+        'is_aktif'
     ];
 
     public function halaman()
