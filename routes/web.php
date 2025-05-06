@@ -4,6 +4,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\JenisSuratController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\ManajemenAksesController;
+use App\Http\Controllers\ManajemenHalamanController;
+use App\Http\Controllers\ManajemenUserController;
 use App\Http\Controllers\PengajuanGeoFacilityController;
 use App\Http\Controllers\PengajuanPersuratanController;
 use App\Http\Controllers\PengajuanRuanganController;
@@ -109,6 +112,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         //pengaturan
         Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan');
         Route::post('/pengaturan/update', [PengaturanController::class, 'updatePengaturan'])->name('pengaturan.update');
+
+        //manajemen akses
+        Route::get('/manajemen-akses', [ManajemenAksesController::class, 'index'])->name('manajemen-akses');
+
+        //manajemen user
+        Route::get('/manajemen-user', [ManajemenUserController::class, 'index'])->name('manajemen-user');
+
+        //manajemen halaman
+        Route::get('/manajemen-halaman', [ManajemenHalamanController::class, 'index'])->name('manajemen-halaman');
     });
 
     //peralatan
