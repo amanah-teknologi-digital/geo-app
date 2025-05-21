@@ -38,6 +38,9 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('web')->logout();
 
+        // Hapus session akses default
+        $request->session()->forget(['akses_default_id', 'akses_default_nama', 'akses_default_halaman']);
+
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();

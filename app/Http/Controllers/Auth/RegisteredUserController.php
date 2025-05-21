@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\AksesUser;
 use App\Models\User;
 use App\Models\Files;
 use Exception;
@@ -98,6 +99,15 @@ class RegisteredUserController extends Controller
                 'no_hp' => $request->no_telepon,
                 'file_kartuid' => $id_file,
                 'id_akses' => 8 //untuk akses pengguna
+            ]);
+
+            //tambah akses user ke database
+            $id_user = $user->id;
+            AksesUser::create([
+                'id_akses' => 8,
+                'id_user' => $id_user,
+                'is_default' => 1,
+                'created_at' => now(),
             ]);
 
             DB::commit();

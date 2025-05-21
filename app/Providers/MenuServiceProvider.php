@@ -33,7 +33,12 @@ class MenuServiceProvider extends ServiceProvider
               $dataSubHeader = [];
               $menu = [];
 
-              $dataHalaman = $user->akses->akseshalaman;
+              $dataHalaman = session('akses_default_halaman');
+              if (!$dataHalaman) {
+                  $dataHalaman = [];
+                  $dataHeader = [];
+              }
+
               foreach ($dataHalaman as $halaman){
                   if (!is_null($halaman->halaman->id_header)){
                       if (empty($dataHeader) OR !in_array($halaman->halaman->id_header, array_column($dataHeader, 'id_header'))){

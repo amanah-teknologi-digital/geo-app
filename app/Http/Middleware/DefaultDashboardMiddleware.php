@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class DefaultDashboardMiddleware
@@ -15,6 +16,25 @@ class DefaultDashboardMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return redirect(route(auth()->user()->akses->halaman->url));
+        // Set default role
+        $user = Auth::user();
+        // Load akses secara aman
+        $aksesList = $user->aksesuser;
+        $defaultAkses = $aksesList->firstWhere('is_default', 1) ?? $aksesList->first();
+
+        if (!$defaultAkses) {
+            abort(403, 'Access Denied');
+        }
+
+        $dataHalaman = $defaultAkses->akses->akseshalaman;
+
+        session([
+            'akses_default_id' => $defaultAkses->id_akses,
+            'akses_default_nama' => $defaultAkses->akses->nama,
+            'akses_default_halaman' => $dataHalaman
+        ]);
+
+
+        return redirect(route($defaultAkses->akses->halaman->url));
     }
 }

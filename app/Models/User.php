@@ -51,9 +51,9 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function akses()
+    public function aksesuser()
     {
-        return $this->belongsTo(Akses::class,'id_akses','id_akses');
+        return $this->hasMany(AksesUser::class,'id_user','id');
     }
 
     public function files()

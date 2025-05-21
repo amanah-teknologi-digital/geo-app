@@ -96,7 +96,7 @@
                             <!-- User -->
                             <li class="nav-item lh-1 me-4">
 
-                                <b>Akses: </b><span class="badge bg-label-success">{{ auth()->user()->akses->nama  }}</span>
+                                <b>Akses: </b><span class="badge bg-label-success">{{ session('akses_default_nama')  }}</span>
                             </li>
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
