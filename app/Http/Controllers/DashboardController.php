@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Repositories\DashboardRepository;
 use App\Http\Services\DashboardServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller{
     private $service;
@@ -75,5 +76,29 @@ class DashboardController extends Controller{
         ];
 
         return response()->json($data);
+    }
+
+    public function gantiHakAkses(Request $request){
+        $id_akses = $request->id_akses;
+        $user = Auth::user();
+        // Load akses secara aman
+        $aksesList = $user->aksesuser;
+        $defaultAkses = $aksesList->firstWhere('id_akses', $id_akses);
+
+        if (!$defaultAkses) {
+            return redirect()->back()->with('error', 'Anda tidak punya otoritas atas akses ini!.');
+        }
+
+        $dataHalaman = $defaultAkses->akses->akseshalaman;
+        $defaultRoute = $defaultAkses->akses->halaman->url;
+
+        session([
+            'akses_default_id' => $defaultAkses->id_akses,
+            'akses_default_nama' => $defaultAkses->akses->nama,
+            'akses_default_halaman' => $dataHalaman,
+            'akses_default_halaman_route' => $defaultAkses->akses->halaman->url
+        ]);
+
+        return redirect(route($defaultRoute))->with('success', 'Berhasil ganti hak akses.');
     }
 }

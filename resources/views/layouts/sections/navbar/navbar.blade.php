@@ -95,7 +95,6 @@
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- User -->
                             <li class="nav-item lh-1 me-4">
-
                                 <b>Akses: </b><span class="badge bg-label-success">{{ session('akses_default_nama')  }}</span>
                             </li>
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -129,6 +128,14 @@
                                     <li>
                                         <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                             <i class="bx bx-user bx-md me-3"></i><span>Data Profile</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider my-1"></div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#gantiAksesModal">
+                                            <i class="bx bx-user-voice bx-md me-3"></i><span>Ganti Hak Akses</span>
                                         </a>
                                     </li>
                                     <li>
