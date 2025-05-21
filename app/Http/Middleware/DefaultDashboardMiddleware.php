@@ -16,25 +16,36 @@ class DefaultDashboardMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Set default role
-        $user = Auth::user();
-        // Load akses secara aman
-        $aksesList = $user->aksesuser;
-        $defaultAkses = $aksesList->firstWhere('is_default', 1) ?? $aksesList->first();
+        $defaultUser = session('akses_default_id');
 
-        if (!$defaultAkses) {
+        if (!($defaultUser)) {
+            // Set default role
+            $user = Auth::user();
+            // Load akses secara aman
+            $aksesList = $user->aksesuser;
+            $defaultAkses = $aksesList->firstWhere('is_default', 1) ?? $aksesList->first();
+
+            if (!$defaultAkses) {
+                abort(403, 'Access Denied');
+            }
+
+            $dataHalaman = $defaultAkses->akses->akseshalaman;
+            $defaultRoute = $defaultAkses->akses->halaman->url;
+
+            session([
+                'akses_default_id' => $defaultAkses->id_akses,
+                'akses_default_nama' => $defaultAkses->akses->nama,
+                'akses_default_halaman' => $dataHalaman,
+                'akses_default_halaman_route' => $defaultAkses->akses->halaman->url
+            ]);
+        }else{
+            $defaultRoute = session('akses_default_halaman_route');
+        }
+
+        if (empty($defaultRoute)) {
             abort(403, 'Access Denied');
         }
 
-        $dataHalaman = $defaultAkses->akses->akseshalaman;
-
-        session([
-            'akses_default_id' => $defaultAkses->id_akses,
-            'akses_default_nama' => $defaultAkses->akses->nama,
-            'akses_default_halaman' => $dataHalaman
-        ]);
-
-
-        return redirect(route($defaultAkses->akses->halaman->url));
+        return redirect(route($defaultRoute));
     }
 }
