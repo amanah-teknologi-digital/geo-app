@@ -15,6 +15,8 @@ class JenisSurat extends Model
         'nama',
         'default_form',
         'is_aktif',
+        'is_datapendukung',
+        'nama_datapendukung',
         'created_at',
         'updated_at',
         'updater'
@@ -33,5 +35,10 @@ class JenisSurat extends Model
     public function pengajuansurat()
     {
         return $this->belongsTo(PengajuanPersuratan::class, 'id_jenissurat', 'id_jenissurat');
+    }
+
+    public function pihakpenyetujusurat()
+    {
+        return $this->hasMany(PihakPenyetujuSurat::class, 'id_jenissurat', 'id_jenissurat');
     }
 }

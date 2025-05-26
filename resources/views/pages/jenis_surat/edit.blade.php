@@ -70,6 +70,12 @@
                                 <textarea id="editor" name="editor" style="height: 700px;">{!! $dataJenisSurat->default_form !!}</textarea>
                                 <div class="error-container" id="error-quil"></div>
                             </div>
+                            <div>
+                                <label for="is_datapendukung" class="form-label">Apakah perlu data pendukung ? <span class="text-danger">*</span></label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" name="is_datapendukung" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataJenisSurat->is_datapendukung? 'checked':'' ?> >
+                                </div>
+                            </div>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mt-6">
