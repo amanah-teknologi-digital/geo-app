@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller{
     private $service;
     private $istilahPersuratan;
+    private $idAkses;
     public function __construct()
     {
         $this->service = new DashboardServices(new DashboardRepository());
         $this->istilahPersuratan = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
+        $this->idAkses = session('akses_default_id');
     }
 
     public function pengguna(){
@@ -68,7 +70,7 @@ class DashboardController extends Controller{
     }
 
     public function getDataNotifikasi(){
-        $idAkses = auth()->user()->id_akses;
+        $idAkses = $this->idAkses;
         $dataNotifSurat = $this->service->getDataNotifSurat($idAkses);
 
         $data = [
