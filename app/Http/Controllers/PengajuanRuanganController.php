@@ -18,21 +18,23 @@ class PengajuanRuanganController extends Controller
 {
     private $service;
     private $subtitle;
+    private $idAkses;
     public function __construct()
     {
         $this->service = new PengajuanRuanganServices(new PengajuanRuanganRepository());
         $this->subtitle = (!empty(config('variables.namaLayananSewaRuangan')) ? config('variables.namaLayananSewaRuangan') : 'Ruangan');
+        $this->idAkses = session('akses_default_id');
     }
 
     public function index(){
         $title = $this->subtitle;
-        $isTambah = $this->service->checkAksesTambah(Auth()->user()->id_akses);
+        $isTambah = $this->service->checkAksesTambah($this->idAkses);
 
         return view('pages.pengajuan_ruangan.index', compact('isTambah','title'));
     }
 
     public function getData(Request $request){
-        $id_akses = auth()->user()->id_akses;
+        $id_akses = $this->idAkses;
 
         if ($request->ajax()) {
             $data_pengajuan = $this->service->getDataPengajuan();
@@ -149,7 +151,7 @@ class PengajuanRuanganController extends Controller
                 'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.'
             ]);
 
-            $isEdit = $this->service->checkAksesTambah(Auth()->user()->id_akses);
+            $isEdit = $this->service->checkAksesTambah($this->idAkses);
             $idRuangan = $request->id_ruangan;
             if (!$isEdit) {
                 return response()->json(['status' => false, 'dataRuangan' => []]);
@@ -228,7 +230,7 @@ class PengajuanRuanganController extends Controller
                 'peralatan_jumlah.array' => 'Jumlah peralatan tidak valid.',
             ]);
 
-            $isTambah = $this->service->checkAksesTambah(Auth()->user()->id_akses);
+            $isTambah = $this->service->checkAksesTambah($this->idAkses);
             if (!$isTambah) {
                 return redirect(route('pengajuanruangan'))->with('error', 'Anda tidak punya otoritas.');
             }

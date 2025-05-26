@@ -140,8 +140,9 @@ class PengajuanRuanganRepository
 
     public function updatePengajuan($request){
         $id_pengajuan = $request->id_pengajuan;
+        $idAkses = session('akses_default_id');
 
-        $dataPengajuan = $this->getDataPengajuan($id_pengajuan, auth()->user()->id_akses);
+        $dataPengajuan = $this->getDataPengajuan($id_pengajuan, $idAkses);
         $dataUser = User::find($dataPengajuan->pengaju);
 
         $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
@@ -159,7 +160,9 @@ class PengajuanRuanganRepository
     }
 
     public function updateDataPemohon($id_pengajuan){
-        $dataPengajuan = $this->getDataPengajuan($id_pengajuan, auth()->user()->id_akses);
+        $idAkses = session('akses_default_id');
+
+        $dataPengajuan = $this->getDataPengajuan($id_pengajuan, $idAkses);
         $dataUser = User::find($dataPengajuan->pengaju);
 
         $dataPengajuan = PengajuanRuangan::find($id_pengajuan);
