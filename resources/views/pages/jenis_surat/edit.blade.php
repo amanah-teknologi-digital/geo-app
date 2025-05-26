@@ -72,7 +72,7 @@
                             </div>
                             <div>
                                 <label for="is_datapendukung" class="form-label">Apakah perlu data pendukung ? <span class="text-danger">*</span></label>
-                                <div class="form-check form-switch">
+                                <div class="form-check form-check-primary form-switch">
                                     <input class="form-check-input" name="is_datapendukung" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataJenisSurat->is_datapendukung? 'checked':'' ?> >
                                 </div>
                             </div>

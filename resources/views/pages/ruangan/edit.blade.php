@@ -97,7 +97,7 @@
                             </div>
                             <div>
                                 <label for="is_aktif" class="form-label">Apakah aktif ? <span class="text-danger">*</span></label>
-                                <div class="form-check form-switch">
+                                <div class="form-check form-check-primary form-switch">
                                     <input class="form-check-input" name="is_aktif" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataRuangan->is_aktif? 'checked':'' ?> >
                                 </div>
                             </div>
