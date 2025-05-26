@@ -34,6 +34,13 @@ $(document).ready(function () {
             nama_jenis: {
                 required: true
             },
+            keterangan_datadukung: {
+                required: {
+                    depends: function () {
+                        return $('#flexSwitchCheckChecked').is(':checked');
+                    }
+                }
+            },
             editor: {
                 required: true
             }
@@ -41,6 +48,9 @@ $(document).ready(function () {
         messages: {
             nama_jenis: {
                 required: "Nama jenis surat wajib diisi"
+            },
+            keterangan_datadukung: {
+                required: "Harap isi keterangan data pendukung"
             },
             editor: {
                 required: "Template tidak boleh kosong"
@@ -57,6 +67,15 @@ $(document).ready(function () {
         },
         submitHandler: function (form) {
             form.submit();
+        }
+    });
+
+    // Handler ketika checkbox berubah
+    $('#flexSwitchCheckChecked').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('#div_keterangan_datadukung').show();
+        } else {
+            $('#div_keterangan_datadukung').hide();
         }
     });
 })

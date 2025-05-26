@@ -76,6 +76,10 @@
                                     <input class="form-check-input" name="is_datapendukung" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataJenisSurat->is_datapendukung? 'checked':'' ?> >
                                 </div>
                             </div>
+                            <div <?= $dataJenisSurat->is_datapendukung? '':'style="display: none;"'?>  id="div_keterangan_datadukung">
+                                <label for="keterangan_datadukung" class="form-label">Keterangan data pendukung <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" value="{{ $dataJenisSurat->nama_datapendukung }}" autocomplete="off">
+                            </div>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mt-6">

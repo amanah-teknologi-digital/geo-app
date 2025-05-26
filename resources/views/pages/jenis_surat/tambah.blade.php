@@ -69,6 +69,16 @@
                                     <textarea id="editor" name="editor" style="height: 700px;"></textarea>
                                     <div class="error-container" id="error-quil"></div>
                                 </div>
+                                <div>
+                                    <label for="is_datapendukung" class="form-label">Apakah perlu data pendukung ? <span class="text-danger">*</span></label>
+                                    <div class="form-check form-check-primary form-switch">
+                                        <input class="form-check-input" name="is_datapendukung" type="checkbox" id="flexSwitchCheckChecked" value="0" >
+                                    </div>
+                                </div>
+                                <div style="display: none;" id="div_keterangan_datadukung">
+                                    <label for="keterangan_datadukung" class="form-label">Keterangan data pendukung <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" autocomplete="off">
+                                </div>
                             </div>
                             <div class="mt-6">
                                 <button type="submit" class="btn btn-primary me-3"><i class="bx bx-save"></i>&nbsp;Tambah Jenis Surat</button>

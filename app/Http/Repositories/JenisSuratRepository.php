@@ -22,6 +22,8 @@ class JenisSuratRepository
             'nama' => $request->nama_jenis,
             'default_form' => $request->editor,
             'is_aktif' => 1,
+            'is_datapendukung' => $request->has('is_datapendukung') ? 1 : 0,
+            'nama_datapendukung' => $request->has('is_datapendukung') ? $request->keterangan_datadukung : null,
             'created_at' => now(),
             'updater' => auth()->user()->id
         ]);
@@ -33,6 +35,8 @@ class JenisSuratRepository
         $dataPengumuman = JenisSurat::find($idJenisSurat);
         $dataPengumuman->nama = $request->nama_jenis;
         $dataPengumuman->default_form = $request->editor;
+        $dataPengumuman->is_datapendukung = $request->has('is_datapendukung') ? 1 : 0;
+        $dataPengumuman->nama_datapendukung = $request->has('is_datapendukung') ? $request->keterangan_datadukung : null;
         $dataPengumuman->updated_at = now();
         $dataPengumuman->updater = auth()->user()->id;
         $dataPengumuman->save();

@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Nonstandard\Uuid;
 use Yajra\DataTables\DataTables;
@@ -86,10 +87,17 @@ class JenisSuratController extends Controller
         try {
             $request->validate([
                 'nama_jenis' => ['required'],
-                'editor' => ['required', 'string', 'min:10']
+                'editor' => ['required', 'string', 'min:10'],
+                'keterangan_datadukung' => [
+                    Rule::requiredIf(function () use ($request) {
+                        return $request->has('is_datapendukung') && $request->is_datapendukung == '1';
+                    }),
+                    'string'
+                ]
             ],[
                 'nama_jenis.required' => 'Nama jenis surat wajib diisi.',
-                'editor.required' => 'Template surat wajib diisi.'
+                'editor.required' => 'Template surat wajib diisi.',
+                'keterangan_datadukung.required' => 'Keterangan data pendukung wajib diisi.',
             ]);
 
             DB::beginTransaction();
@@ -123,11 +131,18 @@ class JenisSuratController extends Controller
             $request->validate([
                 'id_jenissurat' => ['required'],
                 'nama_jenis' => ['required'],
-                'editor' => ['required', 'string', 'min:10']
+                'editor' => ['required', 'string', 'min:10'],
+                'keterangan_datadukung' => [
+                    Rule::requiredIf(function () use ($request) {
+                        return $request->has('is_datapendukung') && $request->is_datapendukung == '1';
+                    }),
+                    'string'
+                ]
             ],[
                 'id_jenissurat.required' => 'Id Jenis Surat tidak ada.',
                 'nama_jenis.required' => 'Nama jenis surat wajib diisi.',
-                'editor.required' => 'Template wajib diisi.'
+                'editor.required' => 'Template wajib diisi.',
+                'keterangan_datadukung.required' => 'Keterangan data pendukung wajib diisi.',
             ]);
 
             DB::beginTransaction();
