@@ -16,12 +16,14 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class RuanganController extends Controller
 {
     private $service;
+    private $idAkses;
     public function __construct(){
         $this->service = new RuanganServices(new RuanganRepository());
+        $this->idAkses = session('akses_default_id');
     }
     public function index(){
         $title = "Ruangan";
-        $isTambah = $this->service->checkAksesTambah(Auth()->user()->id_akses);
+        $isTambah = $this->service->checkAksesTambah($this->idAkses);
         $dataRuangan = $this->service->getDataRuangan();
 
         return view('pages.ruangan.index', compact('title', 'dataRuangan','isTambah'));
@@ -85,7 +87,7 @@ class RuanganController extends Controller
 
     public function detailRuangan($idRuangan){
         $title = "Detail Ruangan";
-        $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
+        $isEdit = $this->service->checkAksesEdit($this->idAkses);
         $dataRuangan = $this->service->getDataRuangan($idRuangan);
         $dataFasilitas = config('listfasilitas', []);
         $dataJenisRuangan = $this->service->getJenisRuangan();
@@ -151,7 +153,7 @@ class RuanganController extends Controller
 
     public function jadwalRuangan($idRuangan){
         $title = "Jadwal Ruangan";
-        $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
+        $isEdit = $this->service->checkAksesEdit($this->idAkses);
         $dataRuangan = $this->service->getDataRuangan($idRuangan);
         $hari = [
             2 => 'Senin',
@@ -231,7 +233,7 @@ class RuanganController extends Controller
                 'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.'
             ]);
 
-            $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
+            $isEdit = $this->service->checkAksesEdit($this->idAkses);
             $idRuangan = $request->idRuangan;
             if (!$isEdit) {
                 return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Anda tidak punya otoritas.');
@@ -319,7 +321,7 @@ class RuanganController extends Controller
                 'jam_selesai.after' => 'Jam selesai harus setelah jam mulai.'
             ]);
 
-            $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
+            $isEdit = $this->service->checkAksesEdit($this->idAkses);
             $idRuangan = $request->idRuangan;
             if (!$isEdit) {
                 return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Anda tidak punya otoritas.');
@@ -371,7 +373,7 @@ class RuanganController extends Controller
                 'idJadwal.required' => 'Id jadwal wajib diisi.'
             ]);
 
-            $isEdit = $this->service->checkAksesEdit(Auth()->user()->id_akses);
+            $isEdit = $this->service->checkAksesEdit($this->idAkses);
             $idRuangan = $request->idRuangan;
             if (!$isEdit) {
                 return redirect(route('ruangan.jadwal', $idRuangan))->with('error', 'Anda tidak punya otoritas.');
