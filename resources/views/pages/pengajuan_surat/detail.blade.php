@@ -179,7 +179,7 @@
                                                     <i class="small text-secondary">(<span >{{ formatBytes($file->file->file_size) }}</span>)</i>
                                                 </div>
                                             </a>
-                                            @if(in_array(auth()->user()->id_akses, [1,2]))
+                                            @if(in_array($idAkses, [1,2]))
                                                 <span class="bx bx-x text-danger cursor-pointer" data-id_file="{{ $file->file->id_file }}" data-bs-toggle="modal" data-bs-target="#modal-hapusfile"></span>
                                             @endif
                                         </div>
@@ -193,7 +193,7 @@
                             </div>
                         @endif
                     </form>
-                    @if(in_array(auth()->user()->id_akses, [1,2]) && $dataPengajuan->id_statuspengajuan == 1)
+                    @if(in_array($idAkses, [1,2]) && $dataPengajuan->id_statuspengajuan == 1)
                         <div class="mt-6 mb-10">
                             <label for="uploadhasilsurat" class="form-label">Upload Hasil Surat <i class="text-muted fw-bold">(Opsional & bisa lebih dari 1, PDF Max 5 MB)</i></label>
                             <form id="frmUploadFile" action="{{ route('pengajuansurat.uploadfile') }}" method="POST" enctype="multipart/form-data">

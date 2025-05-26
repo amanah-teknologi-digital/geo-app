@@ -239,6 +239,7 @@ class PengajuanPersuratanController extends Controller
         $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
         $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
         $dataJenisSurat = $this->service->getJenisSurat(isEdit: $isEdit);
+        $idAkses = $this->idAkses;
         //$isEdit = false;
         if ($isEdit){
             //update data pemohon pengajuan
@@ -256,7 +257,7 @@ class PengajuanPersuratanController extends Controller
         }
         $statusVerifikasi = $this->service->getStatusVerifikasi($id_pengajuan);
 
-        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'id_pengajuan', 'isEdit', 'statusVerifikasi', 'title'));
+        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'id_pengajuan', 'isEdit', 'statusVerifikasi', 'title', 'idAkses'));
     }
 
     public function doUpdatePengajuan(Request $request){
