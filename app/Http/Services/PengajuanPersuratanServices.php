@@ -11,13 +11,15 @@ use Illuminate\Support\Facades\Storage;
 class PengajuanPersuratanServices
 {
     private $repository;
+    private $idAkses;
     public function __construct(PengajuanPersuratanRepository $repository)
     {
         $this->repository = $repository;
+        $this->idAkses = session('akses_default_id');
     }
 
     public function getDataPengajuan($id_pengajuan = null){
-        $id_akses = auth()->user()->id_akses;
+        $id_akses = $this->idAkses;
         $data = $this->repository->getDataPengajuan($id_pengajuan, $id_akses);
 
         return $data;
@@ -72,7 +74,7 @@ class PengajuanPersuratanServices
     }
 
     public function checkOtoritasPengajuan($id_statuspengajuan){
-        $id_akses = auth()->user()->akses->id_akses;
+        $id_akses = $this->idAkses;
 
         if (($id_statuspengajuan == 0 OR $id_statuspengajuan == 4) && in_array($id_akses, [1, 8])) { //jika status draft atau revisi dan akses superadmin & pengguna itu bisa edit
             $is_edit = true;
@@ -94,7 +96,7 @@ class PengajuanPersuratanServices
     }
 
     public function getStatusVerifikasi($id_pengajuan){
-        $id_akses = auth()->user()->akses->id_akses;
+        $id_akses = $this->idAkses;
         $dataPengajuan = $this->getDataPengajuan($id_pengajuan);
 
         $must_aprove = '';

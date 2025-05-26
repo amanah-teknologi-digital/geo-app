@@ -16,21 +16,24 @@ class PengajuanPersuratanController extends Controller
 {
     private $service;
     private $subtitle;
+    private $idAkses;
+
     public function __construct()
     {
         $this->service = new PengajuanPersuratanServices(new PengajuanPersuratanRepository());
         $this->subtitle = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
+        $this->idAkses = session('akses_default_id');
     }
 
     public function index(){
         $title = $this->subtitle;
-        $isTambah = $this->service->checkAksesTambah(Auth()->user()->id_akses);
+        $isTambah = $this->service->checkAksesTambah($this->idAkses);
 
         return view('pages.pengajuan_surat.index', compact('isTambah','title'));
     }
 
     public function getData(Request $request){
-        $id_akses = auth()->user()->id_akses;
+        $id_akses = $this->idAkses;
 
         if ($request->ajax()) {
             $data_pengajuan = $this->service->getDataPengajuan();
@@ -163,7 +166,7 @@ class PengajuanPersuratanController extends Controller
                 'id_pengajuan.required' => 'Id File tidak ada.',
             ]);
 
-            if (in_array(auth()->user()->id_akses, [1,2])) {
+            if (in_array($this->idAkses, [1,2])) {
                 $dataFile = $this->service->getDataFile($request->id_file);
                 $location = $dataFile->location;
 
@@ -203,7 +206,7 @@ class PengajuanPersuratanController extends Controller
             $id_pengajuan = $request->id_pengajuan;
             $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
 
-            if (in_array(auth()->user()->id_akses, [1,2]) && $dataPengajuan->id_statuspengajuan == 1) {
+            if (in_array($this->idAkses, [1,2]) && $dataPengajuan->id_statuspengajuan == 1) {
                 DB::beginTransaction();
 
                 $listFile = $request->file('filesuratupload');
@@ -300,7 +303,7 @@ class PengajuanPersuratanController extends Controller
             $id_pengajuan = $request->id_pengajuan;
             $id_akses = $request->id_akses;
             if (empty($id_akses)){
-                $id_akses = auth()->user()->id_akses;
+                $id_akses = $this->idAkses;
             }
 
             $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
@@ -340,7 +343,7 @@ class PengajuanPersuratanController extends Controller
             $id_pengajuan = $request->id_pengajuan;
             $id_akses = $request->id_akses;
             if (empty($id_akses)){
-                $id_akses = auth()->user()->id_akses;
+                $id_akses = $this->idAkses;
             }
 
             $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
@@ -391,7 +394,7 @@ class PengajuanPersuratanController extends Controller
             $id_pengajuan = $request->id_pengajuan;
             $id_akses = $request->id_akses;
             if (empty($id_akses)){
-                $id_akses = auth()->user()->id_akses;
+                $id_akses = $this->idAkses;
             }
             $keterangan = $request->keteranganrev;
 
@@ -431,7 +434,7 @@ class PengajuanPersuratanController extends Controller
             $id_pengajuan = $request->id_pengajuan;
             $id_akses = $request->id_akses;
             if (empty($id_akses)){
-                $id_akses = auth()->user()->id_akses;
+                $id_akses = $this->idAkses;
             }
             $keterangan = $request->keterangansudahrev;
 
@@ -471,7 +474,7 @@ class PengajuanPersuratanController extends Controller
             $id_pengajuan = $request->id_pengajuan;
             $id_akses = $request->id_akses;
             if (empty($id_akses)){
-                $id_akses = auth()->user()->id_akses;
+                $id_akses = $this->idAkses;
             }
             $keterangan = $request->keterangantolak;
 
