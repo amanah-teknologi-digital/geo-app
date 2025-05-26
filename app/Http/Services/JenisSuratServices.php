@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Http\Repositories\JenisSuratRepository;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Ramsey\Uuid\Nonstandard\Uuid;
 
 class JenisSuratServices
 {
@@ -22,7 +23,10 @@ class JenisSuratServices
 
     public function tambahJenisSurat($request, $idJenisSurat){
         try {
+            $idPihakPenyetuju = strtoupper(Uuid::uuid4()->toString());
+
             $this->repository->tambahJenisSurat($request, $idJenisSurat);
+            $this->repository->tambahdDefaultPenyetuju($idPihakPenyetuju, $idJenisSurat);
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

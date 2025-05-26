@@ -2,7 +2,11 @@
 
 namespace App\Http\Repositories;
 
+use App\Models\Akses;
+use App\Models\AksesUser;
 use App\Models\JenisSurat;
+use App\Models\PihakPenyetujuSurat;
+use App\Models\User;
 
 class JenisSuratRepository
 {
@@ -24,6 +28,18 @@ class JenisSuratRepository
             'is_aktif' => 1,
             'is_datapendukung' => $request->has('is_datapendukung') ? 1 : 0,
             'nama_datapendukung' => $request->has('is_datapendukung') ? $request->keterangan_datadukung : null,
+            'created_at' => now(),
+            'updater' => auth()->user()->id
+        ]);
+    }
+
+    public function tambahdDefaultPenyetuju($idPihakPenyetuju, $idJenisSurat){
+        $AksesPenyetuju = Akses::where('id_akses', 2)->first();
+        PihakPenyetujuSurat::create([
+            'id_pihakpenyetuju' => $idPihakPenyetuju,
+            'id_jenissurat' => $idJenisSurat,
+            'nama' => $AksesPenyetuju->nama,
+            'urutan' => 1,
             'created_at' => now(),
             'updater' => auth()->user()->id
         ]);
