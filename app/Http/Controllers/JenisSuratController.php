@@ -122,8 +122,9 @@ class JenisSuratController extends Controller
     public function editJenisSurat($idJenisSurat){
         $title = "Edit Jenis Surat";
         $dataJenisSurat = $this->service->getDataJenisSurat($idJenisSurat);
+        $pihakPenyetuju = $this->service->getPihakPenyetujuSurat($idJenisSurat);
 
-        return view('pages.jenis_surat.edit', compact('dataJenisSurat', 'title'));
+        return view('pages.jenis_surat.edit', compact('dataJenisSurat', 'pihakPenyetuju', 'title'));
     }
 
     public function doEditJenisSurat(Request $request){

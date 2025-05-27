@@ -24,4 +24,9 @@ class PihakPenyetujuSurat extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function userpenyetuju()
+    {
+        return $this->belongsTo(User::class, 'id_penyetuju','id');
+    }
 }

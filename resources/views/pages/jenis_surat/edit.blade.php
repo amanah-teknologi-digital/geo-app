@@ -56,29 +56,58 @@
                         @csrf
                         <input type="hidden" name="id_jenissurat" value="{{ $dataJenisSurat->id_jenissurat }}">
                         <div class="row g-6">
-                            <div>
-                                <label for="nama_jenis" class="form-label">Nama Jenis Surat <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="nama_jenis" name="nama_jenis" placeholder="Nama jenis surat" value="{{ $dataJenisSurat->nama }}" required autocomplete="off" autofocus>
-                            </div>
-                            <div>
-                                <label for="isi_template" class="form-label">Template Surat <span class="text-danger">*</span></label>
-                                <div id="editor-loading" class="text-center">
-                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                        <span class="visually-hidden">Loading...</span>
+                            <div class="col-sm-8 col-md-8 col-lg-8">
+                                <div>
+                                    <label for="nama_jenis" class="form-label">Nama Jenis Surat <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="nama_jenis" name="nama_jenis" placeholder="Nama jenis surat" value="{{ $dataJenisSurat->nama }}" required autocomplete="off" autofocus>
+                                </div>
+                                <div>
+                                    <label for="isi_template" class="form-label">Template Surat <span class="text-danger">*</span></label>
+                                    <div id="editor-loading" class="text-center">
+                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <textarea id="editor" name="editor" style="height: 700px;">{!! $dataJenisSurat->default_form !!}</textarea>
+                                    <div class="error-container" id="error-quil"></div>
+                                </div>
+                                <div>
+                                    <label for="is_datapendukung" class="form-label">Apakah perlu data pendukung ? <span class="text-danger">*</span></label>
+                                    <div class="form-check form-check-primary form-switch">
+                                        <input class="form-check-input" name="is_datapendukung" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataJenisSurat->is_datapendukung? 'checked':'' ?> >
                                     </div>
                                 </div>
-                                <textarea id="editor" name="editor" style="height: 700px;">{!! $dataJenisSurat->default_form !!}</textarea>
-                                <div class="error-container" id="error-quil"></div>
-                            </div>
-                            <div>
-                                <label for="is_datapendukung" class="form-label">Apakah perlu data pendukung ? <span class="text-danger">*</span></label>
-                                <div class="form-check form-check-primary form-switch">
-                                    <input class="form-check-input" name="is_datapendukung" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataJenisSurat->is_datapendukung? 'checked':'' ?> >
+                                <div <?= $dataJenisSurat->is_datapendukung? '':'style="display: none;"'?>  id="div_keterangan_datadukung">
+                                    <label for="keterangan_datadukung" class="form-label">Keterangan data pendukung <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" value="{{ $dataJenisSurat->nama_datapendukung }}" autocomplete="off">
                                 </div>
                             </div>
-                            <div <?= $dataJenisSurat->is_datapendukung? '':'style="display: none;"'?>  id="div_keterangan_datadukung">
-                                <label for="keterangan_datadukung" class="form-label">Keterangan data pendukung <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" value="{{ $dataJenisSurat->nama_datapendukung }}" autocomplete="off">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <h5>Tingkat Persetujuan</h5>
+                                <table class="table table-sm table-bordered table-hover">
+                                    <tr>
+                                        <td align="center">Urutan</td>
+                                        <td>Nama Penyetuju</td>
+                                        <td align="center">Aksi</td>
+                                    </tr>
+                                    @if($pihakPenyetuju->count() > 0)
+                                        @foreach($pihakPenyetuju as $pers)
+                                            <tr>
+                                                <td align="center">{{ $pers->urutan }}</td>
+                                                <td>{{ $pers->nama }}{{ !empty($pers->id_penyetuju)? ' ('.$pers->userpenyetuju->name.')':'' }}</td>
+                                                <td>
+                                                    <a href="" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus persetujuan ini?')">
+                                                        <i class="bx bx-trash"></i>&nbsp;Hapus
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="3" class="text-center"><p class="text-muted">Persetujuan Kosong!</p></td>
+                                        </tr>
+                                    @endif
+                                </table>
                             </div>
                         </div>
 

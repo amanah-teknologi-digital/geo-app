@@ -84,4 +84,13 @@ class JenisSuratRepository
             $JenisSurat->save();
         }
     }
+
+    public function getPihakPenyetujuSurat($idJenisSurat){
+        $data = PihakPenyetujuSurat::where('id_jenissurat', $idJenisSurat)
+            ->with(['userpenyetuju'])
+            ->orderBy('urutan')
+            ->get();
+
+        return $data;
+    }
 }
