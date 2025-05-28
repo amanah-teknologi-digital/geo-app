@@ -81,6 +81,11 @@ class JenisSuratRepository
     }
 
     public function hapusJenisSurat($idJenisSurat){
+        $pihakPenyetuju = PihakPenyetujuSurat::where('id_jenissurat', $idJenisSurat);
+        if ($pihakPenyetuju) {
+            $pihakPenyetuju->delete();
+        }
+
         $JenisSurat = JenisSurat::find($idJenisSurat);
         if ($JenisSurat) {
             $JenisSurat->delete();
