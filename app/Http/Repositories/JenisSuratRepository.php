@@ -20,6 +20,16 @@ class JenisSuratRepository
         return $data;
     }
 
+    public function getUserPenyetujuSurat($search, $idJenisSurat){
+        $usedUserIds = PihakPenyetujuSurat::where('id_jenissurat', $idJenisSurat)->where('id_penyetuju', '!=', null)->pluck('id_penyetuju');
+
+        $availableUsers = User::whereNotIn('id', $usedUserIds)->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            ->limit(10)
+            ->get(['id', 'name']);
+
+        return $availableUsers;
+    }
+
     public function tambahJenisSurat($request, $idJenisSurat){
         JenisSurat::create([
             'id_jenissurat' => $idJenisSurat,
@@ -56,6 +66,18 @@ class JenisSuratRepository
         $dataPengumuman->updated_at = now();
         $dataPengumuman->updater = auth()->user()->id;
         $dataPengumuman->save();
+    }
+
+    public function tambahPenyetujuSurat($request, $idPihakPenyetuju){
+        PihakPenyetujuSurat::create([
+            'id_pihakpenyetuju' => $idPihakPenyetuju,
+            'id_jenissurat' => $request->id_jenissurat,
+            'nama' => $request->nama_persetujuan,
+            'id_penyetuju' => $request->user_penyetuju,
+            'urutan' => 2,
+            'created_at' => now(),
+            'updater' => auth()->user()->id
+        ]);
     }
 
     public function hapusJenisSurat($idJenisSurat){

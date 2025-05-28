@@ -27,6 +27,12 @@ class JenisSuratServices
         return $data;
     }
 
+    public function getUserPenyetujuSurat($search, $idJenisSurat){
+        $data = $this->repository->getUserPenyetujuSurat($search, $idJenisSurat);
+
+        return $data;
+    }
+
     public function tambahJenisSurat($request, $idJenisSurat){
         try {
             $idPihakPenyetuju = strtoupper(Uuid::uuid4()->toString());
@@ -42,6 +48,17 @@ class JenisSuratServices
     public function updateJenisSurat($request){
         try {
             $this->repository->updateJenisSurat($request);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function tambahPenyetujuSurat($request){
+        try {
+            $idPihakPenyetuju = strtoupper(Uuid::uuid4()->toString());
+
+            $this->repository->tambahPenyetujuSurat($request, $idPihakPenyetuju);
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

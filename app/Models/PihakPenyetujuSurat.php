@@ -15,9 +15,12 @@ class PihakPenyetujuSurat extends Model
         'id_pihakpenyetuju',
         'id_jenissurat',
         'id_penyetuju',
+        'nama',
         'urutan',
+        'id_penyetuju',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'updater'
     ];
 
     protected $casts = [

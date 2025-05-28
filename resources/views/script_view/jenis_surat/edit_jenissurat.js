@@ -78,4 +78,59 @@ $(document).ready(function () {
             $('#div_keterangan_datadukung').hide();
         }
     });
+
+    $('#user_penyetuju').select2({
+        placeholder: 'Cari user...',
+        width: '100%',
+        dropdownParent: $('#modal-tambahpersetujuan'),
+        ajax: {
+            url: urlGetUser,
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return { q: params.term, id_jenissurat: idJenisSurat };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(user => ({
+                        id: user.id,
+                        text: user.name
+                    }))
+                };
+            },
+            cache: true
+        }
+    });
+
+    $("#frm_tambahpersetujuan").validate({
+        ignore: "",
+        rules: {
+            nama_persetujuan: {
+                required: true
+            },
+            user_penyetuju: {
+                required: true
+            }
+        },
+        messages: {
+            nama_persetujuan: {
+                required: "Nama persetujuan wajib diisi"
+            },
+            user_penyetuju: {
+                required: "User penyetuju wajib dipilih"
+            }
+        },
+        errorPlacement: function(error, element) {
+            // Menentukan lokasi error berdasarkan id atau atribut lain
+            if (element.attr("name") === "user_penyetuju") {
+                error.appendTo("#error-user_penyetuju");
+            } else {
+                // Default: tampilkan setelah elemen
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
 });

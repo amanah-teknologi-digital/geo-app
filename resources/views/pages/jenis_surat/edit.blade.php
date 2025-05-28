@@ -56,62 +56,53 @@
                         @csrf
                         <input type="hidden" name="id_jenissurat" value="{{ $dataJenisSurat->id_jenissurat }}">
                         <div class="row g-6">
-                            <div class="col-sm-8 col-md-8 col-lg-8">
-                                <div>
-                                    <label for="nama_jenis" class="form-label">Nama Jenis Surat <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nama_jenis" name="nama_jenis" placeholder="Nama jenis surat" value="{{ $dataJenisSurat->nama }}" required autocomplete="off" autofocus>
-                                </div>
-                                <div>
-                                    <label for="isi_template" class="form-label">Template Surat <span class="text-danger">*</span></label>
-                                    <div id="editor-loading" class="text-center">
-                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                    </div>
-                                    <textarea id="editor" name="editor" style="height: 700px;">{!! $dataJenisSurat->default_form !!}</textarea>
-                                    <div class="error-container" id="error-quil"></div>
-                                </div>
-                                <div>
-                                    <label for="is_datapendukung" class="form-label">Apakah perlu data pendukung ? <span class="text-danger">*</span></label>
-                                    <div class="form-check form-check-primary form-switch">
-                                        <input class="form-check-input" name="is_datapendukung" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataJenisSurat->is_datapendukung? 'checked':'' ?> >
+                            <div>
+                                <label for="nama_jenis" class="form-label">Nama Jenis Surat <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nama_jenis" name="nama_jenis" placeholder="Nama jenis surat" value="{{ $dataJenisSurat->nama }}" required autocomplete="off" autofocus>
+                            </div>
+                            <div>
+                                <label for="isi_template" class="form-label">Template Surat <span class="text-danger">*</span></label>
+                                <div id="editor-loading" class="text-center">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
-                                <div <?= $dataJenisSurat->is_datapendukung? '':'style="display: none;"'?>  id="div_keterangan_datadukung">
-                                    <label for="keterangan_datadukung" class="form-label">Keterangan data pendukung <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" value="{{ $dataJenisSurat->nama_datapendukung }}" autocomplete="off">
+                                <textarea id="editor" name="editor" style="height: 700px;">{!! $dataJenisSurat->default_form !!}</textarea>
+                                <div class="error-container" id="error-quil"></div>
+                            </div>
+                            <div>
+                                <label for="is_datapendukung" class="form-label">Apakah perlu data pendukung ? <span class="text-danger">*</span></label>
+                                <div class="form-check form-check-primary form-switch">
+                                    <input class="form-check-input" name="is_datapendukung" type="checkbox" id="flexSwitchCheckChecked" value="1" <?= $dataJenisSurat->is_datapendukung? 'checked':'' ?> >
                                 </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-lg-4">
-                                <h5>Tingkat Persetujuan</h5>
-                                <table class="table table-sm table-bordered table-hover">
-                                    <tr>
-                                        <td align="center">Urutan</td>
-                                        <td>Nama Penyetuju</td>
-                                        <td align="center">Aksi</td>
-                                    </tr>
-                                    @if($pihakPenyetuju->count() > 0)
-                                        @foreach($pihakPenyetuju as $pers)
-                                            <tr>
-                                                <td align="center">{{ $pers->urutan }}</td>
-                                                <td>{{ $pers->nama }}{{ !empty($pers->id_penyetuju)? ' ('.$pers->userpenyetuju->name.')':'' }}</td>
-                                                <td>
-                                                    <a href="" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus persetujuan ini?')">
-                                                        <i class="bx bx-trash"></i>&nbsp;Hapus
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <tr>
-                                            <td colspan="3" class="text-center"><p class="text-muted">Persetujuan Kosong!</p></td>
-                                        </tr>
-                                    @endif
-                                </table>
+                            <div <?= $dataJenisSurat->is_datapendukung? '':'style="display: none;"'?>  id="div_keterangan_datadukung">
+                                <label for="keterangan_datadukung" class="form-label">Keterangan data pendukung <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" value="{{ $dataJenisSurat->nama_datapendukung }}" autocomplete="off">
+                            </div>
+                            <div <?= $dataJenisSurat->is_datapendukung? '':'style="display: none;"'?>  id="div_keterangan_datadukung">
+                                <label for="keterangan_datadukung" class="form-label">Keterangan data pendukung <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" value="{{ $dataJenisSurat->nama_datapendukung }}" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="tingkat persetujuan" class="form-label" style="line-height: 2">Tingkat Persetujuan <?= ($pihakPenyetuju->count() < 2) ? '&nbsp;<span id="btnTambahPersetujuan" class="btn btn-sm btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modal-tambahpersetujuan">+ Tambah Persetujuan</span>':'' ?></label>
+                                @foreach($pihakPenyetuju as $penyetuju)
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap"><span class="text-success small fw-semibold">
+                                            {{ $penyetuju->urutan.'. '.$penyetuju->nama }}</span>
+                                            @if(!empty($penyetuju->id_penyetuju))
+                                                <i class="small text-secondary">(<span>{{ $penyetuju->userpenyetuju->name }}</span>)</i>
+                                            @endif
+                                        </div>
+                                        @if(!empty($penyetuju->id_penyetuju))
+                                            <span class="bx bx-x text-danger cursor-pointer" data-id_file="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-hapuspersetujuan"></span>
+                                        @endif
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center mt-6">
+                        <div class="d-flex justify-content-between align-items-center mt-12">
                             <button type="submit" class="btn btn-warning me-3 text-black"><i class="bx bx-save"></i>&nbsp;Update Jenis Surat</button>
                             <div class="text-muted">
                                 <small>
@@ -124,7 +115,42 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal-tambahpersetujuan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <form action="{{ route('jenissurat.dotambahpenyetuju') }}" id="frm_tambahpersetujuan" method="POST">
+                @csrf
+                <input type="hidden" name="id_jenissurat" value="{{ $idJenisSurat }}" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Tambah Persetujuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-6">
+                            <div>
+                                <label for="nama_persetujuan" class="form-label">Nama Persetujuan <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nama_persetujuan" name="nama_persetujuan" placeholder="Nama persetujuan" required autocomplete="off" autofocus>
+                            </div>
+                            <div>
+                                <label for="user_penyetuju" class="form-label">User Penyetuju <span class="text-danger">*</span></label>
+                                <select name="user_penyetuju" id="user_penyetuju" class="form-control" required></select>
+                                <div class="error-container" id="error-user_penyetuju"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">Tambah Penyetuju</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 @section('page-script')
+    <script>
+        const urlGetUser = '{{ route('jenissurat.getuserpenyetuju') }}';
+        const idJenisSurat = '{{ $idJenisSurat }}';
+    </script>
     @vite('resources/views/script_view/jenis_surat/edit_jenissurat.js')
 @endsection
