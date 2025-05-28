@@ -80,10 +80,6 @@
                                 <label for="keterangan_datadukung" class="form-label">Keterangan data pendukung <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" value="{{ $dataJenisSurat->nama_datapendukung }}" autocomplete="off">
                             </div>
-                            <div <?= $dataJenisSurat->is_datapendukung? '':'style="display: none;"'?>  id="div_keterangan_datadukung">
-                                <label for="keterangan_datadukung" class="form-label">Keterangan data pendukung <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" value="{{ $dataJenisSurat->nama_datapendukung }}" autocomplete="off">
-                            </div>
                             <div>
                                 <label for="tingkat persetujuan" class="form-label" style="line-height: 2">Tingkat Persetujuan <?= ($pihakPenyetuju->count() < 2) ? '&nbsp;<span id="btnTambahPersetujuan" class="btn btn-sm btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modal-tambahpersetujuan">+ Tambah Persetujuan</span>':'' ?></label>
                                 @foreach($pihakPenyetuju as $penyetuju)
