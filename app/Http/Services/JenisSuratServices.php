@@ -54,6 +54,15 @@ class JenisSuratServices
         }
     }
 
+    public function hapusPihakPenyetujuSurat($idPihakPenyetuju){
+        try {
+            $this->repository->hapusPihakPenyetuju($idPihakPenyetuju);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function tambahPenyetujuSurat($request){
         try {
             $idPihakPenyetuju = strtoupper(Uuid::uuid4()->toString());

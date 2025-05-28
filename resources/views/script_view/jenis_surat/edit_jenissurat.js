@@ -133,4 +133,10 @@ $(document).ready(function () {
             form.submit();
         }
     });
+
+    $('#modal-hapuspersetujuan').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
+        $('#id_pihakpenyetujusurat').val(dataId); // Masukkan ke modal
+    });
 });

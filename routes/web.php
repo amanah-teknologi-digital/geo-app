@@ -63,6 +63,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/jenis-surat/aktifkan', [JenisSuratController::class, 'aktifkanJenisSurat'])->name('jenissurat.aktifkan');
             Route::post('/jenis-surat/nonaktifkan', [JenisSuratController::class, 'nonAktifkanJenisSurat'])->name('jenissurat.nonaktifkan');
             Route::post('/jenis-surat/dotambahpenyetuju', [JenisSuratController::class, 'doTambahPenyetuju'])->name('jenissurat.dotambahpenyetuju');
+            Route::post('/jenis-surat/dohapuspenyetuju', [JenisSuratController::class, 'doHapusPenyetuju'])->name('jenissurat.dohapuspenyetuju');
             Route::get('/jenis-surat/getuserpenyetuju', [JenisSuratController::class, 'getUserPenyetuju'])->name('jenissurat.getuserpenyetuju');
         });
     });

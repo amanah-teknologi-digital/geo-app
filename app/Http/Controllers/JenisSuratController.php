@@ -190,7 +190,6 @@ class JenisSuratController extends Controller
             ]);
 
             DB::beginTransaction();
-            //save file gambar header
 
             $this->service->tambahPenyetujuSurat($request);
 
@@ -235,6 +234,33 @@ class JenisSuratController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function doHapusPenyetuju(Request $request){
+        try {
+            $request->validate([
+                'id_pihakpenyetujusurat' => ['required'],
+            ],[
+                'id_pihakpenyetujusurat.required' => 'Id pihak penyetuju surat tidak ada.',
+            ]);
+
+            DB::beginTransaction();
+
+            $this->service->hapusPihakPenyetujuSurat($request->id_pihakpenyetujusurat);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Berhasil Hapus Pihak Penyetuju Surat.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     public function aktifkanJenisSurat(Request $request){
         try {
             $request->validate([

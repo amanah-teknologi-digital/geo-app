@@ -87,6 +87,13 @@ class JenisSuratRepository
         }
     }
 
+    public function hapusPihakPenyetuju($idPihakPenyetuju){
+        $pihakPenyetuju = PihakPenyetujuSurat::find($idPihakPenyetuju);
+        if ($pihakPenyetuju) {
+            $pihakPenyetuju->delete();
+        }
+    }
+
     public function aktifkanJenisSurat($idJenisSurat){
         $JenisSurat = JenisSurat::find($idJenisSurat);
         if ($JenisSurat) {

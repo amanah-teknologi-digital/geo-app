@@ -95,7 +95,7 @@
                                             @endif
                                         </div>
                                         @if(!empty($penyetuju->id_penyetuju))
-                                            <span class="bx bx-x text-danger cursor-pointer" data-id_file="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-hapuspersetujuan"></span>
+                                            <span class="bx bx-x text-danger cursor-pointer" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-hapuspersetujuan"></span>
                                         @endif
                                     </div>
                                 @endforeach
@@ -141,6 +141,27 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success">Tambah Penyetuju</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-hapuspersetujuan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('jenissurat.dohapuspenyetuju') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_pihakpenyetujusurat" id="id_pihakpenyetujusurat" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Hapus Penyetuju Surat</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah yakin menghapus penyetuju ini?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Hapus</button>
                     </div>
                 </div>
             </form>
