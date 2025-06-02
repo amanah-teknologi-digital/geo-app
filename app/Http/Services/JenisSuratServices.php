@@ -33,6 +33,12 @@ class JenisSuratServices
         return $data;
     }
 
+    public function getUserPenyetujuSuratUpdate($search, $idJenisSurat, $idAksesPenyetuju, $idPihakPenyetuju){
+        $data = $this->repository->getUserPenyetujuSuratUpdate($search, $idJenisSurat, $idAksesPenyetuju, $idPihakPenyetuju);
+
+        return $data;
+    }
+
     public function tambahJenisSurat($request, $idJenisSurat){
         try {
             $idPihakPenyetuju = strtoupper(Uuid::uuid4()->toString());

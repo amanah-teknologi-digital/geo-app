@@ -86,11 +86,10 @@
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <div class="d-flex align-items-center gap-2 flex-wrap"><span class="text-success small fw-semibold">
                                             {{ $penyetuju->urutan.'. '.$penyetuju->nama }}</span>
-                                            @if(!empty($penyetuju->id_penyetuju))
-                                                <i class="small text-secondary">(<span>{{ $penyetuju->userpenyetuju->name }}</span>)</i>
-                                            @endif
+                                            <i class="small text-secondary">(<span>{{ $penyetuju->userpenyetuju->name }}</span>)</i>
                                         </div>
-                                        @if(!empty($penyetuju->id_penyetuju))
+                                        <span class="bx bx-edit text-warning cursor-pointer" data-id_akses="{{ $penyetuju->id_akses }}" data-nama_penyetuju="{{ $penyetuju->nama }}" data-id_penyetuju="{{ $penyetuju->id_penyetuju }}" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-updatepersetujuan"></span>
+                                        @if(empty($penyetuju->id_akses))
                                             <span class="bx bx-x text-danger cursor-pointer" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-hapuspersetujuan"></span>
                                         @endif
                                     </div>
@@ -142,6 +141,38 @@
             </form>
         </div>
     </div>
+    <div class="modal fade" id="modal-updatepersetujuan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <form action="{{ route('jenissurat.doupdatepenyetuju') }}" id="frm_updatepersetujuan" method="POST">
+                @csrf
+                <input type="hidden" name="id_pihakpenyetujusurat" id="id_pihakpenyetujusurat_update" >
+                <input type="hidden" name="id_aksespenyetuju_update" id="id_aksespenyetuju_update" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Update Persetujuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-6">
+                            <div>
+                                <label for="nama_persetujuan" class="form-label">Nama Persetujuan <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nama_persetujuan_update" name="nama_persetujuan" placeholder="Nama persetujuan" required autocomplete="off" autofocus>
+                            </div>
+                            <div>
+                                <label for="user_penyetuju" class="form-label">User Penyetuju <span class="text-danger">*</span></label>
+                                <select name="user_penyetuju" id="user_penyetuju_update" class="form-control" required></select>
+                                <div class="error-container" id="error-user_penyetuju_update"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-warning">Update Penyetuju</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="modal fade" id="modal-hapuspersetujuan" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
             <form action="{{ route('jenissurat.dohapuspenyetuju') }}" method="POST">
@@ -167,6 +198,7 @@
 @section('page-script')
     <script>
         const urlGetUser = '{{ route('jenissurat.getuserpenyetuju') }}';
+        const urlGetUserUpdate = '{{ route('jenissurat.getuserpenyetujuupdate') }}';
         const idJenisSurat = '{{ $idJenisSurat }}';
     </script>
     @vite('resources/views/script_view/jenis_surat/edit_jenissurat.js')

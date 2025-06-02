@@ -136,6 +136,17 @@ class JenisSuratController extends Controller
         return response()->json($users);
     }
 
+    public function getUserPenyetujuUpdate(Request $request){
+        $search = $request->q;
+        $idJenisSurat = $request->id_jenissurat;
+        $idAksesPenyetuju = $request->id_akses;
+        $idPihakPenyetuju = $request->id_pihakpenyetujusurat;
+
+        $users = $this->service->getUserPenyetujuSuratUpdate($search, $idJenisSurat, $idAksesPenyetuju, $idPihakPenyetuju);
+
+        return response()->json($users);
+    }
+
     public function doEditJenisSurat(Request $request){
         try {
             $request->validate([
@@ -175,6 +186,39 @@ class JenisSuratController extends Controller
     }
 
     public function doTambahPenyetuju(Request $request){
+        try {
+            $request->validate([
+                'nama_persetujuan' => ['required'],
+                'id_jenissurat' => ['required'],
+                'user_penyetuju' => ['required',
+                    Rule::unique('pihak_penyetujusurat', 'id_penyetuju')
+                        ->where(fn ($query) => $query->where('id_jenissurat', $request->id_jenissurat))
+                ]
+            ],[
+                'nama_persetujuan.required' => 'Nama persetujuan tidak ada.',
+                'id_jenissurat.required' => 'Id Jenis Surat tidak ada.',
+                'user_penyetuju.required' => 'User penyetuju wajib diisi.',
+            ]);
+
+            DB::beginTransaction();
+
+            $this->service->tambahPenyetujuSurat($request);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Berhasil Tambah Penyetuju Surat.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function doUpdatePenyetuju(Request $request){
         try {
             $request->validate([
                 'nama_persetujuan' => ['required'],

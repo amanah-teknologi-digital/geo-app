@@ -1,3 +1,6 @@
+let idAksesPenyetuju = 0;
+let id_pihakpenyetujusurat_update = 0;
+
 $(document).ready(function () {
     tinymce.init({
         selector: '#editor',
@@ -102,6 +105,29 @@ $(document).ready(function () {
         }
     });
 
+    $('#user_penyetuju_update').select2({
+        placeholder: 'Cari user...',
+        width: '100%',
+        dropdownParent: $('#modal-updatepersetujuan'),
+        ajax: {
+            url: urlGetUserUpdate,
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return { q: params.term, id_jenissurat: idJenisSurat, id_akses: idAksesPenyetuju, id_pihakpenyetujusurat: id_pihakpenyetujusurat_update };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(user => ({
+                        id: user.id,
+                        text: user.name
+                    }))
+                };
+            },
+            cache: true
+        }
+    });
+
     $("#frm_tambahpersetujuan").validate({
         ignore: "",
         rules: {
@@ -138,5 +164,19 @@ $(document).ready(function () {
         var button = $(event.relatedTarget); // Ambil tombol yang diklik
         var dataId = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
         $('#id_pihakpenyetujusurat').val(dataId); // Masukkan ke modal
+    });
+
+    $('#modal-updatepersetujuan').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
+        var dataIdAkses = button.data('id_akses'); // Ambil nilai data-id
+        var namaPenyetuju = button.data('nama_penyetuju'); // Ambil nilai data-id
+        var idPenyetuju = button.data('id_penyetuju'); // Ambil nilai data-id
+
+        $('#id_pihakpenyetujusurat_update').val(dataId); // Masukkan ke modal
+        $('#nama_persetujuan_update').val(namaPenyetuju); // Masukkan ke modal
+        $('#user_penyetuju_update').val(idPenyetuju).trigger('change');
+        idAksesPenyetuju = dataIdAkses;
+
     });
 });

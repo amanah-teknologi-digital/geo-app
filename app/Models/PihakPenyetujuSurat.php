@@ -15,6 +15,7 @@ class PihakPenyetujuSurat extends Model
         'id_pihakpenyetuju',
         'id_jenissurat',
         'id_penyetuju',
+        'id_akses',
         'nama',
         'urutan',
         'id_penyetuju',

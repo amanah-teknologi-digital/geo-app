@@ -21,11 +21,29 @@ class JenisSuratRepository
     }
 
     public function getUserPenyetujuSurat($search, $idJenisSurat){
-        $usedUserIds = PihakPenyetujuSurat::where('id_jenissurat', $idJenisSurat)->where('id_penyetuju', '!=', null)->pluck('id_penyetuju');
+        $usedUserIds = PihakPenyetujuSurat::where('id_jenissurat', $idJenisSurat)->pluck('id_penyetuju');
 
         $availableUsers = User::whereNotIn('id', $usedUserIds)->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
             ->limit(10)
             ->get(['id', 'name']);
+
+        return $availableUsers;
+    }
+
+    public function getUserPenyetujuSuratUpdate($search, $idJenisSurat, $idAksesPenyetuju, $idPihakPenyetuju){
+        $usedUserIds = PihakPenyetujuSurat::where('id_jenissurat', $idJenisSurat)->where('id_penyetuju', '!=', $idPihakPenyetuju)->pluck('id_penyetuju');
+
+        $availableUsers = User::whereNotIn('id', $usedUserIds);
+        if ($idAksesPenyetuju) {
+            $availableUsers = $availableUsers->whereHas('aksesuser', function ($query) use ($idAksesPenyetuju) {
+                $query->where('id_akses', $idAksesPenyetuju);
+            });
+        }
+
+        $availableUsers = $availableUsers->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            ->limit(10)
+            ->get(['id', 'name']);
+
 
         return $availableUsers;
     }
