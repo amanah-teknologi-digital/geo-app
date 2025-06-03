@@ -103,7 +103,7 @@
                             <div>
                                 <label for="email" class="form-label">Persetujuan</label>
                                 <div class="d-flex align-items-center gap-2">
-                                    <div id="list-persetujuan" style="font-weight: bold;" class="text-success">-</div>
+                                    <div id="list-persetujuan" style="font-weight: bold;">-</div>
                                 </div>
                             </div>
                             <div>

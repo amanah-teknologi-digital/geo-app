@@ -39,6 +39,6 @@ class JenisSurat extends Model
 
     public function pihakpenyetujusurat()
     {
-        return $this->hasMany(PihakPenyetujuSurat::class, 'id_jenissurat', 'id_jenissurat')->orderBy('urutan');;
+        return $this->hasMany(PihakPenyetujuSurat::class, 'id_jenissurat', 'id_jenissurat')->orderBy('urutan');
     }
 }

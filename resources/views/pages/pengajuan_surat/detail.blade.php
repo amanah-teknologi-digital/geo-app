@@ -138,6 +138,22 @@
                         <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" required>
                         <div class="row g-6">
                             <div>
+                                <label for="email" class="form-label">Persetujuan</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div id="list-persetujuan" style="font-weight: bold;">
+                                        @if ($dataPengajuan->pihakpenyetuju->isNotEmpty())
+                                            <div style="font-weight: bold;">
+                                                @foreach ($dataPengajuan->pihakpenyetuju as $p)
+                                                    {{ $p->urutan }}. {{ $p->nama }} <i class="text-success">({{ $p->userpenyetuju->name }})</i> @if (!$loop->last) &rarr; @endif
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div><em class="text-danger">Tidak ada pihak penyetuju</em></div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
                                 <label for="jenis_surat" class="form-label">Jenis Surat <span
                                         class="text-danger">*</span></label>
                                 @if($dataPengajuan->id_statuspengajuan == 0)
@@ -156,22 +172,6 @@
                                     </select>
                                     <input type="hidden" name="jenis_surat" value="{{ $dataPengajuan->id_jenissurat }}" >
                                 @endif
-                            </div>
-                            <div>
-                                <label for="email" class="form-label">Persetujuan</label>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div id="list-persetujuan" style="font-weight: bold;" class="text-success">
-                                        @if ($dataPengajuan->pihakpenyetuju->isNotEmpty())
-                                            <div style="font-weight: bold;">
-                                                @foreach ($dataPengajuan->pihakpenyetuju as $p)
-                                                    {{ $p->urutan }}. {{ $p->nama }}@if (!$loop->last) &rarr; @endif
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <div><em class="text-danger">Tidak ada pihak penyetuju</em></div>
-                                        @endif
-                                    </div>
-                                </div>
                             </div>
                             <div>
                                 <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>

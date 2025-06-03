@@ -83,7 +83,7 @@ $(document).ready(function () {
 
                     listpersetujuan.sort((a, b) => a.urutan - b.urutan);
                     // Buat daftar nama dengan urutan
-                    let list = listpersetujuan.map(item => `${item.urutan}. ${item.nama}`);
+                    let list = listpersetujuan.map(item => `${item.urutan}. ${item.nama} <i class="text-success">(${item.userpenyetuju.name})</i>`);
 
                     // Gabungkan dengan tanda panah → dan tampilkan
                     $('#list-persetujuan').html(list.join(' &rarr; '));
