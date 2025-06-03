@@ -20,34 +20,21 @@ class PengajuanPersuratanRepository
             ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat','pihakpenyetuju']);
 
         $id_pengguna = auth()->user()->id;
-        if ($id_akses == 8){ //pengguna
-            $data = $data->where('pengaju', $id_pengguna)
-                ->orderByRaw('CASE
-                    WHEN id_statuspengajuan = 0 THEN 0
-                    WHEN id_statuspengajuan = 4 THEN 1
-                    ELSE 2
-                    END');
+        if ($id_akses == 8 || $id_akses == 1){ //pengguna
+            $data = $data->where('pengaju', $id_pengguna)->orWhereHas('pihakpenyetuju', function ($query) use ($id_pengguna) {
+                $query->where('id_penyetuju', $id_pengguna);
+            });
+        }else{
+            $data = $data->where('id_statuspengajuan', '!=', 0); // Hanya ambil pengajuan yang sudah diajukan
         }
 
-        if ($id_akses == 2){ // admin geo harus status tidak draft
-            $data = $data->where('id_statuspengajuan', '!=', 0)
-                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_surat WHERE persetujuan_surat.id_pengajuan = pengajuan_surat.id_pengajuan AND persetujuan_surat.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
-                ->orderByRaw('CASE
-                    WHEN id_statuspengajuan = 5 THEN 0
-                    ELSE 1
-                    END');
-        }
-
-        if ($id_akses == 1){ //super admin
-            $data = $data
-                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_surat WHERE persetujuan_surat.id_pengajuan = pengajuan_surat.id_pengajuan AND persetujuan_surat.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
-                ->orderByRaw('CASE
-                    WHEN id_statuspengajuan = 0 THEN 0
-                    WHEN id_statuspengajuan = 4 THEN 1
-                    WHEN id_statuspengajuan = 5 THEN 2
-                    ELSE 3
-                    END'); // Urutkan dengan id_statuspengajuan 0, 4, 5
-        }
+        $data = $data
+            ->orderByRaw('CASE
+                WHEN id_statuspengajuan = 0 THEN 0
+                WHEN id_statuspengajuan = 4 THEN 1
+                WHEN id_statuspengajuan = 5 THEN 2
+                ELSE 3
+                END'); // Urutkan dengan id_statuspengajuan 0, 4, 5
 
         $data = $data->orderBy('created_at', 'desc');
 
@@ -173,16 +160,19 @@ class PengajuanPersuratanRepository
     }
 
     public function hapusPengajuan($id_pengajuan){
+        //hapus pihak terkait
+        PihakPenyetujuPengajuanSurat::where('id_pengajuan', $id_pengajuan)->delete();
+
         $pengajuan = PengajuanPersuratan::where('id_pengajuan', $id_pengajuan)->where('id_statuspengajuan', 0)->first();
         if ($pengajuan) {
             $pengajuan->delete();
         }
     }
 
-    public function getPersetujuanTerakhir($id_pengajuan, $id_akses){
+    public function getPersetujuanTerakhir($id_pengajuan, $id_pihakpenyetuju){
         $data = PersetujuanPersuratan::with(['pihakpenyetuju','statuspersetujuan','akses'])
             ->where('id_pengajuan', $id_pengajuan)
-            ->where('id_akses', $id_akses)
+            ->where('id_pihakpenyetuju', $id_pihakpenyetuju)
             ->orderBy('created_at', 'desc')
             ->first();
 

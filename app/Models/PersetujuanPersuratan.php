@@ -14,7 +14,7 @@ class PersetujuanPersuratan extends Model
         'id_persetujuan',
         'id_pengajuan',
         'id_statuspersetujuan',
-        'id_akses',
+        'id_pihakpenyetuju',
         'penyetuju',
         'nama_penyetuju',
         'keterangan',
@@ -34,8 +34,8 @@ class PersetujuanPersuratan extends Model
         return $this->belongsTo(StatusPersetujuan::class, 'id_statuspersetujuan', 'id_statuspersetujuan');
     }
 
-    public function akses()
+    public function pihakpenyetujupengajuansurat()
     {
-        return $this->belongsTo(Akses::class, 'id_akses', 'id_akses');
+        return $this->belongsTo(PihakPenyetujuPengajuanSurat::class, 'id_pihakpenyetuju', 'id_pihakpenyetuju');
     }
 }
