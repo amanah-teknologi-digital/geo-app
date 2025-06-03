@@ -21,8 +21,11 @@ class PengajuanPersuratanRepository
 
         $id_pengguna = auth()->user()->id;
         if ($id_akses == 8 || $id_akses == 1){ //pengguna
-            $data = $data->where('pengaju', $id_pengguna)->orWhereHas('pihakpenyetuju', function ($query) use ($id_pengguna) {
-                $query->where('id_penyetuju', $id_pengguna);
+            $data = $data->where(function ($query) use ($id_pengguna) {
+                $query->where('pengaju', $id_pengguna)
+                    ->orWhereHas('pihakpenyetuju', function ($q) use ($id_pengguna) {
+                        $q->where('id_penyetuju', $id_pengguna);
+                    });
             });
         }else{
             $data = $data->where('id_statuspengajuan', '!=', 0); // Hanya ambil pengajuan yang sudah diajukan
