@@ -8,6 +8,8 @@ use App\Models\JenisSurat;
 use App\Models\PengajuanPersuratan;
 use App\Models\Pengumuman;
 use App\Models\PersetujuanPersuratan;
+use App\Models\PihakPenyetujuPengajuanSurat;
+use App\Models\PihakPenyetujuSurat;
 use App\Models\User;
 use Ramsey\Uuid\Nonstandard\Uuid;
 
@@ -15,7 +17,7 @@ class PengajuanPersuratanRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
         $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'email_its', 'kartu_id', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
-            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat']);
+            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat','pihakpenyetuju']);
 
         $id_pengguna = auth()->user()->id;
         if ($id_akses == 8){ //pengguna
@@ -93,6 +95,22 @@ class PengajuanPersuratanRepository
             'created_at' => now(),
             'updater' => auth()->user()->id
         ]);
+
+        $getPenyetujuSurat = PihakPenyetujuSurat::where('id_jenissurat', $request->jenis_surat)
+            ->orderBy('urutan')
+            ->get();
+
+        foreach ($getPenyetujuSurat as $penyetujuSurat) {
+            $id_persetujuan = strtoupper(Uuid::uuid4()->toString());
+
+            PihakPenyetujuPengajuanSurat::create([
+                'id_pihakpenyetuju' => $id_persetujuan,
+                'id_pengajuan' => $id_pengajuan,
+                'id_penyetuju' => $penyetujuSurat->id_penyetuju,
+                'nama' => $penyetujuSurat->nama,
+                'urutan' => $penyetujuSurat->urutan
+            ]);
+        }
     }
 
     public function updatePengajuan($request){
@@ -100,6 +118,7 @@ class PengajuanPersuratanRepository
         $id_akses = session('akses_default_id');
 
         $dataPengajuan = $this->getDataPengajuan($id_pengajuan, $id_akses);
+        $id_jenissurat = $dataPengajuan->id_jenissurat;
         $dataUser = User::find($dataPengajuan->pengaju);
 
         $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
@@ -114,6 +133,28 @@ class PengajuanPersuratanRepository
         $dataPengajuan->updated_at = now();
         $dataPengajuan->updater = auth()->user()->id;
         $dataPengajuan->save();
+
+        if ($id_jenissurat != $request->jenis_surat) {
+            // Jika jenis surat berubah, hapus pihak penyetuju yang ada
+            PihakPenyetujuPengajuanSurat::where('id_pengajuan', $id_pengajuan)->delete();
+
+            // Tambahkan pihak penyetuju baru sesuai jenis surat yang baru
+            $getPenyetujuSurat = PihakPenyetujuSurat::where('id_jenissurat', $request->jenis_surat)
+                ->orderBy('urutan')
+                ->get();
+
+            foreach ($getPenyetujuSurat as $penyetujuSurat) {
+                $id_persetujuan = strtoupper(Uuid::uuid4()->toString());
+
+                PihakPenyetujuPengajuanSurat::create([
+                    'id_pihakpenyetuju' => $id_persetujuan,
+                    'id_pengajuan' => $id_pengajuan,
+                    'id_penyetuju' => $penyetujuSurat->id_penyetuju,
+                    'nama' => $penyetujuSurat->nama,
+                    'urutan' => $penyetujuSurat->urutan
+                ]);
+            }
+        }
     }
 
     public function updateDataPemohon($id_pengajuan){

@@ -140,12 +140,38 @@
                             <div>
                                 <label for="jenis_surat" class="form-label">Jenis Surat <span
                                         class="text-danger">*</span></label>
-                                <select name="jenis_surat" id="jenis_surat" class="form-control" required {{ $isEdit? '':'disabled' }} >
-                                    <option value="" selected disabled>-- Pilih Jenis Surat --</option>
-                                    @foreach($dataJenisSurat as $row)
-                                        <option value="{{ $row->id_jenissurat }}" {{ ($dataPengajuan->id_jenissurat == $row->id_jenissurat) ? 'selected':'' }}>{{ $row->nama }}</option>
-                                    @endforeach
-                                </select>
+                                @if($dataPengajuan->id_statuspengajuan == 0)
+                                    <select name="jenis_surat" id="jenis_surat" class="form-control" required {{ $isEdit? '':'disabled' }}>
+                                        <option value="" selected disabled>-- Pilih Jenis Surat --</option>
+                                        @foreach($dataJenisSurat as $row)
+                                            <option value="{{ $row->id_jenissurat }}" {{ ($dataPengajuan->id_jenissurat == $row->id_jenissurat) ? 'selected':'' }}>{{ $row->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                @else
+                                    <select name="jenis_surat" id="jenis_surat" class="form-control" required disabled>
+                                        <option value="" selected disabled>-- Pilih Jenis Surat --</option>
+                                        @foreach($dataJenisSurat as $row)
+                                            <option value="{{ $row->id_jenissurat }}" {{ ($dataPengajuan->id_jenissurat == $row->id_jenissurat) ? 'selected':'' }}>{{ $row->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" name="jenis_surat" value="{{ $dataPengajuan->id_jenissurat }}" >
+                                @endif
+                            </div>
+                            <div>
+                                <label for="email" class="form-label">Persetujuan</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div id="list-persetujuan" style="font-weight: bold;" class="text-success">
+                                        @if ($dataPengajuan->pihakpenyetuju->isNotEmpty())
+                                            <div style="font-weight: bold;">
+                                                @foreach ($dataPengajuan->pihakpenyetuju as $p)
+                                                    {{ $p->urutan }}. {{ $p->nama }}@if (!$loop->last) &rarr; @endif
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div><em class="text-danger">Tidak ada pihak penyetuju</em></div>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
@@ -455,6 +481,7 @@
 @section('page-script')
     <script>
         const isEdit = {{ $isEdit ? 'true' : 'false' }};
+        const routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
     </script>
     @vite('resources/views/script_view/pengajuan_surat/detail_pengajuan.js')
 @endsection

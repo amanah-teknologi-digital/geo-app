@@ -61,4 +61,9 @@ class PengajuanPersuratan extends Model
         return $this->hasMany(FilePengajuanSurat::class, 'id_pengajuan', 'id_pengajuan');
     }
 
+    public function pihakpenyetuju()
+    {
+        return $this->hasMany(PihakPenyetujuPengajuanSurat::class, 'id_pengajuan', 'id_pengajuan')->orderBy('urutan');
+    }
+
 }
