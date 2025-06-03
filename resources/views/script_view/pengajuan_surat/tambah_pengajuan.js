@@ -68,6 +68,7 @@ $(document).ready(function () {
 
     $('#jenis_surat').on('change', function() {
         let id_jenissurat = $(this).val();
+        $('#list-persetujuan').html('-');
 
         if (id_jenissurat) {
             $.ajax({
@@ -76,7 +77,16 @@ $(document).ready(function () {
                 data: { id_jenissurat: id_jenissurat },
                 dataType: 'json',
                 success: function(response) {
+                    let listpersetujuan = response.pihakpenyetujusurat;
+
                     tinymce.get('editor_surat').setContent(response.default_form);
+
+                    listpersetujuan.sort((a, b) => a.urutan - b.urutan);
+                    // Buat daftar nama dengan urutan
+                    let list = listpersetujuan.map(item => `${item.urutan}. ${item.nama}`);
+
+                    // Gabungkan dengan tanda panah → dan tampilkan
+                    $('#list-persetujuan').html(list.join(' &rarr; '));
                 },
                 error: function(xhr, status, error) {
                     tinymce.get('editor_surat').setContent('');

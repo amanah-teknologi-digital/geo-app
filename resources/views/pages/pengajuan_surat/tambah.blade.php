@@ -101,6 +101,12 @@
                                 </select>
                             </div>
                             <div>
+                                <label for="email" class="form-label">Persetujuan</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div id="list-persetujuan" style="font-weight: bold;" class="text-success">-</div>
+                                </div>
+                            </div>
+                            <div>
                                 <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
                                 <div id="editor-loading" class="text-center">
                                     <div class="spinner-border spinner-border-sm text-primary" role="status">
