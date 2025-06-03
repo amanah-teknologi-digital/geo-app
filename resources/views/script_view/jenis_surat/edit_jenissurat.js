@@ -1,5 +1,6 @@
 let idAksesPenyetuju = 0;
 let id_pihakpenyetujusurat_update = 0;
+let id_penyetujusurat = 0;
 
 $(document).ready(function () {
     tinymce.init({
@@ -160,6 +161,38 @@ $(document).ready(function () {
         }
     });
 
+    $("#frm_updatepersetujuan").validate({
+        ignore: "",
+        rules: {
+            nama_persetujuan: {
+                required: true
+            },
+            user_penyetuju: {
+                required: true
+            }
+        },
+        messages: {
+            nama_persetujuan: {
+                required: "Nama persetujuan wajib diisi"
+            },
+            user_penyetuju: {
+                required: "User penyetuju wajib dipilih"
+            }
+        },
+        errorPlacement: function(error, element) {
+            // Menentukan lokasi error berdasarkan id atau atribut lain
+            if (element.attr("name") === "user_penyetuju") {
+                error.appendTo("#error-user_penyetuju_update");
+            } else {
+                // Default: tampilkan setelah elemen
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
     $('#modal-hapuspersetujuan').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Ambil tombol yang diklik
         var dataId = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
@@ -171,12 +204,27 @@ $(document).ready(function () {
         var dataId = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
         var dataIdAkses = button.data('id_akses'); // Ambil nilai data-id
         var namaPenyetuju = button.data('nama_penyetuju'); // Ambil nilai data-id
+        var namaPihakPenyetuju = button.data('nama_pihakpenyetuju'); // Ambil nilai data-id
         var idPenyetuju = button.data('id_penyetuju'); // Ambil nilai data-id
 
         $('#id_pihakpenyetujusurat_update').val(dataId); // Masukkan ke modal
         $('#nama_persetujuan_update').val(namaPenyetuju); // Masukkan ke modal
-        $('#user_penyetuju_update').val(idPenyetuju).trigger('change');
+        $('#id_aksespenyetuju_update').val(dataIdAkses); // Masukkan ke modal
+
+        let option = new Option(namaPihakPenyetuju, idPenyetuju, true, true);
+        $('#user_penyetuju_update').append(option).trigger('change');
+
         idAksesPenyetuju = dataIdAkses;
+        id_pihakpenyetujusurat_update = dataId;
+        id_penyetujusurat = idPenyetuju;
+
+        console.log(idAksesPenyetuju);
+
+        if (idAksesPenyetuju == ''){
+            $('#nama_persetujuan_update').prop('readonly', false);
+        }else{
+            $('#nama_persetujuan_update').prop('readonly', true);
+        }
 
     });
 });

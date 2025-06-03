@@ -88,7 +88,7 @@
                                             {{ $penyetuju->urutan.'. '.$penyetuju->nama }}</span>
                                             <i class="small text-secondary">(<span>{{ $penyetuju->userpenyetuju->name }}</span>)</i>
                                         </div>
-                                        <span class="bx bx-edit text-warning cursor-pointer" data-id_akses="{{ $penyetuju->id_akses }}" data-nama_penyetuju="{{ $penyetuju->nama }}" data-id_penyetuju="{{ $penyetuju->id_penyetuju }}" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-updatepersetujuan"></span>
+                                        <span class="bx bx-edit text-warning cursor-pointer" data-id_akses="{{ $penyetuju->id_akses }}" data-nama_pihakpenyetuju="{{ $penyetuju->userpenyetuju->name }}" data-nama_penyetuju="{{ $penyetuju->nama }}" data-id_penyetuju="{{ $penyetuju->id_penyetuju }}" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-updatepersetujuan"></span>
                                         @if(empty($penyetuju->id_akses))
                                             <span class="bx bx-x text-danger cursor-pointer" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-hapuspersetujuan"></span>
                                         @endif

@@ -221,25 +221,25 @@ class JenisSuratController extends Controller
     public function doUpdatePenyetuju(Request $request){
         try {
             $request->validate([
+                'id_pihakpenyetujusurat' => ['required'],
                 'nama_persetujuan' => ['required'],
-                'id_jenissurat' => ['required'],
                 'user_penyetuju' => ['required',
                     Rule::unique('pihak_penyetujusurat', 'id_penyetuju')
-                        ->where(fn ($query) => $query->where('id_jenissurat', $request->id_jenissurat))
+                        ->where(fn ($query) => $query->where('id_jenissurat', $request->id_jenissurat))->where('id_pihakpenyetuju', '!=', $request->id_pihakpenyetujusurat)
                 ]
             ],[
-                'nama_persetujuan.required' => 'Nama persetujuan tidak ada.',
-                'id_jenissurat.required' => 'Id Jenis Surat tidak ada.',
+                'id_pihakpenyetujusurat.required' => 'Id Pihak Penyetuju tidak ada.',
+                'nama_persetujuan.required' => 'Nama Persetujuan wajib diisi.',
                 'user_penyetuju.required' => 'User penyetuju wajib diisi.',
             ]);
 
             DB::beginTransaction();
 
-            $this->service->tambahPenyetujuSurat($request);
+            $this->service->UpdatePenyetujuSurat($request);
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Berhasil Tambah Penyetuju Surat.');
+            return redirect()->back()->with('success', 'Berhasil Update Penyetuju Surat.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();

@@ -80,6 +80,17 @@ class JenisSuratServices
         }
     }
 
+    public function UpdatePenyetujuSurat($request){
+        try {
+            $idPihakPenyetuju = $request->id_pihakpenyetujusurat;
+
+            $this->repository->updatePenyetujuSurat($request, $idPihakPenyetuju);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function hapusJenisSurat($idJenisSurat){
         try {
             $this->repository->hapusJenisSurat($idJenisSurat);
