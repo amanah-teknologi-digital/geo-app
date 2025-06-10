@@ -20,30 +20,55 @@ class PengajuanPersuratanRepository
             ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat','pihakpenyetuju']);
 
         $id_pengguna = auth()->user()->id;
-        if ($id_akses == 8 || $id_akses == 1){ //pengguna
-            $data = $data->where(function ($query) use ($id_pengguna) {
-                $query->where('pengaju', $id_pengguna)
-                    ->orWhereHas('pihakpenyetuju', function ($q) use ($id_pengguna) {
-                        $q->where('id_penyetuju', $id_pengguna);
+        if ($id_akses != 1) {
+            // Semua selain superadmin: hanya yang berkaitan
+            $data = $data->where(function ($q) use ($id_pengguna, $id_akses) {
+                $q->where('pengaju', $id_pengguna)
+                    ->orWhereHas('pihakpenyetuju', function ($q2) use ($id_pengguna) {
+                        $q2->where('id_penyetuju', $id_pengguna);
                     });
             });
-        }else{
-            $data = $data->where('id_statuspengajuan', '!=', 0); // Hanya ambil pengajuan yang sudah diajukan
         }
 
-        $data = $data
-            ->orderByRaw('CASE
-                WHEN id_statuspengajuan = 0 THEN 0
-                WHEN id_statuspengajuan = 4 THEN 1
-                WHEN id_statuspengajuan = 5 THEN 2
-                ELSE 3
-                END'); // Urutkan dengan id_statuspengajuan 0, 4, 5
-
-        $data = $data->orderBy('created_at', 'desc');
+        $data = $data->orderByRaw('CASE
+            WHEN id_statuspengajuan = 0 THEN 0
+            WHEN id_statuspengajuan = 4 THEN 1
+            WHEN id_statuspengajuan = 5 THEN 2
+            ELSE 3
+            END')
+            ->orderBy('created_at', 'desc');
 
         if (!empty($id_pengajuan)) {
-            $data = $data->where('id_pengajuan', $id_pengajuan)->first();
+            return $data->where('id_pengajuan', $id_pengajuan)->first();
         }
+
+        $data = $data->get();
+
+        $data = $data->filter(function ($pengajuan) use ($id_pengguna, $id_akses) {
+            // Superadmin: tidak difilter
+            if ($id_akses == 1) return true;
+
+            // Jika dia pengaju
+            if ($pengajuan->pengaju == $id_pengguna) return true;
+
+            // Cek apakah dia penyetuju
+            $penyetuju = $pengajuan->pihakpenyetuju->firstWhere('id_penyetuju', $id_pengguna);
+            if (!$penyetuju) return false;
+
+            $urutan = $penyetuju->urutan;
+
+            if ($urutan == 1) {
+                // Urutan pertama: hanya jika status pengajuan = diajukan (2)
+                return $pengajuan->id_statuspengajuan == 2;
+            }
+
+            // Urutan > 1: cek penyetuju sebelumnya sudah setujui
+            $prev = $pengajuan->pihakpenyetuju->where('urutan', $urutan - 1)->first();
+            if (!$prev) return false;
+
+            $prev_persetujuan = $pengajuan->persetujuan->firstWhere('id_pihakpenyetuju', $prev->id_pihakpenyetuju);
+            return $prev_persetujuan && $prev_persetujuan->id_statuspersetujuan == 1;
+        });
 
         return $data;
     }
