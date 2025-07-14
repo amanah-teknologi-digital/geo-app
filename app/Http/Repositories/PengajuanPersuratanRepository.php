@@ -42,33 +42,33 @@ class PengajuanPersuratanRepository
             return $data->where('id_pengajuan', $id_pengajuan)->first();
         }
 
-        $data = $data->get();
-
-        $data = $data->filter(function ($pengajuan) use ($id_pengguna, $id_akses) {
-            // Superadmin: tidak difilter
-            if ($id_akses == 1) return true;
-
-            // Jika dia pengaju
-            if ($pengajuan->pengaju == $id_pengguna) return true;
-
-            // Cek apakah dia penyetuju
-            $penyetuju = $pengajuan->pihakpenyetuju->firstWhere('id_penyetuju', $id_pengguna);
-            if (!$penyetuju) return false;
-
-            $urutan = $penyetuju->urutan;
-
-            if ($urutan == 1) {
-                // Urutan pertama: hanya jika status pengajuan = diajukan (2)
-                return $pengajuan->id_statuspengajuan == 2;
-            }
-
-            // Urutan > 1: cek penyetuju sebelumnya sudah setujui
-            $prev = $pengajuan->pihakpenyetuju->where('urutan', $urutan - 1)->first();
-            if (!$prev) return false;
-
-            $prev_persetujuan = $pengajuan->persetujuan->firstWhere('id_pihakpenyetuju', $prev->id_pihakpenyetuju);
-            return $prev_persetujuan && $prev_persetujuan->id_statuspersetujuan == 1;
-        });
+//        $data = $data->get();
+//
+//        $data = $data->filter(function ($pengajuan) use ($id_pengguna, $id_akses) {
+//            // Superadmin: tidak difilter
+//            if ($id_akses == 1) return true;
+//
+//            // Jika dia pengaju
+//            if ($pengajuan->pengaju == $id_pengguna) return true;
+//
+//            // Cek apakah dia penyetuju
+//            $penyetuju = $pengajuan->pihakpenyetuju->firstWhere('id_penyetuju', $id_pengguna);
+//            if (!$penyetuju) return false;
+//
+//            $urutan = $penyetuju->urutan;
+//
+//            if ($urutan == 1) {
+//                // Urutan pertama: hanya jika status pengajuan = diajukan (2)
+//                return $pengajuan->id_statuspengajuan == 2;
+//            }
+//
+//            // Urutan > 1: cek penyetuju sebelumnya sudah setujui
+//            $prev = $pengajuan->pihakpenyetuju->where('urutan', $urutan - 1)->first();
+//            if (!$prev) return false;
+//
+//            $prev_persetujuan = $pengajuan->persetujuan->firstWhere('id_pihakpenyetuju', $prev->id_pihakpenyetuju);
+//            return $prev_persetujuan && $prev_persetujuan->id_statuspersetujuan == 1;
+//        });
 
         return $data;
     }
