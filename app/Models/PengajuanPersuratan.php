@@ -10,6 +10,7 @@ class PengajuanPersuratan extends Model
     public $timestamps = false;
     protected $primaryKey = 'id_pengajuan';
     public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'id_pengajuan',
         'pengaju',
@@ -22,6 +23,7 @@ class PengajuanPersuratan extends Model
         'created_at',
         'keterangan',
         'data_form',
+        'user_perevisi',
         'updated_at',
         'updater'
     ];
@@ -65,5 +67,4 @@ class PengajuanPersuratan extends Model
     {
         return $this->hasMany(PihakPenyetujuPengajuanSurat::class, 'id_pengajuan', 'id_pengajuan')->orderBy('urutan');
     }
-
 }

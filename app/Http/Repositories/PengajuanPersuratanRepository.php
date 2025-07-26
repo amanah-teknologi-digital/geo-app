@@ -16,18 +16,23 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class PengajuanPersuratanRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
-        $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'email_its', 'kartu_id', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
+        $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'email_its', 'kartu_id', 'user_perevisi', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
             ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat','pihakpenyetuju']);
 
         $id_pengguna = auth()->user()->id;
-        if ($id_akses != 1) {
-            // Semua selain superadmin: hanya yang berkaitan
-            $data = $data->where(function ($q) use ($id_pengguna, $id_akses) {
-                $q->where('pengaju', $id_pengguna)
-                    ->orWhereHas('pihakpenyetuju', function ($q2) use ($id_pengguna) {
-                        $q2->where('id_penyetuju', $id_pengguna);
-                    });
+
+        // Filtering akses user (kecuali super admin & admin geo)
+        if (!in_array($id_akses, [1, 2])) {
+            $data = $data->where(function ($q) use ($id_pengguna) {
+                $q->where('pengaju', $id_pengguna) // sebagai pemohon
+                ->orWhereHas('pihakpenyetuju', function ($sub) use ($id_pengguna) {
+                    $sub->where('id_penyetuju', $id_pengguna); // sebagai penyetuju tambahan
+                });
             });
+        }
+
+        if (!in_array($id_akses, [1, 8])){
+            $data = $data->where('id_statuspengajuan', '!=', 0);
         }
 
         $data = $data->orderByRaw('CASE
@@ -35,40 +40,11 @@ class PengajuanPersuratanRepository
             WHEN id_statuspengajuan = 4 THEN 1
             WHEN id_statuspengajuan = 5 THEN 2
             ELSE 3
-            END')
-            ->orderBy('created_at', 'desc');
+            END')->orderBy('created_at', 'desc');
 
         if (!empty($id_pengajuan)) {
             return $data->where('id_pengajuan', $id_pengajuan)->first();
         }
-
-//        $data = $data->get();
-//
-//        $data = $data->filter(function ($pengajuan) use ($id_pengguna, $id_akses) {
-//            // Superadmin: tidak difilter
-//            if ($id_akses == 1) return true;
-//
-//            // Jika dia pengaju
-//            if ($pengajuan->pengaju == $id_pengguna) return true;
-//
-//            // Cek apakah dia penyetuju
-//            $penyetuju = $pengajuan->pihakpenyetuju->firstWhere('id_penyetuju', $id_pengguna);
-//            if (!$penyetuju) return false;
-//
-//            $urutan = $penyetuju->urutan;
-//
-//            if ($urutan == 1) {
-//                // Urutan pertama: hanya jika status pengajuan = diajukan (2)
-//                return $pengajuan->id_statuspengajuan == 2;
-//            }
-//
-//            // Urutan > 1: cek penyetuju sebelumnya sudah setujui
-//            $prev = $pengajuan->pihakpenyetuju->where('urutan', $urutan - 1)->first();
-//            if (!$prev) return false;
-//
-//            $prev_persetujuan = $pengajuan->persetujuan->firstWhere('id_pihakpenyetuju', $prev->id_pihakpenyetuju);
-//            return $prev_persetujuan && $prev_persetujuan->id_statuspersetujuan == 1;
-//        });
 
         return $data;
     }
@@ -197,8 +173,18 @@ class PengajuanPersuratanRepository
         }
     }
 
-    public function getPersetujuanTerakhir($id_pengajuan, $id_pihakpenyetuju){
-        $data = PersetujuanPersuratan::with(['pihakpenyetuju','statuspersetujuan','akses'])
+    public function getPersetujuanTerakhir($id_pengajuan, $id_akses){
+        $data = PersetujuanPersuratan::with(['pihakpenyetuju','statuspersetujuan'])
+            ->where('id_pengajuan', $id_pengajuan)
+            ->where('id_akses', $id_akses)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return $data;
+    }
+
+    public function getPersetujuanTambahanTerakhir($id_pengajuan, $id_pihakpenyetuju){
+        $data = PersetujuanPersuratan::with(['pihakpenyetuju','statuspersetujuan'])
             ->where('id_pengajuan', $id_pengajuan)
             ->where('id_pihakpenyetuju', $id_pihakpenyetuju)
             ->orderBy('created_at', 'desc')
@@ -208,7 +194,7 @@ class PengajuanPersuratanRepository
     }
 
     public function getPersetujuanTerakhirSuper($id_pengajuan){
-        $data = PersetujuanPersuratan::with(['pihakpenyetuju','statuspersetujuan','akses'])
+        $data = PersetujuanPersuratan::with(['pihakpenyetuju','statuspersetujuan'])
             ->where('id_pengajuan', $id_pengajuan)
             ->orderBy('created_at', 'desc')
             ->first();
@@ -216,21 +202,39 @@ class PengajuanPersuratanRepository
         return $data;
     }
 
+    public function getPihakPenyetuju($idPihakPenyetuju){
+        $data = PihakPenyetujuPengajuanSurat::where('id_pihakpenyetuju', $idPihakPenyetuju)->first();
+
+        return $data;
+    }
+
+    public function getPihakPenyetujuByIdpengajuan($idPengajuan){
+        $data = PihakPenyetujuPengajuanSurat::where('id_pengajuan', $idPengajuan)->first();
+
+        return $data;
+    }
+
     public function ajukanPengajuan($id_pengajuan){
         $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
         $dataPengajuan->id_statuspengajuan = 2;
+        $dataPengajuan->user_perevisi = null;
         $dataPengajuan->save();
     }
 
     public function setujuiPengajuan($id_pengajuan){
         $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
         $dataPengajuan->id_statuspengajuan = 1;
+        $dataPengajuan->user_perevisi = null;
         $dataPengajuan->save();
     }
 
-    public function revisiPengajuan($id_pengajuan){
+    public function revisiPengajuan($id_pengajuan, $idPihakpenyetuju){
+        $dataPihakPenyetuju = $this->getPihakPenyetuju($idPihakpenyetuju);
         $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
         $dataPengajuan->id_statuspengajuan = 4;
+        if (!empty($idPihakpenyetuju)){
+            $dataPengajuan->user_perevisi = $dataPihakPenyetuju->id_penyetuju;
+        }
         $dataPengajuan->save();
     }
 
@@ -243,13 +247,15 @@ class PengajuanPersuratanRepository
     public function tolakPengajuan($id_pengajuan){
         $dataPengajuan = PengajuanPersuratan::find($id_pengajuan);
         $dataPengajuan->id_statuspengajuan = 3;
+        $dataPengajuan->user_perevisi = null;
         $dataPengajuan->save();
     }
 
-    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan){
+    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $idPihakpenyetuju, $keterangan){
         $id_persetujuan = strtoupper(Uuid::uuid4()->toString());
+        $dataPihakPenyetuju = $this->getPihakPenyetuju($idPihakpenyetuju);
 
-        PersetujuanPersuratan::create([
+        $dataUpdate = [
             'id_persetujuan' => $id_persetujuan,
             'id_pengajuan' => $id_pengajuan,
             'id_statuspersetujuan' => $id_statuspersetujuan,
@@ -258,7 +264,15 @@ class PengajuanPersuratanRepository
             'nama_penyetuju' => auth()->user()->name,
             'keterangan' => $keterangan,
             'created_at' => now()
-        ]);
+        ];
+
+        if (!empty($idPihakpenyetuju)){
+            $dataUpdate['id_akses'] = null;
+            $dataUpdate['id_pihakpenyetuju'] = $idPihakpenyetuju;
+            $dataUpdate['penyetuju'] = $dataPihakPenyetuju->id_penyetuju;
+        }
+
+        PersetujuanPersuratan::create($dataUpdate);
     }
 
     public function tambahFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize){

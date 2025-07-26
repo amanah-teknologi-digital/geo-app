@@ -83,10 +83,17 @@ $(document).ready(function () {
 
                     listpersetujuan.sort((a, b) => a.urutan - b.urutan);
                     // Buat daftar nama dengan urutan
-                    let list = listpersetujuan.map(item => `${item.urutan}. ${item.nama} <i class="text-success">(${item.userpenyetuju.name})</i>`);
+                    let list2 = '<span class="badge bg-primary text-white">1. Admin ' + namaLayananSurat + '</span>';
+
+                    let list = listpersetujuan.map(item => `<span class="badge bg-primary text-white">${item.urutan}. ${item.nama}</span>`);
+
+                    if (list){
+                        list2 += ' <i class="bx bx-arrow-back text-primary" style="transform: rotate(180deg);"></i> ';
+                        list2 += list.join(' <i class="bx bx-arrow-back text-primary" style="transform: rotate(180deg);"></i>');
+                    }
 
                     // Gabungkan dengan tanda panah → dan tampilkan
-                    $('#list-persetujuan').html(list.join(' &rarr; '));
+                    $('#list-persetujuan').html(list2);
                 },
                 error: function(xhr, status, error) {
                     tinymce.get('editor_surat').setContent('');

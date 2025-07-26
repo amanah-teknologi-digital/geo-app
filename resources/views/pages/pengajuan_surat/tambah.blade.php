@@ -147,6 +147,7 @@
 @section('page-script')
     <script>
         const routeGetJenisSurat = "{{ route('pengajuansurat.getjenissurat') }}";
+        const namaLayananSurat = "{{ $namaLayananSurat }}";
     </script>
     @vite('resources/views/script_view/pengajuan_surat/tambah_pengajuan.js')
 @endsection

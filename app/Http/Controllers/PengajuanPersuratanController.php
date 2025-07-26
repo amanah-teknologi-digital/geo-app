@@ -93,8 +93,9 @@ class PengajuanPersuratanController extends Controller
         $title = "Tambah Pengajuan";
 
         $dataJenisSurat = $this->service->getJenisSurat(isEdit: true);
+        $namaLayananSurat = $this->subtitle;
 
-        return view('pages.pengajuan_surat.tambah', compact('title', 'dataJenisSurat'));
+        return view('pages.pengajuan_surat.tambah', compact('title', 'dataJenisSurat','namaLayananSurat'));
     }
 
     public function doTambahPengajuan(Request $request){
@@ -166,7 +167,8 @@ class PengajuanPersuratanController extends Controller
                 'id_pengajuan.required' => 'Id File tidak ada.',
             ]);
 
-            if (in_array($this->idAkses, [1,2])) {
+            $userTambahan = $this->getUserTambahan($request->id_pengajuan);
+            if ((in_array($this->idAkses, [1,2]) OR $userTambahan)) {
                 $dataFile = $this->service->getDataFile($request->id_file);
                 $location = $dataFile->location;
 
@@ -205,8 +207,9 @@ class PengajuanPersuratanController extends Controller
 
             $id_pengajuan = $request->id_pengajuan;
             $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+            $userTambahan = $this->getUserTambahan($id_pengajuan);
 
-            if (in_array($this->idAkses, [1,2]) && $dataPengajuan->id_statuspengajuan == 1) {
+            if ((in_array($this->idAkses, [1,2]) OR $userTambahan) && $dataPengajuan->id_statuspengajuan == 1) {
                 DB::beginTransaction();
 
                 $listFile = $request->file('filesuratupload');
@@ -233,13 +236,30 @@ class PengajuanPersuratanController extends Controller
         }
     }
 
+    public function getUserTambahan($idPengajuan){
+        $getPihakPenyetuju = $this->service->getPihakPenyetujuByIdpengajuan($idPengajuan);
+        $idUser = auth()->user()->id;
+        $userTambahan = false;
+
+        if (!empty($getPihakPenyetuju)){
+            if ($getPihakPenyetuju->id_penyetuju == $idUser){
+                $userTambahan = true;
+            }
+        }
+
+        return $userTambahan;
+    }
+
     public function detailPengajuan($id_pengajuan){
         $title = "Detail Pengajuan";
 
+        $namaLayananSurat = $this->subtitle;
         $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
         $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
         $dataJenisSurat = $this->service->getJenisSurat(isEdit: $isEdit);
         $idAkses = $this->idAkses;
+        $userTambahan = $this->getUserTambahan($id_pengajuan);
+
         //$isEdit = false;
         if ($isEdit){
             //update data pemohon pengajuan
@@ -255,9 +275,9 @@ class PengajuanPersuratanController extends Controller
                 return redirect()->back()->with('error', $e->getMessage());
             }
         }
-        $statusVerifikasi = $this->service->getStatusVerifikasi($id_pengajuan);
+        $statusVerifikasi = $this->service->getStatusVerifikasi($id_pengajuan, $this->subtitle);
 
-        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'id_pengajuan', 'isEdit', 'statusVerifikasi', 'title', 'idAkses'));
+        return view('pages.pengajuan_surat.detail', compact('dataPengajuan', 'dataJenisSurat', 'id_pengajuan', 'isEdit', 'statusVerifikasi', 'title', 'idAkses', 'namaLayananSurat', 'userTambahan'));
     }
 
     public function doUpdatePengajuan(Request $request){
@@ -313,7 +333,7 @@ class PengajuanPersuratanController extends Controller
 
             if ($dataPengajuan->id_statuspengajuan == 0) {
                 $this->service->ajukanPengajuan($id_pengajuan); //ubah status pengajuan
-                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 2);
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 2, null);
             }
 
             DB::commit();
@@ -343,8 +363,21 @@ class PengajuanPersuratanController extends Controller
 
             $id_pengajuan = $request->id_pengajuan;
             $id_akses = $request->id_akses;
-            if (empty($id_akses)){
-                $id_akses = $this->idAkses;
+            $idPihakpenyetuju = $request->id_pihakpenyetuju;
+            $getPihakPenyetuju = $this->service->getPihakPenyetujuByIdpengajuan($id_pengajuan);
+            $userTambahan = false;
+
+            if (empty($idPihakpenyetuju)) {
+                if (empty($id_akses)) {
+                    $id_akses = $this->idAkses;
+                }
+            }else{
+                if ($getPihakPenyetuju->id_pihakpenyetuju == $idPihakpenyetuju) {
+                    $userTambahan = true;
+                    $id_akses = null;
+                }else {
+                    return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('error', 'Pihak penyetuju tidak sama.');
+                }
             }
 
             $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
@@ -352,7 +385,7 @@ class PengajuanPersuratanController extends Controller
             DB::beginTransaction();
 
             if ($dataPengajuan->id_statuspengajuan == 2 || $dataPengajuan->id_statuspengajuan == 5) {
-                if ($id_akses == 2) { //jika admin
+                if (($id_akses == 2 && empty($getPihakPenyetuju)) OR $userTambahan) { //jika admin
                     $this->service->setujuiPengajuan($id_pengajuan); //ubah status pengajuan
                     if ($request->hasFile('filesurat')) {
                         $listFile = $request->file('filesurat');
@@ -365,7 +398,7 @@ class PengajuanPersuratanController extends Controller
                 }else{
                     $this->service->ajukanPengajuan($id_pengajuan); //ubah ke status diajukan
                 }
-                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 1);
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 1, $idPihakpenyetuju);
             }
 
             DB::commit();
@@ -394,9 +427,21 @@ class PengajuanPersuratanController extends Controller
 
             $id_pengajuan = $request->id_pengajuan;
             $id_akses = $request->id_akses;
-            if (empty($id_akses)){
-                $id_akses = $this->idAkses;
+            $idPihakpenyetuju = $request->id_pihakpenyetuju;
+            $getPihakPenyetuju = $this->service->getPihakPenyetujuByIdpengajuan($id_pengajuan);
+
+            if (empty($idPihakpenyetuju)) {
+                if (empty($id_akses)) {
+                    $id_akses = $this->idAkses;
+                }
+            }else{
+                if ($getPihakPenyetuju->id_pihakpenyetuju == $idPihakpenyetuju){
+                    $id_akses = null;
+                }else{
+                    return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('error', 'Pihak penyetuju tidak sama.');
+                }
             }
+
             $keterangan = $request->keteranganrev;
 
             $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
@@ -404,8 +449,8 @@ class PengajuanPersuratanController extends Controller
             DB::beginTransaction();
 
             if ($dataPengajuan->id_statuspengajuan == 2 || $dataPengajuan->id_statuspengajuan == 5) {
-                $this->service->revisiPengajuan($id_pengajuan); //ubah status pengajuan
-                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 4, $keterangan);
+                $this->service->revisiPengajuan($id_pengajuan, $idPihakpenyetuju); //ubah status pengajuan
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 4, $idPihakpenyetuju, $keterangan);
             }
 
             DB::commit();
@@ -445,7 +490,7 @@ class PengajuanPersuratanController extends Controller
 
             if ($dataPengajuan->id_statuspengajuan == 4) {
                 $this->service->sudahRevisiPengajuan($id_pengajuan); //ubah status pengajuan
-                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 5, $keterangan);
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 5, null, $keterangan);
             }
 
             DB::commit();
@@ -474,8 +519,19 @@ class PengajuanPersuratanController extends Controller
 
             $id_pengajuan = $request->id_pengajuan;
             $id_akses = $request->id_akses;
-            if (empty($id_akses)){
-                $id_akses = $this->idAkses;
+            $idPihakpenyetuju = $request->id_pihakpenyetuju;
+            $getPihakPenyetuju = $this->service->getPihakPenyetujuByIdpengajuan($id_pengajuan);
+
+            if (empty($idPihakpenyetuju)) {
+                if (empty($id_akses)) {
+                    $id_akses = $this->idAkses;
+                }
+            }else{
+                if ($getPihakPenyetuju->id_pihakpenyetuju == $idPihakpenyetuju){
+                    $id_akses = null;
+                }else{
+                    return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('error', 'Pihak penyetuju tidak sama.');
+                }
             }
             $keterangan = $request->keterangantolak;
 
@@ -485,7 +541,7 @@ class PengajuanPersuratanController extends Controller
 
             if ($dataPengajuan->id_statuspengajuan == 2 || $dataPengajuan->id_statuspengajuan == 5) {
                 $this->service->tolakPengajuan($id_pengajuan); //ubah status pengajuan
-                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 3, $keterangan);
+                $this->service->tambahPersetujuan($id_pengajuan, $id_akses, 3, $idPihakpenyetuju, $keterangan);
             }
 
             DB::commit();

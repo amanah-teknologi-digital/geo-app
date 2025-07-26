@@ -110,7 +110,7 @@
                                 @foreach($dataPengajuan->persetujuan as $pers)
                                     <li class="timeline-item mb-5">
                                         <span class="timeline-icon {{ $pers->statuspersetujuan->class_bg }}"><i class="{{ $pers->statuspersetujuan->class_label }}"></i></span>
-                                        <p class="mb-0 fw-medium">{{ $pers->statuspersetujuan->nama.' '.$pers->akses->nama }}</p>
+                                        <p class="mb-0 fw-medium">{{ $pers->statuspersetujuan->nama.' '.(optional($pers->akses)->nama ?? optional($pers->pihakpenyetujupengajuansurat)->nama) }}</p>
                                         <p class="text-muted fst-italic small">{{ $pers->created_at->format('d/m/Y H:i') }} oleh {{ $pers->nama_penyetuju }}</p>
                                         @if(!empty($pers->keterangan))
                                             <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">{{ $pers->keterangan }}</span></p>
@@ -141,14 +141,12 @@
                                 <label for="email" class="form-label">Persetujuan</label>
                                 <div class="d-flex align-items-center gap-2">
                                     <div id="list-persetujuan" style="font-weight: bold;">
+                                        <span class="badge bg-primary text-white">1. Admin {{ $namaLayananSurat }} </span>
                                         @if ($dataPengajuan->pihakpenyetuju->isNotEmpty())
-                                            <div style="font-weight: bold;">
-                                                @foreach ($dataPengajuan->pihakpenyetuju as $p)
-                                                    {{ $p->urutan }}. {{ $p->nama }} <i class="text-success">({{ $p->userpenyetuju->name }})</i> @if (!$loop->last) &rarr; @endif
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <div><em class="text-danger">Tidak ada pihak penyetuju</em></div>
+                                            <i class="bx bx-arrow-back text-primary" style="transform: rotate(180deg);"></i>
+                                            @foreach ($dataPengajuan->pihakpenyetuju as $p)
+                                                <span class="badge bg-primary text-white">{{ $p->urutan }}. {{ $p->nama }} </span> @if (!$loop->last) <i class="bx bx-arrow-back text-primary" style="transform: rotate(180deg);"></i> @endif
+                                            @endforeach
                                         @endif
                                     </div>
                                 </div>
@@ -205,7 +203,7 @@
                                                     <i class="small text-secondary">(<span >{{ formatBytes($file->file->file_size) }}</span>)</i>
                                                 </div>
                                             </a>
-                                            @if(in_array($idAkses, [1,2]))
+                                            @if(in_array($idAkses, [1,2]) OR $userTambahan)
                                                 <span class="bx bx-x text-danger cursor-pointer" data-id_file="{{ $file->file->id_file }}" data-bs-toggle="modal" data-bs-target="#modal-hapusfile"></span>
                                             @endif
                                         </div>
@@ -219,7 +217,7 @@
                             </div>
                         @endif
                     </form>
-                    @if(in_array($idAkses, [1,2]) && $dataPengajuan->id_statuspengajuan == 1)
+                    @if((in_array($idAkses, [1,2]) OR $userTambahan) && $dataPengajuan->id_statuspengajuan == 1)
                         <div class="mt-6 mb-10">
                             <label for="uploadhasilsurat" class="form-label">Upload Hasil Surat <i class="text-muted fw-bold">(Opsional & bisa lebih dari 1, PDF Max 5 MB)</i></label>
                             <form id="frmUploadFile" action="{{ route('pengajuansurat.uploadfile') }}" method="POST" enctype="multipart/form-data">
@@ -285,15 +283,15 @@
                                         </a>
                                     @endif
                                     @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
-                                        <a href="javascript:void(0)" data-id_akses_setujui="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-setujui" class="btn btn-success btn-sm d-flex align-items-center">
+                                        <a href="javascript:void(0)" data-id_pihakpenyetuju="{{ $statusVerifikasi['must_pihakpenyetuju'] }}" data-id_akses_setujui="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-setujui" class="btn btn-success btn-sm d-flex align-items-center">
                                             <i class="bx bx-check-circle"></i>&nbsp;Setujui
                                         </a>
                                         &nbsp;&nbsp;
-                                        <a href="javascript:void(0)" data-id_akses_revisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-revisi" class="btn btn-warning btn-sm d-flex align-items-center">
+                                        <a href="javascript:void(0)" data-id_pihakpenyetuju="{{ $statusVerifikasi['must_pihakpenyetuju'] }}" data-id_akses_revisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-revisi" class="btn btn-warning btn-sm d-flex align-items-center">
                                             <i class="bx bx-revision"></i>&nbsp;Revisi
                                         </a>
                                         &nbsp;&nbsp;
-                                        <a href="javascript:void(0)" data-id_akses_tolak="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
+                                        <a href="javascript:void(0)" data-id_pihakpenyetuju="{{ $statusVerifikasi['must_pihakpenyetuju'] }}" data-id_akses_tolak="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
                                             <i class="bx bx-x"></i>&nbsp;Tolak
                                         </a>
                                     @endif
@@ -382,6 +380,7 @@
                 @csrf
                 <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_setujui" >
+                <input type="hidden" name="id_pihakpenyetuju" id="id_pihakpenyetuju_setujui" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel2">Setujui Pengajuan</h5>
@@ -408,6 +407,7 @@
                 @csrf
                 <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_revisi" >
+                <input type="hidden" name="id_pihakpenyetuju" id="id_pihakpenyetuju_revisi" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel2">Revisi Pengajuan</h5>
@@ -458,6 +458,7 @@
                 @csrf
                 <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_tolak" >
+                <input type="hidden" name="id_pihakpenyetuju" id="id_pihakpenyetuju_tolak" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel2">Tolak Pengajuan</h5>
