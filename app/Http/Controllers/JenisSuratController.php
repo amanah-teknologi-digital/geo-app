@@ -15,10 +15,11 @@ use Yajra\DataTables\DataTables;
 
 class JenisSuratController extends Controller
 {
-    private $service;
+    private $service, $subtitle;
     public function __construct()
     {
         $this->service = new JenisSuratServices(new JenisSuratRepository());
+        $this->subtitle = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
     }
     public function index()
     {
@@ -123,8 +124,9 @@ class JenisSuratController extends Controller
         $title = "Edit Jenis Surat";
         $dataJenisSurat = $this->service->getDataJenisSurat($idJenisSurat);
         $pihakPenyetuju = $this->service->getPihakPenyetujuSurat($idJenisSurat);
+        $namaLayananSurat = $this->subtitle;
 
-        return view('pages.jenis_surat.edit', compact('dataJenisSurat', 'pihakPenyetuju', 'idJenisSurat', 'title'));
+        return view('pages.jenis_surat.edit', compact('dataJenisSurat', 'pihakPenyetuju', 'idJenisSurat', 'title', 'namaLayananSurat'));
     }
 
     public function getUserPenyetuju(Request $request){
@@ -139,10 +141,9 @@ class JenisSuratController extends Controller
     public function getUserPenyetujuUpdate(Request $request){
         $search = $request->q;
         $idJenisSurat = $request->id_jenissurat;
-        $idAksesPenyetuju = $request->id_akses;
         $idPihakPenyetuju = $request->id_pihakpenyetujusurat;
 
-        $users = $this->service->getUserPenyetujuSuratUpdate($search, $idJenisSurat, $idAksesPenyetuju, $idPihakPenyetuju);
+        $users = $this->service->getUserPenyetujuSuratUpdate($search, $idJenisSurat, $idPihakPenyetuju);
 
         return response()->json($users);
     }

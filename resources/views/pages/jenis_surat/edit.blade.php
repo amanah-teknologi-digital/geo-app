@@ -81,17 +81,18 @@
                                 <input type="text" class="form-control" id="keterangan_datadukung" name="keterangan_datadukung" placeholder="Keterangan data pendukung" value="{{ $dataJenisSurat->nama_datapendukung }}" autocomplete="off">
                             </div>
                             <div>
-                                <label for="tingkat persetujuan" class="form-label" style="line-height: 2">Tingkat Persetujuan <?= ($pihakPenyetuju->count() < 2) ? '&nbsp;<span id="btnTambahPersetujuan" class="btn btn-sm btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modal-tambahpersetujuan">+ Tambah Persetujuan</span>':'' ?></label>
+                                <label for="tingkat persetujuan" class="form-label" style="line-height: 2">Tingkat Persetujuan <?= ($pihakPenyetuju->count() < 1) ? '&nbsp;<span id="btnTambahPersetujuan" class="btn btn-sm btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modal-tambahpersetujuan">+ Tambah Persetujuan</span>':'' ?></label>
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap"><span class="text-success small fw-semibold">1. Admin {{ $namaLayananSurat }}</span></div>
+                                </div>
                                 @foreach($pihakPenyetuju as $penyetuju)
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <div class="d-flex align-items-center gap-2 flex-wrap"><span class="text-success small fw-semibold">
                                             {{ $penyetuju->urutan.'. '.$penyetuju->nama }}</span>
                                             <i class="small text-secondary">(<span>{{ $penyetuju->userpenyetuju->name }}</span>)</i>
                                         </div>
-                                        <span class="bx bx-edit text-warning cursor-pointer" data-id_akses="{{ $penyetuju->id_akses }}" data-nama_pihakpenyetuju="{{ $penyetuju->userpenyetuju->name }}" data-nama_penyetuju="{{ $penyetuju->nama }}" data-id_penyetuju="{{ $penyetuju->id_penyetuju }}" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-updatepersetujuan"></span>
-                                        @if(empty($penyetuju->id_akses))
-                                            <span class="bx bx-x text-danger cursor-pointer" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-hapuspersetujuan"></span>
-                                        @endif
+                                        <span class="bx bx-edit text-warning cursor-pointer" data-nama_pihakpenyetuju="{{ $penyetuju->userpenyetuju->name }}" data-nama_penyetuju="{{ $penyetuju->nama }}" data-id_penyetuju="{{ $penyetuju->id_penyetuju }}" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-updatepersetujuan"></span>
+                                        <span class="bx bx-x text-danger cursor-pointer" data-id_pihakpenyetuju="{{ $penyetuju->id_pihakpenyetuju }}" data-bs-toggle="modal" data-bs-target="#modal-hapuspersetujuan"></span>
                                     </div>
                                 @endforeach
                             </div>
@@ -146,7 +147,6 @@
             <form action="{{ route('jenissurat.doupdatepenyetuju') }}" id="frm_updatepersetujuan" method="POST">
                 @csrf
                 <input type="hidden" name="id_pihakpenyetujusurat" id="id_pihakpenyetujusurat_update" >
-                <input type="hidden" name="id_aksespenyetuju_update" id="id_aksespenyetuju_update" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Update Persetujuan</h5>

@@ -1,4 +1,3 @@
-let idAksesPenyetuju = 0;
 let id_pihakpenyetujusurat_update = 0;
 let id_penyetujusurat = 0;
 
@@ -115,7 +114,7 @@ $(document).ready(function () {
             dataType: 'json',
             delay: 250,
             data: function (params) {
-                return { q: params.term, id_jenissurat: idJenisSurat, id_akses: idAksesPenyetuju, id_pihakpenyetujusurat: id_pihakpenyetujusurat_update };
+                return { q: params.term, id_jenissurat: idJenisSurat, id_pihakpenyetujusurat: id_pihakpenyetujusurat_update };
             },
             processResults: function (data) {
                 return {
@@ -202,29 +201,19 @@ $(document).ready(function () {
     $('#modal-updatepersetujuan').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Ambil tombol yang diklik
         var dataId = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
-        var dataIdAkses = button.data('id_akses'); // Ambil nilai data-id
         var namaPenyetuju = button.data('nama_penyetuju'); // Ambil nilai data-id
         var namaPihakPenyetuju = button.data('nama_pihakpenyetuju'); // Ambil nilai data-id
         var idPenyetuju = button.data('id_penyetuju'); // Ambil nilai data-id
 
         $('#id_pihakpenyetujusurat_update').val(dataId); // Masukkan ke modal
         $('#nama_persetujuan_update').val(namaPenyetuju); // Masukkan ke modal
-        $('#id_aksespenyetuju_update').val(dataIdAkses); // Masukkan ke modal
 
         let option = new Option(namaPihakPenyetuju, idPenyetuju, true, true);
         $('#user_penyetuju_update').append(option).trigger('change');
 
-        idAksesPenyetuju = dataIdAkses;
         id_pihakpenyetujusurat_update = dataId;
         id_penyetujusurat = idPenyetuju;
 
-        console.log(idAksesPenyetuju);
-
-        if (idAksesPenyetuju == ''){
-            $('#nama_persetujuan_update').prop('readonly', false);
-        }else{
-            $('#nama_persetujuan_update').prop('readonly', true);
-        }
-
+        $('#nama_persetujuan_update').prop('readonly', false);
     });
 });

@@ -30,15 +30,10 @@ class JenisSuratRepository
         return $availableUsers;
     }
 
-    public function getUserPenyetujuSuratUpdate($search, $idJenisSurat, $idAksesPenyetuju, $idPihakPenyetuju){
+    public function getUserPenyetujuSuratUpdate($search, $idJenisSurat, $idPihakPenyetuju){
         $usedUserIds = PihakPenyetujuSurat::where('id_jenissurat', $idJenisSurat)->where('id_pihakpenyetuju', '!=', $idPihakPenyetuju)->pluck('id_penyetuju');
 
         $availableUsers = User::whereNotIn('id', $usedUserIds);
-        if ($idAksesPenyetuju) {
-            $availableUsers = $availableUsers->whereHas('aksesuser', function ($query) use ($idAksesPenyetuju) {
-                $query->where('id_akses', $idAksesPenyetuju);
-            });
-        }
 
         $availableUsers = $availableUsers->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
             ->limit(10)
@@ -48,7 +43,8 @@ class JenisSuratRepository
         return $availableUsers;
     }
 
-    public function tambahJenisSurat($request, $idJenisSurat){
+    public function tambahJenisSurat($request, $idJenisSurat)
+    {
         JenisSurat::create([
             'id_jenissurat' => $idJenisSurat,
             'nama' => $request->nama_jenis,
@@ -56,18 +52,6 @@ class JenisSuratRepository
             'is_aktif' => 1,
             'is_datapendukung' => $request->has('is_datapendukung') ? 1 : 0,
             'nama_datapendukung' => $request->has('is_datapendukung') ? $request->keterangan_datadukung : null,
-            'created_at' => now(),
-            'updater' => auth()->user()->id
-        ]);
-    }
-
-    public function tambahdDefaultPenyetuju($idPihakPenyetuju, $idJenisSurat){
-        $AksesPenyetuju = Akses::where('id_akses', 2)->first();
-        PihakPenyetujuSurat::create([
-            'id_pihakpenyetuju' => $idPihakPenyetuju,
-            'id_jenissurat' => $idJenisSurat,
-            'nama' => $AksesPenyetuju->nama,
-            'urutan' => 1,
             'created_at' => now(),
             'updater' => auth()->user()->id
         ]);
@@ -102,10 +86,7 @@ class JenisSuratRepository
         $pihakPenyetujuSurat = PihakPenyetujuSurat::find($idPihakPenyetuju);
 
         if ($pihakPenyetujuSurat) {
-            if (empty($request->id_aksespenyetuju_update)) {
-                $pihakPenyetujuSurat->nama = $request->nama_persetujuan;
-            }
-
+            $pihakPenyetujuSurat->nama = $request->nama_persetujuan;
             $pihakPenyetujuSurat->id_penyetuju = $request->user_penyetuju;
             $pihakPenyetujuSurat->updated_at = now();
             $pihakPenyetujuSurat->updater = auth()->user()->id;
