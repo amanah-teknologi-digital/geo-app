@@ -76,20 +76,6 @@
     justify-content: center;
 }
 
-@media (min-width: 1200px) {
-    .fixed-verifikasi-card {
-        margin-left: 260px; /* ganti sesuai lebar sidebar */
-        max-width: calc(100% - 260px);
-    }
-}
-
-@media (max-width: 1199.98px) {
-    .fixed-verifikasi-card {
-        margin-left: 0;
-        max-width: 100%;
-    }
-}
-
 .margin_45{
     margin-bottom: 4.5rem !important
 }

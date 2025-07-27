@@ -242,8 +242,8 @@
                 </div>
             </div>
             @if($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI')
-                <div class="position-fixed bottom-0 mb-10 start-50 translate-middle-x px-3 pb-3" style="z-index: 1050; width: 100%;">
-                    <div class="fixed-verifikasi-card">
+                <div class="position-fixed bottom-0 mb-10 pb-3" style="z-index: 1050;">
+                    <div class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached" style="top: auto; bottom: 4.5rem; padding: 0;">
                         <div class="card rounded-3 w-100 bg-gray-500 border-gray-700" style="box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <!-- Isi card -->
