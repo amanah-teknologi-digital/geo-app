@@ -25,7 +25,7 @@ $(document).ready(function () {
         dom:
             //'Bfrtip',
             '<"mb-5 pb-4 border-bottom d-flex justify-content-between align-items-center"<"head-label text-center"><"dt-action-buttons text-end"B>><"d-flex mb-5 justify-content-between align-items-center row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex mt-5 justify-content-between row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-        displayLength: 5,
+        displayLength: 10,
         lengthMenu: [10, 20, 30, 50],
         buttons: [
             {
