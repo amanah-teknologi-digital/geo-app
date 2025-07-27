@@ -171,10 +171,10 @@ class PengajuanPersuratanServices
             if ($dataPengajuan->id_statuspengajuan == 0){ //draft
                 $message = 'Pengajuan Belum Diajukan!';
             }else{
-                if (empty($persetujuanTerakhir)){
+                if (empty($persetujuanTerakhir) && !$adminGeoSudahSetuju){
                     $must_aprove = 'VERIFIKASI';
                 }else{
-                    if ($dataPengajuan->id_statuspengajuan == 5 && empty($dataPengajuan->user_perevisi)){ //sudah direvisi
+                    if ($dataPengajuan->id_statuspengajuan == 5 && empty($dataPengajuan->user_perevisi) && !$adminGeoSudahSetuju){ //sudah direvisi
                         $must_aprove = 'VERIFIKASI';
                     }else{
                         if (empty($persetujuanTerakhir)){
