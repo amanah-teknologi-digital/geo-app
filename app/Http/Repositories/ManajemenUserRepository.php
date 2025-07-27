@@ -4,16 +4,16 @@ namespace App\Http\Repositories;
 
 use App\Models\Files;
 use App\Models\Pengumuman;
+use App\Models\User;
 use Ramsey\Uuid\Nonstandard\Uuid;
 
 class ManajemenUserRepository
 {
-    public function getDataPengumuman($id_pengumuman){
-        $data = Pengumuman::select('id_pengumuman', 'judul', 'data', 'gambar_header', 'created_at', 'updated_at', 'updater', 'is_posting', 'tgl_posting', 'postinger')
-            ->with(['user','file_pengumuman','postinger_user']);
+    public function getDataUser($idUser){
+        $data = User::with(['aksesuser'])->orderBy('created_at', 'DESC');
 
-        if (!empty($id_pengumuman)) {
-            $data = $data->where('id_pengumuman', $id_pengumuman)->first();
+        if (!empty($idUser)) {
+            $data = $data->where('id', $idUser)->first();
         }
 
         return $data;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Repositories\PengumumanRepository;
-use App\Http\Services\PengumumanServices;
+use App\Http\Repositories\ManajemenUserRepository;
+use App\Http\Services\ManajemenUserServices;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,51 +17,51 @@ class ManajemenUserController extends Controller
     private $service;
     public function __construct()
     {
-        $this->service = new PengumumanServices(new PengumumanRepository());
+        $this->service = new ManajemenUserServices(new ManajemenUserRepository());
     }
     public function index()
     {
-        $title = "List Pengumuman";
+        $title = "Manajemen User";
 
-        return view('pages.pengumuman.index', compact('title'));
+        return view('pages.manajemenuser.index', compact('title'));
     }
 
     public function getData(Request $request){
         if ($request->ajax()) {
-            $data_pengumuman = $this->service->getDataPengumuman();
+            $data_user = $this->service->getDataUser();
 
-            return DataTables::of($data_pengumuman)
+            return DataTables::of($data_user)
                 ->addIndexColumn()
-                ->addColumn('judul', function ($data_pengumuman) {
-                    return $data_pengumuman->judul;
+                ->addColumn('nama', function ($dataUser) {
+                    return '<b>'.$dataUser->name.'</b><br><i class="small text-muted">'.$dataUser->kartu_id.'</i>';
                 })
-                ->addColumn('pembuat', function ($data_pengumuman) {
-                    return '<span class="text-muted" style="font-size: smaller;font-style: italic">'.$data_pengumuman->user->name.
-                        ',<br> pada '.$data_pengumuman->created_at->format('d-m-Y H:i').'</span>';
+                ->addColumn('email', function ($dataUser) {
+                    $htmlStatus = $dataUser->email_verified_at? '<span class="badge bg-sm text-success">Terverifikasi</span>':'<span class="badge bg-sm text-warning">Belum Terverifikasi</span>';
+                    return '<span class="text-muted">'.$dataUser->email.'</span><br>'.$htmlStatus;
                 })
-                ->addColumn('posting', function ($data_pengumuman) {
-                    return $data_pengumuman->is_posting? '<span class="badge bg-sm text-success">Posting</span>':'<span class="badge bg-sm text-warning">Tidak</span>';
+                ->addColumn('nohp', function ($dataUser) {
+                    return '<span class="small">'.$dataUser->no_hp.'</span>';
                 })
-                ->addColumn('aksi', function ($data_pengumuman) {
-                    $html = '<a href="'.route('pengumuman.edit', $data_pengumuman->id_pengumuman).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Edit</span></a>&nbsp;';
-                    $html .= '<div class="d-inline-block"><a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow me-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-dots-vertical-rounded icon-base"></i></a>';
-                    $html .= '<div class="dropdown-menu dropdown-menu-end m-0" style="">';
-                    if ($data_pengumuman->is_posting == 1) {
-                        $html .= '<a href="javascript:;" class="dropdown-item text-warning batal-posting" data-id="'.$data_pengumuman->id_pengumuman.'" data-bs-toggle="modal" data-bs-target="#modal-unpost"><span class="bx bx-candles"></span>&nbsp;Unposting</a>';
+                ->addColumn('created', function ($dataUser) {
+                    return '<span class="small">'.$dataUser->created_at->format('d M Y H:i').'</span>';
+                })
+                ->addColumn('aksi', function ($dataUser) {
+                    if ($dataUser->email_verified_at) {
+                        $html = '<a href="javascript:void(0)" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Akses</span></a>&nbsp;';
                     }else{
-                        $html .= '<a href="javascript:;" class="dropdown-item text-success posting-pengumuman" data-id="'.$data_pengumuman->id_pengumuman.'" data-bs-toggle="modal" data-bs-target="#modal-post"><span class="bx bx-paper-plane"></span>&nbsp;Posting</a>';
+                        $html = '<span class="badge bg-sm text-warning">Belum Terverifikasi</span>';
                     }
-                    $html .= '<div class="dropdown-divider"></div>';
-                    $html .= '<a href="javascript:;" class="dropdown-item text-danger delete-record" data-id="'.$data_pengumuman->id_pengumuman.'" data-bs-toggle="modal" data-bs-target="#modal-hapus"><span class="bx bx-trash"></span>&nbsp;Hapus</a>';
-                    $html .= '</div></div>';
                     return $html;
                 })
-                ->rawColumns(['aksi', 'posting', 'pembuat']) // Untuk render tombol HTML
-                ->filterColumn('judul', function($query, $keyword) {
-                    $query->where('judul', 'LIKE', "%{$keyword}%");
+                ->rawColumns(['nama', 'aksi', 'email', 'nohp', 'created']) // Untuk render tombol HTML
+                ->filterColumn('nama', function($query, $keyword) {
+                    $query->where('name', 'LIKE', "%{$keyword}%")->orWhere('kartu_id', 'LIKE', "%{$keyword}%");
                 })
-                ->filterColumn('created_at', function($query, $keyword) {
-                    $query->whereRaw("DATE_FORMAT(created_at, '%d-%m-%Y %H:%i') LIKE ?", ["%{$keyword}%"]);
+                ->filterColumn('email', function($query, $keyword) {
+                    $query->where('email', 'LIKE', "%{$keyword}%");
+                })
+                ->filterColumn('nohp', function($query, $keyword) {
+                    $query->where('no_hp', 'LIKE', "%{$keyword}%");
                 })
                 ->toJson();
         }

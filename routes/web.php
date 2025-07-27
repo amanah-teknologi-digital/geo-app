@@ -119,6 +119,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         //manajemen user
         Route::get('/manajemen-user', [ManajemenUserController::class, 'index'])->name('manajemen-user');
+        Route::get('/manajemen-user/getdata', [ManajemenUserController::class, 'getData'])->name('manajemen-user.getdata');
     });
 
     //peralatan

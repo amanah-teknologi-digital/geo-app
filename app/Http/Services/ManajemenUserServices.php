@@ -2,7 +2,7 @@
 
 namespace App\Http\Services;
 
-use App\Http\Repositories\PengumumanRepository;
+use App\Http\Repositories\ManajemenUserRepository;
 use App\Models\Files;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\Storage;
 class ManajemenUserServices
 {
     private $repository;
-    public function __construct(PengumumanRepository $repository)
+    public function __construct(ManajemenUserRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function getDataPengumuman($id_pengumuman = null){
-        $data = $this->repository->getDataPengumuman($id_pengumuman);
+    public function getDataUser($idUser = null){
+        $data = $this->repository->getDataUser($idUser);
 
         return $data;
     }
