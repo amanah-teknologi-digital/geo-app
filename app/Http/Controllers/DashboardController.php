@@ -11,11 +11,14 @@ class DashboardController extends Controller{
     private $service;
     private $istilahPersuratan;
     private $idAkses;
+
+    private $subtitleSurat;
     public function __construct()
     {
         $this->service = new DashboardServices(new DashboardRepository());
         $this->istilahPersuratan = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
         $this->idAkses = session('akses_default_id');
+        $this->subtitleSurat = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
     }
 
     public function pengguna(){
@@ -71,7 +74,7 @@ class DashboardController extends Controller{
 
     public function getDataNotifikasi(){
         $idAkses = $this->idAkses;
-        $dataNotifSurat = $this->service->getDataNotifSurat($idAkses);
+        $dataNotifSurat = $this->service->getDataNotifSurat($idAkses, $this->subtitleSurat);
 
         $data = [
             'dataNotifSurat' => $dataNotifSurat

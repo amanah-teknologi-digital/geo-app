@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\PengajuanPersuratanRepository;
 use App\Models\Files;
+use App\Models\PengajuanPersuratan;
 use App\Models\PersetujuanPersuratan;
 use App\Models\PihakPenyetujuPengajuanSurat;
 use Exception;
@@ -97,21 +98,19 @@ class PengajuanPersuratanServices
         return $isTambah;
     }
 
-    public function getStatusVerifikasi($id_pengajuan, $namaLayananSurat){
+    public function getStatusVerifikasi($id_pengajuan, $namaLayananSurat, $dataPengajuan = null){
         $id_akses = $this->idAkses;
         $idUser = auth()->user()->id;
 
-        // Cek penyetuju tambahan
-        $isTambahanPenyetuju = PihakPenyetujuPengajuanSurat::where('id_pengajuan', $id_pengajuan)
-            ->where('id_penyetuju', $idUser)
-            ->first();
+        if (empty($dataPengajuan)) {
+            $dataPengajuan = $this->repository->getDataPengajuanOnly($id_pengajuan);
+        }
 
-        $adminGeoSudahSetuju = PersetujuanPersuratan::where('id_pengajuan', $id_pengajuan)
-            ->where('id_akses', 2)
-            ->where('id_statuspersetujuan', 1)
-            ->exists();
-
-        $dataPengajuan = $this->getDataPengajuan($id_pengajuan);
+        $userPengaju = $dataPengajuan->pengaju;
+        $tambahanPenyetuju = $dataPengajuan->pihakpenyetuju;
+        $dataPersetujuan = $dataPengajuan->persetujuan;
+        $isTambahanPenyetuju = $tambahanPenyetuju->firstWhere('id_penyetuju', $idUser);
+        $adminGeoSudahSetuju = $dataPersetujuan->where('id_akses', 2)->where('id_statuspersetujuan', 1)->isNotEmpty();
 
         $must_aprove = '';
         $message = '';
@@ -121,11 +120,11 @@ class PengajuanPersuratanServices
         $must_sebagai = '';
 
         if ($id_akses == 1 || $dataPengajuan->id_statuspengajuan == 1 || $dataPengajuan->id_statuspengajuan == 3){
-            $persetujuanTerakhir = $this->repository->getPersetujuanTerakhirSuper($id_pengajuan);
+            $persetujuanTerakhir = $dataPersetujuan->sortByDesc('created_at')->first();
         }else if($isTambahanPenyetuju){
-            $persetujuanTerakhir = $this->repository->getPersetujuanTambahanTerakhir($id_pengajuan, $isTambahanPenyetuju->id_pihakpenyetuju);
+            $persetujuanTerakhir = $dataPersetujuan->where('id_pihakpenyetuju', $isTambahanPenyetuju->id_pihakpenyetuju)->sortByDesc('created_at')->first();
         }else{
-            $persetujuanTerakhir = $this->repository->getPersetujuanTerakhir($id_pengajuan, $id_akses);
+            $persetujuanTerakhir = $dataPersetujuan->where('id_akses', $id_akses)->sortByDesc('created_at')->first();
         }
 
         if ($id_akses == 1){ //super admin
@@ -186,7 +185,7 @@ class PengajuanPersuratanServices
                     }
                 }
             }
-        }elseif ($id_akses == 8){ //pengguna
+        }elseif ($id_akses == 8 && $userPengaju == $idUser){ //pengguna
             if ($dataPengajuan->id_statuspengajuan == 0){ //draft
                 $must_aprove = 'AJUKAN';
             }else if ($dataPengajuan->id_statuspengajuan == 4){ //jika revisi harus sudah direvisi

@@ -22,7 +22,7 @@ class PengajuanPersuratanRepository
         $id_pengguna = auth()->user()->id;
 
         // Filtering akses user (kecuali super admin & admin geo)
-        if (!in_array($id_akses, [1, 2])) {
+        if (!in_array($id_akses, [1,2])) {
             $data = $data->where(function ($q) use ($id_pengguna) {
                 $q->where('pengaju', $id_pengguna) // sebagai pemohon
                 ->orWhereHas('pihakpenyetuju', function ($sub) use ($id_pengguna) {
@@ -198,6 +198,12 @@ class PengajuanPersuratanRepository
             ->where('id_pengajuan', $id_pengajuan)
             ->orderBy('created_at', 'desc')
             ->first();
+
+        return $data;
+    }
+
+    public function getDataPengajuanOnly($idPengajuan){
+        $data = PengajuanPersuratan::with(['persetujuan','pihakpenyetuju'])->where('id_pengajuan', $idPengajuan)->first();
 
         return $data;
     }

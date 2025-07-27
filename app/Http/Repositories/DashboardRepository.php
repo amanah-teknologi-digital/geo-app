@@ -47,21 +47,34 @@ class DashboardRepository
         return $data;
     }
 
+    public function getDataPengajuanOnly($idPengajuan){
+        $data = PengajuanPersuratan::with(['persetujuan','pihakpenyetuju'])->where('id_pengajuan', $idPengajuan)->first();
+
+        return $data;
+    }
+
     public function getDataNotifSurat($idAkses){
-        $data = PengajuanPersuratan::with(['persetujuan']);
-
         $id_pengguna = auth()->user()->id;
-        if ($idAkses == 8){ //pengguna
-            $data = $data->where('pengaju', $id_pengguna)->get();
-        }
+        $data = PengajuanPersuratan::with(['persetujuan','pihakpenyetuju'])->whereNotIn('id_statuspengajuan', [1, 3])
+            ->where(function ($query) use ($idAkses, $id_pengguna) {
+                // untuk pengguna biasa
+                if ($idAkses == 8) {
+                    $query->where('pengaju', $id_pengguna);
+                }
 
-        if ($idAkses == 2){ // admin geo harus status tidak draft
-            $data = $data->where('id_statuspengajuan', '!=', 0)->get();
-        }
+                // admin geo: status tidak draft
+                if ($idAkses == 2) {
+                    $query->where('id_statuspengajuan', '!=', 0);
+                }
 
-        if ($idAkses == 1){ //super admin
-            $data = $data->get();
-        }
+                // kondisi umum untuk semua yang bukan superadmin
+                if ($idAkses != 1) {
+                    $query->orWhereHas('pihakpenyetuju', function ($q) use ($id_pengguna) {
+                        $q->where('id_penyetuju', '!=', $id_pengguna);
+                    });
+                }
+            })
+            ->get();
 
         return $data;
     }

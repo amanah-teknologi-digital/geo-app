@@ -3,15 +3,19 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\DashboardRepository;
+use App\Http\Repositories\PengajuanPersuratanRepository;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class DashboardServices
 {
     private $repository;
+    private $servicePengajuanPersuratan;
     public function __construct(DashboardRepository $repository)
     {
         $this->repository = $repository;
+        $repositorySurat = new PengajuanPersuratanRepository();
+        $this->servicePengajuanPersuratan = new PengajuanPersuratanServices($repositorySurat);
     }
 
     public function getDataTotalPersuratan($tahun, $idUser = null)
@@ -88,13 +92,18 @@ class DashboardServices
         return $data;
     }
 
-    public function getDataNotifSurat($idAkses){
+    public function getDataNotifSurat($idAkses, $namaLayananPersuratan){
         $data = $this->repository->getDataNotifSurat($idAkses);
 
         $isNotif = false; $isNotifSurat = false; $jmlNotif = []; $jmlNotifAjukan = 0; $jmlNotifVerifikasi = 0; $jmlNotifRevisi = 0;
         foreach ($data as $key => $value) {
+            $idPengajuan = $value->pengajuan_id;
+            $dataVerifikasi = $this->servicePengajuanPersuratan->getStatusVerifikasi($idPengajuan, $namaLayananPersuratan, $value);
+            $mustApprove = $dataVerifikasi['must_aprove'];
+            $message = $dataVerifikasi['message'];
+
             if ($idAkses == 1){ //super admin
-                if ($value->id_statuspengajuan == 0){
+                if ($mustApprove == 'AJUKAN'){
                     $isNotif = true;
                     $isNotifSurat = true;
 
@@ -105,11 +114,7 @@ class DashboardServices
                     $jmlNotifAjukan += 1;
                 }
 
-                $idPersetujuanAdmin = optional($value->persetujuan->first(function ($item) {
-                    return $item->id_statuspersetujuan == 1 && $item->id_akses == 2;
-                }))->id_persetujuan;
-
-                if ($value->id_statuspengajuan == 5 || $value->id_statuspengajuan == 2 && empty($idPersetujuanAdmin)){
+                if ($mustApprove == 'VERIFIKASI'){
                     $isNotif = true;
                     $isNotifSurat = true;
 
@@ -120,7 +125,7 @@ class DashboardServices
                     $jmlNotifVerifikasi += 1;
                 }
 
-                if ($value->id_statuspengajuan == 4){
+                if ($mustApprove == 'SUDAH DIREVISI'){
                     $isNotif = true;
                     $isNotifSurat = true;
 
@@ -131,11 +136,7 @@ class DashboardServices
                     $jmlNotifRevisi += 1;
                 }
             }elseif ($idAkses == 2){ //admin
-                $idPersetujuanAdmin = optional($value->persetujuan->first(function ($item) {
-                    return $item->id_statuspersetujuan == 1 && $item->id_akses == 2;
-                }))->id_persetujuan;
-
-                if ($value->id_statuspengajuan == 5 || $value->id_statuspengajuan == 2 && empty($idPersetujuanAdmin)){
+                if ($mustApprove == 'VERIFIKASI'){
                     $isNotif = true;
                     $isNotifSurat = true;
 
@@ -146,7 +147,7 @@ class DashboardServices
                     $jmlNotifVerifikasi += 1;
                 }
             }elseif ($idAkses == 8){ //pengguna
-                if ($value->id_statuspengajuan == 0){
+                if ($mustApprove == 'AJUKAN'){
                     $isNotif = true;
                     $isNotifSurat = true;
 
@@ -157,7 +158,7 @@ class DashboardServices
                     $jmlNotifAjukan += 1;
                 }
 
-                if ($value->id_statuspengajuan == 4){
+                if ($mustApprove == 'SUDAH DIREVISI'){
                     $isNotif = true;
                     $isNotifSurat = true;
 
