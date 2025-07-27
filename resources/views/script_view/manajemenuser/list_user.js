@@ -25,7 +25,7 @@ $(document).ready(function () {
         dom:
             //'Bfrtip',
             '<"mb-5 pb-4 border-bottom d-flex justify-content-between align-items-center"<"head-label text-center"><"dt-action-buttons text-end"B>><"d-flex mb-5 justify-content-between align-items-center row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex mt-5 justify-content-between row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-        displayLength: 10,
+        displayLength: 5,
         lengthMenu: [10, 20, 30, 50],
         buttons: [
             {
@@ -109,21 +109,41 @@ $(document).ready(function () {
     });
     $('div.head-label').html('<span class="card-header p-0"><i class="tf-icons bx bx-book-content"></i>&nbsp;List User</span>');
 
-    $('#modal-hapus').on('show.bs.modal', function(event) {
+    $('#modal-akses').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Ambil tombol yang diklik
         var dataId = button.data('id'); // Ambil nilai data-id
-        $('#id_hapus').val(dataId); // Masukkan ke modal
-    });
+        $('#id_user').val(dataId); // Masukkan ke modal
 
-    $('#modal-unpost').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Ambil tombol yang diklik
-        var dataId = button.data('id'); // Ambil nilai data-id
-        $('#id_unposting').val(dataId); // Masukkan ke modal
-    });
+        $.ajax({
+            url: routeGetDataAkses,
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: { id_user: dataId },
+            dataType: 'json',
+            success: function(response) {
+                let html = response['htmlForm'];
 
-    $('#modal-post').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Ambil tombol yang diklik
-        var dataId = button.data('id'); // Ambil nilai data-id
-        $('#id_posting').val(dataId); // Masukkan ke modal
+                $('#kontenakses').html(html);
+            },
+            error: function(xhr, status, error) {
+                $('#kontenakses').html('');
+            }
+        });
     });
-})
+});
+
+window.jadikanDefault = function ($idAkses, $idUser){
+    $('#id_akses_default').val($idAkses);
+    $('#id_user_default').val($idUser);
+    $('#frm-default').submit();
+}
+
+window.hapusAkses = function ($idAkses, $idUser){
+    if (confirm('Apakah yakin menghapus Akses ini?')){
+        $('#id_akses_hapus').val($idAkses);
+        $('#id_user_hapus').val($idUser);
+        $('#frm-hapus').submit();
+    }
+}

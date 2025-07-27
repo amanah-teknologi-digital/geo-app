@@ -21,6 +21,7 @@ class AksesUser extends Model
     protected $fillable = [
         'id_akses',
         'id_user',
+        'is_default',
         'created_at',
         'updated_at'
     ];

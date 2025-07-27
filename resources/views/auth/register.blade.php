@@ -79,7 +79,7 @@
                                 <div class="error-container" id="error-password_confirmation"></div>
                             </div>
                             <div class="my-8">
-                                <div class="form-check mb-0 ms-2">
+                                <div class="form-check form-check-primary mb-0 ms-2">
                                     <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" required>
                                     <label class="form-check-label" for="terms-conditions">
                                         I agree to

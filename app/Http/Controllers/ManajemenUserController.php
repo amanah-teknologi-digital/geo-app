@@ -47,7 +47,7 @@ class ManajemenUserController extends Controller
                 })
                 ->addColumn('aksi', function ($dataUser) {
                     if ($dataUser->email_verified_at) {
-                        $html = '<a href="javascript:void(0)" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Akses</span></a>&nbsp;';
+                        $html = '<a href="javascript:;" data-id="'.$dataUser->id.'" data-bs-toggle="modal" data-bs-target="#modal-akses" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-plus"></span><span class="d-none d-lg-inline-block">&nbsp;Akses</span></a>&nbsp;';
                     }else{
                         $html = '<span class="badge bg-sm text-warning">Belum Terverifikasi</span>';
                     }
@@ -69,167 +69,92 @@ class ManajemenUserController extends Controller
         return response()->json(['message' => 'Invalid request'], 400);
     }
 
-    public function tambahPengumuman(){
-        $title = "Tambah Pengumuman";
+    public function getDataUser(Request $request){
+        $idUser = $request->id_user;
+        $dataUser = $this->service->getDataUser($idUser);
+        $dataAkses = $dataUser->aksesuser;
+        $listAkses = $this->service->getListAkses($dataAkses->pluck('id_akses'));
 
-        return view('pages.pengumuman.tambah', compact('title'));
+        $viewAksesUser = view('pages.manajemenuser.renderakses', compact('dataAkses', 'dataUser', 'listAkses' ,'idUser'))->render();
+        $data = [
+            'htmlForm' => $viewAksesUser,
+        ];
+
+        return response()->json($data);
     }
 
-    public function dotambahPengumuman(Request $request){
+    public function updateAksesUser(Request $request){
         try {
             $request->validate([
-                'judul' => ['required'],
-                'editor_pengumuman' => ['required', 'string', 'min:10'],
-                'gambar_header' => ['required', 'file', 'image', 'max:5048']
+                'id_user' => ['required'],
+                'id_akses' => ['required'],
             ],[
-                'judul.required' => 'Judul wajib diisi.',
-                'editor_pengumuman.required' => 'Konten wajib diisi.',
-                'gambar_header.required' => 'Gambar Header wajib diisi.',
-                'gambar_header.file' => 'File yang diunggah tidak valid.',
-                'gambar_header.image' => 'File harus berupa gambar.',
-                'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
+                'id_user.required' => 'IdUser tidak ada.',
             ]);
 
-            DB::beginTransaction();
-            //save file gambar header
-            $id_file_gambar = strtoupper(Uuid::uuid4()->toString());
-            $this->service->tambahFile($request->file('gambar_header'), $id_file_gambar);
-            $this->service->tambahPengumuman($request, $id_file_gambar);
+            $idUser = $request->id_user;
+            $idAkses = $request->id_akses;
 
-            DB::commit();
+            $this->service->tambahAksesUser($idAkses, $idUser);
 
-            return redirect(route('pengumuman'))->with('success', 'Berhasil Tambah Pengumuman.');
+            return redirect()->back()->with('success', 'Berhasil Tambah Akses.');
         } catch (ValidationException $e) {
-            DB::rollBack();
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
         } catch (Exception $e) {
-            DB::rollBack();
             Log::error($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
-    public function editPengumuman($id_pengumuman){
-        $title = "Edit Pengumuman";
-        $dataPengumuman = $this->service->getDataPengumuman($id_pengumuman);
-        if ($dataPengumuman->is_posting){
-            $is_edit = false;
-        }else{
-            $is_edit = true;
-        }
-
-        return view('pages.pengumuman.edit', compact('dataPengumuman', 'is_edit', 'title'));
-    }
-
-    public function doeditPengumuman(Request $request){
+    public function setDefaultAkses(Request $request){
         try {
             $request->validate([
-                'id_pengumuman' => ['required'],
-                'judul' => ['required'],
-                'editor_pengumuman' => ['required', 'string', 'min:10'],
-                'gambar_header' => ['file', 'image', 'max:5048']
+                'id_user' => ['required'],
+                'id_akses' => ['required'],
             ],[
-                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
-                'judul.required' => 'Judul wajib diisi.',
-                'editor_pengumuman.required' => 'Konten wajib diisi.',
-                'gambar_header.file' => 'File yang diunggah tidak valid.',
-                'gambar_header.image' => 'File harus berupa gambar.',
-                'gambar_header.max' => 'Ukuran file tidak boleh lebih dari 5 MB.',
+                'id_user.required' => 'IdUser tidak ada.',
             ]);
 
-            $dataPengumuman = $this->service->getDataPengumuman($request->id_pengumuman);
+            $idUser = $request->id_user;
+            $idAkses = $request->id_akses;
 
-            DB::beginTransaction();
-            //save file gambar header
-            $id_file_gambar = $dataPengumuman->gambar_header;
-            if ($request->hasFile('gambar_header')) {
-                $this->service->tambahFile($request->file('gambar_header'), $id_file_gambar);
+            $this->service->setDefaultAkses($idAkses, $idUser);
+
+            return redirect()->back()->with('success', 'Berhasil Set Default Akses.');
+        } catch (ValidationException $e) {
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function hapusAksesUser(Request $request)
+    {
+        try {
+            $request->validate([
+                'id_user' => ['required'],
+                'id_akses' => ['required'],
+            ], [
+                'id_user.required' => 'IdUser tidak ada.',
+            ]);
+
+            $idUser = $request->id_user;
+            $idAkses = $request->id_akses;
+
+            $dataUser = $this->service->getDataUser($idUser);
+            $dataAkses = $dataUser->aksesuser;
+            $listAkses = $dataAkses->pluck('id_akses');
+
+            if (count($listAkses) == 1){
+                return redirect()->back()->with('error', 'Akses user tidak boleh kosong.');
             }
 
-            $this->service->updatePengumuman($request);
+            $this->service->hapusAkses($idAkses, $idUser);
 
-            DB::commit();
-
-            return redirect()->back()->with('success', 'Berhasil Update Pengumuman.');
-        } catch (ValidationException $e) {
-            DB::rollBack();
-            $errors = $e->errors();
-            return redirect()->back()->withErrors($errors);
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error($e->getMessage());
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
-
-    public function hapusPengumuman(Request $request){
-        try {
-            $request->validate([
-                'id_pengumuman' => ['required'],
-            ],[
-                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
-            ]);
-
-            $dataPengumuman = $this->service->getDataPengumuman($request->id_pengumuman);
-
-            DB::beginTransaction();
-
-            $this->service->hapusPengumuman($dataPengumuman->id_pengumuman);
-
-            //hapus file gambar header
-            $id_file_gambar = $dataPengumuman->gambar_header;
-            $location = $dataPengumuman->file_pengumuman->location;
-            $this->service->hapusFile($id_file_gambar, $location);
-
-            DB::commit();
-
-            return redirect()->back()->with('success', 'Berhasil Hapus Pengumuman.');
-        } catch (ValidationException $e) {
-            DB::rollBack();
-            $errors = $e->errors();
-            return redirect()->back()->withErrors($errors);
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error($e->getMessage());
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
-    public function postingPengumuman(Request $request){
-        try {
-            $request->validate([
-                'id_pengumuman' => ['required'],
-            ],[
-                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
-            ]);
-
-            $id_pengumuman = $request->id_pengumuman;
-
-            $this->service->postingPengumuman($id_pengumuman);
-
-            return redirect()->back()->with('success', 'Berhasil Posting Pengumuman.');
-        } catch (ValidationException $e) {
-            $errors = $e->errors();
-            return redirect()->back()->withErrors($errors);
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
-
-    public function batalPostingPengumuman(Request $request){
-        try {
-            $request->validate([
-                'id_pengumuman' => ['required'],
-            ],[
-                'id_pengumuman.required' => 'Id Pengumuman tidak ada.',
-            ]);
-
-            $id_pengumuman = $request->id_pengumuman;
-
-            $this->service->batalPostingPengumuman($id_pengumuman);
-
-            return redirect()->back()->with('success', 'Berhasil Batal Posting Pengumuman.');
+            return redirect()->back()->with('success', 'Berhasil Hapus Akses.');
         } catch (ValidationException $e) {
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);

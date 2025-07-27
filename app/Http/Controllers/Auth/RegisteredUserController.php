@@ -97,8 +97,7 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'kartu_id' => $request->no_kartuid,
                 'no_hp' => $request->no_telepon,
-                'file_kartuid' => $id_file,
-                'id_akses' => 8 //untuk akses pengguna
+                'file_kartuid' => $id_file
             ]);
 
             //tambah akses user ke database

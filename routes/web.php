@@ -120,6 +120,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         //manajemen user
         Route::get('/manajemen-user', [ManajemenUserController::class, 'index'])->name('manajemen-user');
         Route::get('/manajemen-user/getdata', [ManajemenUserController::class, 'getData'])->name('manajemen-user.getdata');
+        Route::post('/manajemen-user/getdatauser', [ManajemenUserController::class, 'getDataUser'])->name('manajemen-user.getdatauser');
+        Route::post('/manajemen-user/update-akses', [ManajemenUserController::class, 'updateAksesUser'])->name('manajemen-user.updateakses');
+        Route::post('/manajemen-user/setdefault-akses', [ManajemenUserController::class, 'setDefaultAkses'])->name('manajemen-user.setdefaultrole');
+        Route::post('/manajemen-user/hapus-akses', [ManajemenUserController::class, 'hapusAksesUser'])->name('manajemen-user.hapusakses');
     });
 
     //peralatan

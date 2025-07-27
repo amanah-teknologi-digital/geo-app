@@ -3,10 +3,8 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\ManajemenUserRepository;
-use App\Models\Files;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class ManajemenUserServices
 {
@@ -22,75 +20,35 @@ class ManajemenUserServices
         return $data;
     }
 
-    public function tambahPengumuman($request, $id_file){
+    public function getListAkses($listAkses){
+        $data = $this->repository->getListAkses($listAkses);
+
+        return $data;
+    }
+
+    public function tambahAksesUser($idAkses, $idUser){
         try {
-            $this->repository->tambahPengumuman($request, $id_file);
+            $this->repository->tambahAksesUser($idAkses, $idUser);
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());
         }
     }
 
-    public function updatePengumuman($request){
+    public function setDefaultAkses($idAkses, $idUser){
         try {
-            $this->repository->updatePengumuman($request);
+            $this->repository->setDefaultAkses($idAkses, $idUser);
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());
         }
     }
 
-    public function tambahFile($file, $id_file){
+    public function hapusAkses($idAkses, $idUser)
+    {
         try {
-            $fileName = $file->getClientOriginalName();
-            $fileMime = $file->getClientMimeType();
-            $fileExt = $file->getClientOriginalExtension();
-            $newFileName = $id_file.'.'.$fileExt;
-            $fileSize = $file->getSize();
-            $filePath = $file->storeAs('pengumuman', $newFileName, 'public');
-
-            //save file data ke database
-            $this->repository->createOrUpdateFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function hapusFile($id_file, $location){
-        try {
-            Storage::disk('public')->delete($location);
-
-            //hapus file data di database
-            $this->repository->hapusFile($id_file);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function hapusPengumuman($id_pengumuman){
-        try {
-            $this->repository->hapusPengumuman($id_pengumuman);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function postingPengumuman($id_pengumuman){
-        try {
-            $this->repository->postingPengumuman($id_pengumuman);
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function batalPostingPengumuman($id_pengumuman){
-        try {
-            $this->repository->batalPostingPengumuman($id_pengumuman);
-        }catch(Exception $e){
+            $this->repository->hapusAkses($idAkses, $idUser);
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());
         }
