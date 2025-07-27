@@ -16,7 +16,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb flex">
                     <li class="breadcrumb-item">
-                        <a href="#">Master Data</a>
+                        <a href="#">Referensi</a>
                     </li>
                     <li class="breadcrumb-item active">Jenis Surat</li>
                 </ol>
