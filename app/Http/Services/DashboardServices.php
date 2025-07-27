@@ -102,72 +102,37 @@ class DashboardServices
             $mustApprove = $dataVerifikasi['must_aprove'];
             $message = $dataVerifikasi['message'];
 
-            if ($idAkses == 1){ //super admin
-                if ($mustApprove == 'AJUKAN'){
-                    $isNotif = true;
-                    $isNotifSurat = true;
+            if ($mustApprove == 'AJUKAN'){
+                $isNotif = true;
+                $isNotifSurat = true;
 
-                    if (empty($jmlNotif) or !in_array('ajuansurat', $jmlNotif)){
-                        $jmlNotif[] = 'ajuansurat';
-                    }
-
-                    $jmlNotifAjukan += 1;
+                if (empty($jmlNotif) or !in_array('ajuansurat', $jmlNotif)){
+                    $jmlNotif[] = 'ajuansurat';
                 }
 
-                if ($mustApprove == 'VERIFIKASI'){
-                    $isNotif = true;
-                    $isNotifSurat = true;
+                $jmlNotifAjukan += 1;
+            }
 
-                    if (empty($jmlNotif) or !in_array('verifikasisurat', $jmlNotif)){
-                        $jmlNotif[] = 'verifikasisurat';
-                    }
+            if ($mustApprove == 'VERIFIKASI'){
+                $isNotif = true;
+                $isNotifSurat = true;
 
-                    $jmlNotifVerifikasi += 1;
+                if (empty($jmlNotif) or !in_array('verifikasisurat', $jmlNotif)){
+                    $jmlNotif[] = 'verifikasisurat';
                 }
 
-                if ($mustApprove == 'SUDAH DIREVISI'){
-                    $isNotif = true;
-                    $isNotifSurat = true;
+                $jmlNotifVerifikasi += 1;
+            }
 
-                    if (empty($jmlNotif) or !in_array('revisisurat', $jmlNotif)){
-                        $jmlNotif[] = 'revisisurat';
-                    }
+            if ($mustApprove == 'SUDAH DIREVISI'){
+                $isNotif = true;
+                $isNotifSurat = true;
 
-                    $jmlNotifRevisi += 1;
-                }
-            }elseif ($idAkses == 2){ //admin
-                if ($mustApprove == 'VERIFIKASI'){
-                    $isNotif = true;
-                    $isNotifSurat = true;
-
-                    if (empty($jmlNotif) or !in_array('verifikasisurat', $jmlNotif)){
-                        $jmlNotif[] = 'verifikasisurat';
-                    }
-
-                    $jmlNotifVerifikasi += 1;
-                }
-            }elseif ($idAkses == 8){ //pengguna
-                if ($mustApprove == 'AJUKAN'){
-                    $isNotif = true;
-                    $isNotifSurat = true;
-
-                    if (empty($jmlNotif) or !in_array('ajuansurat', $jmlNotif)){
-                        $jmlNotif[] = 'ajuansurat';
-                    }
-
-                    $jmlNotifAjukan += 1;
+                if (empty($jmlNotif) or !in_array('revisisurat', $jmlNotif)){
+                    $jmlNotif[] = 'revisisurat';
                 }
 
-                if ($mustApprove == 'SUDAH DIREVISI'){
-                    $isNotif = true;
-                    $isNotifSurat = true;
-
-                    if (empty($jmlNotif) or !in_array('revisisurat', $jmlNotif)){
-                        $jmlNotif[] = 'revisisurat';
-                    }
-
-                    $jmlNotifRevisi += 1;
-                }
+                $jmlNotifRevisi += 1;
             }
         }
 

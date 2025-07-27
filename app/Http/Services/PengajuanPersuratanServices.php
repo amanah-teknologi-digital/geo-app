@@ -121,11 +121,16 @@ class PengajuanPersuratanServices
 
         if ($id_akses == 1 || $dataPengajuan->id_statuspengajuan == 1 || $dataPengajuan->id_statuspengajuan == 3){
             $persetujuanTerakhir = $dataPersetujuan->sortByDesc('created_at')->first();
-        }else if($isTambahanPenyetuju){
-            $persetujuanTerakhir = $dataPersetujuan->where('id_pihakpenyetuju', $isTambahanPenyetuju->id_pihakpenyetuju)->sortByDesc('created_at')->first();
         }else{
             $persetujuanTerakhir = $dataPersetujuan->where('id_akses', $id_akses)->sortByDesc('created_at')->first();
         }
+
+        if($isTambahanPenyetuju){
+            $persetujuanTerakhirTambahan = $dataPersetujuan->where('id_pihakpenyetuju', $isTambahanPenyetuju->id_pihakpenyetuju)->sortByDesc('created_at')->first();
+        }else{
+            $persetujuanTerakhirTambahan = [];
+        }
+
 
         if ($id_akses == 1){ //super admin
             if ($dataPengajuan->id_statuspengajuan == 0){ //draft
@@ -171,10 +176,10 @@ class PengajuanPersuratanServices
             if ($dataPengajuan->id_statuspengajuan == 0){ //draft
                 $message = 'Pengajuan Belum Diajukan!';
             }else{
-                if (empty($persetujuanTerakhir) && !$adminGeoSudahSetuju){
+                if (empty($persetujuanTerakhir)){
                     $must_aprove = 'VERIFIKASI';
                 }else{
-                    if ($dataPengajuan->id_statuspengajuan == 5 && empty($dataPengajuan->user_perevisi) && !$adminGeoSudahSetuju){ //sudah direvisi
+                    if ($dataPengajuan->id_statuspengajuan == 5 && empty($dataPengajuan->user_perevisi)){ //sudah direvisi
                         $must_aprove = 'VERIFIKASI';
                     }else{
                         if (empty($persetujuanTerakhir)){
@@ -203,7 +208,7 @@ class PengajuanPersuratanServices
             if ($dataPengajuan->id_statuspengajuan == 0){ //draft
                 $message = 'Pengajuan Belum Diajukan!';
             }else{
-                if (empty($persetujuanTerakhir)){
+                if (empty($persetujuanTerakhirTambahan)){
                     if ($adminGeoSudahSetuju) {
                         $must_aprove = 'VERIFIKASI';
                         $must_pihakpenyetuju = $isTambahanPenyetuju->id_pihakpenyetuju;
@@ -215,7 +220,7 @@ class PengajuanPersuratanServices
                         $must_aprove = 'VERIFIKASI';
                         $must_pihakpenyetuju = $isTambahanPenyetuju->id_pihakpenyetuju;
                     }else{
-                        if (empty($persetujuanTerakhir)){
+                        if (empty($persetujuanTerakhirTambahan)){
                             $message = 'Persetujuan Kosong!';
                         }else{
                             $data = $persetujuanTerakhir;
@@ -280,55 +285,22 @@ class PengajuanPersuratanServices
         }
     }
 
-    public function getHtmlStatusPengajuan($id_statuspengajuan, $id_akses, $dataPersetujuan){
+    public function getHtmlStatusPengajuan($idPengajuan, $namaLayananSurat, $dataPengajuan){
         $html = '';
+        $dataVerifikasi = $this->getStatusVerifikasi($idPengajuan, $namaLayananSurat, $dataPengajuan);
+        $mustApprove = $dataVerifikasi['must_aprove'];
+        $message = $dataVerifikasi['message'];
 
-        if ($id_akses == 8){ //pengguna
-            if ($id_statuspengajuan == 0){
-                $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
-            }elseif ($id_statuspengajuan == 4){
-                $html .= '<br><i class="text-danger small">(Pengajuan Direvisi)</i>';
-            }
+        if ($mustApprove == 'AJUKAN'){
+            $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
         }
 
-        if ($id_akses == 2){ //admin
-            if ($id_statuspengajuan == 5){
-                $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
-            }elseif ($id_statuspengajuan == 2){
-                if ($dataPersetujuan->isNotEmpty()){
-                    $id_persetujuan = $dataPersetujuan->first(function ($item) {
-                        return $item->id_akses == 2;
-                    })->id_persetujuan ?? null;
-
-                    if (empty($id_persetujuan)){
-                        $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
-                    }
-                }else{
-                    $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
-                }
-            }
+        if ($mustApprove == 'VERIFIKASI'){
+            $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
         }
 
-        if ($id_akses == 1){ //superadmin
-            if ($id_statuspengajuan == 0){
-                $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
-            }elseif ($id_statuspengajuan == 4){
-                $html .= '<br><i class="text-danger small">(Pengajuan Direvisi)</i>';
-            }elseif ($id_statuspengajuan == 5){
-                $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
-            }elseif ($id_statuspengajuan == 2){
-                if ($dataPersetujuan->isNotEmpty()){
-                    $id_persetujuan = $dataPersetujuan->first(function ($item) {
-                        return $item->id_akses == 2;
-                    })->id_persetujuan ?? null;
-
-                    if (empty($id_persetujuan)){
-                        $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
-                    }
-                }else{
-                    $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
-                }
-            }
+        if ($mustApprove == 'SUDAH DIREVISI'){
+            $html .= '<br><i class="text-danger small">(Pengajuan Direvisi)</i>';
         }
 
         return $html;

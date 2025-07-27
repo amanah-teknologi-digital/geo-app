@@ -34,6 +34,7 @@ class PengajuanPersuratanController extends Controller
 
     public function getData(Request $request){
         $id_akses = $this->idAkses;
+        $namaLayananSurat = $this->subtitle;
 
         if ($request->ajax()) {
             $data_pengajuan = $this->service->getDataPengajuan();
@@ -50,9 +51,9 @@ class PengajuanPersuratanController extends Controller
                 ->addColumn('keterangan', function ($data_pengajuan) {
                     return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->keterangan.'</span>';
                 })
-                ->addColumn('status', function ($data_pengajuan) use($id_akses) {
+                ->addColumn('status', function ($data_pengajuan) use($namaLayananSurat) {
                     $html = '<span style="font-size: smaller; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
-                    $html .= $this->service->getHtmlStatusPengajuan($data_pengajuan->id_statuspengajuan, $id_akses, $data_pengajuan->persetujuan);
+                    $html .= $this->service->getHtmlStatusPengajuan($data_pengajuan->id_pengajuan, $namaLayananSurat, $data_pengajuan);
 
                     return $html;
                 })
