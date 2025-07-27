@@ -87,7 +87,7 @@ $(document).ready(function () {
 
                     let list = listpersetujuan.map(item => `<span class="badge bg-primary text-white">${item.urutan}. ${item.nama}</span>`);
 
-                    if (list){
+                    if (listpersetujuan.length > 0){
                         list2 += ' <i class="bx bx-arrow-back text-primary" style="transform: rotate(180deg);"></i> ';
                         list2 += list.join(' <i class="bx bx-arrow-back text-primary" style="transform: rotate(180deg);"></i>');
                     }
