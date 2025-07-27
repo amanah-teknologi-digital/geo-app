@@ -24,37 +24,39 @@
 <div class="card">
     <div class="card-header"><b>Daftar Akses {{ $dataUser->name }}</b></div>
     <div class="card-body">
-        <table class="table table-sm table-bordered" id="tabelAkses">
-            <thead class="table-primary">
-            <tr>
-                <th class="text-center" style="width: 10%">#</th>
-                <th class="text-center" style="width: 50%">Akses</th>
-                <th class="text-center" style="width: 20%">Default</th>
-                <th class="text-center" style="width: 20%">Aksi</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($dataAkses as $key => $existakses)
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered" id="tabelAkses">
+                <thead class="table-primary">
                 <tr>
-                    <td class="text-center">{{ ($key+1) }}</td>
-                    <td>{{ $existakses->akses->nama }}</td>
-                    <td class="text-center">
-                        @if($existakses->is_default == 1)
-                            <span class="text-success">Ya</span>
-                        @else
-                            <span class="text-danger">Tidak</span>
-                        @endif
-                    </td>
-                    <td class="text-center" nowrap>
-                        @if($existakses->is_default != 1)
-                            <a href="javascript:;" class="btn btn-sm btn-success" onclick="jadikanDefault('{{ $existakses->id_akses }}', '{{ $idUser }}')"><span class="bx bx-check"></span>&nbsp;Jadikan Default</a>
-                        @endif
-                        <a href="javascript:;" class="btn btn-sm btn-danger" onclick="hapusAkses('{{ $existakses->id_akses }}', '{{ $idUser }}')"><span class="bx bx-trash"></span></a>
-                    </td>
+                    <th class="text-center" style="width: 10%">#</th>
+                    <th class="text-center" style="width: 50%">Akses</th>
+                    <th class="text-center" style="width: 20%">Default</th>
+                    <th class="text-center" style="width: 20%">Aksi</th>
                 </tr>
-            @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach($dataAkses as $key => $existakses)
+                    <tr>
+                        <td class="text-center">{{ ($key+1) }}</td>
+                        <td>{{ $existakses->akses->nama }}</td>
+                        <td class="text-center">
+                            @if($existakses->is_default == 1)
+                                <span class="text-success">Ya</span>
+                            @else
+                                <span class="text-danger">Tidak</span>
+                            @endif
+                        </td>
+                        <td class="text-center" nowrap>
+                            @if($existakses->is_default != 1)
+                                <a href="javascript:;" class="btn btn-sm btn-success" onclick="jadikanDefault('{{ $existakses->id_akses }}', '{{ $idUser }}')"><span class="bx bx-check"></span>&nbsp;Jadikan Default</a>
+                            @endif
+                            <a href="javascript:;" class="btn btn-sm btn-danger" onclick="hapusAkses('{{ $existakses->id_akses }}', '{{ $idUser }}')"><span class="bx bx-trash"></span></a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
