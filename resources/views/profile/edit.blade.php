@@ -78,7 +78,7 @@
                                 <input type="text" class="form-control" id="no_kartuid" name="no_kartuid" placeholder="Nomor Kartu ID (NRP/KTP)" value="{{ old('no_kartuid', $user->kartu_id) }}" required autocomplete="off">
                             </div>
                             <div>
-                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <label for="email" class="form-label">Email (Non ITS)<span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ old('email', $user->email) }}" required autocomplete="off">
 
                                 @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())

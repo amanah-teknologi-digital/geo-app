@@ -11,6 +11,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -41,10 +42,40 @@ class RegisteredUserController extends Controller
         try {
             $request->validate([
                 'nama_lengkap' => ['required'],
-                'email' => ['required', 'string', 'lowercase', 'email', 'unique:'.User::class],
+                'email' => [
+                    'required',
+                    'string',
+                    'lowercase',
+                    'email',
+                    'not_regex:/its\.ac\.id/i', // pastikan bukan email ITS
+                    function ($attribute, $value, $fail) {
+                        $hash = hash('sha256', strtolower($value));
+                        if (\App\Models\User::where('email_hash', $hash)->exists()) {
+                            $fail('Email sudah terdaftar.');
+                        }
+                    }
+                ],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                'no_kartuid' => ['required', Rule::unique('users', 'kartu_id')],
-                'no_telepon' => ['required', 'string', 'max:13', Rule::unique('users', 'no_hp')],
+                'no_kartuid' => [
+                    'required',
+                    function ($attribute, $value, $fail) {
+                        $hash = hash('sha256', $value);
+                        if (\App\Models\User::where('kartu_id_hash', $hash)->exists()) {
+                            $fail('Kartu ID sudah terdaftar.');
+                        }
+                    }
+                ],
+                'no_telepon' => [
+                    'required',
+                    'string',
+                    'max:13',
+                    function ($attribute, $value, $fail) {
+                        $hash = hash('sha256', $value);
+                        if (\App\Models\User::where('no_hp_hash', $hash)->exists()) {
+                            $fail('Nomor telepon sudah terdaftar.');
+                        }
+                    }
+                ],
                 'file_kartuid' => ['required', 'file', 'image', 'max:5120'],
             ],[
                 'nama_lengkap.required' => 'Nama lengkap wajib diisi.',
@@ -52,6 +83,7 @@ class RegisteredUserController extends Controller
                 'email.string'          => 'Email harus berupa teks.',
                 'email.lowercase'       => 'Email harus dalam huruf kecil.',
                 'email.email'           => 'Format email tidak valid.',
+                'email_its.not_regex'   => 'Tidak boleh menggunakan email ITS.',
                 'email.unique'          => 'Email sudah terdaftar.',
                 'password.required'     => 'Password wajib diisi.',
                 'password.confirmed'    => 'Konfirmasi password tidak cocok.',
@@ -75,7 +107,11 @@ class RegisteredUserController extends Controller
             $fileExt = $file->getClientOriginalExtension();
             $newFileName = $id_file.'.'.$fileExt;
             $fileSize = $file->getSize();
-            $filePath = $file->storeAs('identitas', $newFileName, 'local');
+            $fileContents = file_get_contents($file->getRealPath());
+            $encryptedFileContents = Crypt::encrypt($fileContents);
+            $filePath = 'identitas/' . $newFileName;
+
+            Storage::disk('private')->put($filePath, $encryptedFileContents);
 
             DB::beginTransaction();
 
@@ -93,10 +129,10 @@ class RegisteredUserController extends Controller
             //save user ke database
             $user = User::create([
                 'name' => $request->nama_lengkap,
-                'email' => $request->email,
+                'email' => $request->email, // akan otomatis terenkripsi oleh mutator
                 'password' => Hash::make($request->password),
-                'kartu_id' => $request->no_kartuid,
-                'no_hp' => $request->no_telepon,
+                'kartu_id' => $request->no_kartuid, // otomatis terenkripsi
+                'no_hp' => $request->no_telepon,     // otomatis terenkripsi
                 'file_kartuid' => $id_file
             ]);
 
@@ -117,12 +153,12 @@ class RegisteredUserController extends Controller
             return redirect(route('dashboard', absolute: false));
         } catch (ValidationException $e) {
             DB::rollBack();
-            Storage::disk('local')->delete($filePath);
+            Storage::disk('private')->delete($filePath);
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
         } catch (Exception $e) {
             DB::rollBack();
-            Storage::disk('local')->delete($filePath);
+            Storage::disk('private')->delete($filePath);
             Log::error($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }

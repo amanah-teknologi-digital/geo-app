@@ -51,7 +51,7 @@
                                 <input type="text" class="form-control" id="no_kartuid" name="no_kartuid" placeholder="Nomor Kartu ID (NRP/KTP)" required autocomplete="off">
                             </div>
                             <div class="mb-6">
-                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <label for="email" class="form-label">Email (Non ITS)<span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Email" required autocomplete="off">
                             </div>
                             <div class="mb-6">
