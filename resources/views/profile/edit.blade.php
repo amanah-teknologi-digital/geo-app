@@ -113,7 +113,7 @@
                                     @php
                                         $file = auth()->user()->file_kartuid;
                                         $filePath = auth()->user()->files->location;
-                                        $imageUrl = Storage::disk('local')->exists($filePath)
+                                        $imageUrl = Storage::disk('private')->exists($filePath)
                                             ? route('file.getprivatefile', $file)
                                             : asset('assets/img/no_image.jpg');
                                     @endphp

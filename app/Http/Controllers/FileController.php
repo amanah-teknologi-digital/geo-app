@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Files;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
@@ -11,9 +12,10 @@ class FileController extends Controller
     public function getPrivateFile($id_file){
         $data_file = Files::find($id_file);
 
-        if (Storage::disk('local')->exists($data_file->location)) {
-            $file = Storage::disk('local')->get($data_file->location);
-            return response($file, 200)
+        if (Storage::disk('private')->exists($data_file->location)) {
+            $file = Storage::disk('private')->get($data_file->location);
+            $decrypted = Crypt::decrypt($file);
+            return response($decrypted, 200)
                 ->header('Content-Type', $data_file->mime)
                 ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
                 ->header('Pragma', 'no-cache')
