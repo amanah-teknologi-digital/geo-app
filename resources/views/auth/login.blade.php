@@ -52,7 +52,7 @@
                             </div>
                             <div class="mb-8">
                                 <div class="d-flex justify-content-between mt-8">
-                                    <div class="form-check mb-0 ms-2">
+                                    <div class="form-check form-check-primary mb-0 ms-2">
                                         <input class="form-check-input" type="checkbox" id="remember-me" name="remember">
                                         <label class="form-check-label" for="remember-me">
                                             Ingat Saya
