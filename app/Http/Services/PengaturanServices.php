@@ -5,7 +5,9 @@ namespace App\Http\Services;
 use App\Http\Repositories\PengaturanRepository;
 use App\Models\Files;
 use Exception;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PengaturanServices
 {
@@ -37,7 +39,10 @@ class PengaturanServices
             $fileExt = $file->getClientOriginalExtension();
             $newFileName = $id_file.'.'.$fileExt;
             $fileSize = $file->getSize();
-            $filePath = $file->storeAs('sop', $newFileName, 'public');
+            $fileContents = file_get_contents($file->getRealPath());
+            $encryptedFileContents = Crypt::encrypt($fileContents);
+            $filePath = 'sop/' . $newFileName;
+            Storage::disk('public')->put($filePath, $encryptedFileContents);
 
             //save file data ke database
             $this->repository->createOrUpdateFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize, $jenis_file);
