@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Auth\HashedEmailUserProvider;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Auth::provider('hashed_email', function ($app, array $config) {
+            return new HashedEmailUserProvider($app['hash'], $config['model']);
+        });
     }
 }

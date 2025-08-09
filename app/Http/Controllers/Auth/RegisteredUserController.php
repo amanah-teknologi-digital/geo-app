@@ -40,6 +40,8 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         try {
+            $filePath = null; // inisialisasi
+
             $request->validate([
                 'nama_lengkap' => ['required'],
                 'email' => [
@@ -153,12 +155,16 @@ class RegisteredUserController extends Controller
             return redirect(route('dashboard', absolute: false));
         } catch (ValidationException $e) {
             DB::rollBack();
-            Storage::disk('private')->delete($filePath);
+            if ($filePath) {
+                Storage::disk('private')->delete($filePath);
+            }
             $errors = $e->errors();
             return redirect()->back()->withErrors($errors);
         } catch (Exception $e) {
             DB::rollBack();
-            Storage::disk('private')->delete($filePath);
+            if ($filePath) {
+                Storage::disk('private')->delete($filePath);
+            }
             Log::error($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
