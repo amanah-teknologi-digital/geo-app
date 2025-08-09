@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class PengajuanPersuratan extends Model
 {
@@ -19,6 +20,7 @@ class PengajuanPersuratan extends Model
         'nama_pengaju',
         'no_hp',
         'email',
+        'email_its',
         'kartu_id',
         'created_at',
         'keterangan',
@@ -32,6 +34,66 @@ class PengajuanPersuratan extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Encrypt before saving
+    |--------------------------------------------------------------------------
+    */
+    public function setNoHpAttribute($value)
+    {
+        $this->attributes['no_hp'] = Crypt::encryptString($value);
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = Crypt::encryptString($value);
+    }
+
+    public function setEmailItsAttribute($value)
+    {
+        $this->attributes['email_its'] = Crypt::encryptString($value);
+    }
+
+    public function setKartuIdAttribute($value)
+    {
+        $this->attributes['kartu_id'] = Crypt::encryptString($value);
+    }
+
+    public function setDataFormAttribute($value)
+    {
+        $this->attributes['data_form'] = Crypt::encryptString($value);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Decrypt when reading
+    |--------------------------------------------------------------------------
+    */
+    public function getNoHpAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
+
+    public function getEmailAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
+
+    public function getEmailItsAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
+
+    public function getKartuIdAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
+
+    public function getDataFormAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
 
     public function pihakpengaju()
     {

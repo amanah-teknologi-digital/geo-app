@@ -44,94 +44,108 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card mb-6">
-                        <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                            <h5 class="card-title mb-0"><i class="bx bx-user"></i>&nbsp;Data Pemohon</h5>
-                            <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary btn-sm">
+            <div class="row align-items-stretch mb-5">
+                <div class="col-md-7">
+                    <div class="card mb-4 shadow-sm h-100 border-0">
+                        <div class="card-header d-flex justify-content-between align-items-center pb-3 border-bottom">
+                            <h5 class="card-title mb-0 fw-bold d-flex align-items-center">
+                                <i class="bx bx-user me-2" style="font-size: 1.3rem;"></i>
+                                Data Pemohon
+                            </h5>
+                            <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary">
                                 <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                             </a>
                         </div>
                         <div class="card-body pt-4">
-                            <div class="row g-6">
-                                <div>
-                                    <label for="nama_pengaju" class="form-label">Nama Pengaju <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ $dataPengajuan->nama_pengaju }}" readonly>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="fw-semibold small text-secondary mb-3">Nama Pengaju </div>
+                                    <div class="fs-6 text-dark">{{ $dataPengajuan->nama_pengaju }}</div>
                                 </div>
-                                <div>
-                                    <label for="kartu_id" class="form-label">Nomor Kartu ID (NRP/KTP) <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ $dataPengajuan->kartu_id }}" readonly>
+
+                                <div class="col-md-6">
+                                    <div class="fw-semibold small text-secondary mb-3">Nomor Kartu ID (NRP/KTP) </div>
+                                    <div class="fs-6 text-dark">{{ $dataPengajuan->kartu_id }}</div>
                                 </div>
-                                <div>
-                                    <label for="file_kartu_id" class="form-label">File Kartu ID (NRP/KTP) <span
-                                            class="text-danger">*</span></label>
+
+                                <div class="col-md-6">
+                                    <div class="fw-semibold small text-secondary mb-3">No. Hp </div>
+                                    <div class="fs-6 text-dark">{{ $dataPengajuan->no_hp }}</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="fw-semibold small text-secondary mb-3">Email </div>
+                                    <div class="fs-6 text-dark">{{ $dataPengajuan->email }}</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="fw-semibold small text-secondary mb-3">Email ITS </div>
+                                    <div class="fs-6 text-dark">{{ $dataPengajuan->email_its }}</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="fw-semibold small text-secondary mb-1">File Kartu ID (NRP/KTP) </div>
                                     @php
                                         $file = $dataPengajuan->pihakpengaju->file_kartuid;
                                         $filePath = $dataPengajuan->pihakpengaju->files->location;
-                                        $imageUrl2 = Storage::disk('local')->exists($filePath)
+                                        $imageUrl2 = Storage::disk('private')->exists($filePath)
                                             ? route('file.getprivatefile', $file)
                                             : asset('assets/img/no_image.jpg');
                                     @endphp
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img src="{{ $imageUrl2 }}" class="d-block h-px-100 rounded">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="{{ $imageUrl2 }}" class="rounded border shadow-sm" style="height: 80px; object-fit: cover;">
                                         <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                                 data-bs-target="#modals-transparent">
                                             Lihat file
                                         </button>
                                     </div>
                                 </div>
-                                <div>
-                                    <label for="no_hp" class="form-label">No. Hp <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ $dataPengajuan->no_hp }}" readonly>
-                                </div>
-                                <div>
-                                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ $dataPengajuan->email }}" readonly>
-                                </div>
-                                <div>
-                                    <label for="email_its" class="form-label">Email ITS<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ $dataPengajuan->email_its }}" readonly>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card mb-6">
+
+                <div class="col-md-5 d-flex flex-column">
+                    <div class="card flex-fill d-flex flex-column">
                         <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                            <h5 class="card-title mb-0"><i class="bx bx-history"></i>&nbsp;Histori Persetujuan</h5>
+                            <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-history" style="font-size: 1.3rem;"></i>&nbsp;Histori Persetujuan</h5>
                         </div>
-                        <div class="card-body pt-4">
-                            @if($dataPengajuan->persetujuan->isNotEmpty())
-                                <ul class="timeline-with-icons">
-                                @foreach($dataPengajuan->persetujuan as $pers)
-                                    <li class="timeline-item mb-5">
-                                        <span class="timeline-icon {{ $pers->statuspersetujuan->class_bg }}"><i class="{{ $pers->statuspersetujuan->class_label }}"></i></span>
-                                        <p class="mb-0 fw-medium">{{ $pers->statuspersetujuan->nama.' '.(optional($pers->akses)->nama ?? optional($pers->pihakpenyetujupengajuansurat)->nama) }}</p>
-                                        <p class="text-muted fst-italic small">{{ $pers->created_at->format('d/m/Y H:i') }} oleh {{ $pers->nama_penyetuju }}</p>
-                                        @if(!empty($pers->keterangan))
-                                            <p class="text-muted small"><b>Keterangan:</b> <span class="fst-italic">{{ $pers->keterangan }}</span></p>
-                                        @endif
-                                    </li>
-                                @endforeach
-                                </ul>
-                            @else
-                                <div class="text-center">
-                                    <p class="text-muted">Persetujuan Kosong!</p>
+                        <div class="card-body pt-4 overflow-auto" style="flex:1; min-height:0;">
+                            <div class="row">
+                                <div class="col-12">
+                                    @if($dataPengajuan->persetujuan->isNotEmpty())
+                                        <ul class="timeline-with-icons">
+                                            @foreach($dataPengajuan->persetujuan as $pers)
+                                                <li class="timeline-item mb-5"><span class="timeline-icon {{ $pers->statuspersetujuan->class_bg }}"><i class="{{ $pers->statuspersetujuan->class_label }}"></i></span>
+                                                    <p class="mb-0 fw-medium">
+                                                        {{ $pers->statuspersetujuan->nama.' '.(optional($pers->akses)->nama ?? optional($pers->pihakpenyetujupengajuansurat)->nama) }}
+                                                    </p>
+                                                    <p class="text-muted fst-italic small">
+                                                        {{ $pers->created_at->format('d/m/Y H:i') }} oleh {{ $pers->nama_penyetuju }}
+                                                    </p>
+                                                    @if(!empty($pers->keterangan))
+                                                        <p class="text-muted small">
+                                                            <b>Keterangan:</b> <span class="fst-italic">{{ $pers->keterangan }}</span>
+                                                        </p>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <div class="text-center">
+                                            <p class="text-muted">Persetujuan Kosong!</p>
+                                        </div>
+                                    @endif
                                 </div>
-                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI') ? 'style="margin-bottom: 5.5rem !important;"':'style="margin-bottom: 1.5rem !important;"' ?> >
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                    <h5 class="card-title mb-0"><i class="bx bx-envelope pb-0"></i>&nbsp;Data Persuratan</h5>
-                    <h5 class="card-title mb-0"><i class="bx bx-station"></i>&nbsp;Status Pengajuan: <span class="fst-italic" style="color: {{ $dataPengajuan->statuspengajuan->html_color }}">{{ $dataPengajuan->statuspengajuan->nama }}</span></h5>
-                </div>
+                    <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-envelope pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Persuratan</h5>
+                    <span class="badge ms-2 px-3 py-2" style="background-color: {{ $dataPengajuan->statuspengajuan->html_color }}; color: white; font-size: 0.9rem;">{{ $dataPengajuan->statuspengajuan->nama }}</span></div>
                 <div class="card-body pt-4">
                     <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}">
                         @csrf
