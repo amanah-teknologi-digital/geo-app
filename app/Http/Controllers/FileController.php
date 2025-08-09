@@ -30,7 +30,8 @@ class FileController extends Controller
 
         if (Storage::disk('public')->exists($data_file->location)) {
             $file = Storage::disk('public')->get($data_file->location);
-            return response($file, 200)
+            $decrypted = Crypt::decrypt($file);
+            return response($decrypted, 200)
                 ->header('Content-Type', $data_file->mime)
                 ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
                 ->header('Pragma', 'no-cache')

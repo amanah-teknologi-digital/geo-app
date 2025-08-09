@@ -55,13 +55,7 @@ class ManajemenUserController extends Controller
                 })
                 ->rawColumns(['nama', 'aksi', 'email', 'nohp', 'created']) // Untuk render tombol HTML
                 ->filterColumn('nama', function($query, $keyword) {
-                    $query->where('name', 'LIKE', "%{$keyword}%")->orWhere('kartu_id', 'LIKE', "%{$keyword}%");
-                })
-                ->filterColumn('email', function($query, $keyword) {
-                    $query->where('email', 'LIKE', "%{$keyword}%");
-                })
-                ->filterColumn('nohp', function($query, $keyword) {
-                    $query->where('no_hp', 'LIKE', "%{$keyword}%");
+                    $query->where('name', 'LIKE', "%{$keyword}%");
                 })
                 ->toJson();
         }

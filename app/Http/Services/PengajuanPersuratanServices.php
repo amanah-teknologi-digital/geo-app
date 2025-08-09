@@ -8,6 +8,7 @@ use App\Models\PengajuanPersuratan;
 use App\Models\PersetujuanPersuratan;
 use App\Models\PihakPenyetujuPengajuanSurat;
 use Exception;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -322,7 +323,11 @@ class PengajuanPersuratanServices
             $fileExt = $file->getClientOriginalExtension();
             $newFileName = $id_file.'.'.$fileExt;
             $fileSize = $file->getSize();
-            $filePath = $file->storeAs('file_surat', $newFileName, 'public');
+            $fileContents = file_get_contents($file->getRealPath());
+            $encryptedFileContents = Crypt::encrypt($fileContents);
+            $filePath = 'file_surat/' . $newFileName;
+            Storage::disk('public')->put($filePath, $encryptedFileContents);
+
 
             //save file data ke database
             $this->repository->tambahFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize);
