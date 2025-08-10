@@ -358,9 +358,9 @@ class PengajuanPersuratanServices
         }
     }
 
-    public function updateFileSurat($idPengajuan, $idFile){
+    public function updateFileSurat($idPengajuan, $namaDataPendukung, $idFile){
         try {
-            $this->repository->updateFileSurat($idPengajuan, $idFile);
+            $this->repository->updateFileSurat($idPengajuan, $namaDataPendukung, $idFile);
         }catch(Exception $e){
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

@@ -117,6 +117,8 @@ class PengajuanPersuratanController extends Controller
                 'keterangan.required' => 'Keterangan wajib diisi.'
             ]);
 
+            $dataSurat = $this->service->getJenisSurat($request->jenis_surat);
+
             DB::beginTransaction();
             //save
             $id_pengajuan = strtoupper(Uuid::uuid4()->toString());
@@ -125,7 +127,7 @@ class PengajuanPersuratanController extends Controller
                 $idFile = strtoupper(Uuid::uuid4()->toString());
                 $file = $request->file('data_pendukung');
                 $this->service->tambahFile($file, $idFile);
-                $this->service->updateFileSurat($id_pengajuan, $idFile);
+                $this->service->updateFileSurat($id_pengajuan, $dataSurat->nama_datapendukung, $idFile);
             }
 
             DB::commit();

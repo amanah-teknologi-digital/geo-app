@@ -26,6 +26,7 @@ class PengajuanPersuratan extends Model
         'keterangan',
         'data_form',
         'user_perevisi',
+        'nama_pendukung',
         'id_datapendukung',
         'updated_at',
         'updater'

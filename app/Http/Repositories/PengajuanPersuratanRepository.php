@@ -318,10 +318,10 @@ class PengajuanPersuratanRepository
         ]);
     }
 
-    public function updateFileSurat($idPengajuan, $idFile){
+    public function updateFileSurat($idPengajuan, $namaDataPendukung, $idFile){
         $pengajuan = PengajuanPersuratan::where('id_pengajuan', $idPengajuan)->first();
         if ($pengajuan) {
-            $pengajuan->update(['id_datapendukung' => $idFile]);
+            $pengajuan->update(['id_datapendukung' => $idFile, 'nama_pendukung' => $namaDataPendukung]);
         }
     }
 }
