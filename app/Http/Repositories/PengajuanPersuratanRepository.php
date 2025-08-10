@@ -50,7 +50,7 @@ class PengajuanPersuratanRepository
     }
 
     public function getJenisSurat($id_jenissurat, $isEdit){
-        $data = JenisSurat::select('id_jenissurat', 'nama', 'default_form', 'created_at', 'updated_at')->with(['pihakpenyetujusurat', 'pihakpenyetujusurat.userpenyetuju'])->orderBy('created_at');
+        $data = JenisSurat::select('id_jenissurat', 'nama', 'default_form', 'is_datapendukung', 'nama_datapendukung', 'created_at', 'updated_at')->with(['pihakpenyetujusurat', 'pihakpenyetujusurat.userpenyetuju'])->orderBy('created_at');
         if (!empty($id_jenissurat)) {
             $data = $data->where('id_jenissurat', $id_jenissurat)->first();
         }else{
@@ -316,5 +316,12 @@ class PengajuanPersuratanRepository
             'id_pengajuan' => $idPengajuan,
             'id_file' => $idFile
         ]);
+    }
+
+    public function updateFileSurat($idPengajuan, $idFile){
+        $pengajuan = PengajuanPersuratan::where('id_pengajuan', $idPengajuan)->first();
+        if ($pengajuan) {
+            $pengajuan->update(['id_datapendukung' => $idFile]);
+        }
     }
 }

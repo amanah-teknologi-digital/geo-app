@@ -104,7 +104,13 @@ class PengajuanPersuratanController extends Controller
             $request->validate([
                 'jenis_surat' => ['required'],
                 'editor_surat' => ['required', 'string', 'min:10'],
-                'keterangan' => ['required']
+                'keterangan' => ['required'],
+                'data_pendukung' => [function ($attribute, $value, $fail) use ($request) {
+                    $dataSurat = $this->service->getJenisSurat($request->jenis_surat, true);
+                    if ($dataSurat->is_datapendukung == 1 && !$request->hasFile('data_pendukung')) {
+                        $fail('Data Pendukung wajib diisi.');
+                    }
+                }]
             ],[
                 'jenis_surat.required' => 'Jenis Surat wajib diisi.',
                 'editor_surat.required' => 'Surat wajib diisi.',
@@ -112,9 +118,15 @@ class PengajuanPersuratanController extends Controller
             ]);
 
             DB::beginTransaction();
-            //save file gambar header
+            //save
             $id_pengajuan = strtoupper(Uuid::uuid4()->toString());
             $this->service->tambahPengajuan($request, $id_pengajuan);
+            if ($request->hasFile('data_pendukung')) {
+                $idFile = strtoupper(Uuid::uuid4()->toString());
+                $file = $request->file('data_pendukung');
+                $this->service->tambahFile($file, $idFile);
+                $this->service->updateFileSurat($id_pengajuan, $idFile);
+            }
 
             DB::commit();
 

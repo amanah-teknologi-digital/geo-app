@@ -358,6 +358,15 @@ class PengajuanPersuratanServices
         }
     }
 
+    public function updateFileSurat($idPengajuan, $idFile){
+        try {
+            $this->repository->updateFileSurat($idPengajuan, $idFile);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function getPihakPenyetujuByIdpengajuan($idPengajuan){
         $data = $this->repository->getPihakPenyetujuByIdpengajuan($idPengajuan);
 

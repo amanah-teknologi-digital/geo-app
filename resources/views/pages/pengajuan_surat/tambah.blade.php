@@ -52,7 +52,7 @@
                     </a>
                 </div>
                 <div class="card-body pt-4">
-                    <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.dotambah') }}">
+                    <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.dotambah') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="row g-6">
                             <div class="col-md-12">
@@ -108,41 +108,43 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p class="card-title mb-0 fw-bold d-flex align-items-center">
-                                    <i class="bx bx-envelope pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Persuratan
-                                </p>
-                                <br>
-                                <div>
-                                    <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                    <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
-                                        <option value="" selected disabled>-- Pilih Jenis Surat --</option>
-                                        @foreach($dataJenisSurat as $row)
-                                            <option value="{{ $row->id_jenissurat }}">{{ $row->nama }}</option>
-                                        @endforeach
-                                    </select>
+                        <div class="row g-6">
+                            <p class="card-title mb-0 fw-bold d-flex align-items-center">
+                                <i class="bx bx-envelope pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Persuratan
+                            </p>
+                            <br>
+                            <div>
+                                <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                <select name="jenis_surat" id="jenis_surat" class="form-control" required autofocus>
+                                    <option value="" selected disabled>-- Pilih Jenis Surat --</option>
+                                    @foreach($dataJenisSurat as $row)
+                                        <option value="{{ $row->id_jenissurat }}">{{ $row->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="email" class="form-label">Persetujuan</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div id="list-persetujuan" style="font-weight: bold;">-</div>
                                 </div>
-                                <div>
-                                    <label for="email" class="form-label">Persetujuan</label>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div id="list-persetujuan" style="font-weight: bold;">-</div>
+                            </div>
+                            <div>
+                                <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
+                                <div id="editor-loading" class="text-center">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
-                                <div>
-                                    <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
-                                    <div id="editor-loading" class="text-center">
-                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                    </div>
-                                    <textarea id="editor_surat" name="editor_surat" style="height: 500px;"></textarea>
-                                    <div class="error-container" id="error-quil"></div>
-                                </div>
-                                <div>
-                                    <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
-                                    <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required></textarea>
-                                </div>
+                                <textarea id="editor_surat" name="editor_surat" style="height: 500px;"></textarea>
+                                <div class="error-container" id="error-quil"></div>
+                            </div>
+                            <div>
+                                <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
+                                <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required></textarea>
+                            </div>
+                            <div id="div_datapendukung" style="display: none">
+                                <label for="data_pendukung" class="form-label">Data Pendukung <span id="nama_datapendukung" class="text-muted fst-italic"></span> <span class="text-danger">*</span></label>
+                                <input type="file" class="form-control" name="data_pendukung" id="data_pendukung" accept="application/pdf">
                             </div>
                         </div>
                         <div class="mt-6">

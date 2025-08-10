@@ -78,6 +78,8 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function(response) {
                     let listpersetujuan = response.pihakpenyetujusurat;
+                    let isDataPendukung = response.is_datapendukung;
+                    let namaDataPendukung = response.nama_datapendukung
 
                     tinymce.get('editor_surat').setContent(response.default_form);
 
@@ -94,6 +96,17 @@ $(document).ready(function () {
 
                     // Gabungkan dengan tanda panah → dan tampilkan
                     $('#list-persetujuan').html(list2);
+
+                    if (isDataPendukung === 1){
+                        $('#div_datapendukung').show();
+                        $('#nama_datapendukung').html("("+namaDataPendukung+")");
+                        $('#data_pendukung').attr('required', true);
+                    }else{
+                        $('#div_datapendukung').hide();
+                        $('#nama_datapendukung').html('');
+                        $('#data_pendukung').val('');
+                        $('#data_pendukung').removeAttr('required');
+                    }
                 },
                 error: function(xhr, status, error) {
                     tinymce.get('editor_surat').setContent('');
