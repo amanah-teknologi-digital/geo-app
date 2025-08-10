@@ -349,6 +349,18 @@ class PengajuanPersuratanServices
         }
     }
 
+    public function hapusFilePendukung($idPengajuan, $idFile, $location){
+        try {
+            Storage::disk('public')->delete($location);
+
+            //hapus file dari database
+            $this->repository->hapusFilePendukung($idPengajuan);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function tambahFileSurat($idPengajuan, $idFile){
         try {
             $this->repository->tambahFileSurat($idPengajuan, $idFile);
@@ -361,6 +373,15 @@ class PengajuanPersuratanServices
     public function updateFileSurat($idPengajuan, $namaDataPendukung, $idFile){
         try {
             $this->repository->updateFileSurat($idPengajuan, $namaDataPendukung, $idFile);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function updateFileSuratUpdate($idPengajuan, $idFile){
+        try {
+            $this->repository->updateFileSuratUpdate($idPengajuan, $idFile);
         }catch(Exception $e){
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

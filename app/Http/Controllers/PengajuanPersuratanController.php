@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Repositories\PengajuanPersuratanRepository;
 use App\Http\Services\PengajuanPersuratanServices;
+use App\Models\PengajuanPersuratan;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -208,6 +209,42 @@ class PengajuanPersuratanController extends Controller
         }
     }
 
+    public function hapusFilePendukung(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+            ],[
+                'id_pengajuan.required' => 'Id File tidak ada.',
+            ]);
+
+            $dataPengajuan = $this->service->getDataPengajuan($request->id_pengajuan);
+            $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
+
+            if ($isEdit) {
+                $dataFile = $this->service->getDataFile($dataPengajuan->id_datapendukung);
+                $location = $dataFile->location;
+
+                DB::beginTransaction();
+
+                $this->service->hapusFilePendukung($request->id_pengajuan, $request->id_file, $location);
+
+                DB::commit();
+
+                return redirect()->back()->with('success', 'Berhasil Hapus File Pengajuan.');
+            }else{
+                return redirect()->back()->with('error', 'Tidak ada akses untuk menghapus!.');
+            }
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     public function uploadFile(Request $request){
         try {
             $request->validate([
@@ -301,7 +338,20 @@ class PengajuanPersuratanController extends Controller
                 'id_pengajuan' => ['required'],
                 'jenis_surat' => ['required'],
                 'editor_surat' => ['required', 'string', 'min:10'],
-                'keterangan' => ['required']
+                'keterangan' => ['required'],
+                'data_pendukung' => [function($attribute, $value, $fail) use ($request) {
+                    if ($request->has('id_pengajuan')) {
+                        // cek di DB apakah nama_datapendukung tidak kosong
+                        $pengajuan = PengajuanPersuratan::where('id_pengajuan', $request->id_pengajuan)->first();
+
+                        if ($pengajuan && !empty($pengajuan->nama_pendukung)) {
+                            // file harus ada kalau nama_datapendukung tidak kosong
+                            if (!$request->hasFile('data_pendukung')) {
+                                $fail('File Data Pendukung wajib diupload karena sudah ada data pendukung sebelumnya.');
+                            }
+                        }
+                    }
+                }]
             ],[
                 'id_pengajuan.required' => 'Id Pengajuan wajib diisi.',
                 'jenis_surat.required' => 'Jenis Surat wajib diisi.',
@@ -313,6 +363,12 @@ class PengajuanPersuratanController extends Controller
             //save file gambar header
             $id_pengajuan = $request->id_pengajuan;
             $this->service->updatePengajuan($request);
+            if ($request->hasFile('data_pendukung')) {
+                $idFile = strtoupper(Uuid::uuid4()->toString());
+                $file = $request->file('data_pendukung');
+                $this->service->tambahFile($file, $idFile);
+                $this->service->updateFileSuratUpdate($id_pengajuan, $idFile);
+            }
 
             DB::commit();
 
@@ -343,6 +399,10 @@ class PengajuanPersuratanController extends Controller
             }
 
             $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+
+            if (!empty($dataPengajuan->nama_pendukung) && empty($dataPengajuan->id_datapendukung)){
+                return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('error', 'Data Pendukung belum diisi.');
+            }
 
             DB::beginTransaction();
 
@@ -375,6 +435,12 @@ class PengajuanPersuratanController extends Controller
                 'filesurat.*.file' => 'File yang diunggah tidak valid.',
                 'filesurat.*.max' => 'Ukuran akumulasi file tidak boleh lebih dari 5 MB.',
             ]);
+
+            $id_pengajuan = $request->id_pengajuan;
+            $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+            if (!empty($dataPengajuan->nama_pendukung) && empty($dataPengajuan->id_datapendukung)){
+                return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('error', 'Data Pendukung belum diisi.');
+            }
 
             $id_pengajuan = $request->id_pengajuan;
             $id_akses = $request->id_akses;
@@ -500,6 +566,10 @@ class PengajuanPersuratanController extends Controller
             $keterangan = $request->keterangansudahrev;
 
             $dataPengajuan = $this->service->getDataPengajuan($id_pengajuan);
+
+            if (!empty($dataPengajuan->nama_pendukung) && empty($dataPengajuan->id_datapendukung)){
+                return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('error', 'Data Pendukung belum diisi.');
+            }
 
             DB::beginTransaction();
 

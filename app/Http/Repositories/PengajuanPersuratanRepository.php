@@ -16,8 +16,8 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class PengajuanPersuratanRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
-        $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'email_its', 'kartu_id', 'user_perevisi', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
-            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat','pihakpenyetuju']);
+        $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'email_its', 'kartu_id', 'user_perevisi', 'nama_pendukung', 'id_datapendukung', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
+            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat','pihakpenyetuju','filependukung']);
 
         $id_pengguna = auth()->user()->id;
 
@@ -322,6 +322,20 @@ class PengajuanPersuratanRepository
         $pengajuan = PengajuanPersuratan::where('id_pengajuan', $idPengajuan)->first();
         if ($pengajuan) {
             $pengajuan->update(['id_datapendukung' => $idFile, 'nama_pendukung' => $namaDataPendukung]);
+        }
+    }
+
+    public function updateFileSuratUpdate($idPengajuan, $idFile){
+        $pengajuan = PengajuanPersuratan::where('id_pengajuan', $idPengajuan)->first();
+        if ($pengajuan) {
+            $pengajuan->update(['id_datapendukung' => $idFile]);
+        }
+    }
+
+    public function hapusFilePendukung($idPengajuan){
+        $pengajuan = PengajuanPersuratan::where('id_pengajuan', $idPengajuan)->first();
+        if ($pengajuan) {
+            $pengajuan->update(['id_datapendukung' => null]);
         }
     }
 }

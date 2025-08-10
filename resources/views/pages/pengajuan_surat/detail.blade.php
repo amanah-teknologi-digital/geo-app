@@ -147,7 +147,7 @@
                     <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-envelope pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Persuratan</h5>
                     <span class="badge ms-2 px-3 py-2" style="background-color: {{ $dataPengajuan->statuspengajuan->html_color }}; color: white; font-size: 0.9rem;">{{ $dataPengajuan->statuspengajuan->nama }}</span></div>
                 <div class="card-body pt-4">
-                    <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}">
+                    <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" required>
                         <div class="row g-6">
@@ -166,24 +166,14 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="jenis_surat" class="form-label">Jenis Surat <span
-                                        class="text-danger">*</span></label>
-                                @if($dataPengajuan->id_statuspengajuan == 0)
-                                    <select name="jenis_surat" id="jenis_surat" class="form-control" required {{ $isEdit? '':'disabled' }}>
-                                        <option value="" selected disabled>-- Pilih Jenis Surat --</option>
-                                        @foreach($dataJenisSurat as $row)
-                                            <option value="{{ $row->id_jenissurat }}" {{ ($dataPengajuan->id_jenissurat == $row->id_jenissurat) ? 'selected':'' }}>{{ $row->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                @else
-                                    <select name="jenis_surat" id="jenis_surat" class="form-control" required disabled>
-                                        <option value="" selected disabled>-- Pilih Jenis Surat --</option>
-                                        @foreach($dataJenisSurat as $row)
-                                            <option value="{{ $row->id_jenissurat }}" {{ ($dataPengajuan->id_jenissurat == $row->id_jenissurat) ? 'selected':'' }}>{{ $row->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                    <input type="hidden" name="jenis_surat" value="{{ $dataPengajuan->id_jenissurat }}" >
-                                @endif
+                                <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                <select id="jenis_surat" class="form-control" required disabled>
+                                    <option value="" selected disabled>-- Pilih Jenis Surat --</option>
+                                    @foreach($dataJenisSurat as $row)
+                                        <option value="{{ $row->id_jenissurat }}" {{ ($dataPengajuan->id_jenissurat == $row->id_jenissurat) ? 'selected':'' }}>{{ $row->nama }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" name="jenis_surat" value="{{ $dataPengajuan->id_jenissurat }}" >
                             </div>
                             <div>
                                 <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
@@ -198,6 +188,31 @@
                             <div>
                                 <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
                                 <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required {{ $isEdit? '':'readonly' }} >{{ $dataPengajuan->keterangan }}</textarea>
+                            </div>
+                            <div id="div_datapendukung" <?= !empty($dataPengajuan->nama_pendukung) ? '':'style="display: none"' ?>>
+                                <label for="data_pendukung" class="form-label">Data Pendukung <span id="nama_datapendukung" class="text-muted fst-italic">{{ !empty($dataPengajuan->nama_pendukung) ? "(".$dataPengajuan->nama_pendukung.")":'' }}</span> <span class="text-danger">*</span></label>
+                                @if(!empty($dataPengajuan->id_datapendukung))
+                                    @php
+                                        $filePath = optional($dataPengajuan->filependukung)->location ?? 'no-exist';
+                                        $fileId = optional($dataPengajuan->filependukung)->id_file ?? -1;
+                                        $imageUrl = Storage::disk('public')->exists($filePath)
+                                            ? route('file.getpublicfile', $fileId)
+                                            : false;
+                                    @endphp
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <a href="{{ $imageUrl }}" target="_blank">
+                                            <div class="d-flex align-items-center gap-2 flex-wrap"><span class="text-success small fw-semibold">
+                                                    <i class="bx bxs-file-archive me-1"></i>{{ $dataPengajuan->filependukung->file_name }}</span>
+                                                <i class="small text-secondary">(<span >{{ formatBytes($dataPengajuan->filependukung->file_size) }}</span>)</i>
+                                            </div>
+                                        </a>
+                                        @if($isEdit)
+                                            <span class="bx bx-x text-danger cursor-pointer" data-id_file="{{ $dataPengajuan->filependukung->id_file }}" data-bs-toggle="modal" data-bs-target="#modal-hapusfilependukung"></span>
+                                        @endif
+                                    </div>
+                                @else
+                                    <input type="file" class="form-control" name="data_pendukung" id="data_pendukung" accept="application/pdf" {{ !empty($dataPengajuan->nama_pendukung) ? 'required':'' }}>
+                                @endif
                             </div>
                             @if($dataPengajuan->filesurat->isNotEmpty())
                                 <div>
@@ -375,6 +390,27 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel2">Hapus File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah yakin menghapus file ini?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">Iya</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-hapusfilependukung" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('pengajuansurat.hapusfilependukung') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Hapus File Pendukung</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

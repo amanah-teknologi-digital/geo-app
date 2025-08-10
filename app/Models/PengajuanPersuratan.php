@@ -131,4 +131,9 @@ class PengajuanPersuratan extends Model
     {
         return $this->hasMany(PihakPenyetujuPengajuanSurat::class, 'id_pengajuan', 'id_pengajuan')->orderBy('urutan');
     }
+
+    public function filependukung()
+    {
+        return $this->belongsTo(Files::class, 'id_datapendukung', 'id_file');
+    }
 }
