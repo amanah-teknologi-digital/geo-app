@@ -121,6 +121,7 @@ $(document).ready(function () {
     });
 
     $("#frmUploadFile").validate({
+        ignore: [],
         rules: {
             "filesuratupload[]": {
                 required: true,
@@ -145,6 +146,41 @@ $(document).ready(function () {
             }
         },
         submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+    $.validator.addMethod("ratingRequired", function(value, element) {
+        return $('input[name="rating"]:checked').length > 0;
+    }, "Please select a rating.");
+
+    $("#FrmSurveyKepuasan").validate({
+        // Aturan validasi
+        rules: {
+            rating: {
+                ratingRequired: true // Cukup gunakan 'required' bawaan
+            }
+        },
+        // Pesan error yang akan ditampilkan
+        messages: {
+            rating: {
+                // Pesan untuk aturan 'required'
+                ratingRequired: "Mohon pilih bintang sebagai rating."
+            }
+        },
+        // Mengatur di mana pesan error akan ditempatkan
+        errorPlacement: function(error, element) {
+            // Khusus untuk input 'rating', tampilkan error di div #error-rating
+            if (element.attr("name") === "rating") {
+                error.appendTo("#error-rating");
+            } else {
+                // Untuk input lain, gunakan penempatan default
+                error.insertAfter(element);
+            }
+        },
+        // Fungsi yang dijalankan jika form valid
+        submitHandler: function(form) {
+            // Kirim form jika semua validasi terpenuhi
             form.submit();
         }
     });

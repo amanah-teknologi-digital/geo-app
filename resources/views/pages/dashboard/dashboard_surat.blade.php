@@ -119,6 +119,81 @@
 
     <div class="row">
         <div class="col-md-12 col-xxl-12 mb-6">
+            <div class="card p-4">
+                <div class="row">
+                    <!-- Left side: rating average and total -->
+                    <div class="col-md-4 d-flex flex-column align-items-center justify-content-center border-end">
+                        <h2 class="text-primary fw-bold mb-1" style="font-size: 2.5rem;">{{ round($dataSurveyKepuasan->average_rating, 2) }} <span class="text-warning">★</span></h2>
+                        <div class="text-muted mb-2">Total {{ $dataSurveyKepuasan->total_responden }} reviews</div>
+                    </div>
+                    @php
+                        $total = $dataSurveyKepuasan->total_responden ?: 1;
+
+                        $percent_1 = ($dataSurveyKepuasan->rating_1 / $total) * 100;
+                        $percent_2 = ($dataSurveyKepuasan->rating_2 / $total) * 100;
+                        $percent_3 = ($dataSurveyKepuasan->rating_3 / $total) * 100;
+                        $percent_4 = ($dataSurveyKepuasan->rating_4 / $total) * 100;
+                        $percent_5 = ($dataSurveyKepuasan->rating_5 / $total) * 100;
+                    @endphp
+                        <!-- Right side: rating breakdown -->
+                    <div class="col-md-8 ps-md-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <div style="width: 60px;">5 Star</div>
+                            <div class="flex-grow-1 mx-3">
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percent_5 }}%;" aria-valuenow="{{ $percent_5 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div style="width: 30px;" class="text-end">{{ $dataSurveyKepuasan->rating_5 }} </div>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <div style="width: 60px;">4 Star</div>
+                            <div class="flex-grow-1 mx-3">
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percent_4 }}%;" aria-valuenow="{{ $percent_4 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div style="width: 30px;" class="text-end">{{ $dataSurveyKepuasan->rating_4 }}</div>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <div style="width: 60px;">3 Star</div>
+                            <div class="flex-grow-1 mx-3">
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percent_3 }}%;" aria-valuenow="{{ $percent_3 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div style="width: 30px;" class="text-end">{{ $dataSurveyKepuasan->rating_3 }}</div>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <div style="width: 60px;">2 Star</div>
+                            <div class="flex-grow-1 mx-3">
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percent_2 }}%;" aria-valuenow="{{ $percent_2 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div style="width: 30px;" class="text-end">{{ $dataSurveyKepuasan->rating_2 }}</div>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <div style="width: 60px;">1 Star</div>
+                            <div class="flex-grow-1 mx-3">
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percent_1 }}%;" aria-valuenow="{{ $percent_1 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div style="width: 30px;" class="text-end">{{ $dataSurveyKepuasan->rating_1 }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-xxl-12 mb-6">
             <div class="card">
                 <div class="row row-bordered g-0">
                     <div class="col-md-12">

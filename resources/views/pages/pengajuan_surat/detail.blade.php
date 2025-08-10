@@ -45,6 +45,79 @@
                 </div>
             @endif
             <div class="row align-items-stretch mb-5">
+                <div class="col-md-12">
+                    <div class="card mb-4 shadow-sm h-100 border-0">
+                        <div class="card-header d-flex justify-content-between align-items-center pb-3 border-bottom">
+                            <h5 class="card-title mb-0 fw-bold d-flex align-items-center">
+                                <i class="bx bx-collection me-2" style="font-size: 1.3rem;"></i>
+                                Surver Kepuasan Layanan Kami
+                            </h5>
+                            @if($dataPengajuan->id_statuspengajuan == 1 )
+                                <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary">
+                                    <i class="bx bx-arrow-back"></i>&nbsp;Kembali
+                                </a>
+                            @endif
+                        </div>
+                        <div class="card-body pt-4">
+                            @if($dataPengajuan->id_statuspengajuan == 1)
+                                @if(empty($dataPengajuan->surveykepuasan))
+                                    <form id="FrmSurveyKepuasan" action="{{ route('pengajuansurat.surveykepuasan') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}">
+
+                                        <p>Terima kasih telah menggunakan layanan kami. Mohon luangkan waktu sejenak untuk mengisi survei kepuasan berikut agar kami bisa terus meningkatkan kualitas layanan.</p>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Beri Rating Kepuasan Anda:</label>
+                                            <div class="rating">
+                                                <input type="radio" id="star5" name="rating" value="5" />
+                                                <label for="star5" title="5 stars">★</label>
+
+                                                <input type="radio" id="star4" name="rating" value="4" />
+                                                <label for="star4" title="4 stars">★</label>
+
+                                                <input type="radio" id="star3" name="rating" value="3" />
+                                                <label for="star3" title="3 stars">★</label>
+
+                                                <input type="radio" id="star2" name="rating" value="2" />
+                                                <label for="star2" title="2 stars">★</label>
+
+                                                <input type="radio" id="star1" name="rating" value="1" />
+                                                <label for="star1" title="1 star">★</label>
+                                            </div>
+                                            <div id="error-rating" style="color:red; margin-top: 5px;"></div>
+                                            <small class="text-muted">Pilih bintang 1 - 5 sesuai dengan tingkat kepuasan Anda.</small>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="keterangan" class="form-label">Saran atau Perbaikan (opsional):</label>
+                                            <textarea class="form-control" name="keterangan" rows="3" placeholder="Tulis komentar atau saran Anda agar kami dapat memperbaiki layanan...">{{ old('keterangan') }}</textarea>
+                                            <small class="text-muted float-end">Kami sangat menghargai masukan Anda.</small>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary"><i class="bx bx-paper-plane me-2" style="font-size: 1.3rem;"></i>Kirim Penilaian</button>
+                                    </form>
+                                @else
+                                    <h5>Riwayat Penilaian:</h5>
+                                    <p>Terima kasih telah menggunakan layanan kami. Kami sangat menghargai masukan Anda.</p>
+                                    <ul class="list-group mb-3">
+                                        <li class="list-group-item">
+                                            <label class="form-label">Rating Kepuasan Anda:</label>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <span style="color: {{ $i <= $dataPengajuan->surveykepuasan->rating ? '#f5b301' : '#ddd' }};">★</span>
+                                            @endfor
+                                            <br>
+                                            <small><em>{{ $dataPengajuan->surveykepuasan->keterangan ?? '-' }}</em></small><br>
+                                            <small class="text-muted">Dikirim pada: {{ $dataPengajuan->surveykepuasan->created_at->format('d M Y H:i') }}</small>
+                                        </li>
+                                    </ul>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-stretch mb-5">
                 <div class="col-md-7">
                     <div class="card mb-4 shadow-sm h-100 border-0">
                         <div class="card-header d-flex justify-content-between align-items-center pb-3 border-bottom">
@@ -52,9 +125,11 @@
                                 <i class="bx bx-user me-2" style="font-size: 1.3rem;"></i>
                                 Data Pemohon
                             </h5>
-                            <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary">
-                                <i class="bx bx-arrow-back"></i>&nbsp;Kembali
-                            </a>
+                            @if($dataPengajuan->id_statuspengajuan != 1 )
+                                <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary">
+                                    <i class="bx bx-arrow-back"></i>&nbsp;Kembali
+                                </a>
+                            @endif
                         </div>
                         <div class="card-body pt-4">
                             <div class="row g-4">
@@ -260,6 +335,7 @@
                             </form>
                         </div>
                     @endif
+
                     <ul class="fa-ul ml-auto float-end mt-5">
                         <li>
                             <small><em>Ganti text yang <b>bewarna kuning</b> sesuai data yang akan diajukan!.</em></small>

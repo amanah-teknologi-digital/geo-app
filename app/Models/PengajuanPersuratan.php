@@ -136,4 +136,9 @@ class PengajuanPersuratan extends Model
     {
         return $this->belongsTo(Files::class, 'id_datapendukung', 'id_file');
     }
+
+    public function surveykepuasan()
+    {
+        return $this->belongsTo(SurveyKepuasanPersuratan::class, 'id_pengajuan', 'id_pengajuan');
+    }
 }

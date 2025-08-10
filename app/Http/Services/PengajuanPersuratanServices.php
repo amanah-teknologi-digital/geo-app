@@ -388,7 +388,17 @@ class PengajuanPersuratanServices
         }
     }
 
-    public function getPihakPenyetujuByIdpengajuan($idPengajuan){
+    public function simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating){
+        try {
+            $this->repository->simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function getPihakPenyetujuByIdpengajuan($idPengajuan)
+    {
         $data = $this->repository->getPihakPenyetujuByIdpengajuan($idPengajuan);
 
         return $data;

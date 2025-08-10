@@ -52,6 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/pengajuan-surat/hapusfile', [PengajuanPersuratanController::class, 'hapusFile'])->name('pengajuansurat.hapusfile');
         Route::post('/pengajuan-surat/hapusfilependukung', [PengajuanPersuratanController::class, 'hapusFilePendukung'])->name('pengajuansurat.hapusfilependukung');
         Route::post('/pengajuan-surat/uploadFile', [PengajuanPersuratanController::class, 'uploadFile'])->name('pengajuansurat.uploadfile');
+        Route::post('/pengajuan-surat/surveykepuasan', [PengajuanPersuratanController::class, 'surveyKepuasan'])->name('pengajuansurat.surveykepuasan');
 
         Route::middleware('role:1,2')->group(function () { //bisa manajemen jenis surat
             Route::get('/jenis-surat', [JenisSuratController::class, 'index'])->name('jenissurat');

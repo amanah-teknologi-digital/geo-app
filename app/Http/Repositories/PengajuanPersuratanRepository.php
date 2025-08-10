@@ -10,6 +10,7 @@ use App\Models\Pengumuman;
 use App\Models\PersetujuanPersuratan;
 use App\Models\PihakPenyetujuPengajuanSurat;
 use App\Models\PihakPenyetujuSurat;
+use App\Models\SurveyKepuasanPersuratan;
 use App\Models\User;
 use Ramsey\Uuid\Nonstandard\Uuid;
 
@@ -17,7 +18,7 @@ class PengajuanPersuratanRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
         $data = PengajuanPersuratan::select('id_pengajuan', 'pengaju', 'id_statuspengajuan', 'id_jenissurat', 'nama_pengaju', 'no_hp', 'email', 'email_its', 'kartu_id', 'user_perevisi', 'nama_pendukung', 'id_datapendukung', 'created_at', 'updated_at', 'updater', 'keterangan', 'data_form')
-            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat','pihakpenyetuju','filependukung']);
+            ->with(['pihakpengaju','pihakupdater','jenis_surat','statuspengajuan','persetujuan','filesurat','pihakpenyetuju','filependukung','surveykepuasan']);
 
         $id_pengguna = auth()->user()->id;
 
@@ -315,6 +316,15 @@ class PengajuanPersuratanRepository
         FilePengajuanSurat::create([
             'id_pengajuan' => $idPengajuan,
             'id_file' => $idFile
+        ]);
+    }
+
+    public function simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating){
+        SurveyKepuasanPersuratan::create([
+            'id_kepuasan' => $idKepuasan,
+            'id_pengajuan' => $idPengajuan,
+            'rating' => $rating,
+            'keterangan' => $keterangan
         ]);
     }
 

@@ -147,4 +147,10 @@ class DashboardServices
 
         return $data;
     }
+
+    public function getSurveyKepuasan(){
+        $data = $this->repository->getSurveyKepuasan();
+
+        return $data;
+    }
 }

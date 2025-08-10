@@ -56,6 +56,23 @@ class PengajuanPersuratanController extends Controller
                     $html = '<span style="font-size: smaller; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
                     $html .= $this->service->getHtmlStatusPengajuan($data_pengajuan->id_pengajuan, $namaLayananSurat, $data_pengajuan);
 
+                    if ($data_pengajuan->id_statuspengajuan == 1){
+                        if (!empty($data_pengajuan->surveykepuasan)){
+                            $tmp_stars = '';
+                            for ($i = 1; $i <= 5; $i++){
+                                if ($i <= $data_pengajuan->surveykepuasan->rating){
+                                    $color = '#f5b301';
+                                }else{
+                                    $color = '#ddd';
+                                }
+                                $tmp_stars .= '<span style="color: '.$color.'">★</span>';
+                            }
+                        }else{
+                            $tmp_stars = '<span class="text-danger fst-italic small">Belum mengisi survey</span>';
+                        }
+                        $html .= '<br>'.$tmp_stars;
+                    }
+
                     return $html;
                 })
                 ->addColumn('aksi', function ($data_pengajuan) {
@@ -632,6 +649,43 @@ class PengajuanPersuratanController extends Controller
             DB::commit();
 
             return redirect(route('pengajuansurat.detail', $id_pengajuan))->with('success', 'Berhasil Tolak Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function surveyKepuasan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+                'rating' => ['required', 'integer', 'between:1,5'],
+                'keterangan' => ['nullable', 'string'],
+            ]);
+
+            $idPengajuan = $request->id_pengajuan;
+            $keterangan = $request->keterangan;
+            $rating = $request->rating;
+
+            $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
+
+            if (!empty($dataPengajuan->surveykepuasan)){
+                return redirect(route('pengajuansurat.detail', $idPengajuan))->with('error', 'Anda sudah melakukan survey kepuasan.');
+            }
+
+            DB::beginTransaction();
+
+            $idKepuasan = strtoupper(Uuid::uuid4()->toString());
+            $this->service->simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating);
+
+            DB::commit();
+
+            return redirect(route('pengajuansurat.detail', $idPengajuan))->with('success', 'Berhasil mengisi Survey Kepuasan.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();
