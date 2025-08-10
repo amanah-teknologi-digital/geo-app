@@ -38,14 +38,16 @@ class DashboardController extends Controller{
 
     public function ruangan(){
         $title = 'Dashboard Ruangan';
+        $istilahPersuratan = $this->istilahPersuratan;
 
-        return view('pages.dashboard.dashboard_pengguna', compact('title'));
+        return view('pages.dashboard.dashboard_pengguna', compact('title','istilahPersuratan'));
     }
 
     public function peralatan(){
         $title = 'Dashboard Peralatan';
+        $istilahPersuratan = $this->istilahPersuratan;
 
-        return view('pages.dashboard.dashboard_pengguna', compact('title'));
+        return view('pages.dashboard.dashboard_pengguna', compact('title', 'istilahPersuratan'));
     }
 
     public function getDataSurat(Request $request){
