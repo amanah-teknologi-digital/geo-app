@@ -262,7 +262,7 @@
                             @endif
                             @if(count($ruangantersedia) > 0)
                                 <div class="d-grid mt-4">
-                                    <a href="#" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Ruangan <i class="bi bi-arrow-right-short"></i></a>
+                                    <a href="{{ route('listruangan') }}" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Ruangan <i class="bi bi-arrow-right-short"></i></a>
                                 </div>
                             @endif
                         </div>

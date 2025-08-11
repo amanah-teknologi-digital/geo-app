@@ -42,7 +42,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-{{--                    <a href="/" class="btn btn-sm btn-nav-daftar"><i class="bi bi-arrow-left me-1"></i> Landing Page</a>--}}&nbsp;
+                    &nbsp;
                 </li>
             </ul>
             @auth
@@ -57,62 +57,15 @@
 
 <main>
     <!-- Main Content & Sidebar Section -->
-    <section id="main-section" class="py-5">
+    <header id="hero" class="hero-section" style="min-height: 100vh !important; max-height: 100vh !important;">
         <div class="container">
-            <div class="row justify-content-center">
-                <!-- Main Content -->
-                <div class="col-lg-8 col-md-10 col-12">
-                    <div class="content-wrapper shadow-sm p-4 rounded bg-white" data-aos="fade-up">
-                        <!-- Judul -->
-                        <h4 class="fw-bold mb-3 text-center">{{ $data->judul }}</h4>
+            <div class="row align-items-center">
+                <div class="col-lg-12">
 
-                        <!-- Meta Data -->
-                        <div class="news-meta d-flex flex-wrap justify-content-center gap-3 text-muted mb-4 small">
-                            <span><i class="bi bi-calendar"></i> {{ $data->tgl_posting->format('d M Y') }}</span>
-                            <span><i class="bi bi-person"></i> Ditulis oleh <b>{{ $data->postinger_user->name }}</b></span>
-                        </div>
-
-                        <!-- Gambar Pengumuman -->
-                        @php
-                            $file = $data->gambar_header;
-                            $filePath = $data->file_pengumuman->location ?? null;
-                            $imageUrl = ($filePath && Storage::disk('public')->exists($filePath))
-                                ? route('file.getpublicfile', $file)
-                                : asset('assets/img/no_image.jpg');
-                        @endphp
-                        <div class="text-center mb-4">
-                            <img src="{{ $imageUrl }}"
-                                 alt="{{ $data->judul }}"
-                                 class="img-fluid rounded shadow-sm pengumuman-img">
-                        </div>
-
-                        <!-- Konten Pengumuman -->
-                        <div id="editor_pengumuman"
-                             class="content-body"
-                             style="border: none; padding: 0;">
-                            {!! $data->data !!}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <style>
-        .pengumuman-img {
-            max-width: 80%;
-            height: auto;
-        }
-        .content-body p {
-            line-height: 1.7;
-            font-size: 1rem;
-        }
-        @media (max-width: 576px) {
-            .pengumuman-img {
-                max-width: 100%;
-            }
-        }
-    </style>
+    </header>
 
 </main>
 
