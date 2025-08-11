@@ -71,8 +71,8 @@
 <header id="hero" class="hero-section">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6 text-lg-start text-center">
-                <h1 data-aos="fade-right">Sistem Informasi Manajemen Geofisika</h1>
+            <div class="col-lg-6 text-lg-start text-center" >
+                <h1 class="sitename" data-aos="fade-right" data-aos-delay="0">Selamat Datang di GeoReserve</h1>
                 <p data-aos="fade-right" data-aos-delay="100">Kelola persuratan, booking ruangan dan peralatan, serta pantau pengumuman terbaru dalam satu platform yang cepat, aman, dan terintegrasi.</p>
                 <div class="hero-buttons d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start" data-aos="fade-right" data-aos-delay="200">
                     <a href="{{ route('pengajuansurat') }}" class="btn btn-primary"><i class="bi bi-envelope-fill"></i>Ajukan Surat</a>
@@ -80,8 +80,30 @@
                     <a href="{{ route('pengajuanperalatan') }}" class="btn btn-outline-primary"><i class="bi bi-projector-fill"></i>Booking Peralatan</a>
                 </div>
             </div>
-            <div class="col-lg-6 d-none d-lg-block">
-                <img src="{{ asset('landing_page_rss/gedung.png') }}" alt="Ilustrasi Sistem Informasi" class="hero-image" data-aos="fade-left">
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="hero-carousel-container">
+                    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="{{ asset('landing_page_rss/gedung.png') }}" class="d-block w-100" alt="Students collaborating">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ asset('landing_page_rss/geoletter_img.png') }}" class="d-block w-100" alt="Using a system">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ asset('landing_page_rss/room_img.png') }}" class="d-block w-100" alt="Team working">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -95,7 +117,7 @@
                 <!-- Main Content -->
                 <div class="col-lg-8">
                     <div class="main-content h-100" data-aos="fade-up">
-                        <h2 class="content-title">Selamat Datang di GeoReserve</h2>
+                        <h2 class="content-title">GeoReserve</h2>
                         <p class="text-muted">GeoReserve (Sistem Informasi Manajemen Geofisika) adalah platform digital yang dirancang untuk merevolusi cara kita mengelola administrasi dan fasilitas. Tujuan kami adalah menyederhanakan proses yang kompleks, mengurangi birokrasi, dan menyediakan akses informasi yang cepat dan transparan bagi seluruh civitas akademika.</p>
 
                         <hr class="my-4">
@@ -187,18 +209,26 @@
                     <div class="card-custom mb-4" data-aos="fade-up" data-aos-delay="100">
                         <div class="card-header-custom"><i class="bi bi-megaphone-fill me-2"></i>Pengumuman Terbaru</div>
                         <div class="card-body p-4">
-                            <div class="pengumuman-item">
-                                <p class="pengumuman-meta"><i class="bi bi-calendar-event"></i> 10 Agustus 2025</p>
-                                <a href="#" class="pengumuman-title d-block">Jadwal Maintenance Sistem SIMADU</a>
-                            </div>
-                            <div class="pengumuman-item">
-                                <p class="pengumuman-meta"><i class="bi bi-calendar-event"></i> 08 Agustus 2025</p>
-                                <a href="#" class="pengumuman-title d-block">Prosedur Baru Pengajuan Surat Rekomendasi</a>
-                            </div>
-                            <div class="pengumuman-item">
-                                <p class="pengumuman-meta"><i class="bi bi-calendar-event"></i> 05 Agustus 2025</p>
-                                <a href="#" class="pengumuman-title d-block">Peresmian Ruang Rapat Cendrawasih</a>
-                            </div>
+                            @if(count($pengumumanterbaru) > 0)
+                                @foreach($pengumumanterbaru as $rows)
+                                    @php
+                                        $file = $rows->gambar_header;
+                                        $filePath = $rows->file_pengumuman->location;
+                                        $imageUrl = Storage::disk('public')->exists($filePath)
+                                            ? route('file.getpublicfile', $file)
+                                            : asset('assets/img/no_image.jpg');
+                                    @endphp
+                                    <div class="pengumuman-item">
+                                        <img src="{{ $imageUrl }}" class="me-3 rounded" alt="{{ $rows->judul }}" loading="lazy">
+                                        <div>
+                                            <p class="pengumuman-meta"><i class="bi bi-calendar-event"></i> {{ $rows->tgl_posting->format('d/m/Y') }}</p>
+                                            <a href="{{ route('pengumuman.lihatpengumuman', $rows->id_pengumuman) }}" class="pengumuman-title d-block">{{ $rows->judul }}</a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="alert alert-warning" >Belum ada pengumuman terkini!</div>
+                            @endif
                         </div>
                     </div>
 
