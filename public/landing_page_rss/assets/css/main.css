@@ -82,9 +82,9 @@ body {
 
 /* Hero Section */
 .hero-section {
-    background: radial-gradient(ellipse at center, #E0E8F5 0%, #FFFFFF 70%);
+    background: linear-gradient(to bottom, #FFFFFF, #96b0e1);
     padding: 100px 0;
-    min-height: 60vh;
+    min-height: 70vh;
     display: flex;
     align-items: center;
 }
@@ -98,7 +98,7 @@ body {
 
 .hero-section p {
     font-size: 1.1rem;
-    color: #6c757d;
+    color: #545b60;
     max-width: 500px;
     margin-bottom: 30px;
 }

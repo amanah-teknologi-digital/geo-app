@@ -58,10 +58,10 @@
                 </li>
             </ul>
             @auth
-                <a href="{{ route('dashboard') }}" class="btn btn-nav-dashboard me-2"><i class="bi bi-house"></i>&nbsp;Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="btn btn-sm btn-success me-2 rounded-3"><i class="bi bi-house"></i>&nbsp;Dashboard</a>
             @else
-                <a href="{{ route('login') }}" class="btn btn-nav-masuk me-2"><i class="bi bi-box-arrow-in-right me-1"></i> Masuk</a>
-                <a href="{{ route('register') }}" class="btn btn-nav-daftar"><i class="bi bi-person-plus-fill me-1"></i> Daftar</a>
+                <a href="{{ route('login') }}" class="btn btn-sm btn-nav-masuk me-2"><i class="bi bi-box-arrow-in-right me-1"></i> Masuk</a>
+                <a href="{{ route('register') }}" class="btn btn-sm btn-nav-daftar"><i class="bi bi-person-plus-fill me-1"></i> Daftar</a>
             @endif
         </div>
     </div>
