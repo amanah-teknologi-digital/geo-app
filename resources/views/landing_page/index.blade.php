@@ -123,7 +123,7 @@
                         <hr class="my-4">
 
                         <h4 class="mb-4">Layanan Utama Kami</h4>
-                        <div class="row g-4 layanan-utama-item">
+                        <div class="row g-4 layanan-utama-item mb-3">
                             <div class="col-12 d-flex mb-3">
                                 <div class="icon-box me-3 flex-shrink-0"><i class="bi bi-envelope-paper-fill"></i></div>
                                 <div>
@@ -273,19 +273,19 @@
                         <div class="card-header-custom"><i class="bi bi-display-fill me-2"></i>Peralatan Tersedia</div>
                         <div class="card-body p-4">
                             <div class="sidebar-item">
-                                <img src="https://images.unsplash.com/photo-1593030103057-24b41d514a9e?q=80&w=200&auto=format&fit=crop" alt="Proyektor">
+                                <img src="{{ asset('landing_page_rss/assets/img/events-1.jpg') }}" alt="Proyektor">
                                 <div class="sidebar-item-details">
                                     <h6>Proyektor InFocus</h6>
                                 </div>
                             </div>
                             <div class="sidebar-item">
-                                <img src="https://images.unsplash.com/photo-1589221469434-5d8491a58334?q=80&w=200&auto=format&fit=crop" alt="Sound System">
+                                <img src="{{ asset('landing_page_rss/assets/img/events-2.jpg') }}" alt="Sound System">
                                 <div class="sidebar-item-details">
                                     <h6>Sound System Portable</h6>
                                 </div>
                             </div>
                             <div class="sidebar-item">
-                                <img src="https://images.unsplash.com/photo-1616421233882-12e0da42a55a?q=80&w=200&auto=format&fit=crop" alt="Webcam">
+                                <img src="{{ asset('landing_page_rss/assets/img/events-3.jpg') }}" alt="Webcam">
                                 <div class="sidebar-item-details">
                                     <h6>Webcam Logitech</h6>
                                 </div>
