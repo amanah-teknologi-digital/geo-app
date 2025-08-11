@@ -5,7 +5,9 @@ namespace App\Http\Services;
 use App\Http\Repositories\RuanganRepository;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class RuanganServices
 {
@@ -60,7 +62,10 @@ class RuanganServices
             $fileExt = $file->getClientOriginalExtension();
             $newFileName = $idFile.'.'.$fileExt;
             $fileSize = $file->getSize();
-            $filePath = $file->storeAs('ruangan', $newFileName, 'public');
+            $fileContents = file_get_contents($file->getRealPath());
+            $encryptedFileContents = Crypt::encrypt($fileContents);
+            $filePath = 'ruangan/' . $newFileName;
+            Storage::disk('public')->put($filePath, $encryptedFileContents);
 
             //save file data ke database
             $this->repository->createOrUpdateFile($idFile, $fileName, $filePath, $fileMime, $fileExt, $fileSize);

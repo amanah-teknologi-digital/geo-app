@@ -221,7 +221,7 @@
                                     <div class="pengumuman-item">
                                         <img src="{{ $imageUrl }}" class="me-3 rounded" alt="{{ $rows->judul }}" loading="lazy">
                                         <div>
-                                            <p class="pengumuman-meta"><i class="bi bi-calendar-event"></i> {{ $rows->tgl_posting->format('d/m/Y') }}</p>
+                                            <p class="pengumuman-meta">{{ $rows->tgl_posting->format('d/m/Y') }}</p>
                                             <a href="{{ route('pengumuman.lihatpengumuman', $rows->id_pengumuman) }}" class="pengumuman-title d-block">{{ $rows->judul }}</a>
                                         </div>
                                     </div>
@@ -236,49 +236,35 @@
                     <div class="card-custom mb-4" data-aos="fade-up" data-aos-delay="200">
                         <div class="card-header-custom"><i class="bi bi-calendar-week-fill me-2"></i>Ruangan Tersedia</div>
                         <div class="card-body p-4">
-                            <div class="sidebar-item">
-                                <img src="https://images.unsplash.com/photo-1596048133344-3c35b365e6c7?q=80&w=200&auto=format&fit=crop" alt="Aula">
-                                <div class="sidebar-item-details">
-                                    <h6>Aula Serbaguna</h6>
-                                    <div>
-                                        <span class="badge bg-light text-dark border me-2">A-01</span>
-                                        <small class="text-muted">Kapasitas: 150 orang</small>
+                            @if(count($ruangantersedia) > 0)
+                                @foreach($ruangantersedia as $rows)
+                                    @php
+                                        $file = $rows->gambar_file;
+                                        $filePath = $rows->gambar->location;
+                                        $imageUrl = Storage::disk('public')->exists($filePath)
+                                            ? route('file.getpublicfile', $file)
+                                            : asset('assets/img/no_image.jpg');
+                                    @endphp
+
+                                    <div class="sidebar-item">
+                                        <img src="{{ $imageUrl }}" alt="{{ $rows->nama }}">
+                                        <div class="sidebar-item-details">
+                                            <h6>{{ $rows->nama }}</h6>
+                                            <span class="badge badge-primary small">{{ $rows->jenis_ruangan }}</span>
+                                            <div>
+                                                <small class="text-muted">Kapasitas: {{ $rows->kapasitas }}</small>
+                                            </div>
+                                        </div>
                                     </div>
+                                @endforeach
+                            @else
+                                <div class="alert alert-warning" >Ruangan tersedia kosong!</div>
+                            @endif
+                            @if(count($ruangantersedia) > 0)
+                                <div class="d-grid mt-4">
+                                    <a href="#" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Ruangan <i class="bi bi-arrow-right-short"></i></a>
                                 </div>
-                            </div>
-                            <div class="sidebar-item">
-                                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=200&auto=format&fit=crop" alt="Ruang Rapat">
-                                <div class="sidebar-item-details">
-                                    <h6>Ruang Rapat Merak</h6>
-                                    <div>
-                                        <span class="badge bg-light text-dark border me-2">R-03</span>
-                                        <small class="text-muted">Kapasitas: 25 orang</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="sidebar-item">
-                                <img src="https://images.unsplash.com/photo-1560420025-9453f02b4724?q=80&w=200&auto=format&fit=crop" alt="Ruang Diskusi">
-                                <div class="sidebar-item-details">
-                                    <h6>Ruang Diskusi Elang</h6>
-                                    <div>
-                                        <span class="badge bg-light text-dark border me-2">D-05</span>
-                                        <small class="text-muted">Kapasitas: 10 orang</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="sidebar-item">
-                                <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=200&auto=format&fit=crop" alt="Perpustakaan">
-                                <div class="sidebar-item-details">
-                                    <h6>Ruang Baca Perpustakaan</h6>
-                                    <div>
-                                        <span class="badge bg-light text-dark border me-2">P-01</span>
-                                        <small class="text-muted">Kapasitas: 50 orang</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-grid mt-4">
-                                <a href="#" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Ruangan <i class="bi bi-arrow-right-short"></i></a>
-                            </div>
+                            @endif
                         </div>
                     </div>
 

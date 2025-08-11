@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengaturan;
 use App\Models\Pengumuman;
+use App\Models\Ruangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
@@ -15,8 +16,10 @@ class LandingPageController extends Controller
         $pengumumanterbaru = Pengumuman::with(['user','file_pengumuman','postinger_user'])
             ->where('is_posting', 1)->orderBy('created_at', 'desc')
             ->take(3)->get();
+        $ruangantersedia = Ruangan::with(['gambar'])->where('is_aktif', 1)->orderBy('created_at', 'desc')
+            ->take(4)->get();
 
-        return view('landing_page.index', compact('pengaturan','pengumumanterbaru'));
+        return view('landing_page.index', compact('pengaturan','pengumumanterbaru', 'ruangantersedia'));
     }
 
     public function lihatPengumuman($id_pengumuman){
