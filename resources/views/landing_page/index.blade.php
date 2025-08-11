@@ -6,367 +6,432 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>GeoReserve</title>
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+    <meta name="description" content="Sistem Informasi Manajemen Geofisika ITS (GeoReserve) untuk pengajuan persuratan, booking ruangan, peminjaman peralatan, dan informasi terbaru. Efisien, cepat, dan terintegrasi.">
+    <meta name="keywords" content="sistem informasi, manajemen, persuratan, booking ruangan, peminjaman peralatan, georeserve, ITS, Geofisika">
 
     <!-- Favicons -->
     <link href="{{ asset('landing_page_rss/teknikgeo.png') }}" rel="icon">
     <link href="{{ asset('landing_page_rss/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts (Poppins) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="{{ asset('landing_page_rss/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('landing_page_rss/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('landing_page_rss/assets/vendor/aos/aos.css') }}" rel="stylesheet">
-    <link href="{{ asset('landing_page_rss/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('landing_page_rss/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
     <!-- Main CSS File -->
     <link href="{{ asset('landing_page_rss/assets/css/main.css') }}" rel="stylesheet">
-
-    <!-- =======================================================
-    * Template Name: Yummy
-    * Template URL: https://bootstrapmade.com/yummy-bootstrap-restaurant-website-template/
-    * Updated: Aug 07 2024 with Bootstrap v5.3.3
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
-    <style>
-        .col-bg {
-            position: relative;
-            background-image: url({{ asset('landing_page_rss/gedung.png') }});
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            color: white;
-            padding: 50px;
-        }
-
-        /* Overlay semi-transparan */
-        .col-bg::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Warna hitam dengan transparansi 50% */
-        }
-
-        /* Agar teks tetap terlihat di atas overlay */
-        .col-bg > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .news-card {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease-in-out;
-        }
-        .news-card:hover {
-            transform: translateY(-5px);
-        }
-        .news-img {
-            height: 200px;
-            object-fit: cover;
-            width: 100%;
-        }
-        .news-content {
-            padding: 20px;
-        }
-        .news-date {
-            background-color: #dc3545;
-            color: white;
-            text-align: center;
-            padding: 3px;
-            border-radius: 8px;
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 12px;
-        }
-        .icon-text {
-            font-size: 14px;
-            color: gray;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .news-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            border-top: 1px solid #eee;
-        }
-        .judulnews {
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    </style>
 </head>
 
-<body class="index-page">
+<body>
 
-<header id="header" class="header d-flex align-items-center sticky-top" style="color: var(--color-default);">
-    <div class="container position-relative d-flex align-items-center justify-content-between" >
-
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
         <a href="" class="logo d-flex align-items-center me-auto me-xl-0 order-first">
-            <img src="{{ asset('landing_page_rss/teknikgeo.png') }}" alt="">
+            <img src="{{ asset('landing_page_rss/teknikgeo.png') }}" alt="" class="logo-img">
             <h1 class="sitename">GeoReserve</h1>
         </a>
-
-        <nav id="navmenu" class="navmenu d-flex align-content-center" >
-            <ul>
-                <li><a href="#hero" class="active"><i class="bi bi-house-door-fill"></i>&nbsp;Halaman Utama<br></a></li>
-                <li><a href="#pengumuman"><i class="bi bi-newspaper"></i>&nbsp;Pengumuman</a></li>
-                <li><a href="#layanan"><i class="bi bi-info-circle-fill"></i>&nbsp;Layanan Support</a></li>
-{{--                <li><a href="#footer"><i class="bi bi-people-fill"></i>&nbsp;Kontak</a></li>--}}
-                @auth
-                    <li>
-                        <button class="btn btn-sm btn-primary w-100" style="background-color: var(--color-default)"><a style="color: white !important;" href="{{ route('dashboard') }}"><i class="bi bi-house"></i>&nbsp;Dashboard</a></button>
-                    </li>
-                @else
-                    <li>
-                        <button class="btn btn-sm btn-success w-100"><a href="{{ route('login') }}" style="color: white !important;"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login</a></button>
-                    </li>
-                    <li>
-                        <button class="btn btn-sm btn-primary w-100" style="background-color: var(--color-default) !important;"><a style="color: white !important;" href="{{ route('register') }}"><i class="bi bi-journal-bookmark-fill"></i>&nbsp;Registrasi</a></button>
-                    </li>
-                @endauth
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#hero">Beranda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#main-section">Layanan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#alur-proses">Alur Proses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#faq">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#kontak">Kontak</a>
+                </li>
             </ul>
-            <i class="mobile-nav-toggle d-xl-none bi bi-list d-flex order-last"></i>
-        </nav>
+            @auth
+                <a href="{{ route('dashboard') }}" class="btn btn-nav-dashboard me-2"><i class="bi bi-house"></i>&nbsp;Dashboard</a>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-nav-masuk me-2"><i class="bi bi-box-arrow-in-right me-1"></i> Masuk</a>
+                <a href="{{ route('register') }}" class="btn btn-nav-daftar"><i class="bi bi-person-plus-fill me-1"></i> Daftar</a>
+            @endif
+        </div>
+    </div>
+</nav>
 
+<!-- Hero Section -->
+<header id="hero" class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-lg-start text-center">
+                <h1 data-aos="fade-right">Sistem Informasi Manajemen Geofisika</h1>
+                <p data-aos="fade-right" data-aos-delay="100">Kelola persuratan, booking ruangan dan peralatan, serta pantau pengumuman terbaru dalam satu platform yang cepat, aman, dan terintegrasi.</p>
+                <div class="hero-buttons d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start" data-aos="fade-right" data-aos-delay="200">
+                    <a href="{{ route('pengajuansurat') }}" class="btn btn-primary"><i class="bi bi-envelope-fill"></i>Ajukan Surat</a>
+                    <a href="{{ route('pengajuanruangan') }}" class="btn btn-outline-primary"><i class="bi bi-calendar2-check-fill"></i>Booking Ruangan</a>
+                    <a href="{{ route('pengajuanperalatan') }}" class="btn btn-outline-primary"><i class="bi bi-projector-fill"></i>Booking Peralatan</a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="{{ asset('landing_page_rss/gedung.png') }}" alt="Ilustrasi Sistem Informasi" class="hero-image" data-aos="fade-left">
+            </div>
+        </div>
     </div>
 </header>
 
-<main class="main">
+<main>
+    <!-- Main Content & Sidebar Section -->
+    <section id="main-section" class="py-5">
+        <div class="container mt-4">
+            <div class="row g-5">
+                <!-- Main Content -->
+                <div class="col-lg-8">
+                    <div class="main-content h-100" data-aos="fade-up">
+                        <h2 class="content-title">Selamat Datang di GeoReserve</h2>
+                        <p class="text-muted">GeoReserve (Sistem Informasi Manajemen Geofisika) adalah platform digital yang dirancang untuk merevolusi cara kita mengelola administrasi dan fasilitas. Tujuan kami adalah menyederhanakan proses yang kompleks, mengurangi birokrasi, dan menyediakan akses informasi yang cepat dan transparan bagi seluruh civitas akademika.</p>
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero section col-bg">
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-            <div class="row gy-12 justify-content-center justify-content-lg-between">
-                <div class="col-lg-12 d-flex flex-column justify-content-center">
-                    <h3 data-aos="fade-up" class="font-bold" style="color: var(--color-secondary);text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);">Sistem Informasi Manajemen Geofisika</h3>
-                    <br>
-                    <p data-aos="fade-up" data-aos-delay="100" class="text-white">Sistem ini menyediakan layanan persuratan, peminjaman ruangan,
-                        <br>dan peminjaman alat di Departemen Teknik Geofisika ITS</p>
+                        <hr class="my-4">
+
+                        <h4 class="mb-4">Layanan Utama Kami</h4>
+                        <div class="row g-4 layanan-utama-item">
+                            <div class="col-12 d-flex mb-3">
+                                <div class="icon-box me-3 flex-shrink-0"><i class="bi bi-envelope-paper-fill"></i></div>
+                                <div>
+                                    <h6 class="fw-bold">Pengajuan Persuratan</h6>
+                                    <p class="text-muted small mb-0">Proses pengajuan berbagai surat keperluan akademik dan administrasi menjadi lebih cepat dan mudah. Lupakan antrean panjang dan proses manual yang memakan waktu.</p>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex mb-3">
+                                <div class="icon-box me-3 flex-shrink-0"><i class="bi bi-calendar2-check-fill"></i></div>
+                                <div>
+                                    <h6 class="fw-bold">Booking Ruangan</h6>
+                                    <p class="text-muted small mb-0">Butuh ruang untuk rapat, diskusi, atau kegiatan lainnya? Cek ketersediaan, lihat fasilitas, dan lakukan pemesanan langsung dari mana saja.</p>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex">
+                                <div class="icon-box me-3 flex-shrink-0"><i class="bi bi-projector-fill"></i></div>
+                                <div>
+                                    <h6 class="fw-bold">Peminjaman Peralatan</h6>
+                                    <p class="text-muted small mb-0">Pinjam proyektor, sound system, dan inventaris lainnya dengan mudah. Pastikan semua kebutuhan teknis kegiatan Anda terpenuhi.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h4 class="mb-4">Jenis Surat yang Dilayani</h4>
+                        <div class="row g-3">
+                            <div class="col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="50">
+                                <div class="layanan-persuratan-card">
+                                    <i class="bi bi-briefcase-fill fs-2"></i>
+                                    <h6>Surat Permohonan Magang/KP</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="100">
+                                <div class="layanan-persuratan-card">
+                                    <i class="bi bi-patch-check-fill fs-2"></i>
+                                    <h6>Surat Keterangan Yudisium</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="150">
+                                <div class="layanan-persuratan-card">
+                                    <i class="bi bi-search fs-2"></i>
+                                    <h6>Surat Permohonan Penelitian</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="200">
+                                <div class="layanan-persuratan-card">
+                                    <i class="bi bi-person-check-fill fs-2"></i>
+                                    <h6>Surat Rekomendasi</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="250">
+                                <div class="layanan-persuratan-card">
+                                    <i class="bi bi-calendar2-week-fill fs-2"></i>
+                                    <h6>Surat Ijin Perkuliahan</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="300">
+                                <div class="layanan-persuratan-card">
+                                    <i class="bi bi-book-half fs-2"></i>
+                                    <h6>Surat Permohonan TA</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="350">
+                                <div class="layanan-persuratan-card">
+                                    <i class="bi bi-cash-coin fs-2"></i>
+                                    <h6>Surat Keringanan UKT</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="400">
+                                <div class="layanan-persuratan-card">
+                                    <i class="bi bi-file-earmark-plus-fill fs-2"></i>
+                                    <h6>Layanan Surat Lainnya</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4" id="informasi-sidebar">
+                    <!-- Pengumuman -->
+                    <div class="card-custom mb-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card-header-custom"><i class="bi bi-megaphone-fill me-2"></i>Pengumuman Terbaru</div>
+                        <div class="card-body p-4">
+                            <div class="pengumuman-item">
+                                <p class="pengumuman-meta"><i class="bi bi-calendar-event"></i> 10 Agustus 2025</p>
+                                <a href="#" class="pengumuman-title d-block">Jadwal Maintenance Sistem SIMADU</a>
+                            </div>
+                            <div class="pengumuman-item">
+                                <p class="pengumuman-meta"><i class="bi bi-calendar-event"></i> 08 Agustus 2025</p>
+                                <a href="#" class="pengumuman-title d-block">Prosedur Baru Pengajuan Surat Rekomendasi</a>
+                            </div>
+                            <div class="pengumuman-item">
+                                <p class="pengumuman-meta"><i class="bi bi-calendar-event"></i> 05 Agustus 2025</p>
+                                <a href="#" class="pengumuman-title d-block">Peresmian Ruang Rapat Cendrawasih</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jadwal Ruangan Tersedia -->
+                    <div class="card-custom mb-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-header-custom"><i class="bi bi-calendar-week-fill me-2"></i>Ruangan Tersedia</div>
+                        <div class="card-body p-4">
+                            <div class="sidebar-item">
+                                <img src="https://images.unsplash.com/photo-1596048133344-3c35b365e6c7?q=80&w=200&auto=format&fit=crop" alt="Aula">
+                                <div class="sidebar-item-details">
+                                    <h6>Aula Serbaguna</h6>
+                                    <div>
+                                        <span class="badge bg-light text-dark border me-2">A-01</span>
+                                        <small class="text-muted">Kapasitas: 150 orang</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sidebar-item">
+                                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=200&auto=format&fit=crop" alt="Ruang Rapat">
+                                <div class="sidebar-item-details">
+                                    <h6>Ruang Rapat Merak</h6>
+                                    <div>
+                                        <span class="badge bg-light text-dark border me-2">R-03</span>
+                                        <small class="text-muted">Kapasitas: 25 orang</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sidebar-item">
+                                <img src="https://images.unsplash.com/photo-1560420025-9453f02b4724?q=80&w=200&auto=format&fit=crop" alt="Ruang Diskusi">
+                                <div class="sidebar-item-details">
+                                    <h6>Ruang Diskusi Elang</h6>
+                                    <div>
+                                        <span class="badge bg-light text-dark border me-2">D-05</span>
+                                        <small class="text-muted">Kapasitas: 10 orang</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sidebar-item">
+                                <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=200&auto=format&fit=crop" alt="Perpustakaan">
+                                <div class="sidebar-item-details">
+                                    <h6>Ruang Baca Perpustakaan</h6>
+                                    <div>
+                                        <span class="badge bg-light text-dark border me-2">P-01</span>
+                                        <small class="text-muted">Kapasitas: 50 orang</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid mt-4">
+                                <a href="#" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Ruangan <i class="bi bi-arrow-right-short"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Peralatan Tersedia -->
+                    <div class="card-custom" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-header-custom"><i class="bi bi-display-fill me-2"></i>Peralatan Tersedia</div>
+                        <div class="card-body p-4">
+                            <div class="sidebar-item">
+                                <img src="https://images.unsplash.com/photo-1593030103057-24b41d514a9e?q=80&w=200&auto=format&fit=crop" alt="Proyektor">
+                                <div class="sidebar-item-details">
+                                    <h6>Proyektor InFocus</h6>
+                                </div>
+                            </div>
+                            <div class="sidebar-item">
+                                <img src="https://images.unsplash.com/photo-1589221469434-5d8491a58334?q=80&w=200&auto=format&fit=crop" alt="Sound System">
+                                <div class="sidebar-item-details">
+                                    <h6>Sound System Portable</h6>
+                                </div>
+                            </div>
+                            <div class="sidebar-item">
+                                <img src="https://images.unsplash.com/photo-1616421233882-12e0da42a55a?q=80&w=200&auto=format&fit=crop" alt="Webcam">
+                                <div class="sidebar-item-details">
+                                    <h6>Webcam Logitech</h6>
+                                </div>
+                            </div>
+                            <div class="d-grid mt-4">
+                                <a href="#" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Alat <i class="bi bi-arrow-right-short"></i></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section><!-- /Hero Section -->
-
-    <!-- Pengumuman Section -->
-    <section id="pengumuman" class="pengumuman section">
-        <div class="container section-title" data-aos="fade-up">
-            <h4 class="font-bold header-section" ><i class="bi bi-newspaper"></i>&nbsp;Pengumuman</h4>
-        </div><!-- End Section Title -->
-
-        <div class="container">
-            <div class="row justify-content-center g-4">
-            @if(count($pengumumanterbaru) > 0)
-                    @foreach($pengumumanterbaru as $rows)
-                        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                            <a href="{{ route('pengumuman.lihatpengumuman', $rows->id_pengumuman) }}">
-                                <div class="news-card bg-white position-relative">
-                                    @php
-                                        $file = $rows->gambar_header;
-                                        $filePath = $rows->file_pengumuman->location;
-                                        $imageUrl = Storage::disk('public')->exists($filePath)
-                                            ? route('file.getpublicfile', $file)
-                                            : asset('assets/img/no_image.jpg');
-                                    @endphp
-                                    <img src="{{ $imageUrl }}" class="news-img" alt="{{ $rows->judul }}">
-                                    <div class="news-content">
-                                        <h5 class="judulnews">{{ $rows->judul }}</h5>
-                                        <p style="max-height: 10vh;min-height: 10vh">{!! Str::limit(strip_tags($rows->data), 100, '...') !!}</p>
-    {{--                                    <span class="mt-3 mb-3 text-black"><i><a href="#" class="badge bg-info">Lihat selengkapnya <i class="bi bi-arrow-right"></i></a></i></span>--}}
-                                    </div>
-                                    <div class="news-footer">
-                                        <div class="icon-text">
-                                            <span>👤 {{ $rows->postinger_user->name }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="news-date">{{ $rows->tgl_posting->format('d/m/Y') }}</div>
-                                </div>
-                            </a>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-                        <div class="alert alert-warning" >Belum ada pengumuman terkini!</div>
-                    </div>
-                @endif
-            </div>
-        </div>
-        @if(count($pengumumanterbaru) > 0)
-            <div class="text-center pt-5" data-aos="fade-up" data-aos-delay="100">
-                <a href="{{ route('pengumuman.listpengumuman') }}" class="more-btn animated"><span>Lihat Semua Pengumuman</span> <i class="bi bi-chevron-right"></i></a>
-            </div>
-        @endif
     </section>
 
-    <!-- Tentang Section -->
-    <section id="layanan" class="why-us section light-background">
+    <!-- Alur Proses Section -->
+    <section class="alur-proses-section" id="alur-proses">
         <div class="container">
-            <div class="row gy-4">
-                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="why-box" style="background-color: var(--color-default)">
-                        <h3>Layanan Support</h3>
-                        <p>
-                            Ada beberapa Layanan yang ada pada Sistem ini, yaitu: <br>
-                            <i class="bi bi-check-circle text-info"></i> <b>Geo Letter</b>: Melayani Persuratan dan perizinan<br>
-                            <i class="bi bi-check-circle text-info"></i> <b>Geo Room</b>: Perizinan dan Penyewaan Ruangan<br>
-                            <i class="bi bi-check-circle text-info"></i> <b>Geo Facility</b>: Perizinan dan Penyewaan Alat/Lab<br>
-                            <br>
-                            <i>untuk menggunakan layanan ini pengguna diharapkan untuk login pada halaman yang disediakan.</i>
-                        </p>
-                        <div class="text-center">
-                            <a href="#" class="more-btn"><span>Lihat Selengkapnya</span> <i class="bi bi-chevron-right"></i></a>
+            <h2 class="content-title text-center mb-5" data-aos="fade-up">Alur Proses Layanan yang Mudah</h2>
+            <div class="row">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-card">
+                        <div class="step-icon"><i class="bi bi-mouse"></i></div>
+                        <h5>Langkah 1: Pilih Layanan</h5>
+                        <p>Pilih salah satu layanan utama kami, seperti pengajuan surat, booking ruangan, atau peminjaman alat.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-card">
+                        <div class="step-icon"><i class="bi bi-input-cursor-text"></i></div>
+                        <h5>Langkah 2: Isi Formulir</h5>
+                        <p>Lengkapi formulir online yang tersedia dengan data yang benar dan unggah dokumen pendukung jika diperlukan.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-card">
+                        <div class="step-icon"><i class="bi bi-stopwatch"></i></div>
+                        <h5>Langkah 3: Lacak Proses</h5>
+                        <p>Pantau status pengajuan Anda secara real-time melalui sistem hingga mendapatkan konfirmasi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-5">
+        <div class="container">
+            <h2 class="content-title text-center mb-5" data-aos="fade-up">Pertanyaan yang Sering Diajukan (FAQ)</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    Bagaimana cara mengajukan surat?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Anda dapat mengajukan surat dengan masuk ke akun Anda, memilih jenis surat yang diinginkan pada bagian layanan persuratan, mengisi formulir yang tersedia, dan mengunggah dokumen pendukung jika diperlukan.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Berapa lama proses pengajuan surat hingga selesai?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Waktu proses bervariasi tergantung jenis surat dan kelengkapan data. Namun, Anda dapat melacak status pengajuan secara real-time melalui dasbor akun Anda.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Bagaimana cara melihat status ruangan yang tersedia?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Status ketersediaan ruangan dapat dilihat langsung pada bagian "Ruangan Tersedia" di halaman ini atau melalui menu booking ruangan setelah Anda masuk ke sistem.
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div><!-- End Why Box -->
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="col-lg-8 d-flex align-items-stretch">
-                    <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
-
-                        <div class="col-xl-4">
-                            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
-                                <i class="bi bi-clipboard-data"></i>
-                                <h4>Geo Letter</h4>
-                                <p>Layanan ini mengarah pada perizinan persuratan, dengan mekanisme mendowload dan mengupload sesuai template surat kemudian mengunduhnya jika sudah disetujui admin.</p>
-                                <br>
-                                @php
-                                    $filePath = optional($pengaturan->files_geoletter)->location ?? 'no-exist';
-                                    $fileId = optional($pengaturan->files_geoletter)->id_file ?? -1;
-                                    $imageUrl = Storage::disk('public')->exists($filePath)
-                                        ? route('file.getpublicfile', $fileId)
-                                        : 'javascript:void(0)';
-                                @endphp
-                                <div class="text-center">
-                                    <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary"><span>Lihat SOP</span></a>
-                                </div>
-                            </div>
-                        </div><!-- End Icon Box -->
-
-                        <div class="col-xl-4" data-aos="fade-up" data-aos-delay="300">
-                            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
-                                <i class="bi bi-hospital-fill"></i>
-                                <h4>Geo Room</h4>
-                                <p>Layanan ini memberikan pembokingan ruangan, dengan ketentuan melakukan pengajuan 2 hari sebelum pemakaian ruangan dan melampirkan berita acara setelah disetujui.</p>
-                                <br>
-                                @php
-                                    $filePath = optional($pengaturan->files_georoom)->location ?? 'no-exist';
-                                    $fileId = optional($pengaturan->files_georoom)->id_file ?? -1;
-                                    $imageUrl = Storage::disk('public')->exists($filePath)
-                                        ? route('file.getpublicfile', $fileId)
-                                        : 'javascript:void(0)';
-                                @endphp
-                                <div class="text-center">
-                                    <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary"><span>Lihat SOP</span></a>
-                                </div>
-                            </div>
-                        </div><!-- End Icon Box -->
-
-                        <div class="col-xl-4" data-aos="fade-up" data-aos-delay="400">
-                            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
-                                <i class="bi bi-gear-fill"></i>
-                                <h4>Geo Facility</h4>
-                                <p>Layanan untuk memanajemen peminjaman alat/lab, dengan vasiasi stok dan harga sesuai dengan durasi peminjaman alat. ada cost tambahan jika ada kerusakan.</p>
-                                <br>
-                                @php
-                                    $filePath = optional($pengaturan->files_geofacility)->location ?? 'no-exist';
-                                    $fileId = optional($pengaturan->files_geofacility)->id_file ?? -1;
-                                    $imageUrl = Storage::disk('public')->exists($filePath)
-                                        ? route('file.getpublicfile', $fileId)
-                                        : 'javascript:void(0)';
-                                @endphp
-                                <div class="text-center">
-                                    <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary" ><span>Lihat SOP</span></a>
-                                </div>
-                            </div>
-                        </div><!-- End Icon Box -->
+    <!-- Kontak Section -->
+    <section id="kontak" class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-6" data-aos="fade-up">
+                    <div class="contact-details h-100">
+                        <h5><i class="bi bi-telephone-fill me-2"></i>Hubungi Kami</h5>
+                        <p>Jika Anda memiliki pertanyaan atau memerlukan bantuan, jangan ragu untuk menghubungi admin kami.</p>
+                        <hr class="border-light">
+                        <p class="mb-2"><strong>Admin Persuratan:</strong> {{ $pengaturan->admin_geoletter }}</p>
+                        <p class="mb-2"><strong>Admin Ruangan:</strong> {{ $pengaturan->admin_ruang }}</p>
+                        <p class="mb-0"><strong>Admin Peralatan:</strong> {{ $pengaturan->admin_peralatan }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3927.2928733842655!2d112.79700709250486!3d-7.279900165259386!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xeb3150bedb5cd2f2!2sTeknik+Geofisika+FTSP+ITS!5e0!3m2!1sid!2sid!4v1539787165326" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
         </div>
-    </section><!-- /Why Us Section -->
+    </section>
+
 </main>
 
-<footer id="footer" class="footer text-white" style="background-color: var(--color-default);">
-
+<!-- Footer -->
+<footer class="footer">
     <div class="container">
-        <div class="row gy-3">
-            <div class="col-lg-4 col-md-4 d-flex">
-                <i class="bi bi-geo-alt icon text-white"></i>
-                <div class="address">
-                    <h4 class="text-white">Alamat</h4>
-                    <p>{{ $pengaturan->alamat }}</p>
-                </div>
-
-            </div>
-
-            <div class="col-lg-5 col-md-5 d-flex">
-                <i class="bi bi-telephone icon text-white"></i>
-                <div>
-                    <h4 class="text-white">Kontak</h4>
-                    <p>
-                        Admin Geoletter: <span>{{ $pengaturan->admin_geoletter }}</span><br>
-                        Admin Peminjaman Ruangan: <span>{{ $pengaturan->admin_ruang }}</span><br>
-                        Admin Peminjaman Alat Lab: <span>{{ $pengaturan->admin_peralatan }}</span>
-                    </p>
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <a href="" class="logo d-flex align-items-center me-auto me-xl-0 order-first">
+                    <img src="{{ asset('landing_page_rss/teknikgeo.png') }}" alt="" class="logo-img">
+                    <h1 class="sitename">GeoReserve</h1>
+                </a>
+                <p>Sistem Informasi Manajemen Geofisika yang membantu mengelola administrasi dan inventaris secara efisien dan transparan.</p>
+                <div class="footer-social mt-4">
+                    <a href="{{ $pengaturan->link_yt }}"><i class="bi bi-youtube"></i></a>
+                    <a href="{{ $pengaturan->link_fb }}"><i class="bi bi-facebook"></i></a>
+                    <a href="{{ $pengaturan->link_ig }}"><i class="bi bi-instagram"></i></a>
+                    <a href="{{ $pengaturan->link_linkedin }}"><i class="bi bi-linkedin"></i></a>
                 </div>
             </div>
-
-            <div class="col-lg-3 col-md-3 d-flex">
-                <i class="bi bi-person-plus icon text-white"></i>
-                <div class="social-links">
-                    <h4 class="text-white">Ikuti Kami</h4>
-                    <div class="d-flex text-white">
-                        <a href="{{ $pengaturan->link_yt }}" target="_blank" class="youtube text-white"><i class="bi bi-youtube text-white"></i></a>
-                        <a href="{{ $pengaturan->link_fb }}" target="_blank" class="facebook text-white"><i class="bi bi-facebook"></i></a>
-                        <a href="{{ $pengaturan->link_ig }}" target="_blank" class="instagram text-white"><i class="bi bi-instagram"></i></a>
-                        <a href="{{ $pengaturan->link_linkedin }}" target="_blank" class="linkedin text-white"><i class="bi bi-linkedin"></i></a>
-                    </div>
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <h5 class="footer-title">Layanan</h5>
+                <div class="footer-links">
+                    <a href="#hero"><i class="bi bi-dot"></i>Pengajuan Surat</a>
+                    <a href="#hero"><i class="bi bi-dot"></i>Booking Ruangan</a>
+                    <a href="#hero"><i class="bi bi-dot"></i>Peminjaman Peralatan</a>
                 </div>
             </div>
-
+            <div class="col-lg-4">
+                <h5 class="footer-title">Alamat Kantor</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2 d-flex"><i class="bi bi-geo-alt-fill me-2 mt-1"></i><span>{{ $pengaturan->alamat }}</span></li>
+                    <li class="mb-2 d-flex"><i class="bi bi-envelope-fill me-2 mt-1"></i><span>tgeofisika@its.ac.id</span></li>
+                    <li class="mb-2 d-flex"><i class="bi bi-telephone-fill me-2 mt-1"></i><span>(031) 5953476</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <p class="mb-0">&copy; {{ date('Y') }} GeoReserve - Sistem Informasi Manajemen Geofisika. All Rights Reserved.</p>
         </div>
     </div>
-
-    <div class="container copyright text-center text-white">
-        <p>© <span>{{ date('Y') }} Copyright</span> <strong class="px-1 sitename">GeoReserve</strong> <span>All Rights Reserved</span></p>
-    </div>
-
 </footer>
-
-<!-- Scroll Top -->
-<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-<!-- Preloader -->
-<div id="preloader"></div>
-
-<!-- Vendor JS Files -->
 <script src="{{ asset('landing_page_rss/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('landing_page_rss/assets/vendor/php-email-form/validate.js') }}../../../public/"></script>
 <script src="{{ asset('landing_page_rss/assets/vendor/aos/aos.js') }}"></script>
-<script src="{{ asset('landing_page_rss/assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
-<script src="{{ asset('landing_page_rss/assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>
-<script src="{{ asset('landing_page_rss/assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
 
 <!-- Main JS File -->
 <script src="{{ asset('landing_page_rss/assets/js/main.js') }}"></script>
-
 </body>
 
 </html>
