@@ -291,7 +291,7 @@
                                 </div>
                             </div>
                             <div class="d-grid mt-4">
-                                <a href="#" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Alat <i class="bi bi-arrow-right-short"></i></a>
+                                <a href="{{ route('listperalatan') }}" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Alat <i class="bi bi-arrow-right-short"></i></a>
                             </div>
                         </div>
                     </div>

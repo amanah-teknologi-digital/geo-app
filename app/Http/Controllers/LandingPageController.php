@@ -88,4 +88,12 @@ class LandingPageController extends Controller
 
         return view('landing_page.list_ruangan', compact('pengaturan','dataRuangan'));
     }
+
+    public function getListPeralatan(){
+        $pengaturan = Pengaturan::with(['files_geoletter', 'files_georoom', 'files_geofacility'])->first();
+        $dataRuangan = Ruangan::with(['gambar'])->where('is_aktif', 1)
+            ->where('is_aktif', 1)->orderBy('created_at', 'desc')->get();
+
+        return view('landing_page.list_peralatan', compact('pengaturan','dataRuangan'));
+    }
 }

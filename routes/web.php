@@ -21,6 +21,7 @@ Route::get('/pengumuman/lihat/{id_pengumuman}', [LandingPageController::class, '
 Route::get('/pengumuman/list', [LandingPageController::class, 'listPengumuman'])->name('pengumuman.listpengumuman');
 Route::get('/pengumuman/getlist', [LandingPageController::class, 'getListPengumuman'])->name('pengumuman.getlistpengumuman');
 Route::get('/list-ruangan', [LandingPageController::class, 'getListRuangan'])->name('listruangan');
+Route::get('/list-peralatan', [LandingPageController::class, 'getListPeralatan'])->name('listperalatan');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard')->middleware('defaultdashboard')->name('dashboard');
