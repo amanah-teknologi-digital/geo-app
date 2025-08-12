@@ -81,7 +81,7 @@
                                         </div>
                                         <div class="card-body p-3">
                                             <h5 class="card-title">{{ $ruangan->nama }}&nbsp;<span class="badge bg-success rounded-pill align-middle" style="font-size: 0.7rem;">{{ $ruangan->kode_ruangan }}</span></h5>
-                                            <p class="card-text mb-2 mt-2"><i class="bx bx-current-location me-1"></i>{{ $ruangan->lokasi }}</p>
+                                            <p class="card-text mb-2 mt-2"><i class="bx bx-location-plus me-1"></i>{{ $ruangan->lokasi }}</p>
 
                                             <div class="facility-section">
                                                 @php
