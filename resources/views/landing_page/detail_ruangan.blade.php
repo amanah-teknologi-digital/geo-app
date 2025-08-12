@@ -117,7 +117,7 @@
                             </div>
                             <hr class="my-6">
                             <h5>Keterangan</h5>
-                            <p class="mb-0">{!! nl2br(e($dataRuangan->keterangan)) !!}</p>
+                            <p class="mb-0 text-muted fst-italic">{!! nl2br(e($dataRuangan->keterangan)) !!}</p>
                         </div>
                     </div>
                     <div class="card shadow-none app-calendar-wrapper border-top border-bottom">

@@ -57,16 +57,6 @@
                             <h5 class="mb-0">{{ $dataRuangan->nama }}&nbsp;<span class="badge rounded-pill <?= $dataRuangan->is_aktif? 'bg-success':'bg-danger' ?> mb-3">{{ $dataRuangan->kode_ruangan }}</span></h5>
                             <p class="mb-0 w-100 text-truncate">{{ $dataRuangan->deskripsi }}</p>
                         </div>
-                        <div class="d-flex align-items-center">
-                            @if($dataRuangan->is_aktif)
-                                <a class="btn btn-sm btn-primary d-flex align-items-center" href="{{ route('ruangan.detail', $dataRuangan->id_ruangan) }}"> <i class="icon-base bx bx-cart-add icon-sm lh-1 scaleX-n1-rtl me-2"></i><span class="me-2">Booking Ruangan</span></a>
-                            @else
-                                <a class="disabled btn btn-sm btn-danger d-flex align-items-center" href="javascript:void(0)"> <i class="icon-base bx bx-x icon-sm lh-1 scaleX-n1-rtl me-2"></i><span>Tidak Tersedia</span> </a>
-                            @endif
-                                {{--                            <span class="badge bg-label-danger">UI/UX</span>--}}
-{{--                            <i class="icon-base bx bx-share-alt icon-lg mx-4"></i>--}}
-{{--                            <i class="icon-base bx bx-bookmarks icon-lg"></i>--}}
-                        </div>
                     </div>
                     <div class="card academy-content shadow-none border">
                         @php
@@ -79,9 +69,10 @@
                         <div class="card-body pt-4">
                             <div class="row">
                                 <div class="col-md-4 mb-3 mb-md-0">
-                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modals-transparent">
-                                        <img class="img-fluid w-100" style="border-radius: 8px;object-fit: cover;" src="{{ $imageUrl }}" alt="{{ $dataRuangan->nama }}">
-                                    </a>
+                                    <div class="position-relative">
+                                        <img src="{{ $imageUrl }}" class="card-img-top rounded-2" alt="{{ $dataRuangan->nama }}">
+                                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">{{ $dataRuangan->jenis_ruangan }}</span>
+                                    </div>
                                     <div class="row align-items-center gx-4 mt-4">
                                         <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
                                             <p class="text-nowrap mb-2"><i class="icon-base bx bx-group me-2 align-bottom"></i>Kapasitas: {{ $dataRuangan->kapasitas }} Orang</p>
@@ -89,7 +80,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h5>Lokasi <span class="badge bg-label-primary small" style="font-size: 0.8125rem !important;">{{ $dataRuangan->jenis_ruangan }}</span></h5>
+                                    <h5>Lokasi</h5>
                                     <p class="mb-0">{{ $dataRuangan->lokasi }}</p>
                                     <hr class="my-6">
                                     <h5>Fasilitas</h5>

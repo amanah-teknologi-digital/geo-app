@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\DefaultDashboardMiddleware;
+use App\Http\Middleware\ForcedHttpsMiddleware;
 use App\Http\Middleware\HalamanMiddleware;
 use App\Http\Middleware\NoCacheMiddleware;
 use App\Http\Middleware\RoleMiddleware;
@@ -16,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->append(ForcedHttpsMiddleware::class);
         $middleware->alias([
             'defaultdashboard' => DefaultDashboardMiddleware::class,
             'halaman' => HalamanMiddleware::class,
