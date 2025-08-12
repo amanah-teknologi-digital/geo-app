@@ -60,8 +60,13 @@
     <!-- Main Content & Sidebar Section -->
     <header id="hero" class="ruangan-section pt-3">
         <div class="container">
-            <div class="card-custom" data-aos="fade-up" data-aos-delay="100">
-                <div class="card-header-custom"><i class="bi bi bi-calendar-week-fill me-2"></i>List Ruangan</div>
+            <div class="card-custom mb-5" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-header-custom d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0"><i class="bi bi bi-calendar-week-fill me-2"></i>List Ruangan</h5>
+                    <a href="{{ route('landingpage') }}" class="btn btn-primary mb-0">
+                        <i class="bx bx-arrow-back"></i>&nbsp;Landing Page
+                    </a>
+                </div>
                 <div class="card-body p-4">
                     <div class="row g-4">
                         @if(isset($dataRuangan) && !$dataRuangan->isEmpty())
