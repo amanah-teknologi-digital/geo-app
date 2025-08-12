@@ -120,22 +120,22 @@ body {
     box-shadow: 0 6px 20px rgba(74, 105, 165, 0.2);
 }
 
-.hero-buttons .btn-primary {
+.btn-primary {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     color: #fff;
 }
-.hero-buttons .btn-primary:hover {
+.btn-primary:hover {
     background-color: var(--primary-hover);
     border-color: var(--primary-hover);
 }
 
-.hero-buttons .btn-outline-primary {
+.btn-outline-primary {
     color: var(--text-color);
     border-color: var(--light-gray);
     background-color: #fff;
 }
-.hero-buttons .btn-outline-primary:hover {
+.btn-outline-primary:hover {
     background-color: var(--primary-color);
     color: #fff;
     border-color: var(--primary-color);
