@@ -397,8 +397,11 @@ body {
 /* Footer */
 .footer {
     background-color: var(--primary-color);
-    color: #fff;
+    color: #fff !important;
     padding: 60px 0 20px 0;
+}
+.footer h5{
+    color: #fff !important;
 }
 .footer-title {
     font-weight: 600;

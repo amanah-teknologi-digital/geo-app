@@ -103,7 +103,7 @@
                                                 @endif
                                             </div>
 
-                                            <a href="#" class="btn btn-primary w-100"><i class="bx bx-detail me-1"></i>Lihat Detail</a>
+                                            <a href="{{ route('listruangan.detail', $ruangan->id_ruangan) }}" class="btn btn-primary w-100"><i class="bx bx-detail me-1"></i>Lihat Detail</a>
                                         </div>
                                     </div>
                                 </div>

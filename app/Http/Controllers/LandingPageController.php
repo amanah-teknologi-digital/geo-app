@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\RuanganRepository;
+use App\Http\Services\RuanganServices;
 use App\Models\Pengaturan;
 use App\Models\Pengumuman;
 use App\Models\Ruangan;
@@ -11,6 +13,11 @@ use Yajra\DataTables\DataTables;
 
 class LandingPageController extends Controller
 {
+    private $service;
+    public function __construct(){
+        $this->service = new RuanganServices(new RuanganRepository());
+    }
+
     public function index(){
         $pengaturan = Pengaturan::with(['files_geoletter', 'files_georoom', 'files_geofacility'])->first();
         $pengumumanterbaru = Pengumuman::with(['user','file_pengumuman','postinger_user'])
@@ -83,17 +90,44 @@ class LandingPageController extends Controller
 
     public function getListRuangan(){
         $pengaturan = Pengaturan::with(['files_geoletter', 'files_georoom', 'files_geofacility'])->first();
-        $dataRuangan = Ruangan::with(['gambar'])->where('is_aktif', 1)
-            ->where('is_aktif', 1)->orderBy('created_at', 'desc')->get();
+        $dataRuangan = Ruangan::with(['gambar'])->where('is_aktif', 1)->orderBy('created_at', 'desc')->get();
 
         return view('landing_page.list_ruangan', compact('pengaturan','dataRuangan'));
     }
 
     public function getListPeralatan(){
         $pengaturan = Pengaturan::with(['files_geoletter', 'files_georoom', 'files_geofacility'])->first();
-        $dataRuangan = Ruangan::with(['gambar'])->where('is_aktif', 1)
-            ->where('is_aktif', 1)->orderBy('created_at', 'desc')->get();
+        $dataRuangan = Ruangan::with(['gambar'])->where('is_aktif', 1)->orderBy('created_at', 'desc')->get();
 
         return view('landing_page.list_peralatan', compact('pengaturan','dataRuangan'));
+    }
+
+    public function getDetailRuangan($idRuangan){
+        $pengaturan = Pengaturan::with(['files_geoletter', 'files_georoom', 'files_geofacility'])->first();
+        $dataRuangan = Ruangan::with(['gambar'])->where('is_aktif', 1)->where('id_ruangan', $idRuangan)->first();
+        $hari = [
+            2 => 'Senin',
+            3 => 'Selasa',
+            4 => 'Rabu',
+            5 => 'Kamis',
+            6 => 'Jumat',
+            7 => 'Sabtu',
+            1 => 'Minggu',
+        ];
+
+        return view('landing_page.detail_ruangan', compact('pengaturan','dataRuangan', 'hari', 'idRuangan'));
+    }
+
+    public function getDataJadwalRuangan(Request $request){
+        $idRuangan = $request->id_ruangan;
+        $dataJadwal = $this->service->getDataJadwal($idRuangan);
+        $dataBooking = [];
+
+        $data = [
+            'jadwal' => $dataJadwal,
+            'booking' => $dataBooking,
+        ];
+
+        return response()->json($data);
     }
 }
