@@ -32,7 +32,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a href="" class="logo d-flex align-items-center me-auto me-xl-0 order-first">
+        <a href="{{ route('landingpage') }}" class="logo d-flex align-items-center me-auto me-xl-0 order-first">
             <img src="{{ asset('landing_page_rss/teknikgeo.png') }}" alt="" class="logo-img">
             <h1 class="sitename">GeoReserve</h1>
         </a>

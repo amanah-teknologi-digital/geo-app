@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>GeoReserve</title>
+    <title>GeoReserve &bullet; {{ $data->judul }}</title>
     <meta name="description" content="Sistem Informasi Manajemen Geofisika ITS (GeoReserve) untuk pengajuan persuratan, booking ruangan, peminjaman peralatan, dan informasi terbaru. Efisien, cepat, dan terintegrasi.">
     <meta name="keywords" content="sistem informasi, manajemen, persuratan, booking ruangan, peminjaman peralatan, georeserve, ITS, Geofisika">
 
@@ -32,7 +32,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a href="" class="logo d-flex align-items-center me-auto me-xl-0 order-first">
+        <a href="{{ route('landingpage') }}" class="logo d-flex align-items-center me-auto me-xl-0 order-first">
             <img src="{{ asset('landing_page_rss/teknikgeo.png') }}" alt="" class="logo-img">
             <h1 class="sitename">GeoReserve</h1>
         </a>
