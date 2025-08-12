@@ -60,7 +60,7 @@
             @auth
                 <a href="{{ route('dashboard') }}" class="btn btn-sm btn-outline-success me-2 rounded-3"><i class="bi bi-house"></i>&nbsp;Dashboard</a>
             @else
-                <a href="{{ route('login') }}" class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-box-arrow-in-right me-1"></i> Masuk</a>
+                <a href="{{ route('login') }}" class="btn btn-sm btn-nav-masuk me-2"><i class="bi bi-box-arrow-in-right me-1"></i> Masuk</a>
                 <a href="{{ route('register') }}" class="btn btn-sm btn-nav-daftar"><i class="bi bi-person-plus-fill me-1"></i> Daftar</a>
             @endif
         </div>
@@ -75,7 +75,7 @@
                 <h1 class="sitename" data-aos="fade-right" data-aos-delay="0">Selamat Datang di GeoReserve</h1>
                 <p data-aos="fade-right" data-aos-delay="100">Kelola persuratan, booking ruangan dan peralatan, serta pantau pengumuman terbaru dalam satu platform yang cepat, aman, dan terintegrasi.</p>
                 <div class="hero-buttons d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start" data-aos="fade-right" data-aos-delay="200">
-                    <a href="{{ route('pengajuansurat') }}" class="btn btn-primary"><i class="bi bi-envelope-fill"></i>Ajukan Surat</a>
+                    <a href="{{ route('pengajuansurat') }}" class="btn btn-ajukan"><i class="bi bi-envelope-fill"></i>Ajukan Surat</a>
                     <a href="{{ route('pengajuanruangan') }}" class="btn btn-outline-primary"><i class="bi bi-calendar2-check-fill"></i>Booking Ruangan</a>
                     <a href="{{ route('pengajuanperalatan') }}" class="btn btn-outline-primary"><i class="bi bi-projector-fill"></i>Booking Peralatan</a>
                 </div>

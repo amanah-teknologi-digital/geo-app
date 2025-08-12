@@ -6,6 +6,7 @@
     --text-color: #343a40;
     --light-gray: #e9ecef;
     --accent-color: rgb(8 60 132 / 1);
+    --accent-color2: #F5D042;
 }
 
 html {
@@ -42,41 +43,30 @@ body {
     font-weight: 600;
 }
 
-.btn-nav-daftar {
-    background-color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-    color: white;
-    padding: 0.4rem 1rem;
-    border-radius: 8px;
-}
-.btn-nav-daftar:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
-    color: white;
-}
-
-.btn-nav-dashboard {
-    background-color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-    color: white;
-    padding: 0.4rem 1rem;
-    border-radius: 8px;
-}
-.btn-nav-dashboard:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
-    color: white;
-}
-
 .btn-nav-masuk {
+    color: black;
+    border-color: var(--primary-color);
     background-color: #fff;
-    border: 1px solid var(--light-gray);
-    color: var(--text-color);
     padding: 0.4rem 1rem;
     border-radius: 8px;
 }
 .btn-nav-masuk:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.btn-nav-daftar {
+    background-color: var(--accent-color);
+    border: 1px solid var(--primary-color);
+    color: #fff;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+}
+.btn-nav-daftar:hover {
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    color: #fff;
 }
 
 
@@ -121,13 +111,29 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: #fff;
+    background-color: var(--accent-color2);
+    border-color: var(--accent-color2);
+    border: 1px solid var(--accent-color2);
+    color: var(--accent-color);
 }
+
 .btn-primary:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
+    background-color: #fff;
+    border-color: var(--light-gray);
+    color: black;
+}
+
+.btn-ajukan {
+    background-color: var(--accent-color);
+    border: 1px solid var(--primary-color);
+    color: #fff;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+}
+.btn-ajukan:hover {
+    background-color: #fff;
+    border-color: var(--light-gray);
+    color: black;
 }
 
 .btn-outline-primary {
@@ -307,13 +313,12 @@ body {
 }
 
 .btn-lihat-semua {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 .btn-lihat-semua:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
+    background-color: #fff;
+    border-color: var(--light-gray);
+    color: black;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(74, 105, 165, 0.3);
 }
@@ -485,6 +490,76 @@ body {
 .carousel-control-next-icon {
     border-radius: 50%;
     padding: 1.2rem;
+}
+
+.room-card {
+    border-radius: 1rem; border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+.room-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 1.5rem 3.5rem rgba(0, 0, 0, 0.2) !important;
+}
+/* UPDATED: Menambahkan sudut tumpul dan bayangan pada gambar */
+.room-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+    border-radius: 1rem 1rem 0 0; /* Membuat sudut atas gambar tumpul */
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); /* Bayangan halus di bawah gambar */
+}
+.room-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+.room-card .card-title {
+    font-weight: 600; color: #343a40; font-size: 1rem;
+}
+.room-card .card-text {
+    color: #6c757d;
+    font-size: 0.8rem;
+    flex-grow: 1;
+}
+
+.facility-section {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 0.5rem 0;
+    margin: 0.8rem 0;
+    border-top: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+    scrollbar-width: none;
+}
+.facility-section::-webkit-scrollbar { display: none; }
+
+.facility-item {
+    display: inline-block;
+    text-align: center;
+    margin-right: 1.25rem;
+    flex-shrink: 0;
+}
+.facility-item:last-child { margin-right: 0; }
+
+.facility-item i {
+    font-size: 1.2rem;
+    margin-bottom: 0.1rem;
+}
+.facility-item p {
+    font-size: 0.65rem;
+    margin-bottom: 0;
+    color: #495057;
+}
+.room-card .btn {
+    border-radius: 50px; font-weight: 500; padding: 0.4rem 0; font-size: 0.8rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.ruangan-section {
+    background: linear-gradient(to bottom, #FFFFFF, #96b0e1);
+    min-height: 100vh;
+    display: flex;
 }
 
 

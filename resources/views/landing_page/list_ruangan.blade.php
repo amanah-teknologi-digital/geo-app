@@ -21,6 +21,7 @@
     <!-- Vendor CSS Files -->
     <link href="{{ asset('landing_page_rss/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('landing_page_rss/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="{{ asset('landing_page_rss/assets/vendor/aos/aos.css') }}" rel="stylesheet">
 
     <!-- Main CSS File -->
@@ -48,7 +49,7 @@
             @auth
                 <a href="{{ route('dashboard') }}" class="btn btn-sm btn-outline-success me-2 rounded-3"><i class="bi bi-house"></i>&nbsp;Dashboard</a>
             @else
-                <a href="{{ route('login') }}" class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-box-arrow-in-right me-1"></i> Masuk</a>
+                <a href="{{ route('login') }}" class="btn btn-sm btn-nav-masuk me-2"><i class="bi bi-box-arrow-in-right me-1"></i> Masuk</a>
                 <a href="{{ route('register') }}" class="btn btn-sm btn-nav-daftar"><i class="bi bi-person-plus-fill me-1"></i> Daftar</a>
             @endif
         </div>
@@ -57,11 +58,62 @@
 
 <main>
     <!-- Main Content & Sidebar Section -->
-    <header id="hero" class="hero-section" style="min-height: 100vh !important; max-height: 100vh !important;">
+    <header id="hero" class="ruangan-section pt-3">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-12">
+            <div class="card-custom" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-header-custom"><i class="bi bi bi-calendar-week-fill me-2"></i>List Ruangan</div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        @if(isset($dataRuangan) && !$dataRuangan->isEmpty())
+                            @foreach($dataRuangan as $ruangan)
+                                @php
+                                    $file = $ruangan->gambar_file ?? null;
+                                    $filePath = $ruangan->gambar->location ?? null;
+                                    $imageUrl = ($filePath && Storage::disk('public')->exists($filePath))
+                                        ? route('file.getpublicfile', $file)
+                                        : asset('assets/img/no_image.jpg');
+                                @endphp
+                                <div class="col-xxl-3 col-lg-4 col-md-6">
+                                    <div class="card room-card shadow-lg">
+                                        <div class="position-relative">
+                                            <img src="{{ $imageUrl }}" class="card-img-top" alt="{{ $ruangan->nama }}">
+                                            <span class="badge bg-primary position-absolute top-0 end-0 m-3">{{ $ruangan->jenis_ruangan }}</span>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <h5 class="card-title">{{ $ruangan->nama }}&nbsp;<span class="badge bg-success rounded-pill align-middle" style="font-size: 0.7rem;">{{ $ruangan->kode_ruangan }}</span></h5>
+                                            <p class="card-text mb-2 mt-2"><i class="bx bx-current-location me-1"></i>{{ $ruangan->lokasi }}</p>
 
+                                            <div class="facility-section">
+                                                @php
+                                                    $fasilitasList = json_decode($ruangan->fasilitas);
+                                                @endphp
+
+                                                <div class="facility-item">
+                                                    <i class="bx bx-user text-primary"></i>
+                                                    <p>{{ $ruangan->kapasitas }} Orang</p>
+                                                </div>
+
+                                                @if (!empty($fasilitasList))
+                                                    @foreach ($fasilitasList as $fasilitas)
+                                                        <div class="facility-item">
+                                                            <i class="bx {{ $fasilitas->icon }} text-primary"></i>
+                                                            <p>{{ $fasilitas->text }}</p>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+
+                                            <a href="#" class="btn btn-primary w-100"><i class="bx bx-detail me-1"></i>Lihat Detail</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="col-12">
+                                <p class="text-center text-muted">Tidak ada ruangan yang tersedia saat ini.</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
