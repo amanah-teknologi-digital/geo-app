@@ -70,12 +70,12 @@
         <div class="container">
             <div class="card-custom mb-5" data-aos="fade-up" data-aos-delay="100">
                 <div class="card-header-custom d-flex justify-content-between align-items-center pb-4 border-bottom">
-                    <h5 class="card-title mb-0"><i class="bx bx-detail mb-1"></i>&nbsp;Detail {{ $dataRuangan->nama }}</h5>
+                    <h5 class="card-title mb-0"><i class="bx bx-detail mb-1"></i>&nbsp;Detail {{ $dataRuangan->nama }} &nbsp;<span class="badge bg-success rounded-pill align-middle" style="font-size: 0.7rem;">{{ $dataRuangan->kode_ruangan }}</span></h5>
                     <a href="{{ route('listruangan') }}" class="btn btn-primary mb-0">
                         <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                     </a>
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body p-5">
                     @php
                         $file = $dataRuangan->gambar_file;
                         $filePath = $dataRuangan->gambar->location;
@@ -83,14 +83,19 @@
                             ? route('file.getpublicfile', $file)
                             : asset('assets/img/no_image.jpg');
                     @endphp
-                    <div class="row">
+                    <div class="row mb-5">
                         <div class="col-md-4 mb-3 mb-md-0">
-                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modals-transparent">
-                                <img class="img-fluid w-100" style="border-radius: 8px;object-fit: cover;" src="{{ $imageUrl }}" alt="{{ $dataRuangan->nama }}">
-                            </a>
+                            <div class="position-relative">
+                                <img src="{{ $imageUrl }}" class="card-img-top rounded-2" alt="{{ $dataRuangan->nama }}">
+                                <span class="badge bg-label position-absolute top-0 end-0 m-3">{{ $dataRuangan->jenis_ruangan }}</span>
+                            </div>
+
                             <div class="row align-items-center gx-4 mt-4">
                                 <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
-                                    <p class="text-nowrap mb-2"><i class="icon-base bx bx-group me-2 align-bottom"></i>Kapasitas: {{ $dataRuangan->kapasitas }} Orang</p>
+                                    <div class="facility-item">
+                                        <i class="bx bx-user"></i>
+                                        <span>Kapasitas {{ $dataRuangan->kapasitas }} Orang</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -99,10 +104,14 @@
                             <p class="mb-0">{{ $dataRuangan->lokasi }}</p>
                             <hr class="my-6">
                             <h5>Fasilitas</h5>
-                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xxl-3 g-2">
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xxl-3 g-2 align-items-center">
                                 @foreach(json_decode($dataRuangan->fasilitas, true) as $item)
                                     <div class="col">
-                                        <p class="mb-2"><i class="icon-base bx <?= $item['icon'] ?> me-2 align-bottom"></i>&nbsp;{{ $item['text'] }}</p>
+                                        <div class="facility-item mb-2">
+                                            <i class="bx {{ $item['icon'] }} me-2 align-bottom"></i>
+                                            <span>{{ $item['text'] }}</span>
+                                        </div>
+{{--                                        <p class="mb-2"><i class="icon-base bx <?= $item['icon'] ?> me-2 align-bottom"></i>&nbsp;{{ $item['text'] }}</p>--}}
                                     </div>
                                 @endforeach
                             </div>
@@ -114,7 +123,7 @@
                     <div class="card shadow-none app-calendar-wrapper border-top border-bottom">
                         <div class="row g-0">
                             <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
-                                <div class="px-6 pb-2 my-sm-0 p-4">
+                                <div class="pb-2 my-sm-0 pt-4">
                                     <!-- Filter -->
                                     <div>
                                         <h5>Filter Jadwal</h5>

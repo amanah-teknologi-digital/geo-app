@@ -565,4 +565,8 @@ body {
     display: flex;
 }
 
+.bg-label{
+    background-color: var(--accent-color);
+}
+
 

@@ -77,7 +77,7 @@
                                     <div class="card room-card shadow-lg">
                                         <div class="position-relative">
                                             <img src="{{ $imageUrl }}" class="card-img-top" alt="{{ $ruangan->nama }}">
-                                            <span class="badge bg-primary position-absolute top-0 end-0 m-3">{{ $ruangan->jenis_ruangan }}</span>
+                                            <span class="badge bg-label position-absolute top-0 end-0 m-3">{{ $ruangan->jenis_ruangan }}</span>
                                         </div>
                                         <div class="card-body p-3">
                                             <h5 class="card-title">{{ $ruangan->nama }}&nbsp;<span class="badge bg-success rounded-pill align-middle" style="font-size: 0.7rem;">{{ $ruangan->kode_ruangan }}</span></h5>
