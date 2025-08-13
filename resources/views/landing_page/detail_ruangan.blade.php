@@ -71,7 +71,7 @@
             <div class="card-custom mb-5" data-aos="fade-up" data-aos-delay="100">
                 <div class="card-header-custom d-flex justify-content-between align-items-center pb-4 border-bottom">
                     <h5 class="card-title mb-0"><i class="bx bx-detail mb-1"></i>&nbsp;Detail {{ $dataRuangan->nama }} &nbsp;<span class="badge bg-success rounded-pill align-middle" style="font-size: 0.7rem;">{{ $dataRuangan->kode_ruangan }}</span></h5>
-                    <a href="{{ route('listruangan') }}" class="btn btn-primary mb-0">
+                    <a href="{{ route('listruangan') }}" class="btn btn-light mb-0">
                         <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                     </a>
                 </div>
