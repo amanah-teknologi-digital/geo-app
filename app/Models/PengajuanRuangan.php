@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class PengajuanRuangan extends Model
 {
@@ -35,6 +36,56 @@ class PengajuanRuangan extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Encrypt before saving
+    |--------------------------------------------------------------------------
+    */
+    public function setNoHpAttribute($value)
+    {
+        $this->attributes['no_hp'] = Crypt::encryptString($value);
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = Crypt::encryptString($value);
+    }
+
+    public function setEmailItsAttribute($value)
+    {
+        $this->attributes['email_its'] = Crypt::encryptString($value);
+    }
+
+    public function setKartuIdAttribute($value)
+    {
+        $this->attributes['kartu_id'] = Crypt::encryptString($value);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Decrypt when reading
+    |--------------------------------------------------------------------------
+    */
+    public function getNoHpAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
+
+    public function getEmailAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
+
+    public function getEmailItsAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
+
+    public function getKartuIdAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
 
     public function pihakpengaju()
     {
