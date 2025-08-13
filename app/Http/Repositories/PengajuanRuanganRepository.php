@@ -24,39 +24,30 @@ class PengajuanRuanganRepository
         $data = PengajuanRuangan::with(['pihakpengaju','pihakupdater','statuspengaju','statuspengajuan','persetujuan','pengajuanruangandetail', 'pengajuanperalatandetail', 'surveykepuasan']);
 
         $id_pengguna = auth()->user()->id;
-        if ($id_akses == 8){ //pengguna
-            $data = $data->where('pengaju', $id_pengguna)
-                ->orderByRaw('CASE
-                    WHEN id_statuspengajuan = 0 THEN 0
-                    WHEN id_statuspengajuan = 4 THEN 1
-                    ELSE 2
-                    END');
+
+        // Filtering akses user (kecuali super admin & admin geo)
+        if (!in_array($id_akses, [1,3])) {
+            $data = $data->where(function ($q) use ($id_pengguna) {
+                $q->where('pengaju', $id_pengguna) // sebagai pemohon
+                ->orWhereHas('pihakpenyetuju', function ($sub) use ($id_pengguna) {
+                    $sub->where('id_penyetuju', $id_pengguna); // sebagai penyetuju tambahan
+                });
+            });
         }
 
-        if ($id_akses == 2){ // admin geo harus status tidak draft
-            $data = $data->where('id_statuspengajuan', '!=', 0)
-                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_ruangan WHERE persetujuan_ruangan.id_pengajuan = pengajuan_ruangan.id_pengajuan AND persetujuan_ruangan.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
-                ->orderByRaw('CASE
-                    WHEN id_statuspengajuan = 5 THEN 0
-                    ELSE 1
-                    END');
+        if (!in_array($id_akses, [1, 8])){
+            $data = $data->where('id_statuspengajuan', '!=', 0);
         }
 
-        if ($id_akses == 1){ //super admin
-            $data = $data
-                ->orderByRaw('IF(EXISTS(SELECT 1 FROM persetujuan_ruangan WHERE persetujuan_ruangan.id_pengajuan = pengajuan_ruangan.id_pengajuan AND persetujuan_ruangan.id_akses = 2), 1, 0)') // Urutkan yang tidak ada id_akses = 2 ke atas
-                ->orderByRaw('CASE
-                    WHEN id_statuspengajuan = 0 THEN 0
-                    WHEN id_statuspengajuan = 4 THEN 1
-                    WHEN id_statuspengajuan = 5 THEN 2
-                    ELSE 3
-                    END'); // Urutkan dengan id_statuspengajuan 0, 4, 5
-        }
-
-        $data = $data->orderBy('created_at', 'desc');
+        $data = $data->orderByRaw('CASE
+            WHEN id_statuspengajuan = 0 THEN 0
+            WHEN id_statuspengajuan = 4 THEN 1
+            WHEN id_statuspengajuan = 5 THEN 2
+            ELSE 3
+            END')->orderBy('created_at', 'desc');
 
         if (!empty($id_pengajuan)) {
-            $data = $data->where('id_pengajuan', $id_pengajuan)->first();
+            return $data->where('id_pengajuan', $id_pengajuan)->first();
         }
 
         return $data;
