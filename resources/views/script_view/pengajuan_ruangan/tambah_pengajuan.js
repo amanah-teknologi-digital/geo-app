@@ -465,6 +465,8 @@ function checkAvaliableJadwal(){
             let status = response.status;
             dataRuangan = response.dataRuangan;
 
+            console.log(response)
+
             setLoadingButton('btn-next-2', false);
             if (status){
                 stepper.to(3)

@@ -262,21 +262,38 @@ class PengajuanRuanganRepository
         $jamMulai = Carbon::createFromFormat('H:i', $jamMulai)->format('H:i:s');
         $jamSelesai = Carbon::createFromFormat('H:i', $jamSelesai)->format('H:i:s');
 
-        $jadwalBentrok = JadwalRuangan::whereIn('id_ruangan', $idRuangan)
-            ->where(function($query) use ($tglMulai, $tglSelesai, $jamMulai, $jamSelesai) {
-                $query->whereBetween('tgl_mulai', [$tglMulai, $tglSelesai])
-                    ->orWhereBetween('tgl_selesai', [$tglMulai, $tglSelesai])
-                    ->orWhere(function($q) use ($tglMulai, $tglSelesai) {
-                        $q->where('tgl_mulai', '<=', $tglMulai)
-                            ->where('tgl_selesai', '>=', $tglSelesai);
-                    });
-            })
-            ->where(function($query) use ($jamMulai, $jamSelesai) {
-                $query->where('jam_mulai', '<', $jamSelesai)
-                    ->where('jam_selesai', '>', $jamMulai);
-            });
+//        $jadwalBentrok = JadwalRuangan::whereIn('id_ruangan', $idRuangan)
+//            ->where(function($query) use ($tglMulai, $tglSelesai, $jamMulai, $jamSelesai) {
+//                $query->whereBetween('tgl_mulai', [$tglMulai, $tglSelesai])
+//                    ->orWhereBetween('tgl_selesai', [$tglMulai, $tglSelesai])
+//                    ->orWhere(function($q) use ($tglMulai, $tglSelesai) {
+//                        $q->where('tgl_mulai', '<=', $tglMulai)
+//                            ->where('tgl_selesai', '>=', $tglSelesai);
+//                    });
+//            })
+//            ->where(function($query) use ($jamMulai, $jamSelesai) {
+//                $query->where('jam_mulai', '<', $jamSelesai)
+//                    ->where('jam_selesai', '>', $jamMulai);
+//            });
+//
+//        $jadwalBentrok = $jadwalBentrok->exists();
 
-        $jadwalBentrok = $jadwalBentrok->exists();
+        // Cari semua hari yang ada di range input
+        $daysInRange = [];
+        $period = new \DatePeriod(new \DateTime($tglMulai), new \DateInterval('P1D'), (new \DateTime($tglSelesai))->modify('+1 day'));
+        foreach ($period as $date) {
+            $phpDay = (int) $date->format('N');
+            $mappedDay = ($phpDay % 7) + 1;
+            $daysInRange[] = $mappedDay;
+        }
+
+        $jadwalBentrok = JadwalRuangan::whereIn('id_ruangan', (array) $idRuangan)
+            ->where('tgl_mulai', '<=', $tglSelesai)
+            ->where('tgl_selesai', '>=', $tglMulai)
+            ->where('jam_mulai', '<', $jamSelesai)
+            ->where('jam_selesai', '>', $jamMulai)
+            ->whereIn('day_of_week', $daysInRange)
+            ->exists();
 
         return $jadwalBentrok;
     }

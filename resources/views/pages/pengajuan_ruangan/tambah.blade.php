@@ -211,11 +211,11 @@
                                                 <div class="row g-6">
                                                     <div class="col-sm-12">
                                                         <label class="form-label" for="nama_kegiatan">Nama Kegiatan <span class="text-danger">*</span></label>
-                                                        <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" placeholder="nama kegiatan" autocomplete="off">
+                                                        <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" placeholder="Nama Kegiatan" autocomplete="off">
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <label class="form-label" for="deskripsi_kegiatan">Deskripsi Kegiatan <span class="text-danger">*</span></label>
-                                                        <textarea rows="5" cols="5" name="deskripsi_kegiatan" id="deskripsi_kegiatan" class="form-control" placeholder="nama kegiatan"></textarea>
+                                                        <textarea rows="5" cols="5" name="deskripsi_kegiatan" id="deskripsi_kegiatan" class="form-control" placeholder="Deskripsi Kegiatan"></textarea>
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <label class="form-label" for="deskripsi_kegiatan">Data Peminjaman Sarana/Prasarana <span class="text-danger">*</span></label>

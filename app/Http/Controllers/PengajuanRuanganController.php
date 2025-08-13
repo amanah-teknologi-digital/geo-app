@@ -44,7 +44,7 @@ class PengajuanRuanganController extends Controller
                 ->addColumn('namaruangan', function ($data_pengajuan) {
                     $html = '<b class="small">';
                     foreach ($data_pengajuan->pengajuanruangandetail as $ruangan){
-                        $html .= '&bullet;&nbsp;' . $ruangan->ruangan->nama . '<br>';
+                        $html .= '<span class="bx bx-check-circle text-success me-2" style="font-size: 1rem"></span>' . $ruangan->ruangan->nama . '<br>';
                     }
 
                     $html .= '</b>';
