@@ -71,4 +71,9 @@ class PengajuanRuangan extends Model
         return $this->hasMany(PengajuanPeralatanRuangan::class, 'id_pengajuan', 'id_pengajuan');
     }
 
+    public function surveykepuasan()
+    {
+        return $this->belongsTo(SurveyKepuasanRuangan::class, 'id_pengajuan', 'id_pengajuan');
+    }
+
 }
