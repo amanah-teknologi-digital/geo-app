@@ -14,8 +14,8 @@ class PengajuanRuangan extends Model
     protected $fillable = [
         'id_pengajuan',
         'pengaju',
-        'id_statuspengajuan',
         'id_statuspengaju',
+        'id_tahapan',
         'nama_kegiatan',
         'deskripsi',
         'tgl_mulai',
@@ -102,9 +102,9 @@ class PengajuanRuangan extends Model
         return $this->belongsTo(StatusPengaju::class, 'id_statuspengaju', 'id_statuspengaju');
     }
 
-    public function statuspengajuan()
+    public function tahapanpengajuan()
     {
-        return $this->belongsTo(StatusPengajuan::class, 'id_statuspengajuan', 'id_statuspengajuan');
+        return $this->belongsTo(TahapanPeminjamanRuangan::class, 'id_tahapan', 'id_tahapan');
     }
 
     public function persetujuan()

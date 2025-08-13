@@ -21,34 +21,52 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class PengajuanRuanganRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
-        $data = PengajuanRuangan::with(['pihakpengaju','pihakupdater','statuspengaju','statuspengajuan','persetujuan','pengajuanruangandetail', 'pengajuanperalatandetail', 'surveykepuasan']);
+        $data = PengajuanRuangan::with(['pihakpengaju','pihakupdater','statuspengaju','tahapanpengajuan','persetujuan','pengajuanruangandetail', 'pengajuanperalatandetail', 'surveykepuasan']);
 
         $id_pengguna = auth()->user()->id;
 
-        // Filtering akses user (kecuali super admin & admin geo)
-        if (!in_array($id_akses, [1,3])) {
+        // khusus untuk akses pemeriksa dan pengguna, berdasarkan penunjukan atau yang mengajukan saja
+        if (in_array($id_akses, [8,9])) {
             $data = $data->where(function ($q) use ($id_pengguna) {
                 $q->where('pengaju', $id_pengguna) // sebagai pemohon
-                ->orWhereHas('pihakpenyetuju', function ($sub) use ($id_pengguna) {
-                    $sub->where('id_penyetuju', $id_pengguna); // sebagai penyetuju tambahan
-                });
+                ->orWhere('pemeriksa_awal', $id_pengguna)
+                ->orWhere('pemeriksa_akhir', $id_pengguna);
             });
         }
 
-        if (!in_array($id_akses, [1, 8])){
-            $data = $data->where('id_statuspengajuan', '!=', 0);
+        if ($id_akses == 3){ //admin ruangan
+            $data = $data->where('id_tahapan', '!=', 1); // pengajuan tidak draft
         }
 
-        $data = $data->orderByRaw('CASE
-            WHEN id_statuspengajuan = 0 THEN 0
-            WHEN id_statuspengajuan = 4 THEN 1
-            WHEN id_statuspengajuan = 5 THEN 2
-            ELSE 3
-            END')->orderBy('created_at', 'desc');
+        if ($id_akses == 9){ //pemeriksa
+            $data = $data->whereHas('persetujuan', function($q) use ($id_pengajuan){
+                $q->where('id_statuspersetujuan', 1)->where('id_tahapan', 2); //jika sudah disetujui pada tahapan verifikasi admin
+            });
+        }
+
+        if ($id_akses == 6){ //kasubbag
+            $data = $data->whereHas('persetujuan', function($q) use ($id_pengajuan){
+                $q->where('id_statuspersetujuan', 1)->where('id_tahapan', 3); //jika sudah disetujui pada tahapan pemeriksaan awal
+            });
+        }
+
+        if ($id_akses == 7){ //kadep
+            $data = $data->whereHas('persetujuan', function($q) use ($id_pengajuan){
+                $q->where('id_statuspersetujuan', 1)->where('id_tahapan', 4); //jika sudah disetujui pada tahapan verifikasi kasubbag
+            });
+        }
+
+        $data = $data->orderBy('created_at', 'desc');
 
         if (!empty($id_pengajuan)) {
             return $data->where('id_pengajuan', $id_pengajuan)->first();
         }
+
+        return $data;
+    }
+
+    public function getDataPengajuanOnly($idPengajuan){
+        $data = PengajuanRuangan::with(['persetujuan'])->where('id_pengajuan', $idPengajuan)->first();
 
         return $data;
     }
@@ -90,7 +108,7 @@ class PengajuanRuanganRepository
         PengajuanRuangan::create([
             'id_pengajuan' => $idPengajuan,
             'pengaju' => auth()->user()->id,
-            'id_statuspengajuan' => 0, //draft
+            'id_tahapan' => 1, //draft
             'id_statuspengaju' => $statusPengaju,
             'nama_kegiatan' => $namaKegiatan,
             'deskripsi' => $deskripsiKegiatan,
@@ -166,7 +184,7 @@ class PengajuanRuanganRepository
     }
 
     public function hapusPengajuan($id_pengajuan){
-        $pengajuan = PengajuanRuangan::where('id_pengajuan', $id_pengajuan)->where('id_statuspengajuan', 0)->first();
+        $pengajuan = PengajuanRuangan::where('id_pengajuan', $id_pengajuan)->where('id_tahapan', 1)->first();
         if ($pengajuan) {
             $pengajuan->delete();
         }

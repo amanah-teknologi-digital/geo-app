@@ -13,6 +13,7 @@ class PersetujuanRuangan extends Model
     protected $fillable = [
         'id_persetujuan',
         'id_pengajuan',
+        'id_tahapan',
         'id_statuspersetujuan',
         'id_akses',
         'penyetuju',
@@ -37,5 +38,10 @@ class PersetujuanRuangan extends Model
     public function akses()
     {
         return $this->belongsTo(Akses::class, 'id_akses', 'id_akses');
+    }
+
+    public function tahapanpengajuan()
+    {
+        return $this->belongsTo(TahapanPeminjamanRuangan::class, 'id_tahapan', 'id_tahapan');
     }
 }

@@ -71,14 +71,14 @@ class PengajuanRuanganController extends Controller
                     return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->nama_kegiatan.'</span>';
                 })
                 ->addColumn('status', function ($data_pengajuan) use($id_akses) {
-                    $html = '<span style="font-size: smaller; color: '.$data_pengajuan->statuspengajuan->html_color.'">'.$data_pengajuan->statuspengajuan->nama.'</span>';
-                    $html .= $this->service->getHtmlStatusPengajuan($data_pengajuan->id_statuspengajuan, $id_akses, $data_pengajuan->persetujuan);
+                    $html = '<span style="font-size: smaller;">'.$data_pengajuan->tahapanpengajuan->nama.'</span>';
+                    $html .= $this->service->getHtmlStatusPengajuan($data_pengajuan->id_pengajuan, $this->subtitle, $data_pengajuan);
 
                     return $html;
                 })
                 ->addColumn('aksi', function ($data_pengajuan) {
                     $html = '<a href="'.route('pengajuanruangan.detail', $data_pengajuan->id_pengajuan).'" class="btn btn-sm py-1 px-2 btn-primary"><span class="bx bx-edit-alt"></span><span class="d-none d-lg-inline-block">&nbsp;Detail</span></a>';
-                    if ($data_pengajuan->id_statuspengajuan == 0) { //status draft bisa hapus
+                    if ($data_pengajuan->id_tahapan == 1) { //status draft bisa hapus
                         $html .= '&nbsp;&nbsp;<a href="javascript:;" data-id="' . $data_pengajuan->id_pengajuan . '" data-bs-toggle="modal" data-bs-target="#modal-hapus" class="btn btn-sm py-1 px-2 btn-danger"><span class="bx bx-trash"></span><span class="d-none d-lg-inline-block">&nbsp;Hapus</span></a>';
                     }
 

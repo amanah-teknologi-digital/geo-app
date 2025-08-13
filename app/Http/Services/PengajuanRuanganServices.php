@@ -127,40 +127,126 @@ class PengajuanRuanganServices
         return $isTambah;
     }
 
-    public function getStatusVerifikasi($id_pengajuan){
+    public function getStatusVerifikasi($id_pengajuan, $namaLayananRuang, $dataPengajuan = null){
         $id_akses = $this->idAkses;
-        $dataPengajuan = $this->getDataPengajuan($id_pengajuan);
+        $idUser = auth()->user()->id;
+
+        if (empty($dataPengajuan)) {
+            $dataPengajuan = $this->repository->getDataPengajuanOnly($id_pengajuan);
+        }
+
+        $tahapan = $dataPengajuan->id_tahapan;
+        $userPengaju = $dataPengajuan->pengaju;
+        $userPemeriksaAwal = $dataPengajuan->pemeriksa_awal;
+        $userPemeriksaAkhir = $dataPengajuan->pemeriksa_akhir;
+        $dataPersetujuan = $dataPengajuan->persetujuan;
+        $adminSudahSetuju = $dataPersetujuan->where('id_tahapan', 2)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $pemeriksaAwalSudahSetuju = $dataPersetujuan->where('id_tahapan', 3)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $kasubbagSudahSetuju = $dataPersetujuan->where('id_tahapan', 4)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $kadepSudahSetuju = $dataPersetujuan->where('id_tahapan', 5)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $sudahPengembalian = $dataPersetujuan->where('id_tahapan', 6)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $adminVerifikasiPengembalian = $dataPersetujuan->where('id_tahapan', 7)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $pemeriksaAkhirSudahSetuju = $dataPersetujuan->where('id_tahapan', 8)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $sudahVerifikasiPengembalian = $dataPersetujuan->where('id_tahapan', 9)->where('id_statuspersetujuan', 1)->isNotEmpty();
 
         $must_aprove = '';
         $message = '';
         $data = [];
         $must_akses = 0;
+        $tahapan_next = 0;
         $must_sebagai = '';
+        $label_verifikasi = '';
 
-        if ($id_akses == 1 || $dataPengajuan->id_statuspengajuan == 1 || $dataPengajuan->id_statuspengajuan == 3){
-            $persetujuanTerakhir = $this->repository->getPersetujuanTerakhirSuper($id_pengajuan);
+        if ($id_akses == 1){
+            $persetujuanTerakhir = $dataPersetujuan->sortByDesc('created_at')->first();
         }else{
-            $persetujuanTerakhir = $this->repository->getPersetujuanTerakhir($id_pengajuan, $id_akses);
+            $persetujuanTerakhir = $dataPersetujuan->where('id_akses', $id_akses)->sortByDesc('created_at')->first();
         }
 
         if ($id_akses == 1){ //super admin
-            if ($dataPengajuan->id_statuspengajuan == 0){ //draft
+            if ($tahapan == 1){ //draft
                 $must_aprove = 'AJUKAN';
                 $must_akses = 8;
+                $tahapan_next = 2;
                 $must_sebagai = 'Pengguna';
-            }else{
-                if ($dataPengajuan->id_statuspengajuan == 2) { //verifikator sebagai
+                $label_verifikasi = 'Ajukan';
+            }else if ($tahapan == 2) { // Verifikasi Admin
+                if (!$adminSudahSetuju) {
                     $must_aprove = 'VERIFIKASI';
-                    $must_akses = 2;
-                    $must_sebagai = 'Admin Geo Letter';
-                }if ($dataPengajuan->id_statuspengajuan == 4){ //jika revisi harus sudah direvisi
-                    $must_aprove = 'SUDAH DIREVISI';
+                    $must_akses = 3;
+                    $tahapan_next = 3;
+                    $must_sebagai = 'Admin ' . $namaLayananRuang;
+                    $label_verifikasi = 'Setujui';
+                }
+            }else if ($tahapan == 3) { // Pemeriksaaan Awal
+                if (!$pemeriksaAwalSudahSetuju) {
+                    $must_aprove = 'VERIFIKASI';
+                    $must_akses = 9;
+                    $tahapan_next = 4;
+                    $must_sebagai = 'Pemeriksa Awal';
+                    $label_verifikasi = 'Verifikasi';
+                }
+            }else if ($tahapan == 4) { // Verifikasi Kasubbag
+                if (!$kasubbagSudahSetuju) {
+                    $must_aprove = 'VERIFIKASI';
+                    $must_akses = 6;
+                    $tahapan_next = 5;
+                    $must_sebagai = 'Kasubbag';
+                    $label_verifikasi = 'Setujui';
+                }
+            }else if ($tahapan == 5) { // Verifikasi Kadep
+                if (!$kadepSudahSetuju) {
+                    $must_aprove = 'VERIFIKASI';
+                    $must_akses = 7;
+                    $tahapan_next = 6;
+                    $must_sebagai = 'Kadep';
+                    $label_verifikasi = 'Setujui';
+                }
+            }else if ($tahapan == 6) { // Pengajuan Berjalan
+                if (!$sudahPengembalian) {
+                    $must_aprove = 'PENGEMBALIAN';
                     $must_akses = 8;
+                    $tahapan_next = 7;
                     $must_sebagai = 'Pengguna';
-                }else if ($dataPengajuan->id_statuspengajuan == 5){ //jika sudah revisi harus diverifikasi
+                    $label_verifikasi = 'Kembalikan Ruangan';
+                }
+            }else if ($tahapan == 7) { // Pengajuan Pengembalian
+                if (!$adminVerifikasiPengembalian) {
                     $must_aprove = 'VERIFIKASI';
-                    $must_akses = 2;
-                    $must_sebagai = 'Admin Geo Letter';
+                    $must_akses = 3;
+                    $tahapan_next = 8;
+                    $must_sebagai = 'Admin ' . $namaLayananRuang;
+                    $label_verifikasi = 'Setujui';
+                }
+            }else if ($tahapan == 8) { // Pemeriksaan Akhir
+                if (!$pemeriksaAkhirSudahSetuju) {
+                    $must_aprove = 'VERIFIKASI';
+                    $must_akses = 9;
+                    $tahapan_next = 9;
+                    $must_sebagai = 'Pemeriksa Akhir';
+                    $label_verifikasi = 'Verifikasi';
+                }
+            }else if ($tahapan == 9) { // Verifikasi Pengembalian
+                if (!$sudahVerifikasiPengembalian) {
+                    $must_aprove = 'VERIFIKASI';
+                    $must_akses = 6;
+                    $tahapan_next = 10;
+                    $must_sebagai = 'Kasubbag';
+                    $label_verifikasi = 'Setujui';
+                }
+            }else{
+                if (empty($persetujuanTerakhir)){
+                    $message = 'Persetujuan Kosong!';
+                }else{
+                    $data = $persetujuanTerakhir;
+                }
+            }
+        }else if ($id_akses == 3){ //admin ruang
+            if ($tahapan == 2) { // Verifikasi Admin
+                if (!$adminSudahSetuju) {
+                    $must_aprove = 'VERIFIKASI';
+                    $tahapan_next = 3;
+                    $label_verifikasi = 'Setujui';
                 }else{
                     if (empty($persetujuanTerakhir)){
                         $message = 'Persetujuan Kosong!';
@@ -168,30 +254,120 @@ class PengajuanRuanganServices
                         $data = $persetujuanTerakhir;
                     }
                 }
-            }
-        }elseif ($id_akses == 2){ //admin geo letter
-            if ($dataPengajuan->id_statuspengajuan == 0){ //draft
-                $message = 'Pengajuan Belum Diajukan!';
-            }else{
-                if (empty($persetujuanTerakhir)){
+            }else if ($tahapan == 7) { // Pengajuan Pengembalian
+                if (!$adminVerifikasiPengembalian) {
                     $must_aprove = 'VERIFIKASI';
+                    $tahapan_next = 8;
+                    $label_verifikasi = 'Setujui';
                 }else{
-                    if ($dataPengajuan->id_statuspengajuan == 5){ //sudah direvisi
-                        $must_aprove = 'VERIFIKASI';
+                    if (empty($persetujuanTerakhir)){
+                        $message = 'Persetujuan Kosong!';
                     }else{
-                        if (empty($persetujuanTerakhir)){
-                            $message = 'Persetujuan Kosong!';
-                        }else{
-                            $data = $persetujuanTerakhir;
-                        }
+                        $data = $persetujuanTerakhir;
                     }
                 }
+            }else{
+                if (empty($persetujuanTerakhir)){
+                    $message = 'Persetujuan Kosong!';
+                }else{
+                    $data = $persetujuanTerakhir;
+                }
             }
-        }elseif ($id_akses == 8){ //pengguna
-            if ($dataPengajuan->id_statuspengajuan == 0){ //draft
+        }else if ($id_akses == 9){ // Pemeriksa
+            if ($tahapan == 3 && $userPemeriksaAwal == $idUser) { // Pemeriksaaan Awal
+                if (!$pemeriksaAwalSudahSetuju) {
+                    $must_aprove = 'VERIFIKASI';
+                    $tahapan_next = 4;
+                    $label_verifikasi = 'Verifikasi';
+                }else{
+                    if (empty($persetujuanTerakhir)){
+                        $message = 'Persetujuan Kosong!';
+                    }else{
+                        $data = $persetujuanTerakhir;
+                    }
+                }
+            }else if ($tahapan == 8 && $userPemeriksaAkhir == $idUser) { // Pemeriksaan Akhir
+                if (!$pemeriksaAkhirSudahSetuju) {
+                    $must_aprove = 'VERIFIKASI';
+                    $tahapan_next = 9;
+                    $label_verifikasi = 'Verifikasi';
+                }else{
+                    if (empty($persetujuanTerakhir)){
+                        $message = 'Persetujuan Kosong!';
+                    }else{
+                        $data = $persetujuanTerakhir;
+                    }
+                }
+            }else{
+                if (empty($persetujuanTerakhir)){
+                    $message = 'Persetujuan Kosong!';
+                }else{
+                    $data = $persetujuanTerakhir;
+                }
+            }
+        }else if ($id_akses == 6){ //kasubbag
+            if ($tahapan == 4) { // Verifikasi Kasubbag
+                if (!$kasubbagSudahSetuju) {
+                    $must_aprove = 'VERIFIKASI';
+                    $tahapan_next = 5;
+                    $label_verifikasi = 'Setujui';
+                }else{
+                    if (empty($persetujuanTerakhir)){
+                        $message = 'Persetujuan Kosong!';
+                    }else{
+                        $data = $persetujuanTerakhir;
+                    }
+                }
+            }else if ($tahapan == 9) { // Verifikasi Pengembalian
+                if (!$sudahVerifikasiPengembalian) {
+                    $must_aprove = 'VERIFIKASI';
+                    $tahapan_next = 10;
+                    $label_verifikasi = 'Setujui';
+                }else{
+                    if (empty($persetujuanTerakhir)){
+                        $message = 'Persetujuan Kosong!';
+                    }else{
+                        $data = $persetujuanTerakhir;
+                    }
+                }
+            }else{
+                if (empty($persetujuanTerakhir)){
+                    $message = 'Persetujuan Kosong!';
+                }else{
+                    $data = $persetujuanTerakhir;
+                }
+            }
+        }else if ($id_akses == 7){ //kadep
+            if ($tahapan == 5) { // Verifikasi Kadep
+                if (!$kadepSudahSetuju) {
+                    $must_aprove = 'VERIFIKASI';
+                    $tahapan_next = 6;
+                    $label_verifikasi = 'Setujui';
+                }else{
+                    if (empty($persetujuanTerakhir)){
+                        $message = 'Persetujuan Kosong!';
+                    }else{
+                        $data = $persetujuanTerakhir;
+                    }
+                }
+            }else{
+                if (empty($persetujuanTerakhir)){
+                    $message = 'Persetujuan Kosong!';
+                }else{
+                    $data = $persetujuanTerakhir;
+                }
+            }
+        }else if ($id_akses == 8 && $userPengaju == $idUser){ //pengguna
+            if ($tahapan == 1){ //draft
                 $must_aprove = 'AJUKAN';
-            }else if ($dataPengajuan->id_statuspengajuan == 4){ //jika revisi harus sudah direvisi
-                $must_aprove = 'SUDAH DIREVISI';
+                $tahapan_next = 2;
+                $label_verifikasi = 'Ajukan';
+            }else if ($tahapan == 6) { // Pengajuan Berjalan
+                if (!$sudahPengembalian) {
+                    $must_aprove = 'PENGEMBALIAN';
+                    $tahapan_next = 7;
+                    $label_verifikasi = 'Kembalikan Ruangan';
+                }
             }else{
                 if (empty($persetujuanTerakhir)){
                     $message = 'Persetujuan Kosong!';
@@ -206,7 +382,9 @@ class PengajuanRuanganServices
             'message' => $message,
             'data' => $data,
             'must_akses' => $must_akses,
-            'must_sebagai' => $must_sebagai
+            'must_sebagai' => $must_sebagai,
+            'tahapan_next' => $tahapan_next,
+            'label_verifikasi' => $label_verifikasi
         ];
     }
 
@@ -255,55 +433,22 @@ class PengajuanRuanganServices
         }
     }
 
-    public function getHtmlStatusPengajuan($id_statuspengajuan, $id_akses, $dataPersetujuan){
+    public function getHtmlStatusPengajuan($idPengajuan, $namaLayananRuang, $dataPengajuan){
         $html = '';
+        $dataVerifikasi = $this->getStatusVerifikasi($idPengajuan, $namaLayananRuang, $dataPengajuan);
+        $mustApprove = $dataVerifikasi['must_aprove'];
+        $message = $dataVerifikasi['message'];
 
-        if ($id_akses == 8){ //pengguna
-            if ($id_statuspengajuan == 0){
-                $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
-            }elseif ($id_statuspengajuan == 4){
-                $html .= '<br><i class="text-danger small">(Pengajuan Direvisi)</i>';
-            }
+        if ($mustApprove == 'AJUKAN'){
+            $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
         }
 
-        if ($id_akses == 2){ //admin
-            if ($id_statuspengajuan == 5){
-                $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
-            }elseif ($id_statuspengajuan == 2){
-                if ($dataPersetujuan->isNotEmpty()){
-                    $id_persetujuan = $dataPersetujuan->first(function ($item) {
-                        return $item->id_akses == 2;
-                    })->id_persetujuan ?? null;
-
-                    if (empty($id_persetujuan)){
-                        $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
-                    }
-                }else{
-                    $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
-                }
-            }
+        if ($mustApprove == 'VERIFIKASI'){
+            $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
         }
 
-        if ($id_akses == 1){ //superadmin
-            if ($id_statuspengajuan == 0){
-                $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
-            }elseif ($id_statuspengajuan == 4){
-                $html .= '<br><i class="text-danger small">(Pengajuan Direvisi)</i>';
-            }elseif ($id_statuspengajuan == 5){
-                $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
-            }elseif ($id_statuspengajuan == 2){
-                if ($dataPersetujuan->isNotEmpty()){
-                    $id_persetujuan = $dataPersetujuan->first(function ($item) {
-                        return $item->id_akses == 2;
-                    })->id_persetujuan ?? null;
-
-                    if (empty($id_persetujuan)){
-                        $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
-                    }
-                }else{
-                    $html .= '<br><i class="text-danger small">(Belum Diajukan)</i>';
-                }
-            }
+        if ($mustApprove == 'SUDAH DIREVISI'){
+            $html .= '<br><i class="text-danger small">(Pengajuan Direvisi)</i>';
         }
 
         return $html;
