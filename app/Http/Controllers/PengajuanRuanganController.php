@@ -286,12 +286,10 @@ class PengajuanRuanganController extends Controller
     }
 
     public function detailPengajuan($idPengajuan){
-        $title = "Detail Pengajuan";
+        $title = "Detail Pengajuan Ruangan";
 
         $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
-        $isEdit = $this->service->checkOtoritasPengajuan($dataPengajuan->id_statuspengajuan);
-        $dataStatusPeminjam = $this->service->getDataStatusPeminjam();
-        $dataRuangan = $this->service->getDataRuanganAktif(isEdit: $isEdit);
+        $isEdit = $this->service->checkOtoritasPengajuan($idPengajuan);
 
         //$isEdit = false;
         if ($isEdit){
@@ -308,9 +306,9 @@ class PengajuanRuanganController extends Controller
                 return redirect()->back()->with('error', $e->getMessage());
             }
         }
-        $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan);
+        $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan, $this->subtitle, $dataPengajuan);
 
-        return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'dataStatusPeminjam', 'dataRuangan', 'title'));
+        return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'title'));
     }
 
     public function doHapusPengajuan(Request $request){

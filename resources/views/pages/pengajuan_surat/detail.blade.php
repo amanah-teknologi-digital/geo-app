@@ -218,9 +218,12 @@
                 </div>
             </div>
             <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI') ? 'style="margin-bottom: 5.5rem !important;"':'style="margin-bottom: 1.5rem !important;"' ?> >
+                <div class="stage-bar bg-primary text-white">
+                    {{ $dataPengajuan->statuspengajuan->nama }}
+                </div>
                 <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
                     <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-envelope pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Persuratan</h5>
-                    <span class="badge ms-2 px-3 py-2" style="background-color: {{ $dataPengajuan->statuspengajuan->html_color }}; color: white; font-size: 0.9rem;">{{ $dataPengajuan->statuspengajuan->nama }}</span></div>
+                </div>
                 <div class="card-body pt-4">
                     <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}" enctype="multipart/form-data">
                         @csrf

@@ -44,26 +44,24 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <div class="row align-items-stretch mb-5">
-                <div class="col-md-12">
-                    <div class="card mb-4 shadow-sm h-100 border-0">
-                        <div class="card-header d-flex justify-content-between align-items-center pb-3 border-bottom">
-                            <h5 class="card-title mb-0 fw-bold d-flex align-items-center">
-                                <i class="bx bx-collection me-2" style="font-size: 1.3rem;"></i>
-                                Surver Kepuasan Layanan Kami
-                            </h5>
-                            @if($dataPengajuan->id_statuspengajuan == 1 )
+            @if($dataPengajuan->id_tahapan == '10')
+                <div class="row align-items-stretch mb-5">
+                    <div class="col-md-12">
+                        <div class="card mb-4 shadow-sm h-100 border-0">
+                            <div class="card-header d-flex justify-content-between align-items-center pb-3 border-bottom">
+                                <h5 class="card-title mb-0 fw-bold d-flex align-items-center">
+                                    <i class="bx bx-collection me-2" style="font-size: 1.3rem;"></i>
+                                    Surver Kepuasan Layanan Kami
+                                </h5>
                                 <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary">
                                     <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                                 </a>
-                            @endif
-                        </div>
-                        <div class="card-body pt-4">
-                            @if($dataPengajuan->id_statuspengajuan == 1)
+                            </div>
+                            <div class="card-body pt-4">
                                 @if(empty($dataPengajuan->surveykepuasan))
                                     <form id="FrmSurveyKepuasan" action="{{ route('pengajuansurat.surveykepuasan') }}" method="POST">
                                         @csrf
-                                        <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}">
+                                        <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}">
 
                                         <p>Terima kasih telah menggunakan layanan kami. Mohon luangkan waktu sejenak untuk mengisi survei kepuasan berikut agar kami bisa terus meningkatkan kualitas layanan.</p>
 
@@ -112,11 +110,11 @@
                                         </li>
                                     </ul>
                                 @endif
-                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
             <div class="row align-items-stretch mb-5">
                 <div class="col-md-7">
                     <div class="card mb-4 shadow-sm h-100 border-0">
@@ -125,7 +123,7 @@
                                 <i class="bx bx-user me-2" style="font-size: 1.3rem;"></i>
                                 Data Pemohon
                             </h5>
-                            @if($dataPengajuan->id_statuspengajuan != 1 )
+                            @if($dataPengajuan->id_tahapan != 10 )
                                 <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary">
                                     <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                                 </a>
@@ -157,7 +155,10 @@
                                     <div class="fw-semibold small text-secondary mb-3">Email ITS </div>
                                     <div class="fs-6 text-dark">{{ $dataPengajuan->email_its }}</div>
                                 </div>
-
+                                <div class="col-md-6">
+                                    <div class="fw-semibold small text-secondary mb-3">Status Pengaju </div>
+                                    <div class="fs-6 text-dark">{{ $dataPengajuan->statuspengaju->nama }}</div>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="fw-semibold small text-secondary mb-1">File Kartu ID (NRP/KTP) </div>
                                     @php
@@ -217,131 +218,108 @@
                     </div>
                 </div>
             </div>
-            <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI') ? 'style="margin-bottom: 5.5rem !important;"':'style="margin-bottom: 1.5rem !important;"' ?> >
-                <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
-                    <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-envelope pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Persuratan</h5>
-                    <span class="badge ms-2 px-3 py-2" style="background-color: {{ $dataPengajuan->statuspengajuan->html_color }}; color: white; font-size: 0.9rem;">{{ $dataPengajuan->statuspengajuan->nama }}</span></div>
-                <div class="card-body pt-4">
-                    <form id="formPengajuan" method="POST" action="{{ route('pengajuansurat.doupdate') }}" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" required>
-                        <div class="row g-6">
-                            <div>
-                                <label for="email" class="form-label">Persetujuan</label>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div id="list-persetujuan" style="font-weight: bold;">
-                                        <span class="badge bg-primary text-white">1. Admin {{ $namaLayananSurat }} </span>
-                                        @if ($dataPengajuan->pihakpenyetuju->isNotEmpty())
-                                            <i class="bx bx-arrow-back text-primary" style="transform: rotate(180deg);"></i>
-                                            @foreach ($dataPengajuan->pihakpenyetuju as $p)
-                                                <span class="badge bg-primary text-white">{{ $p->urutan }}. {{ $p->nama }} </span> @if (!$loop->last) <i class="bx bx-arrow-back text-primary" style="transform: rotate(180deg);"></i> @endif
-                                            @endforeach
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="jenis_surat" class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                <select id="jenis_surat" class="form-control" required disabled>
-                                    <option value="" selected disabled>-- Pilih Jenis Surat --</option>
-                                    @foreach($dataJenisSurat as $row)
-                                        <option value="{{ $row->id_jenissurat }}" {{ ($dataPengajuan->id_jenissurat == $row->id_jenissurat) ? 'selected':'' }}>{{ $row->nama }}</option>
-                                    @endforeach
-                                </select>
-                                <input type="hidden" name="jenis_surat" value="{{ $dataPengajuan->id_jenissurat }}" >
-                            </div>
-                            <div>
-                                <label for="isi_surat" class="form-label">Form Isi Surat <span class="text-danger">*</span></label>
-                                <div id="editor-loading" class="text-center">
-                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                                <textarea id="editor_surat" name="editor_surat" style="height: 500px;">{!! $dataPengajuan->data_form !!}</textarea>
-                                <div class="error-container" id="error-quil"></div>
-                            </div>
-                            <div>
-                                <label for="keterangan" class="form-label">Keterangan <span class="text-danger">*</span></label>
-                                <textarea name="keterangan" id="keterangan" class="form-control" cols="10" rows="5" required {{ $isEdit? '':'readonly' }} >{{ $dataPengajuan->keterangan }}</textarea>
-                            </div>
-                            <div id="div_datapendukung" <?= !empty($dataPengajuan->nama_pendukung) ? '':'style="display: none"' ?>>
-                                <label for="data_pendukung" class="form-label">Data Pendukung <span id="nama_datapendukung" class="text-muted fst-italic">{{ !empty($dataPengajuan->nama_pendukung) ? "(".$dataPengajuan->nama_pendukung.")":'' }}</span> <span class="text-danger">*</span></label>
-                                @if(!empty($dataPengajuan->id_datapendukung))
-                                    @php
-                                        $filePath = optional($dataPengajuan->filependukung)->location ?? 'no-exist';
-                                        $fileId = optional($dataPengajuan->filependukung)->id_file ?? -1;
-                                        $imageUrl = Storage::disk('public')->exists($filePath)
-                                            ? route('file.getpublicfile', $fileId)
-                                            : false;
-                                    @endphp
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <a href="{{ $imageUrl }}" target="_blank">
-                                            <div class="d-flex align-items-center gap-2 flex-wrap"><span class="text-success small fw-semibold">
-                                                    <i class="bx bxs-file-archive me-1"></i>{{ $dataPengajuan->filependukung->file_name }}</span>
-                                                <i class="small text-secondary">(<span >{{ formatBytes($dataPengajuan->filependukung->file_size) }}</span>)</i>
-                                            </div>
-                                        </a>
-                                        @if($isEdit)
-                                            <span class="bx bx-x text-danger cursor-pointer" data-id_file="{{ $dataPengajuan->filependukung->id_file }}" data-bs-toggle="modal" data-bs-target="#modal-hapusfilependukung"></span>
-                                        @endif
-                                    </div>
-                                @else
-                                    <input type="file" class="form-control" name="data_pendukung" id="data_pendukung" accept="application/pdf" {{ !empty($dataPengajuan->nama_pendukung) ? 'required':'' }}>
-                                @endif
-                            </div>
-                            @if($dataPengajuan->filesurat->isNotEmpty())
-                                <div>
-                                    <label for="filehasil" class="form-label fw-bold">File Surat: </label>
-                                    @foreach($dataPengajuan->filesurat as $file)
-                                        @php
-                                            $filePath = optional($file->file)->location ?? 'no-exist';
-                                            $fileId = optional($file->file)->id_file ?? -1;
-                                            $imageUrl = Storage::disk('public')->exists($filePath)
-                                                ? route('file.getpublicfile', $fileId)
-                                                : false;
-                                        @endphp
-                                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                                            <a href="{{ $imageUrl }}" target="_blank">
-                                                <div class="d-flex align-items-center gap-2 flex-wrap"><span class="text-success small fw-semibold">
-                                                    <i class="bx bxs-file-archive me-1"></i>{{ $file->file->file_name }}</span>
-                                                    <i class="small text-secondary">(<span >{{ formatBytes($file->file->file_size) }}</span>)</i>
-                                                </div>
-                                            </a>
-                                            @if(in_array($idAkses, [1,2]) OR $userTambahan)
-                                                <span class="bx bx-x text-danger cursor-pointer" data-id_file="{{ $file->file->id_file }}" data-bs-toggle="modal" data-bs-target="#modal-hapusfile"></span>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
-                        @if($isEdit)
-                            <div class="mt-6">
-                                <button type="submit" class="btn btn-warning me-3 text-black"><i class="bx bx-save"></i>&nbsp;Update Pengajuan</button>
-                            </div>
-                        @endif
-                    </form>
-                    @if((in_array($idAkses, [1,2]) OR $userTambahan) && $dataPengajuan->id_statuspengajuan == 1)
-                        <div class="mt-6 mb-10">
-                            <label for="uploadhasilsurat" class="form-label">Upload Hasil Surat <i class="text-muted fw-bold">(Opsional & bisa lebih dari 1, PDF Max 5 MB)</i></label>
-                            <form id="frmUploadFile" action="{{ route('pengajuansurat.uploadfile') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
-                                <div class="input-group">
-                                    <input type="file" class="form-control" name="filesuratupload[]" id="filesuratupload" accept="application/pdf" multiple required>
-                                    <button class="btn btn-outline-primary" type="submit"><i class="bx bx-save"></i>&nbsp;Upload File</button>
-                                </div>
-                                <div class="error-container" id="error-uploadfile"></div>
-                            </form>
-                        </div>
-                    @endif
+            <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'PENGEMBALIAN' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI') ? 'style="margin-bottom: 5.5rem !important;"':'style="margin-bottom: 1.5rem !important;"' ?> >
+                <div class="stage-bar bg-primary text-white">
+                    {{ $dataPengajuan->tahapanpengajuan->nama }}
+                </div>
 
+                <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
+                    <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-building pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Pengajuan Ruangan</h5>
+                </div>
+                <div class="card-body pt-4">
+                    <div class="row g-6">
+                        <div>
+                            <div class="fw-semibold small text-secondary mb-3">Persetujuan </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <div id="list-persetujuan">
+                                    <span class="fst-italic">Admin Ruang</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
+                                    <span class="fst-italic">Pemeriksa Awal</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
+                                    <span class="fst-italic">Kasubbag</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
+                                    <span class="fst-italic">Kadep</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
+                                    <span class="font-bold text-success fst-italic">Pengembalian</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
+                                    <span class="fst-italic">Admin Ruang</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
+                                    <span class="fst-italic">Pemeriksa Akhir</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
+                                    <span class="fst-italic">Kasubbag</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
+                                    <span class="fst-italic">Selesai</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="fw-semibold small text-secondary mb-3">Nama Kegiatan </div>
+                            <div class="fs-6 text-dark">{{ $dataPengajuan->nama_kegiatan }}</div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="fw-semibold small text-secondary mb-3">Deskripsi Kegiatan </div>
+                            <div class="fs-6 text-dark fst-italic small">{{ $dataPengajuan->deskripsi }}</div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="fw-semibold small text-secondary mb-3">Ruangan Dipinjam </div>
+                            <div class="fs-6 text-dark small d-flex flex-wrap gap-1">
+                                {!! $dataPengajuan->pengajuanruangandetail->map(function($ruang) {
+                                    return '<span class="badge bg-primary rounded-pill">'
+                                        . $ruang->ruangan->kode_ruangan . ' - ' . $ruang->ruangan->nama .
+                                    '</span>';
+                                })->implode(' ') !!}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="fw-semibold small text-secondary mb-3">Data Rincian Peralatan </div>
+                            <div class="table-responsive" id="tabelPeminjaman">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                    <tr style="background-color: rgba(8, 60, 132, 0.16) !important">
+                                        <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">No</td>
+                                        <td class="fw-bold" style="width: 30%; color: rgb(8, 60, 132)" align="center">Nama Peralatan</td>
+                                        <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">Jumlah</td>
+                                        <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">Status Awal</td>
+                                        <td class="fw-bold" nowrap="" style="width: 25%; color: rgb(8, 60, 132)" align="center">Keterangan Awal</td>
+                                        <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">Status Akhir</td>
+                                        <td class="fw-bold" nowrap="" style="width: 25%; color: rgb(8, 60, 132)" align="center">Keterangan Akhir</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbodySarpras">
+
+                                    @foreach($dataPengajuan->pengajuanperalatandetail as $key => $peralatan)
+                                        <tr>
+                                            <td align="center">{{ $key+1 }}</td>
+                                            <td>{{ $peralatan->nama_sarana }}</td>
+                                            <td align="center">{{ $peralatan->jumlah }}</td>
+                                            <td align="center">
+                                                @if(empty($peralatan->is_valid_awal))
+                                                    -
+                                                @else
+                                                    @if($peralatan->is_valid_awal == 1)
+                                                        <span class="bx bx-check text-success"></span>
+                                                    @else
+                                                        <span class="bx bx-x text-danger"></span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td><span class="text-muted fst-italic small">{{ $peralatan->keterangan_awal }}</span></td>
+                                            <td align="center">
+                                                @if(empty($peralatan->is_valid_akhir))
+                                                    -
+                                                @else
+                                                    @if($peralatan->is_valid_akhir == 1)
+                                                        <span class="bx bx-check text-success"></span>
+                                                    @else
+                                                        <span class="bx bx-x text-danger"></span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td><span class="text-muted fst-italic small">{{ $peralatan->keterangan_akhir }}</span></td>
+                                        </tr>
+                                    @endforeach
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                     <ul class="fa-ul ml-auto float-end mt-5">
                         <li>
-                            <small><em>Ganti text yang <b>bewarna kuning</b> sesuai data yang akan diajukan!.</em></small>
-                        </li>
-                        <li>
-                            <small><em>Jika ada <b>revisi dari admin</b>, maka update data <b>pengajuan</b> atau <b>biodata</b> sesuai dengan <b>arahan revisi</b> pada histori persetujuan.</em></small>
+                            <small><em>Data tidak bisa diupdate, Silahkan <b>hapus pengajuan</b> dan input kembali data untuk memperbaiki selama pengajuan masih belum <b>Diajukan</b>.</em></small>
                         </li>
                     </ul>
                 </div>
@@ -439,7 +417,7 @@
         <div class="modal-dialog modal-sm" role="document">
             <form action="{{ route('pengajuansurat.ajukan') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_ajukan" >
                 <div class="modal-content">
                     <div class="modal-header">
@@ -461,7 +439,7 @@
         <div class="modal-dialog modal-sm" role="document">
             <form action="{{ route('pengajuansurat.hapusfile') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
                 <input type="hidden" name="id_file" id="id_filehapus" >
                 <div class="modal-content">
                     <div class="modal-header">
@@ -483,7 +461,7 @@
         <div class="modal-dialog modal-sm" role="document">
             <form action="{{ route('pengajuansurat.hapusfilependukung') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel2">Hapus File Pendukung</h5>
@@ -504,7 +482,7 @@
         <div class="modal-dialog modal-md" role="document">
             <form id="frmSetujuiPengajuan" action="{{ route('pengajuansurat.setujui') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_setujui" >
                 <input type="hidden" name="id_pihakpenyetuju" id="id_pihakpenyetuju_setujui" >
                 <div class="modal-content">
@@ -531,7 +509,7 @@
         <div class="modal-dialog modal-sm" role="document">
             <form action="{{ route('pengajuansurat.revisi') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_revisi" >
                 <input type="hidden" name="id_pihakpenyetuju" id="id_pihakpenyetuju_revisi" >
                 <div class="modal-content">
@@ -557,7 +535,7 @@
         <div class="modal-dialog modal-sm" role="document">
             <form action="{{ route('pengajuansurat.sudahrevisi') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_sudahrevisi" >
                 <div class="modal-content">
                     <div class="modal-header">
@@ -582,7 +560,7 @@
         <div class="modal-dialog modal-sm" role="document">
             <form action="{{ route('pengajuansurat.tolak') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $id_pengajuan }}" >
+                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_tolak" >
                 <input type="hidden" name="id_pihakpenyetuju" id="id_pihakpenyetuju_tolak" >
                 <div class="modal-content">

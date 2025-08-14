@@ -105,14 +105,10 @@ class PengajuanRuanganServices
         }
     }
 
-    public function checkOtoritasPengajuan($id_statuspengajuan){
+    public function checkOtoritasPengajuan($idPengajuan){
         $id_akses = $this->idAkses;
 
-        if (($id_statuspengajuan == 0 OR $id_statuspengajuan == 4) && in_array($id_akses, [1, 8])) { //jika status draft atau revisi dan akses superadmin & pengguna itu bisa edit
-            $is_edit = true;
-        }else{
-            $is_edit = false;
-        }
+        $is_edit = true;
 
         return $is_edit;
     }

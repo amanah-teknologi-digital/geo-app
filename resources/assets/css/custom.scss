@@ -205,6 +205,16 @@
     color: gold;
 }
 
+.stage-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-bottom-left-radius: .5rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
 
 
 
