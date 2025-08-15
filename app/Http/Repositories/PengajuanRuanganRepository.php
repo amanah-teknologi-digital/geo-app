@@ -21,7 +21,7 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class PengajuanRuanganRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
-        $data = PengajuanRuangan::with(['pihakpengaju','pihakupdater','statuspengaju','tahapanpengajuan','persetujuan','pengajuanruangandetail', 'pengajuanperalatandetail', 'surveykepuasan']);
+        $data = PengajuanRuangan::with(['pihakpengaju','pihakupdater','statuspengaju','tahapanpengajuan','persetujuan','pengajuanruangandetail', 'pengajuanperalatandetail', 'pemeriksaawal', 'pemeriksaakhir', 'surveykepuasan']);
 
         $id_pengguna = auth()->user()->id;
 

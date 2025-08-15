@@ -46,80 +46,9 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    <div class="row mb-6 pt-2 g-6">
-        <div class="col-sm-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="content-left">
-                            <h5 class="mb-1" id="total_pengajuan">
-                                <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </h5>
-                            <small>Total Pengajuan</small>
-                        </div>
-                        <span class="badge bg-label-primary rounded-circle p-2"><i class="bx bx-book-content bx-lg"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="content-left">
-                            <h5 class="mb-1" id="total_disetujui">
-                                <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </h5>
-                            <small>Total Disetujui</small>
-                        </div>
-                        <span class="badge bg-label-success rounded-circle p-2"><i class="bx bx-check bx-lg"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="content-left">
-                            <h5 class="mb-1" id="total_onproses">
-                                <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </h5>
-                            <small>Total Onproses</small>
-                        </div>
-                        <span class="badge bg-label-warning rounded-circle p-2"><i class="bx bx-loader bx-lg"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="content-left">
-                            <h5 class="mb-1" id="total_ditolak">
-                                <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </h5>
-                            <small>Total Ditolak</small>
-                        </div>
-                        <span class="badge bg-label-danger rounded-circle p-2"><i class="bx bx-x bx-lg"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 col-xxl-12 mb-6">
-            <div class="card p-4">
+    <div class="row pt-2 g-6 mb-6">
+        <div class="col-md-12 col-xxl-4">
+            <div class="card p-4 h-100">
                 <div class="row">
                     <!-- Left side: rating average and total -->
                     <div class="col-md-4 d-flex flex-column align-items-center justify-content-center border-end">
@@ -136,8 +65,8 @@
                         $percent_5 = ($dataSurveyKepuasan->rating_5 / $total) * 100;
                     @endphp
                         <!-- Right side: rating breakdown -->
-                    <div class="col-md-8 ps-md-4">
-                        <div class="d-flex align-items-center mb-2">
+                    <div class="col-md-8 ps-md-4 small">
+                        <div class="d-flex align-items-center mb-1">
                             <div style="width: 60px;">5 Star</div>
                             <div class="flex-grow-1 mx-3">
                                 <div class="progress" style="height: 10px;">
@@ -147,7 +76,7 @@
                             <div style="width: 30px;" class="text-end">{{ $dataSurveyKepuasan->rating_5 }} </div>
                         </div>
 
-                        <div class="d-flex align-items-center mb-2">
+                        <div class="d-flex align-items-center mb-1">
                             <div style="width: 60px;">4 Star</div>
                             <div class="flex-grow-1 mx-3">
                                 <div class="progress" style="height: 10px;">
@@ -157,7 +86,7 @@
                             <div style="width: 30px;" class="text-end">{{ $dataSurveyKepuasan->rating_4 }}</div>
                         </div>
 
-                        <div class="d-flex align-items-center mb-2">
+                        <div class="d-flex align-items-center mb-1">
                             <div style="width: 60px;">3 Star</div>
                             <div class="flex-grow-1 mx-3">
                                 <div class="progress" style="height: 10px;">
@@ -167,7 +96,7 @@
                             <div style="width: 30px;" class="text-end">{{ $dataSurveyKepuasan->rating_3 }}</div>
                         </div>
 
-                        <div class="d-flex align-items-center mb-2">
+                        <div class="d-flex align-items-center mb-1">
                             <div style="width: 60px;">2 Star</div>
                             <div class="flex-grow-1 mx-3">
                                 <div class="progress" style="height: 10px;">
@@ -185,6 +114,70 @@
                                 </div>
                             </div>
                             <div style="width: 30px;" class="text-end">{{ $dataSurveyKepuasan->rating_1 }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xxl-8">
+            <div class="card h-100">
+                <div class="card-widget-separator-wrapper">
+                    <div class="card-body card-widget-separator">
+                        <div class="row gy-4 gy-sm-1">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-4 pb-sm-0">
+                                    <div>
+                                        <p class="mb-1">Total Pengajuan</p>
+                                        <h4 class="mb-1" id="total_pengajuan">
+                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <span class="avatar me-sm-6"><span class="avatar-initial rounded w-px-44 h-px-44 bg-label-primary"><i class="bx bx-book-content bx-lg text-heading"></i></span></span>
+                                </div>
+                                <hr class="d-none d-sm-block d-lg-none me-6">
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-4 pb-sm-0">
+                                    <div>
+                                        <p class="mb-1">Total Disetujui</p>
+                                        <h4 class="mb-1" id="total_disetujui">
+                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <span class="avatar p-2 me-lg-6"><span class="avatar-initial rounded w-px-44 h-px-44 bg-label-success"><i class="bx bx-check bx-lg text-heading"></i></span></span>
+                                </div>
+                                <hr class="d-none d-sm-block d-lg-none">
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="d-flex justify-content-between align-items-start border-end pb-4 pb-sm-0 card-widget-3">
+                                    <div>
+                                        <p class="mb-1">Total Onproses</p>
+                                        <h4 class="mb-1" id="total_onproses">
+                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <span class="avatar p-2 me-sm-6"><span class="avatar-initial rounded w-px-44 h-px-44 bg-label-warning"><i class="bx bx-loader bx-lg text-heading"></i></span></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="mb-1">Total Ditolak</p>
+                                        <h4 class="mb-1" id="total_ditolak">
+                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <span class="avatar p-2"><span class="avatar-initial rounded w-px-44 h-px-44 bg-label-danger"><i class="bx bx-x bx-lg text-heading"></i></span></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -68,99 +68,103 @@
     <!-- Main Content & Sidebar Section -->
     <header id="hero" class="ruangan-section pt-5">
         <div class="container">
-            <div class="card-custom mb-5" data-aos="fade-up" data-aos-delay="100">
-                <div class="card-header-custom d-flex justify-content-between align-items-center pb-4 border-bottom">
-                    <h5 class="card-title mb-0"><i class="bx bx-detail mb-1"></i>&nbsp;Detail {{ $dataRuangan->nama }} &nbsp;<span class="badge bg-success rounded-pill align-middle" style="font-size: 0.7rem;">{{ $dataRuangan->kode_ruangan }}</span></h5>
-                    <a href="{{ route('listruangan') }}" class="btn btn-light mb-0">
-                        <i class="bx bx-arrow-back"></i>&nbsp;Kembali
-                    </a>
-                </div>
-                <div class="card-body p-5">
-                    @php
-                        $file = $dataRuangan->gambar_file;
-                        $filePath = $dataRuangan->gambar->location;
-                        $imageUrl = Storage::disk('public')->exists($filePath)
-                            ? route('file.getpublicfile', $file)
-                            : asset('assets/img/no_image.jpg');
-                    @endphp
-                    <div class="row mb-5">
-                        <div class="col-md-4 mb-3 mb-md-0">
-                            <div class="position-relative">
-                                <img src="{{ $imageUrl }}" class="card-img-top rounded-2" alt="{{ $dataRuangan->nama }}">
-                                <span class="badge bg-label position-absolute top-0 end-0 m-3">{{ $dataRuangan->jenis_ruangan }}</span>
-                            </div>
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <div class="card-custom mb-5" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center pb-4 border-bottom">
+                            <h5 class="card-title mb-0"><i class="bx bx-detail mb-1"></i>&nbsp;Detail {{ $dataRuangan->nama }} &nbsp;<span class="badge bg-success rounded-pill align-middle" style="font-size: 0.7rem;">{{ $dataRuangan->kode_ruangan }}</span></h5>
+                            <a href="{{ route('listruangan') }}" class="btn btn-light mb-0">
+                                <i class="bx bx-arrow-back"></i>&nbsp;Kembali
+                            </a>
+                        </div>
+                        <div class="card-body p-5">
+                            @php
+                                $file = $dataRuangan->gambar_file;
+                                $filePath = $dataRuangan->gambar->location;
+                                $imageUrl = Storage::disk('public')->exists($filePath)
+                                    ? route('file.getpublicfile', $file)
+                                    : asset('assets/img/no_image.jpg');
+                            @endphp
+                            <div class="row mb-5">
+                                <div class="col-md-4 mb-3 mb-md-0">
+                                    <div class="position-relative">
+                                        <img src="{{ $imageUrl }}" class="card-img-top rounded-2" alt="{{ $dataRuangan->nama }}">
+                                        <span class="badge bg-label position-absolute top-0 end-0 m-3">{{ $dataRuangan->jenis_ruangan }}</span>
+                                    </div>
 
-                            <div class="row align-items-center gx-4 mt-4">
-                                <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
-                                    <div class="facility-item">
-                                        <i class="bx bx-user"></i>
-                                        <span>Kapasitas {{ $dataRuangan->kapasitas }} Orang</span>
+                                    <div class="row align-items-center gx-4 mt-4">
+                                        <div class="col-12 d-flex flex-wrap gap-2 justify-content-between">
+                                            <div class="facility-item">
+                                                <i class="bx bx-user"></i>
+                                                <span>Kapasitas {{ $dataRuangan->kapasitas }} Orang</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <h5>Lokasi <span class="badge bg-label-primary small" style="font-size: 0.8125rem !important;">{{ $dataRuangan->jenis_ruangan }}</span></h5>
+                                    <p class="mb-0">{{ $dataRuangan->lokasi }}</p>
+                                    <hr class="my-6">
+                                    <h5>Fasilitas</h5>
+                                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xxl-3 g-2 align-items-center">
+                                        @foreach(json_decode($dataRuangan->fasilitas, true) as $item)
+                                            <div class="col">
+                                                <div class="facility-item mb-2">
+                                                    <i class="bx {{ $item['icon'] }} me-2 align-bottom"></i>
+                                                    <span>{{ $item['text'] }}</span>
+                                                </div>
+                                                {{--                                        <p class="mb-2"><i class="icon-base bx <?= $item['icon'] ?> me-2 align-bottom"></i>&nbsp;{{ $item['text'] }}</p>--}}
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <hr class="my-6">
+                                    <h5>Keterangan</h5>
+                                    <p class="mb-0 text-muted fst-italic">{!! nl2br(e($dataRuangan->keterangan)) !!}</p>
+                                </div>
+                            </div>
+                            <div class="card shadow-none app-calendar-wrapper border-top border-bottom">
+                                <div class="row g-0">
+                                    <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
+                                        <div class="pb-2 my-sm-0 pt-4">
+                                            <!-- Filter -->
+                                            <div>
+                                                <h5>Filter Jadwal</h5>
+                                            </div>
+
+                                            <div class="form-check form-check-secondary mb-5 ms-2">
+                                                <input class="form-check-input select-all" type="checkbox" id="selectAll" data-value="all" checked="">
+                                                <label class="form-check-label" for="selectAll">Tampilkan Semua</label>
+                                            </div>
+
+                                            <div class="app-calendar-events-filter text-heading">
+                                                <div class="form-check form-check-success mb-5 ms-2">
+                                                    <input class="form-check-input input-filter" type="checkbox" id="select-jadwal" data-value="jadwal" checked="">
+                                                    <label class="form-check-label" for="select-jadwal">Jadwal Kuliah</label>
+                                                </div>
+                                                <div class="form-check form-check-primary mb-5 ms-2">
+                                                    <input class="form-check-input input-filter" type="checkbox" id="select-booking" data-value="booking" checked="">
+                                                    <label class="form-check-label" for="select-booking">Jadwal Booking</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col app-calendar-content">
+                                        <div class="card shadow-none border-0">
+                                            <div class="card-body pb-0">
+                                                <div id="calendar"></div>
+                                            </div>
+                                        </div>
+                                        <div class="app-overlay"></div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-8">
-                            <h5>Lokasi <span class="badge bg-label-primary small" style="font-size: 0.8125rem !important;">{{ $dataRuangan->jenis_ruangan }}</span></h5>
-                            <p class="mb-0">{{ $dataRuangan->lokasi }}</p>
-                            <hr class="my-6">
-                            <h5>Fasilitas</h5>
-                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xxl-3 g-2 align-items-center">
-                                @foreach(json_decode($dataRuangan->fasilitas, true) as $item)
-                                    <div class="col">
-                                        <div class="facility-item mb-2">
-                                            <i class="bx {{ $item['icon'] }} me-2 align-bottom"></i>
-                                            <span>{{ $item['text'] }}</span>
-                                        </div>
-{{--                                        <p class="mb-2"><i class="icon-base bx <?= $item['icon'] ?> me-2 align-bottom"></i>&nbsp;{{ $item['text'] }}</p>--}}
-                                    </div>
-                                @endforeach
-                            </div>
-                            <hr class="my-6">
-                            <h5>Keterangan</h5>
-                            <p class="mb-0 text-muted fst-italic">{!! nl2br(e($dataRuangan->keterangan)) !!}</p>
+                            <ul class="fa-ul ml-auto float-end mt-5 p-4">
+                                <li>
+                                    <small><em>Pembokingan harap H-1 dari pembookingan, hanya jadwal yang tersedia saja yang bisa dibooking!.</em></small>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="card shadow-none app-calendar-wrapper border-top border-bottom">
-                        <div class="row g-0">
-                            <div class="col app-calendar-sidebar border-end" id="app-calendar-sidebar">
-                                <div class="pb-2 my-sm-0 pt-4">
-                                    <!-- Filter -->
-                                    <div>
-                                        <h5>Filter Jadwal</h5>
-                                    </div>
-
-                                    <div class="form-check form-check-secondary mb-5 ms-2">
-                                        <input class="form-check-input select-all" type="checkbox" id="selectAll" data-value="all" checked="">
-                                        <label class="form-check-label" for="selectAll">Tampilkan Semua</label>
-                                    </div>
-
-                                    <div class="app-calendar-events-filter text-heading">
-                                        <div class="form-check form-check-success mb-5 ms-2">
-                                            <input class="form-check-input input-filter" type="checkbox" id="select-jadwal" data-value="jadwal" checked="">
-                                            <label class="form-check-label" for="select-jadwal">Jadwal Kuliah</label>
-                                        </div>
-                                        <div class="form-check form-check-primary mb-5 ms-2">
-                                            <input class="form-check-input input-filter" type="checkbox" id="select-booking" data-value="booking" checked="">
-                                            <label class="form-check-label" for="select-booking">Jadwal Booking</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col app-calendar-content">
-                                <div class="card shadow-none border-0">
-                                    <div class="card-body pb-0">
-                                        <div id="calendar"></div>
-                                    </div>
-                                </div>
-                                <div class="app-overlay"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="fa-ul ml-auto float-end mt-5 p-4">
-                        <li>
-                            <small><em>Pembokingan harap H-1 dari pembookingan, hanya jadwal yang tersedia saja yang bisa dibooking!.</em></small>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>

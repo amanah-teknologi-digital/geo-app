@@ -244,15 +244,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12">
-                            <div class="fw-semibold small text-secondary mb-3">Nama Kegiatan </div>
-                            <div class="fs-6 text-dark">{{ $dataPengajuan->nama_kegiatan }}</div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="fw-semibold small text-secondary mb-3">Deskripsi Kegiatan </div>
-                            <div class="fs-6 text-dark fst-italic small">{{ $dataPengajuan->deskripsi }}</div>
-                        </div>
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <div class="fw-semibold small text-secondary mb-3">Ruangan Dipinjam </div>
                             <div class="fs-6 text-dark small d-flex flex-wrap gap-1">
                                 {!! $dataPengajuan->pengajuanruangandetail->map(function($ruang) {
@@ -262,11 +254,43 @@
                                 })->implode(' ') !!}
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="fw-semibold small text-secondary mb-3">Jadwal Peminjaman </div>
+                            <div class="fs-6 text-dark fst-italic small">{!! $jadwalPeminjaman !!}</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="fw-semibold small text-secondary mb-3">Nama Kegiatan </div>
+                            <div class="fs-6 text-dark">{{ $dataPengajuan->nama_kegiatan }}</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="fw-semibold small text-secondary mb-3">Deskripsi Kegiatan </div>
+                            <textarea class="form-control" rows="5" disabled>{{ $dataPengajuan->deskripsi }}</textarea>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Awal </div>
+                            <div class="fs-6 text-dark">
+                                @if(!empty($dataPengajuan->pemeriksaawal))
+                                    {{ $dataPengajuan->pemeriksaawal->name }}
+                                @else
+                                    <span class="fst-italic text-danger small">Belum Ditentukan</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Akhir </div>
+                            <div class="fs-6 text-dark">
+                                @if(!empty($dataPengajuan->pemeriksaakhir))
+                                    {{ $dataPengajuan->pemeriksaakhir->name }}
+                                @else
+                                    <span class="fst-italic text-danger small">Belum Ditentukan</span>
+                                @endif
+                            </div>
+                        </div>
 
                         <div class="col-sm-12">
                             <div class="fw-semibold small text-secondary mb-3">Data Rincian Peralatan </div>
                             <div class="table-responsive" id="tabelPeminjaman">
-                                <table class="table table-bordered table-sm">
+                                <table class="table table-bordered table-sm small">
                                     <thead>
                                     <tr style="background-color: rgba(8, 60, 132, 0.16) !important">
                                         <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">No</td>
@@ -315,6 +339,10 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="fw-semibold small text-secondary mb-3">Kondisi Ruangan dan Peralatan Sesudah Acara</div>
+
                         </div>
                     </div>
                     <ul class="fa-ul ml-auto float-end mt-5">

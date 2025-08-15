@@ -21,6 +21,7 @@ class PengajuanRuanganController extends Controller
     private $idAkses;
     public function __construct()
     {
+        Carbon::setLocale('id');
         $this->service = new PengajuanRuanganServices(new PengajuanRuanganRepository());
         $this->subtitle = (!empty(config('variables.namaLayananSewaRuangan')) ? config('variables.namaLayananSewaRuangan') : 'Ruangan');
         $this->idAkses = session('akses_default_id');
@@ -52,10 +53,10 @@ class PengajuanRuanganController extends Controller
                     return $html;
                 })
                 ->addColumn('tglbooking', function ($data_pengajuan) {
-                    $tanggalMulai = Carbon::parse($data_pengajuan->tgl_mulai)->translatedFormat('d F Y');
-                    $tanggalSelesai = Carbon::parse($data_pengajuan->tgl_selesai)->translatedFormat('d F Y');
-                    $jamMulai = Carbon::parse($data_pengajuan->jam_mulai)->translatedFormat('H:i');
-                    $jamSelesai = Carbon::parse($data_pengajuan->jam_selesai)->translatedFormat('H:i');
+                    $tanggalMulai = $data_pengajuan->tgl_mulai->translatedFormat('d F Y');
+                    $tanggalSelesai = $data_pengajuan->tgl_selesai->translatedFormat('d F Y');
+                    $jamMulai = $data_pengajuan->jam_mulai->translatedFormat('H:i');
+                    $jamSelesai = $data_pengajuan->jam_selesai->translatedFormat('H:i');
 
                     if ($data_pengajuan->tgl_mulai == $data_pengajuan->tgl_selesai) {
                         return "<i class='text-muted small'>$tanggalMulai, jam $jamMulai – $jamSelesai</i>";
@@ -290,6 +291,17 @@ class PengajuanRuanganController extends Controller
 
         $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
         $isEdit = $this->service->checkOtoritasPengajuan($idPengajuan);
+        $tanggalMulai = $dataPengajuan->tgl_mulai->translatedFormat('d F Y');
+        $tanggalSelesai = $dataPengajuan->tgl_selesai->translatedFormat('d F Y');
+        $jamMulai = $dataPengajuan->jam_mulai->translatedFormat('H:i');
+        $jamSelesai = $dataPengajuan->jam_selesai->translatedFormat('H:i');
+
+        $jadwalPeminjaman = '';
+        if ($dataPengajuan->tgl_mulai == $dataPengajuan->tgl_selesai) {
+            $jadwalPeminjaman = "<i class='small'>$tanggalMulai, jam $jamMulai – $jamSelesai</i>";
+        } else {
+            $jadwalPeminjaman = "<i class='small'>$tanggalMulai s/d $tanggalSelesai, Jam $jamMulai – $jamSelesai</i>";
+        }
 
         //$isEdit = false;
         if ($isEdit){
@@ -308,7 +320,7 @@ class PengajuanRuanganController extends Controller
         }
         $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan, $this->subtitle, $dataPengajuan);
 
-        return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'title'));
+        return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'title', 'jadwalPeminjaman'));
     }
 
     public function doHapusPengajuan(Request $request){

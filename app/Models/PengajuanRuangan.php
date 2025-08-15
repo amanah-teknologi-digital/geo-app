@@ -16,6 +16,8 @@ class PengajuanRuangan extends Model
         'pengaju',
         'id_statuspengaju',
         'id_tahapan',
+        'pemeriksa_awal',
+        'pemeriksa_akhir',
         'nama_kegiatan',
         'deskripsi',
         'tgl_mulai',
@@ -33,6 +35,10 @@ class PengajuanRuangan extends Model
     ];
 
     protected $casts = [
+        'tgl_mulai'   => 'date',
+        'tgl_selesai' => 'date',
+        'jam_mulai'   => 'datetime',
+        'jam_selesai' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -125,6 +131,16 @@ class PengajuanRuangan extends Model
     public function surveykepuasan()
     {
         return $this->belongsTo(SurveyKepuasanRuangan::class, 'id_pengajuan', 'id_pengajuan');
+    }
+
+    public function pemeriksaawal()
+    {
+        return $this->belongsTo(User::class, 'pemeriksa_awal', 'id');
+    }
+
+    public function pemeriksaakhir()
+    {
+        return $this->belongsTo(User::class, 'pemeriksa_akhir', 'id');
     }
 
 }
