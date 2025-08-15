@@ -123,6 +123,50 @@ class PengajuanRuanganServices
         return $isTambah;
     }
 
+    function getStatusPersetujuan($dataPersetujuan){
+        $adminSudahSetuju           = $dataPersetujuan->where('id_tahapan', 2)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $pemeriksaAwalSudahSetuju   = $dataPersetujuan->where('id_tahapan', 3)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $kasubbagSudahSetuju        = $dataPersetujuan->where('id_tahapan', 4)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $kadepSudahSetuju           = $dataPersetujuan->where('id_tahapan', 5)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $sudahPengembalian          = $dataPersetujuan->where('id_tahapan', 6)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $adminVerifikasiPengembalian= $dataPersetujuan->where('id_tahapan', 7)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $pemeriksaAkhirSudahSetuju  = $dataPersetujuan->where('id_tahapan', 8)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        $sudahVerifikasiPengembalian= $dataPersetujuan->where('id_tahapan', 9)->where('id_statuspersetujuan', 1)->isNotEmpty();
+
+        return compact(
+            'adminSudahSetuju',
+            'pemeriksaAwalSudahSetuju',
+            'kasubbagSudahSetuju',
+            'kadepSudahSetuju',
+            'sudahPengembalian',
+            'adminVerifikasiPengembalian',
+            'pemeriksaAkhirSudahSetuju',
+            'sudahVerifikasiPengembalian'
+        );
+    }
+
+    function getStatusPersetujuanTerakhir($dataPersetujuan){
+        $adminSudahSetuju           = $dataPersetujuan->where('id_tahapan', 2)->sortByDesc('created_at')->first();
+        $pemeriksaAwalSudahSetuju   = $dataPersetujuan->where('id_tahapan', 3)->sortByDesc('created_at')->first();
+        $kasubbagSudahSetuju        = $dataPersetujuan->where('id_tahapan', 4)->sortByDesc('created_at')->first();
+        $kadepSudahSetuju           = $dataPersetujuan->where('id_tahapan', 5)->sortByDesc('created_at')->first();
+        $sudahPengembalian          = $dataPersetujuan->where('id_tahapan', 6)->sortByDesc('created_at')->first();
+        $adminVerifikasiPengembalian= $dataPersetujuan->where('id_tahapan', 7)->sortByDesc('created_at')->first();
+        $pemeriksaAkhirSudahSetuju  = $dataPersetujuan->where('id_tahapan', 8)->sortByDesc('created_at')->first();
+        $sudahVerifikasiPengembalian= $dataPersetujuan->where('id_tahapan', 9)->sortByDesc('created_at')->first();
+
+        return compact(
+            'adminSudahSetuju',
+            'pemeriksaAwalSudahSetuju',
+            'kasubbagSudahSetuju',
+            'kadepSudahSetuju',
+            'sudahPengembalian',
+            'adminVerifikasiPengembalian',
+            'pemeriksaAkhirSudahSetuju',
+            'sudahVerifikasiPengembalian'
+        );
+    }
+
     public function getStatusVerifikasi($id_pengajuan, $namaLayananRuang, $dataPengajuan = null){
         $id_akses = $this->idAkses;
         $idUser = auth()->user()->id;
@@ -136,14 +180,7 @@ class PengajuanRuanganServices
         $userPemeriksaAwal = $dataPengajuan->pemeriksa_awal;
         $userPemeriksaAkhir = $dataPengajuan->pemeriksa_akhir;
         $dataPersetujuan = $dataPengajuan->persetujuan;
-        $adminSudahSetuju = $dataPersetujuan->where('id_tahapan', 2)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $pemeriksaAwalSudahSetuju = $dataPersetujuan->where('id_tahapan', 3)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $kasubbagSudahSetuju = $dataPersetujuan->where('id_tahapan', 4)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $kadepSudahSetuju = $dataPersetujuan->where('id_tahapan', 5)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $sudahPengembalian = $dataPersetujuan->where('id_tahapan', 6)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $adminVerifikasiPengembalian = $dataPersetujuan->where('id_tahapan', 7)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $pemeriksaAkhirSudahSetuju = $dataPersetujuan->where('id_tahapan', 8)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $sudahVerifikasiPengembalian = $dataPersetujuan->where('id_tahapan', 9)->where('id_statuspersetujuan', 1)->isNotEmpty();
+        extract($this->getStatusPersetujuan($dataPersetujuan));
 
         $must_aprove = '';
         $message = '';

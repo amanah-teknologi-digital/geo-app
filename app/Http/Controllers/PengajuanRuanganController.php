@@ -303,6 +303,8 @@ class PengajuanRuanganController extends Controller
             $jadwalPeminjaman = "<i class='small'>$tanggalMulai s/d $tanggalSelesai, Jam $jamMulai – $jamSelesai</i>";
         }
 
+        extract($this->service->getStatusPersetujuanTerakhir($dataPengajuan->persetujuan));
+
         //$isEdit = false;
         if ($isEdit){
             //update data pemohon pengajuan
@@ -320,7 +322,15 @@ class PengajuanRuanganController extends Controller
         }
         $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan, $this->subtitle, $dataPengajuan);
 
-        return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'title', 'jadwalPeminjaman'));
+        return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'title', 'jadwalPeminjaman',
+            'adminSudahSetuju',
+            'pemeriksaAwalSudahSetuju',
+            'kasubbagSudahSetuju',
+            'kadepSudahSetuju',
+            'sudahPengembalian',
+            'adminVerifikasiPengembalian',
+            'pemeriksaAkhirSudahSetuju',
+            'sudahVerifikasiPengembalian'));
     }
 
     public function doHapusPengajuan(Request $request){

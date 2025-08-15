@@ -190,116 +190,260 @@
                             <div class="nav-align-top nav-tabs-shadow h-100">
                                 <ul class="nav nav-tabs w-100" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="true">Peminjaman</button>
+                                        <button type="button" class="nav-link {{ empty($sudahPengembalian) ? 'active':'' }}" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="true">Peminjaman</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="false" tabindex="-1">Pengembalian</button>
+                                        <button type="button" class="nav-link {{ !empty($sudahPengembalian) ? 'active':'' }}" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="false" tabindex="-1">Pengembalian</button>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
-                                    <div class="tab-pane fade active show" id="navs-top-home" role="tabpanel">
+                                    <div class="tab-pane fade {{ empty($sudahPengembalian) ? 'active show':'' }}" id="navs-top-home" role="tabpanel">
                                         <ul class="timeline pb-0 mb-0">
                                             <li class="timeline-item timeline-item-transparent border-success">
                                                 <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                 <div class="timeline-event">
                                                     <div class="timeline-header">
                                                         <h6 class="mb-0">Draft</h6>
-                                                        <small class="text-muted">Tuesday 11:29 AM</small>
+                                                        <small class="text-muted">{{ $dataPengajuan->created_at->translatedFormat('d F Y h:i') }}</small>
                                                     </div>
-                                                    <p class="mt-3">Your order has been placed successfully</p>
+                                                    <p class="mt-3">Dibuat oleh {{ $dataPengajuan->pihakpengaju->name }}</p>
                                                 </div>
                                             </li>
-                                            <li class="timeline-item timeline-item-transparent border-danger">
-                                                <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                            <li class="timeline-item timeline-item-transparent {{ empty($adminSudahSetuju) ? 'border-left-dashed' : ($adminSudahSetuju->id_statuspersetujuan == 1 ? 'border-success' : 'border-danger') }}">
+                                                @if(empty($adminSudahSetuju))
+                                                    <span class="timeline-point timeline-point-secondary"></span>
+                                                @else
+                                                    @if($adminSudahSetuju->id_statuspersetujuan == 1)
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                    @else
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                    @endif
+                                                @endif
                                                 <div class="timeline-event">
                                                     <div class="timeline-header">
                                                         <h6 class="mb-0">Verifikasi Admin Ruang</h6>
-                                                        <small class="text-muted">Wednesday 11:29 AM</small>
+                                                        @if(!empty($adminSudahSetuju))
+                                                            <small class="text-muted">{{ $adminSudahSetuju->created_at->translatedFormat('d F Y h:i') }}</small>
+                                                        @endif
                                                     </div>
-                                                    <p class="mt-3 mb-3">Pick-up scheduled with courier</p>
+                                                    @if(!empty($adminSudahSetuju))
+                                                        @if($adminSudahSetuju->id_statuspersetujuan == 1)
+                                                            <p class="mt-3 mb-3">Diverifikasi oleh {{ $adminSudahSetuju->nama_penyetuju }}</p>
+                                                        @else
+                                                            <p class="mt-3 mb-3">Ditolak oleh {{ $adminSudahSetuju->nama_penyetuju }}</p>
+                                                            <p class="small fst-italic">{{ $adminSudahSetuju->keterangan }}</p>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </li>
-                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                                <span class="timeline-point timeline-point-secondary"></span>
+                                            <li class="timeline-item timeline-item-transparent {{ empty($pemeriksaAwalSudahSetuju) ? 'border-left-dashed' : ($pemeriksaAwalSudahSetuju->id_statuspersetujuan == 1 ? 'border-success' : 'border-danger') }}">
+                                                @if(empty($pemeriksaAwalSudahSetuju))
+                                                    <span class="timeline-point timeline-point-secondary"></span>
+                                                @else
+                                                    @if($pemeriksaAwalSudahSetuju->id_statuspersetujuan == 1)
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                    @else
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                    @endif
+                                                @endif
                                                 <div class="timeline-event">
                                                     <div class="timeline-header">
                                                         <h6 class="mb-0">Pemeriksaan Awal</h6>
-                                                        <small class="text-muted">Thursday 11:29 AM</small>
+                                                        @if(!empty($pemeriksaAwalSudahSetuju))
+                                                            <small class="text-muted">{{ $pemeriksaAwalSudahSetuju->created_at->translatedFormat('d F Y h:i') }}</small>
+                                                        @endif
                                                     </div>
-                                                    <p class="mt-3 mb-3">Item has been picked up by courier</p>
+                                                    @if(!empty($pemeriksaAwalSudahSetuju))
+                                                        @if($pemeriksaAwalSudahSetuju->id_statuspersetujuan == 1)
+                                                            <p class="mt-3 mb-3">Diperiksa oleh {{ $pemeriksaAwalSudahSetuju->nama_penyetuju }}</p>
+                                                        @else
+                                                            <p class="mt-3 mb-3">Ditolak oleh {{ $pemeriksaAwalSudahSetuju->nama_penyetuju }}</p>
+                                                            <p class="small fst-italic">{{ $pemeriksaAwalSudahSetuju->keterangan }}</p>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </li>
-                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                                <span class="timeline-point timeline-point-secondary"></span>
+                                            <li class="timeline-item timeline-item-transparent {{ empty($kasubbagSudahSetuju) ? 'border-left-dashed' : ($kasubbagSudahSetuju->id_statuspersetujuan == 1 ? 'border-success' : 'border-danger') }}">
+                                                @if(empty($kasubbagSudahSetuju))
+                                                    <span class="timeline-point timeline-point-secondary"></span>
+                                                @else
+                                                    @if($kasubbagSudahSetuju->id_statuspersetujuan == 1)
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                    @else
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                    @endif
+                                                @endif
                                                 <div class="timeline-event">
                                                     <div class="timeline-header">
                                                         <h6 class="mb-0">Verifikasi Kasubbag</h6>
-                                                        <small class="text-muted">Saturday 15:20 AM</small>
+                                                        @if(!empty($kasubbagSudahSetuju))
+                                                            <small class="text-muted">{{ $kasubbagSudahSetuju->created_at->translatedFormat('d F Y h:i') }}</small>
+                                                        @endif
                                                     </div>
-                                                    <p class="mt-3 mb-3">Package arrived at an Amazon facility, NY</p>
+                                                    @if(!empty($kasubbagSudahSetuju))
+                                                        @if($kasubbagSudahSetuju->id_statuspersetujuan == 1)
+                                                            <p class="mt-3 mb-3">Diverifikasi oleh {{ $kasubbagSudahSetuju->nama_penyetuju }}</p>
+                                                        @else
+                                                            <p class="mt-3 mb-3">Ditolak oleh {{ $kasubbagSudahSetuju->nama_penyetuju }}</p>
+                                                            <p class="small fst-italic">{{ $kasubbagSudahSetuju->keterangan }}</p>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </li>
-                                            <li class="timeline-item timeline-item-transparent border-transparent pb-0">
-                                                <span class="timeline-point timeline-point-secondary"></span>
+                                            <li class="timeline-item timeline-item-transparent border-transparent">
+                                                @if(empty($kadepSudahSetuju))
+                                                    <span class="timeline-point timeline-point-secondary"></span>
+                                                @else
+                                                    @if($kadepSudahSetuju->id_statuspersetujuan == 1)
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                    @else
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                    @endif
+                                                @endif
                                                 <div class="timeline-event">
                                                     <div class="timeline-header">
                                                         <h6 class="mb-0">Verifikasi Kadep</h6>
-                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                        @if(!empty($kadepSudahSetuju))
+                                                            <small class="text-muted">{{ $kadepSudahSetuju->created_at->translatedFormat('d F Y h:i') }}</small>
+                                                        @endif
                                                     </div>
-                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                    @if(!empty($kadepSudahSetuju))
+                                                        @if($kadepSudahSetuju->id_statuspersetujuan == 1)
+                                                            <p class="mt-3 mb-3">Diverifikasi oleh {{ $kadepSudahSetuju->nama_penyetuju }}</p>
+                                                        @else
+                                                            <p class="mt-3 mb-3">Ditolak oleh {{ $kadepSudahSetuju->nama_penyetuju }}</p>
+                                                            <p class="small fst-italic">{{ $kadepSudahSetuju->keterangan }}</p>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
+                                    <div class="tab-pane fade {{ !empty($sudahPengembalian) ? 'active show':'' }}" id="navs-top-profile" role="tabpanel">
                                         <ul class="timeline pb-0 mb-0">
-                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                                <span class="timeline-point timeline-point-secondary"></span>
+                                            <li class="timeline-item timeline-item-transparent {{ empty($sudahPengembalian) ? 'border-left-dashed' : ($sudahPengembalian->id_statuspersetujuan == 1 ? 'border-success' : 'border-danger') }}">
+                                                @if(empty($sudahPengembalian))
+                                                    <span class="timeline-point timeline-point-secondary"></span>
+                                                @else
+                                                    @if($sudahPengembalian->id_statuspersetujuan == 1)
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                    @else
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                    @endif
+                                                @endif
                                                 <div class="timeline-event">
                                                     <div class="timeline-header">
                                                         <h6 class="mb-0">Pengembalian</h6>
-                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                        @if(!empty($sudahPengembalian))
+                                                            <small class="text-muted">{{ $sudahPengembalian->created_at->translatedFormat('d F Y h:i') }}</small>
+                                                        @endif
                                                     </div>
-                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                    @if(!empty($sudahPengembalian))
+                                                        @if($sudahPengembalian->id_statuspersetujuan == 1)
+                                                            <p class="mt-3 mb-3">Diajukan oleh {{ $sudahPengembalian->nama_penyetuju }}</p>
+                                                        @else
+                                                            <p class="mt-3 mb-3">Ditolak oleh {{ $sudahPengembalian->nama_penyetuju }}</p>
+                                                            <p class="small fst-italic">{{ $sudahPengembalian->keterangan }}</p>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </li>
-                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                                <span class="timeline-point timeline-point-secondary"></span>
+                                            <li class="timeline-item timeline-item-transparent {{ empty($adminVerifikasiPengembalian) ? 'border-left-dashed' : ($adminVerifikasiPengembalian->id_statuspersetujuan == 1 ? 'border-success' : 'border-danger') }}">
+                                                @if(empty($adminVerifikasiPengembalian))
+                                                    <span class="timeline-point timeline-point-secondary"></span>
+                                                @else
+                                                    @if($adminVerifikasiPengembalian->id_statuspersetujuan == 1)
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                    @else
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                    @endif
+                                                @endif
                                                 <div class="timeline-event">
                                                     <div class="timeline-header">
                                                         <h6 class="mb-0">Verifikasi Admin Ruang</h6>
-                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                        @if(!empty($adminVerifikasiPengembalian))
+                                                            <small class="text-muted">{{ $adminVerifikasiPengembalian->created_at->translatedFormat('d F Y h:i') }}</small>
+                                                        @endif
                                                     </div>
-                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                    @if(!empty($adminVerifikasiPengembalian))
+                                                        @if($adminVerifikasiPengembalian->id_statuspersetujuan == 1)
+                                                            <p class="mt-3 mb-3">Diverifikasi oleh {{ $adminVerifikasiPengembalian->nama_penyetuju }}</p>
+                                                        @else
+                                                            <p class="mt-3 mb-3">Ditolak oleh {{ $adminVerifikasiPengembalian->nama_penyetuju }}</p>
+                                                            <p class="small fst-italic">{{ $adminVerifikasiPengembalian->keterangan }}</p>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </li>
-                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                                <span class="timeline-point timeline-point-secondary"></span>
+                                            <li class="timeline-item timeline-item-transparent {{ empty($pemeriksaAkhirSudahSetuju) ? 'border-left-dashed' : ($pemeriksaAkhirSudahSetuju->id_statuspersetujuan == 1 ? 'border-success' : 'border-danger') }}">
+                                                @if(empty($pemeriksaAkhirSudahSetuju))
+                                                    <span class="timeline-point timeline-point-secondary"></span>
+                                                @else
+                                                    @if($pemeriksaAkhirSudahSetuju->id_statuspersetujuan == 1)
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                    @else
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                    @endif
+                                                @endif
                                                 <div class="timeline-event">
                                                     <div class="timeline-header">
-                                                        <h6 class="mb-0">Pemeriksaan Akhir</h6>
-                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                        <h6 class="mb-0">Pemeriksa Akhir</h6>
+                                                        @if(!empty($pemeriksaAkhirSudahSetuju))
+                                                            <small class="text-muted">{{ $pemeriksaAkhirSudahSetuju->created_at->translatedFormat('d F Y h:i') }}</small>
+                                                        @endif
                                                     </div>
-                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                    @if(!empty($pemeriksaAkhirSudahSetuju))
+                                                        @if($pemeriksaAkhirSudahSetuju->id_statuspersetujuan == 1)
+                                                            <p class="mt-3 mb-3">Diperiksa oleh {{ $pemeriksaAkhirSudahSetuju->nama_penyetuju }}</p>
+                                                        @else
+                                                            <p class="mt-3 mb-3">Ditolak oleh {{ $pemeriksaAkhirSudahSetuju->nama_penyetuju }}</p>
+                                                            <p class="small fst-italic">{{ $pemeriksaAkhirSudahSetuju->keterangan }}</p>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </li>
-                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                                <span class="timeline-point timeline-point-secondary"></span>
+                                            <li class="timeline-item timeline-item-transparent {{ empty($sudahVerifikasiPengembalian) ? 'border-left-dashed' : ($sudahVerifikasiPengembalian->id_statuspersetujuan == 1 ? 'border-success' : 'border-danger') }}">
+                                                @if(empty($sudahVerifikasiPengembalian))
+                                                    <span class="timeline-point timeline-point-secondary"></span>
+                                                @else
+                                                    @if($sudahVerifikasiPengembalian->id_statuspersetujuan == 1)
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                    @else
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                    @endif
+                                                @endif
                                                 <div class="timeline-event">
                                                     <div class="timeline-header">
-                                                        <h6 class="mb-0">Verifikasi Pengembalian</h6>
-                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                        <h6 class="mb-0">Verifikasi Kasubbag</h6>
+                                                        @if(!empty($sudahVerifikasiPengembalian))
+                                                            <small class="text-muted">{{ $sudahVerifikasiPengembalian->created_at->translatedFormat('d F Y h:i') }}</small>
+                                                        @endif
                                                     </div>
-                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                    @if(!empty($sudahVerifikasiPengembalian))
+                                                        @if($sudahVerifikasiPengembalian->id_statuspersetujuan == 1)
+                                                            <p class="mt-3 mb-3">Diverifikasi oleh {{ $sudahVerifikasiPengembalian->nama_penyetuju }}</p>
+                                                        @else
+                                                            <p class="mt-3 mb-3">Ditolak oleh {{ $sudahVerifikasiPengembalian->nama_penyetuju }}</p>
+                                                            <p class="small fst-italic">{{ $sudahVerifikasiPengembalian->keterangan }}</p>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </li>
                                             <li class="timeline-item timeline-item-transparent border-transparent pb-0">
-                                                <span class="timeline-point timeline-point-secondary"></span>
+                                                @if(empty($sudahVerifikasiPengembalian))
+                                                    <span class="timeline-point timeline-point-secondary"></span>
+                                                @else
+                                                    @if($sudahVerifikasiPengembalian->id_statuspersetujuan == 1)
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                    @else
+                                                        <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                    @endif
+                                                @endif
                                                 <div class="timeline-event pb-0">
                                                     <div class="timeline-header">
                                                         <h6 class="mb-0">Selesai</h6>
                                                     </div>
-                                                    <p class="mt-1 mb-0">Package will be delivered by tomorrow</p>
+                                                    <p class="mt-1 mb-0">Peminjaman Ruangan Sudah Selesai</p>
                                                 </div>
                                             </li>
                                         </ul>
@@ -322,7 +466,7 @@
                     <div class="row g-6">
                         <div class="col-sm-6">
                             <div class="fw-semibold small text-secondary mb-3">Ruangan Dipinjam </div>
-                            <div class="fs-6 text-dark small d-flex flex-wrap gap-1">
+                            <div class="fs-6 text-dark d-flex flex-wrap gap-1">
                                 {!! $dataPengajuan->pengajuanruangandetail->map(function($ruang) {
                                     return '<span class="badge bg-primary rounded-pill">'
                                         . $ruang->ruangan->kode_ruangan . ' - ' . $ruang->ruangan->nama .
@@ -332,7 +476,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="fw-semibold small text-secondary mb-3">Jadwal Peminjaman </div>
-                            <div class="fs-6 text-dark fst-italic small">{!! $jadwalPeminjaman !!}</div>
+                            <div class="fs-6 text-dark fst-italic">{!! $jadwalPeminjaman !!}</div>
                         </div>
                         <div class="col-sm-6">
                             <div class="fw-semibold small text-secondary mb-3">Nama Kegiatan </div>
