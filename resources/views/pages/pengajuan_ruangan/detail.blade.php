@@ -186,108 +186,126 @@
                         <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
                             <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-history" style="font-size: 1.3rem;"></i>&nbsp;Histori Persetujuan</h5>
                         </div>
-                        <div class="card-body pt-4 overflow-auto" style="flex:1; min-height:0;">
-                            <ul class="timeline pb-0 mb-0">
-                                <li class="timeline-item timeline-item-transparent border-success">
-                                    <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
-                                    <div class="timeline-event">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Draft</h6>
-                                            <small class="text-muted">Tuesday 11:29 AM</small>
-                                        </div>
-                                        <p class="mt-3">Your order has been placed successfully</p>
+                        <div class="card-body overflow-auto p-0" style="flex:1; min-height:0;">
+                            <div class="nav-align-top nav-tabs-shadow h-100">
+                                <ul class="nav nav-tabs w-100" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="true">Peminjaman</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="false" tabindex="-1">Pengembalian</button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade active show" id="navs-top-home" role="tabpanel">
+                                        <ul class="timeline pb-0 mb-0">
+                                            <li class="timeline-item timeline-item-transparent border-success">
+                                                <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Draft</h6>
+                                                        <small class="text-muted">Tuesday 11:29 AM</small>
+                                                    </div>
+                                                    <p class="mt-3">Your order has been placed successfully</p>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent border-danger">
+                                                <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Verifikasi Admin Ruang</h6>
+                                                        <small class="text-muted">Wednesday 11:29 AM</small>
+                                                    </div>
+                                                    <p class="mt-3 mb-3">Pick-up scheduled with courier</p>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
+                                                <span class="timeline-point timeline-point-secondary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Pemeriksaan Awal</h6>
+                                                        <small class="text-muted">Thursday 11:29 AM</small>
+                                                    </div>
+                                                    <p class="mt-3 mb-3">Item has been picked up by courier</p>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
+                                                <span class="timeline-point timeline-point-secondary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Verifikasi Kasubbag</h6>
+                                                        <small class="text-muted">Saturday 15:20 AM</small>
+                                                    </div>
+                                                    <p class="mt-3 mb-3">Package arrived at an Amazon facility, NY</p>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent border-transparent pb-0">
+                                                <span class="timeline-point timeline-point-secondary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Verifikasi Kadep</h6>
+                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                    </div>
+                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
-                                </li>
-                                <li class="timeline-item timeline-item-transparent border-danger">
-                                    <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
-                                    <div class="timeline-event">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Verifikasi Admin Ruang</h6>
-                                            <small class="text-muted">Wednesday 11:29 AM</small>
-                                        </div>
-                                        <p class="mt-3 mb-3">Pick-up scheduled with courier</p>
+                                    <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
+                                        <ul class="timeline pb-0 mb-0">
+                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
+                                                <span class="timeline-point timeline-point-secondary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Pengembalian</h6>
+                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                    </div>
+                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
+                                                <span class="timeline-point timeline-point-secondary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Verifikasi Admin Ruang</h6>
+                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                    </div>
+                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
+                                                <span class="timeline-point timeline-point-secondary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Pemeriksaan Akhir</h6>
+                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                    </div>
+                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent border-left-dashed">
+                                                <span class="timeline-point timeline-point-secondary"></span>
+                                                <div class="timeline-event">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Verifikasi Pengembalian</h6>
+                                                        <small class="text-muted">Today 14:12 PM</small>
+                                                    </div>
+                                                    <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item timeline-item-transparent border-transparent pb-0">
+                                                <span class="timeline-point timeline-point-secondary"></span>
+                                                <div class="timeline-event pb-0">
+                                                    <div class="timeline-header">
+                                                        <h6 class="mb-0">Selesai</h6>
+                                                    </div>
+                                                    <p class="mt-1 mb-0">Package will be delivered by tomorrow</p>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
-                                </li>
-                                <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                    <span class="timeline-point timeline-point-secondary"></span>
-                                    <div class="timeline-event">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Pemeriksaan Awal</h6>
-                                            <small class="text-muted">Thursday 11:29 AM</small>
-                                        </div>
-                                        <p class="mt-3 mb-3">Item has been picked up by courier</p>
-                                    </div>
-                                </li>
-                                <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                    <span class="timeline-point timeline-point-secondary"></span>
-                                    <div class="timeline-event">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Verifikasi Kasubbag</h6>
-                                            <small class="text-muted">Saturday 15:20 AM</small>
-                                        </div>
-                                        <p class="mt-3 mb-3">Package arrived at an Amazon facility, NY</p>
-                                    </div>
-                                </li>
-                                <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                    <span class="timeline-point timeline-point-secondary"></span>
-                                    <div class="timeline-event">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Verifikasi Kadep</h6>
-                                            <small class="text-muted">Today 14:12 PM</small>
-                                        </div>
-                                        <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
-                                    </div>
-                                </li>
-                                <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                    <span class="timeline-point timeline-point-secondary"></span>
-                                    <div class="timeline-event">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Pengembalian</h6>
-                                            <small class="text-muted">Today 14:12 PM</small>
-                                        </div>
-                                        <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
-                                    </div>
-                                </li>
-                                <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                    <span class="timeline-point timeline-point-secondary"></span>
-                                    <div class="timeline-event">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Verifikasi Admin Ruang</h6>
-                                            <small class="text-muted">Today 14:12 PM</small>
-                                        </div>
-                                        <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
-                                    </div>
-                                </li>
-                                <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                    <span class="timeline-point timeline-point-secondary"></span>
-                                    <div class="timeline-event">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Pemeriksaan Akhir</h6>
-                                            <small class="text-muted">Today 14:12 PM</small>
-                                        </div>
-                                        <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
-                                    </div>
-                                </li>
-                                <li class="timeline-item timeline-item-transparent border-left-dashed">
-                                    <span class="timeline-point timeline-point-secondary"></span>
-                                    <div class="timeline-event">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Verifikasi Pengembalian</h6>
-                                            <small class="text-muted">Today 14:12 PM</small>
-                                        </div>
-                                        <p class="mt-3 mb-3">Package has left an Amazon facility, NY</p>
-                                    </div>
-                                </li>
-                                <li class="timeline-item timeline-item-transparent border-transparent pb-0">
-                                    <span class="timeline-point timeline-point-secondary"></span>
-                                    <div class="timeline-event pb-0">
-                                        <div class="timeline-header">
-                                            <h6 class="mb-0">Selesai</h6>
-                                        </div>
-                                        <p class="mt-1 mb-0">Package will be delivered by tomorrow</p>
-                                    </div>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -302,22 +320,6 @@
                 </div>
                 <div class="card-body pt-4">
                     <div class="row g-6">
-                        <div>
-                            <div class="fw-semibold small text-secondary mb-3">Persetujuan </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <div id="list-persetujuan">
-                                    <span class="fst-italic">Admin Ruang</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
-                                    <span class="fst-italic">Pemeriksa Awal</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
-                                    <span class="fst-italic">Kasubbag</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
-                                    <span class="fst-italic">Kadep</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
-                                    <span class="font-bold text-success fst-italic">Pengembalian</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
-                                    <span class="fst-italic">Admin Ruang</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
-                                    <span class="fst-italic">Pemeriksa Akhir</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
-                                    <span class="fst-italic">Kasubbag</span> <span class="fst-italic bx bx-arrow-back rotate-180"></span>
-                                    <span class="fst-italic">Selesai</span>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-sm-6">
                             <div class="fw-semibold small text-secondary mb-3">Ruangan Dipinjam </div>
                             <div class="fs-6 text-dark small d-flex flex-wrap gap-1">

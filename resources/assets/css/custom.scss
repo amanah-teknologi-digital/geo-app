@@ -645,5 +645,16 @@ html:not([dir=rtl]) .timeline-item {
     border-left-style: dashed !important;
 }
 
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    color: var(--color-default);
+    background-color: var(--bs-nav-tabs-link-active-bg);
+    border-color: var(--color-default);
+}
+
+.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+    isolation: isolate;
+    color: var(--color-default);
+}
+
 
 
