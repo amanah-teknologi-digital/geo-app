@@ -44,22 +44,21 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <div class="row align-items-stretch mb-5">
-                <div class="col-md-12">
-                    <div class="card mb-4 shadow-sm h-100 border-0">
-                        <div class="card-header d-flex justify-content-between align-items-center pb-3 border-bottom">
-                            <h5 class="card-title mb-0 fw-bold d-flex align-items-center">
-                                <i class="bx bx-collection me-2" style="font-size: 1.3rem;"></i>
-                                Surver Kepuasan Layanan Kami
-                            </h5>
-                            @if($dataPengajuan->id_statuspengajuan == 1 )
+            @if($dataPengajuan->id_statuspengajuan == 1 )
+                <div class="row align-items-stretch mb-5">
+                    <div class="col-md-12">
+                        <div class="card mb-4 shadow-sm h-100 border-0">
+                            <div class="card-header d-flex justify-content-between align-items-center pb-3 border-bottom">
+                                <h5 class="card-title mb-0 fw-bold d-flex align-items-center">
+                                    <i class="bx bx-collection me-2" style="font-size: 1.3rem;"></i>
+                                    Surver Kepuasan Layanan Kami
+                                </h5>
+
                                 <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary">
                                     <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                                 </a>
-                            @endif
-                        </div>
-                        <div class="card-body pt-4">
-                            @if($dataPengajuan->id_statuspengajuan == 1)
+                            </div>
+                            <div class="card-body pt-4">
                                 @if(empty($dataPengajuan->surveykepuasan))
                                     <form id="FrmSurveyKepuasan" action="{{ route('pengajuansurat.surveykepuasan') }}" method="POST">
                                         @csrf
@@ -112,11 +111,11 @@
                                         </li>
                                     </ul>
                                 @endif
-                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
             <div class="row align-items-stretch mb-5">
                 <div class="col-md-7">
                     <div class="card mb-4 shadow-sm h-100 border-0">
