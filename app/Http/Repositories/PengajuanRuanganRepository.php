@@ -10,6 +10,7 @@ use App\Models\PengajuanPeralatanRuangan;
 use App\Models\PengajuanPersuratan;
 use App\Models\PengajuanRuangan;
 use App\Models\PengajuanRuanganDetail;
+use App\Models\Pengaturan;
 use App\Models\Pengumuman;
 use App\Models\PersetujuanPersuratan;
 use App\Models\PersetujuanRuangan;
@@ -74,6 +75,12 @@ class PengajuanRuanganRepository
 
     public function getDataStatusPeminjam(){
         $data = StatusPengaju::get();
+
+        return $data;
+    }
+
+    public function getDataPengaturan(){
+        $data = Pengaturan::first();
 
         return $data;
     }

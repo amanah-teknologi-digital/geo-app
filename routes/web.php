@@ -108,6 +108,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
         Route::post('/pengajuan-ruangan/doupdate', [PengajuanRuanganController::class, 'doUpdatePengajuan'])->name('pengajuanruangan.doupdate');
         Route::post('/pengajuan-ruangan/dotolak', [PengajuanRuanganController::class, 'doTolakPengajuan'])->name('pengajuanruangan.tolak');
+        Route::get('/pengajuan-ruangan/ba-peminjaman/{id_pengajuan}', [PengajuanRuanganController::class, 'generateBeritaAcaraPeminjaman'])->name('pengajuanruangan.bapeminjaman');
     });
 
     Route::middleware('halaman:peralatan')->group(function () { //peralatan

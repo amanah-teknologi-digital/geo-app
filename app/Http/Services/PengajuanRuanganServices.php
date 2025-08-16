@@ -26,6 +26,12 @@ class PengajuanRuanganServices
         return $data;
     }
 
+    public function getDataPengaturan(){
+        $data = $this->repository->getDataPengaturan();
+
+        return $data;
+    }
+
     public function getDataPengajuanOnly($id_pengajuan){
         $id_akses = $this->idAkses;
         $data = $this->repository->getDataPengajuanOnly($id_pengajuan);

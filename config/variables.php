@@ -28,4 +28,5 @@ return [
     "namaLayananPersuratan" => "Geo Letter",
     "namaLayananSewaRuangan" => "Geo Room",
     "namaLayananSewaPeralatan" => "Geo Tools",
+    "namaFakultas" => "TEKNIK GEOFISIKA ITS",
 ];

@@ -13,17 +13,20 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Nonstandard\Uuid;
 use Yajra\DataTables\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PengajuanRuanganController extends Controller
 {
     private $service;
     private $subtitle;
+    private $fakultas;
     private $idAkses;
     public function __construct()
     {
         Carbon::setLocale('id');
         $this->service = new PengajuanRuanganServices(new PengajuanRuanganRepository());
         $this->subtitle = (!empty(config('variables.namaLayananSewaRuangan')) ? config('variables.namaLayananSewaRuangan') : 'Ruangan');
+        $this->fakultas = (!empty(config('variables.namaFakultas')) ? config('variables.namaFakultas') : '');
         $this->idAkses = session('akses_default_id');
     }
 
@@ -478,5 +481,26 @@ class PengajuanRuanganController extends Controller
         $users = $this->service->getUserPemeriksaRuangan($search);
 
         return response()->json($users);
+    }
+
+    public function generateBeritaAcaraPeminjaman($idPengajuan){
+        $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
+        $dataPengaturan = $this->service->getDataPengaturan();
+        $fakultas = $this->fakultas;
+        $dataPersetujuan = $dataPengajuan->persetujuan;
+        $sudahSetujuKadep = $dataPersetujuan->where('id_tahapan', 5)->sortByDesc('created_at')->first();
+
+        if (!empty($sudahSetujuKadep)){
+            if ($sudahSetujuKadep->id_statuspersetujuan == 1){
+                $pdf = PDF::loadView('pages.pengajuan_ruangan.ba_pengembalian', compact('dataPengajuan','dataPengaturan', 'fakultas'))
+                    ->setPaper('a4', 'portrait');
+
+                return $pdf->download("berita_acara_{$dataPengajuan->id_pengajuan}.pdf");
+            }else{
+                abort(404);
+            }
+        }else{
+            abort(404);
+        }
     }
 }

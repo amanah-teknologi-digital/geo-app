@@ -459,8 +459,13 @@
                     {{ $dataPengajuan->tahapanpengajuan->nama }}
                 </div>
 
-                <div class="card-header d-flex justify-content-between align-items-center pb-4 border-bottom">
+                <div class="card-header d-flex align-items-center pb-4 border-bottom">
                     <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-building pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Pengajuan Ruangan</h5>
+                    @if(!empty($kadepSudahSetuju))
+                        @if($kadepSudahSetuju->id_statuspersetujuan == 1)
+                            &nbsp;<a href="{{ route('pengajuanruangan.bapeminjaman', $idPengajuan) }}" target="_blank" class="btn btn-sm btn-success" style="margin-left: 1rem"><span class="bx bx-download me-2 "></span>Berita Acara Peminjaman</a>
+                        @endif
+                    @endif
                 </div>
                 <div class="card-body pt-4">
                     <form id="frmPengajuanRuang" method="POST" action="{{ route('pengajuanruangan.doupdate') }}" enctype="multipart/form-data">
