@@ -67,12 +67,12 @@ class DashboardController extends Controller{
     public function getDataSuratPengguna(Request $request){
         $idUser = $request->get('id_user');
         $tahun = $request->tahun;
-        $dataTotalPersuratan = $this->service->getDataTotalPersuratan($tahun, $idUser);
-        $dataStatistikPersuratan = $this->service->getDataStatistikPersuratan($tahun, $idUser);
+        $dataTotal = $this->service->getDataTotal($tahun, $idUser);
+        $dataStatistik = $this->service->getDataStatistik($tahun, $idUser);
 
         $data = [
-            'dataPersuratan' => $dataTotalPersuratan,
-            'dataStatistikPersuratan' => $dataStatistikPersuratan
+            'data' => $dataTotal,
+            'dataStatistik' => $dataStatistik
         ];
         return response()->json($data);
     }

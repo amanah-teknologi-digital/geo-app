@@ -36,8 +36,54 @@ class DashboardRepository
         return $data;
     }
 
+    public function getDataTotalPengajuanRuangan($tahun, $idUser){
+        $data = PengajuanRuangan::selectRaw("
+            YEAR(created_at) as tahun,
+            COUNT(id_pengajuan) as total_pengajuan,
+            SUM(CASE WHEN id_tahapan = 10 THEN 1 ELSE 0 END) as disetujui,
+            SUM(CASE WHEN EXISTS (
+                SELECT 1 FROM persetujuan_ruangan pr
+                WHERE pr.id_pengajuan = pengajuan_ruangan.id_pengajuan
+                  AND pr.id_statuspersetujuan = 3
+            ) THEN 1 ELSE 0 END) as ditolak")
+            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->orderByDesc('tahun')
+            ->where(DB::raw('YEAR(created_at)'), $tahun);
+
+        if (!empty($idUser)){
+            $data = $data->where('pengaju', $idUser)->first();
+        }else{
+            $data = $data->first();
+        }
+
+        $data->on_proses = $data->total_pengajuan - ($data->disetujui + $data->ditolak);
+
+        $data = $data ?? (object) [
+            'tahun' => $tahun,
+            'total_pengajuan' => 0,
+            'disetujui' => 0,
+            'ditolak' => 0,
+            'on_proses' => 0
+        ];
+
+        return $data;
+    }
+
     public function getDataStatistikPersuratan($tahun, $idUser){
         $data = PengajuanPersuratan::with('persetujuan')
+            ->where(DB::raw('YEAR(created_at)'), $tahun);
+
+        if (!empty($idUser)){
+            $data = $data->where('pengaju', $idUser)->get();
+        }else{
+            $data = $data->get();
+        }
+
+        return $data;
+    }
+
+    public function getDataStatistikRuangan($tahun, $idUser){
+        $data = PengajuanRuangan::with('persetujuan')
             ->where(DB::raw('YEAR(created_at)'), $tahun);
 
         if (!empty($idUser)){

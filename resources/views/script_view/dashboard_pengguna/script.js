@@ -111,8 +111,8 @@ function getDataSurat(){
         data: { tahun: tahun, id_user: idUser },
         dataType: 'json',
         success: function(response) {
-            let dataPersuratan = response['dataPersuratan'];
-            let dataStatistikPersuratan = response['dataStatistikPersuratan'];
+            let dataPersuratan = response['data'];
+            let dataStatistikPersuratan = response['dataStatistik'];
 
             setDataStatus(dataPersuratan);
             generateChart(dataStatistikPersuratan);
@@ -152,7 +152,6 @@ function setDataStatus(data){
 }
 
 function generateChart(data){
-    console.log(data)
     let timestamps = data['listTanggal'];
     let jumlahPengajuan = data['listPengajuan'];
     let jumlahDisetujui = data['listDisetujui'];
