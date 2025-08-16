@@ -1,5 +1,4 @@
 let formValidation;
-let toast;
 
 $(document).ready(function () {
     $('#pemeriksa_awal').select2({
@@ -13,6 +12,7 @@ $(document).ready(function () {
                 return { q: params.term };
             },
             processResults: function (data) {
+                formValidation.focusInvalid();
                 return {
                     results: data.map(user => ({
                         id: user.id,
@@ -24,6 +24,73 @@ $(document).ready(function () {
         }
     });
 
-    const toastLive = document.getElementById('liveToast')
-    toast = new bootstrap.Toast(toastLive)
+    formValidation = $("#frmPengajuanRuang").validate({
+        rules: {
+            pemeriksa_awal: {
+                required: true
+            },
+        },
+        messages: {
+            pemeriksa_awal: {
+                required: "Pemeriksa awal harus ditentukan!"
+            }
+        },
+        errorPlacement: function(error, element) {
+            // Menentukan lokasi error berdasarkan id atau atribut lain
+            if (element.attr("name") === "pemeriksa_awal") {
+                error.appendTo("#error-pemeriksa_awal");
+            } else {
+                // Default: tampilkan setelah elemen
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+    $(document).on("click", "#btn-ajukan", function (e) {
+        e.preventDefault(); // cegah modal langsung muncul
+
+        if ($("#frmPengajuanRuang").valid()) {
+            // // kalau valid → buka modal
+            var dataId = $(this).data('id_akses_ajukan');
+            var tahapanNext = $(this).data('tahapan_next'); // Ambil nilai data-id
+            $('#id_aksespersetujuan').val(dataId);
+            $('#tahapan_next').val(tahapanNext);
+
+            $("#modal-ajukan").modal("show");
+        } else {
+            // kalau tidak valid → fokus ke field pertama error
+            formValidation.focusInvalid();
+        }
+    });
+
+    $(document).on("click", "#btn-ajuanconfirm", function (e) {
+        $("#frmPengajuanRuang").submit();
+    });
+
+    $('#modal-hapusfile').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_file'); // Ambil nilai data-id
+        $('#id_filehapus').val(dataId); // Masukkan ke modal
+    });
+
+    $('#modal-setujui').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_akses_setujui'); // Ambil nilai data-id
+        var dataid_pihakpenyetuju = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
+        $('#id_akses_setujui').val(dataId); // Masukkan ke modal
+        $('#id_pihakpenyetuju_setujui').val(dataid_pihakpenyetuju); // Masukkan ke modal
+    });
+
+    $('#modal-tolak').on('show.bs.modal', function(event) {
+        $('#keterangantolak').html("");
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_akses_tolak'); // Ambil nilai data-id
+        var dataid_pihakpenyetuju = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
+
+        $('#id_akses_tolak').val(dataId); // Masukkan ke modal
+        $('#id_pihakpenyetuju_tolak').val(dataid_pihakpenyetuju); // Masukkan ke modal
+    });
 });

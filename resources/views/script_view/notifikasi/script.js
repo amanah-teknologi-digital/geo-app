@@ -12,8 +12,9 @@ function getDataNotifikasi(){
         dataType: 'json',
         success: function(response) {
             let dataNotifSurat = response['dataNotifSurat'];
+            let dataNotifRuangan = response['dataNotifRuangan'];
 
-            setDataNotifikasi(dataNotifSurat)
+            setDataNotifikasi(dataNotifSurat, dataNotifRuangan)
             setTimeout(function() {
                 hideLoader()
             }, 1000);
@@ -52,27 +53,48 @@ function resetDataNotifikasi(){
     $('#jml_surat_ajukan').html('0');
     $('#jml_surat_verifikasi').html('0');
     $('#jml_surat_revisi').html('0');
+    $('#data_notif_ruangan').hide();
+    $('#notif_ruangan_ajukan').hide();
+    $('#notif_ruangan_verifikasi').hide();
+    $('#notif_ruangan_revisi').hide();
+    $('#jml_ruangan_ajukan').html('0');
+    $('#jml_ruangan_verifikasi').html('0');
+    $('#jml_ruangan_revisi').html('0');
 }
 
-function setDataNotifikasi(data){
-    let isNotif = data['isNotif'];
-    let isNotifSurat = data['isNotifSurat'];
-    let jmlNotif = data['jmlNotif'];
-    let jmlNotifAjukan = data['jmlNotifAjukan'];
-    let jmlNotifVerifikasi = data['jmlNotifVerifikasi'];
-    let jmlNotifRevisi = data['jmlNotifRevisi'];
+function setDataNotifikasi(dataSurat, dataRuangan){
+    let isNotif = dataSurat['isNotif'];
+    let isNotifSurat = dataSurat['isNotifSurat'];
+    let jmlNotifSurat = dataSurat['jmlNotif'];
+    let jmlNotifAjukan = dataSurat['jmlNotifAjukan'];
+    let jmlNotifVerifikasi = dataSurat['jmlNotifVerifikasi'];
+    let jmlNotifRevisi = dataSurat['jmlNotifRevisi'];
+
+    if (!isNotif){
+        isNotif = dataRuangan['isNotif'];
+    }
+    let isNotifRuangan = dataRuangan['isNotifRuangan'];
+    let jmlNotifRuangan = dataRuangan['jmlNotif'];
+    let jmlNotifRuanganAjukan = dataRuangan['jmlNotifAjukan'];
+    let jmlNotifRuanganVerifikasi = dataRuangan['jmlNotifVerifikasi'];
+
+    let jmlNotif = parseInt(jmlNotifSurat) + parseInt(jmlNotifRuangan)
 
     if (isNotif){
         $('#tanda_notif').show();
         $('#icon_notifikasi').addClass('bounce');
     }
 
-    if (jmlNotif.length > 0){
-        $('#pesan_notifikasi').html(jmlNotif.length + ' Baru');
+    if (jmlNotif > 0){
+        $('#pesan_notifikasi').html(jmlNotif + ' Baru');
     }
 
     if (isNotifSurat){
         $('#data_notif_surat').show();
+    }
+
+    if (isNotifRuangan){
+        $('#data_notif_ruangan').show();
     }
 
     if (jmlNotifAjukan > 0){
@@ -80,9 +102,19 @@ function setDataNotifikasi(data){
         $('#jml_surat_ajukan').html(jmlNotifAjukan);
     }
 
+    if (jmlNotifRuanganAjukan > 0){
+        $('#notif_ruangan_ajukan').show();
+        $('#jml_ruangan_ajukan').html(jmlNotifRuanganAjukan);
+    }
+
     if (jmlNotifVerifikasi > 0){
         $('#notif_surat_verifikasi').show();
         $('#jml_surat_verifikasi').html(jmlNotifVerifikasi);
+    }
+
+    if (jmlNotifRuanganVerifikasi > 0){
+        $('#notif_ruangan_verifikasi').show();
+        $('#jml_ruangan_verifikasi').html(jmlNotifRuanganVerifikasi);
     }
 
     if (jmlNotifRevisi > 0){

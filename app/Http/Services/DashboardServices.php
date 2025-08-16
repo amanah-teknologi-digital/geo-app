@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\DashboardRepository;
 use App\Http\Repositories\PengajuanPersuratanRepository;
+use App\Http\Repositories\PengajuanRuanganRepository;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -11,11 +12,14 @@ class DashboardServices
 {
     private $repository;
     private $servicePengajuanPersuratan;
+    private $servicePengajuanRuangan;
     public function __construct(DashboardRepository $repository)
     {
         $this->repository = $repository;
         $repositorySurat = new PengajuanPersuratanRepository();
+        $repositoryRuangan = new PengajuanRuanganRepository();
         $this->servicePengajuanPersuratan = new PengajuanPersuratanServices($repositorySurat);
+        $this->servicePengajuanRuangan = new PengajuanRuanganServices($repositoryRuangan);
     }
 
     public function getDataTotalPersuratan($tahun, $idUser = null)
@@ -95,7 +99,7 @@ class DashboardServices
     public function getDataNotifSurat($idAkses, $namaLayananPersuratan){
         $data = $this->repository->getDataNotifSurat($idAkses);
 
-        $isNotif = false; $isNotifSurat = false; $jmlNotif = []; $jmlNotifAjukan = 0; $jmlNotifVerifikasi = 0; $jmlNotifRevisi = 0;
+        $isNotif = false; $isNotifSurat = false; $jmlNotif = 0; $jmlNotifAjukan = 0; $jmlNotifVerifikasi = 0; $jmlNotifRevisi = 0;
         foreach ($data as $key => $value) {
             $idPengajuan = $value->pengajuan_id;
             $dataVerifikasi = $this->servicePengajuanPersuratan->getStatusVerifikasi($idPengajuan, $namaLayananPersuratan, $value);
@@ -105,33 +109,21 @@ class DashboardServices
             if ($mustApprove == 'AJUKAN'){
                 $isNotif = true;
                 $isNotifSurat = true;
-
-                if (empty($jmlNotif) or !in_array('ajuansurat', $jmlNotif)){
-                    $jmlNotif[] = 'ajuansurat';
-                }
-
+                $jmlNotif++;
                 $jmlNotifAjukan += 1;
             }
 
             if ($mustApprove == 'VERIFIKASI'){
                 $isNotif = true;
                 $isNotifSurat = true;
-
-                if (empty($jmlNotif) or !in_array('verifikasisurat', $jmlNotif)){
-                    $jmlNotif[] = 'verifikasisurat';
-                }
-
+                $jmlNotif++;
                 $jmlNotifVerifikasi += 1;
             }
 
             if ($mustApprove == 'SUDAH DIREVISI'){
                 $isNotif = true;
                 $isNotifSurat = true;
-
-                if (empty($jmlNotif) or !in_array('revisisurat', $jmlNotif)){
-                    $jmlNotif[] = 'revisisurat';
-                }
-
+                $jmlNotif++;
                 $jmlNotifRevisi += 1;
             }
         }
@@ -143,6 +135,42 @@ class DashboardServices
             'jmlNotifAjukan' => $jmlNotifAjukan,
             'jmlNotifVerifikasi' => $jmlNotifVerifikasi,
             'jmlNotifRevisi' => $jmlNotifRevisi,
+        ];
+
+        return $data;
+    }
+
+    public function getDataNotifRuangan($idAkses, $namaLayananRuang){
+        $data = $this->repository->getDataNotifRuangan($idAkses);
+
+        $isNotif = false; $isNotifSurat = false; $jmlNotif = 0; $jmlNotifAjukan = 0; $jmlNotifVerifikasi = 0; $jmlNotifRevisi = 0;
+        foreach ($data as $key => $value) {
+            $idPengajuan = $value->pengajuan_id;
+            $dataVerifikasi = $this->servicePengajuanRuangan->getStatusVerifikasi($idPengajuan, $namaLayananRuang, $value);
+            $mustApprove = $dataVerifikasi['must_aprove'];
+            $message = $dataVerifikasi['message'];
+
+            if ($mustApprove == 'AJUKAN'){
+                $isNotif = true;
+                $isNotifSurat = true;
+                $jmlNotif++;
+                $jmlNotifAjukan += 1;
+            }
+
+            if ($mustApprove == 'VERIFIKASI'){
+                $isNotif = true;
+                $isNotifSurat = true;
+                $jmlNotif++;
+                $jmlNotifVerifikasi += 1;
+            }
+        }
+
+        $data = [
+            'isNotif' => $isNotif,
+            'jmlNotif' => $jmlNotif,
+            'isNotifRuangan' => $isNotifSurat,
+            'jmlNotifAjukan' => $jmlNotifAjukan,
+            'jmlNotifVerifikasi' => $jmlNotifVerifikasi
         ];
 
         return $data;

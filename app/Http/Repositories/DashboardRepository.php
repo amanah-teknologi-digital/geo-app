@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\PengajuanPersuratan;
+use App\Models\PengajuanRuangan;
 use App\Models\SurveyKepuasanPersuratan;
 use Illuminate\Support\Facades\DB;
 
@@ -76,6 +77,49 @@ class DashboardRepository
                 }
             })
             ->get();
+
+        return $data;
+    }
+
+    public function getDataNotifRuangan($idAkses){
+        $data = PengajuanRuangan::with(['persetujuan'])->whereDoesntHave('persetujuan', function($q){
+            $q->where('id_statuspersetujuan', 3); //jika sudah disetujui pada tahapan verifikasi admin
+        })->where('id_tahapan', '!=', 10);
+
+        $id_pengguna = auth()->user()->id;
+
+        // khusus untuk akses pemeriksa dan pengguna, berdasarkan penunjukan atau yang mengajukan saja
+        if (in_array($idAkses, [8,9])) {
+            $data = $data->where(function ($q) use ($id_pengguna) {
+                $q->where('pengaju', $id_pengguna) // sebagai pemohon
+                ->orWhere('pemeriksa_awal', $id_pengguna)
+                    ->orWhere('pemeriksa_akhir', $id_pengguna);
+            });
+        }
+
+        if ($idAkses == 3){ //admin ruangan
+            $data = $data->where('id_tahapan', '!=', 1); // pengajuan tidak draft
+        }
+
+        if ($idAkses == 9){ //pemeriksa
+            $data = $data->whereHas('persetujuan', function($q){
+                $q->where('id_statuspersetujuan', 1)->where('id_tahapan', 2); //jika sudah disetujui pada tahapan verifikasi admin
+            });
+        }
+
+        if ($idAkses == 6){ //kasubbag
+            $data = $data->whereHas('persetujuan', function($q){
+                $q->where('id_statuspersetujuan', 1)->where('id_tahapan', 3); //jika sudah disetujui pada tahapan pemeriksaan awal
+            });
+        }
+
+        if ($idAkses == 7){ //kadep
+            $data = $data->whereHas('persetujuan', function($q){
+                $q->where('id_statuspersetujuan', 1)->where('id_tahapan', 4); //jika sudah disetujui pada tahapan verifikasi kasubbag
+            });
+        }
+
+        $data = $data->get();
 
         return $data;
     }

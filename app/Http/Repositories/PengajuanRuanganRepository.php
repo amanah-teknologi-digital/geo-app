@@ -39,19 +39,19 @@ class PengajuanRuanganRepository
         }
 
         if ($id_akses == 9){ //pemeriksa
-            $data = $data->whereHas('persetujuan', function($q) use ($id_pengajuan){
+            $data = $data->whereHas('persetujuan', function($q){
                 $q->where('id_statuspersetujuan', 1)->where('id_tahapan', 2); //jika sudah disetujui pada tahapan verifikasi admin
             });
         }
 
         if ($id_akses == 6){ //kasubbag
-            $data = $data->whereHas('persetujuan', function($q) use ($id_pengajuan){
+            $data = $data->whereHas('persetujuan', function($q){
                 $q->where('id_statuspersetujuan', 1)->where('id_tahapan', 3); //jika sudah disetujui pada tahapan pemeriksaan awal
             });
         }
 
         if ($id_akses == 7){ //kadep
-            $data = $data->whereHas('persetujuan', function($q) use ($id_pengajuan){
+            $data = $data->whereHas('persetujuan', function($q){
                 $q->where('id_statuspersetujuan', 1)->where('id_tahapan', 4); //jika sudah disetujui pada tahapan verifikasi kasubbag
             });
         }

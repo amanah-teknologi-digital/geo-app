@@ -466,6 +466,8 @@
                     <form id="frmPengajuanRuang" method="POST" action="{{ route('pengajuanruangan.doupdate') }}" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}">
+                        <input type="hidden" name="id_akses" id="id_aksespersetujuan">
+                        <input type="hidden" name="tahapan_next" id="tahapan_next">
                         <div class="row g-6">
                             <div class="col-sm-6">
                                 <div class="fw-semibold small text-secondary mb-3">Ruangan Dipinjam </div>
@@ -502,11 +504,7 @@
                                                 <div class="error-container" id="error-pemeriksa_awal"></div>
                                             </div>
                                         @else
-                                            <div>
-                                                <label for="pemeriksa_awal" class="form-label">User Pemeriksa Awal <span class="text-danger">*</span></label>
-                                                <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
-                                                <div class="error-container" id="error-pemeriksa_awal"></div>
-                                            </div>
+                                            <span class="fst-italic text-danger small">Belum Ditentukan</span>
                                         @endif
                                     @endif
                                 </div>
@@ -620,7 +618,7 @@
                                 </div>
                                 <div class="d-flex align-items-center">
                                     @if($statusVerifikasi['must_aprove'] == 'AJUKAN')
-                                        <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" data-bs-toggle="modal" data-bs-target="#modal-ajukan" class="btn btn-success btn-sm d-flex align-items-center">
+                                        <a href="javascript:void(0)" id="btn-ajukan" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" class="btn btn-success btn-sm d-flex align-items-center">
                                             <i class="bx bx-paper-plane"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
                                         </a>
                                     @endif
@@ -670,24 +668,19 @@
     </div>
     <div class="modal fade" id="modal-ajukan" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengajuansurat.ajukan') }}" method="POST">
-                @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
-                <input type="hidden" name="id_akses" id="id_akses_ajukan" >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Ajukan Pengajuan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Apakah yakin mengajukan pengajuan ini?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">Iya</button>
-                    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Ajukan Pengajuan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </form>
+                <div class="modal-body">
+                    <p>Apakah yakin mengajukan pengajuan ini?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" id="btn-ajuanconfirm" class="btn btn-success">Iya</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="modal-hapusfile" tabindex="-1" aria-hidden="true">

@@ -88,6 +88,32 @@
                                             </li>
                                         </ul>
                                     </li>
+                                    <li class="dropdown-notifications-list scrollable-container ps ps--active-y">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item list-group-item-action dropdown-notifications-item" id="data_notif_ruangan" style="display: none">
+                                                <a href="{{ route('pengajuanruangan') }}">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 me-3">
+                                                            <div class="avatar">
+                                                                <i class="icon-base bx bxs-buildings" style="font-size: 2.5rem;"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="mb-0">Pengajuan {{ (!empty(config('variables.namaLayananSewaRuangan')) ? config('variables.namaLayananSewaRuangan') : 'Ruangan') }}</h6>
+                                                            <ul>
+                                                                <li id="notif_ruangan_ajukan" style="display: none">
+                                                                    <small class="mb-1 d-block text-body">Sebanyak&nbsp;<b class="text-danger" id="jml_ruangan_ajukan">0</b>&nbsp;pengajuan belum diajukan</small>
+                                                                </li>
+                                                                <li id="notif_ruangan_verifikasi" style="display: none">
+                                                                    <small class="mb-1 d-block text-body">Sebanyak&nbsp;<b class="text-danger" id="jml_ruangan_verifikasi">0</b>&nbsp;pengajuan belum diverifikasi</small>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
