@@ -497,7 +497,7 @@
                                     @if(!empty($dataPengajuan->pemeriksaawal))
                                         {{ $dataPengajuan->pemeriksaawal->name }}
                                     @else
-                                        @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $idPengajuan->id_tahapan == 2)
+                                        @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 2)
                                             <div>
                                                 <label for="pemeriksa_awal" class="form-label">User Pemeriksa Awal <span class="text-danger">*</span></label>
                                                 <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
@@ -623,11 +623,11 @@
                                         </a>
                                     @endif
                                     @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
-                                        <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" data-bs-toggle="modal" data-bs-target="#modal-setujui" class="btn btn-success btn-sm d-flex align-items-center">
+                                        <a href="javascript:void(0)" id="btn-setujui" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" class="btn btn-success btn-sm d-flex align-items-center">
                                             <i class="bx bx-check-circle"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
                                         </a>
                                         &nbsp;&nbsp;
-                                        <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
+                                        <a href="javascript:void(0)" data-id_akses_tolak="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
                                             <i class="bx bx-x"></i>&nbsp;Tolak
                                         </a>
                                     @endif
@@ -728,89 +728,27 @@
     </div>
     <div class="modal fade" id="modal-setujui" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
-            <form id="frmSetujuiPengajuan" action="{{ route('pengajuansurat.setujui') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
-                <input type="hidden" name="id_akses" id="id_akses_setujui" >
-                <input type="hidden" name="id_pihakpenyetuju" id="id_pihakpenyetuju_setujui" >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Setujui Pengajuan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Apakah yakin menyetujui pengajuan ini?</p>
-                        <div>
-                            <label for="filesurat" class="form-label">File Hasil Surat <i class="text-muted fw-bold">(Opsional & bisa lebih dari 1, PDF Max 5 MB)</i></label>
-                            <input type="file" class="form-control" name="filesurat[]" id="filesurat" accept="application/pdf" multiple autofocus>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">Iya</button>
-                    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Setujui Pengajuan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </form>
-        </div>
-    </div>
-    <div class="modal fade" id="modal-revisi" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengajuansurat.revisi') }}" method="POST">
-                @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
-                <input type="hidden" name="id_akses" id="id_akses_revisi" >
-                <input type="hidden" name="id_pihakpenyetuju" id="id_pihakpenyetuju_revisi" >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Revisi Pengajuan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div>
-                            <label for="keteranganrev" class="form-label">Keterangan <span class="text-danger">*</span></label>
-                            <textarea name="keteranganrev" id="keteranganrev" class="form-control" cols="10" rows="5" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-warning">Revisi</button>
-                    </div>
+                <div class="modal-body">
+                    <p>Apakah yakin menyetujui pengajuan ini?</p>
                 </div>
-            </form>
-        </div>
-    </div>
-    <div class="modal fade" id="modal-sudahrevisi" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengajuansurat.sudahrevisi') }}" method="POST">
-                @csrf
-                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
-                <input type="hidden" name="id_akses" id="id_akses_sudahrevisi" >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Sudah Revisi Pengajuan</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div>
-                            <label for="keterangansudahrev" class="form-label">Keterangan <span class="text-danger">*</span></label>
-                            <textarea name="keterangansudahrev" id="keterangansudahrev" class="form-control" cols="10" rows="5" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-info">Ajukan Revisi</button>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" id="btn-setujuiconfirm" class="btn btn-success">Iya</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="modal-tolak" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
-            <form action="{{ route('pengajuansurat.tolak') }}" method="POST">
+            <form action="{{ route('pengajuanruangan.tolak') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
                 <input type="hidden" name="id_akses" id="id_akses_tolak" >
-                <input type="hidden" name="id_pihakpenyetuju" id="id_pihakpenyetuju_tolak" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel2">Tolak Pengajuan</h5>

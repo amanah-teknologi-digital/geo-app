@@ -66,7 +66,28 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", "#btn-setujui", function (e) {
+        e.preventDefault(); // cegah modal langsung muncul
+
+        if ($("#frmPengajuanRuang").valid()) {
+            // // kalau valid → buka modal
+            var dataId = $(this).data('id_akses_ajukan');
+            var tahapanNext = $(this).data('tahapan_next'); // Ambil nilai data-id
+            $('#id_aksespersetujuan').val(dataId);
+            $('#tahapan_next').val(tahapanNext);
+
+            $("#modal-setujui").modal("show");
+        } else {
+            // kalau tidak valid → fokus ke field pertama error
+            formValidation.focusInvalid();
+        }
+    });
+
     $(document).on("click", "#btn-ajuanconfirm", function (e) {
+        $("#frmPengajuanRuang").submit();
+    });
+
+    $(document).on("click", "#btn-setujuiconfirm", function (e) {
         $("#frmPengajuanRuang").submit();
     });
 
@@ -76,21 +97,11 @@ $(document).ready(function () {
         $('#id_filehapus').val(dataId); // Masukkan ke modal
     });
 
-    $('#modal-setujui').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Ambil tombol yang diklik
-        var dataId = button.data('id_akses_setujui'); // Ambil nilai data-id
-        var dataid_pihakpenyetuju = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
-        $('#id_akses_setujui').val(dataId); // Masukkan ke modal
-        $('#id_pihakpenyetuju_setujui').val(dataid_pihakpenyetuju); // Masukkan ke modal
-    });
-
     $('#modal-tolak').on('show.bs.modal', function(event) {
         $('#keterangantolak').html("");
         var button = $(event.relatedTarget); // Ambil tombol yang diklik
         var dataId = button.data('id_akses_tolak'); // Ambil nilai data-id
-        var dataid_pihakpenyetuju = button.data('id_pihakpenyetuju'); // Ambil nilai data-id
 
         $('#id_akses_tolak').val(dataId); // Masukkan ke modal
-        $('#id_pihakpenyetuju_tolak').val(dataid_pihakpenyetuju); // Masukkan ke modal
     });
 });

@@ -72,7 +72,7 @@ class PengajuanRuanganController extends Controller
                     return '<span class="text-muted" style="font-size: smaller; font-style: italic">'.$data_pengajuan->nama_kegiatan.'</span>';
                 })
                 ->addColumn('status', function ($data_pengajuan) use($id_akses) {
-                    $html = '<span style="font-size: smaller;">'.$data_pengajuan->tahapanpengajuan->nama.'</span>';
+                    $html = '<span class="text-black" style="font-size: smaller;">'.$data_pengajuan->tahapanpengajuan->nama.'</span>';
                     $html .= $this->service->getHtmlStatusPengajuan($data_pengajuan->id_pengajuan, $this->subtitle, $data_pengajuan);
 
                     return $html;
@@ -361,8 +361,92 @@ class PengajuanRuanganController extends Controller
         }
     }
 
+    public function doTolakPengajuan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+                'keterangantolak' => ['required'],
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan tidak ada.',
+                'keterangantolak.required' => 'Keterangan tidak ada.',
+            ]);
+
+            $idPengajuan = $request->id_pengajuan;
+            $idAkses = $request->id_akses;
+            if (empty($idAkses)){
+                $idAkses = $this->idAkses;
+            }
+            $keterangan = $request->keterangantolak;
+
+            $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
+            $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan, $this->subtitle, $dataPengajuan, $idAkses);
+            $mustVerif = $statusVerifikasi['must_aprove'];
+
+            DB::beginTransaction();
+
+            if ($mustVerif == 'VERIFIKASI'){
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 3, $keterangan);
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Berhasil Hapus Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     public function doUpdatePengajuan(Request $request){
-        dd($request->input());
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+                'tahapan_next' => ['required']
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan wajib diisi.',
+                'tahapan_next.required' => 'Tahapan wajib diisi.',
+            ]);
+
+            $idPengajuan = $request->id_pengajuan;
+            $idAkses = $request->id_akses;
+            $idTahapan = $request->tahapan_next;
+            if (empty($idAkses)){
+                $idAkses = $this->idAkses;
+            }
+
+            $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
+            $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan, $this->subtitle, $dataPengajuan, $idAkses);
+            $idTahapanNext = $statusVerifikasi['tahapan_next'];
+            $mustVerif = $statusVerifikasi['must_approve'];
+
+            if ($idTahapan != $idTahapanNext){
+                return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('error', 'Form input errorr.');
+            }
+
+            DB::beginTransaction();
+
+            if ($dataPengajuan->id_tahapan == 1 && $mustVerif == 'AJUKAN') {
+                $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
+            }
+
+            DB::commit();
+
+            return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('success', 'Berhasil Update Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function getUserPenyetuju(Request $request){

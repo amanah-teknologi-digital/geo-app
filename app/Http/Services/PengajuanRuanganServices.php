@@ -26,6 +26,13 @@ class PengajuanRuanganServices
         return $data;
     }
 
+    public function getDataPengajuanOnly($id_pengajuan){
+        $id_akses = $this->idAkses;
+        $data = $this->repository->getDataPengajuanOnly($id_pengajuan);
+
+        return $data;
+    }
+
     public function tambahDataPengajuan($idPengajuan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai, $statusPengaju, $deskripsiKegiatan, $namaKegiatan){
         try {
             $this->repository->tambahDataPengajuan($idPengajuan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai, $statusPengaju, $deskripsiKegiatan, $namaKegiatan);
@@ -74,6 +81,15 @@ class PengajuanRuanganServices
         $data = $this->repository->getDataFile($idFile);
 
         return $data;
+    }
+
+    public function updateTahapanPengajuan($idPengajuan, $idTahapan){
+        try {
+            $this->repository->updateTahapanPengajuan($idPengajuan, $idTahapan);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
     }
 
     public function updatePengajuan($request){
@@ -167,8 +183,13 @@ class PengajuanRuanganServices
         );
     }
 
-    public function getStatusVerifikasi($id_pengajuan, $namaLayananRuang, $dataPengajuan = null){
-        $id_akses = $this->idAkses;
+    public function getStatusVerifikasi($id_pengajuan, $namaLayananRuang, $dataPengajuan = null, $idAkses = null){
+        if (empty($idAkses)){
+            $id_akses = $this->idAkses;
+        }else{
+            $id_akses = $idAkses;
+        }
+
         $idUser = auth()->user()->id;
 
         if (empty($dataPengajuan)) {
@@ -487,10 +508,10 @@ class PengajuanRuanganServices
         return $html;
     }
 
-    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan = null)
+    public function tambahPersetujuan($idPengajuan, $idAkses, $idTahapan, $idStatusPersetujuan, $keterangan = null)
     {
         try {
-            $this->repository->tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan);
+            $this->repository->tambahPersetujuan($idPengajuan, $idAkses, $idTahapan, $idStatusPersetujuan, $keterangan);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

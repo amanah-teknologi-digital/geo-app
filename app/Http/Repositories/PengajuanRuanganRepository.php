@@ -12,6 +12,7 @@ use App\Models\PengajuanRuangan;
 use App\Models\PengajuanRuanganDetail;
 use App\Models\Pengumuman;
 use App\Models\PersetujuanPersuratan;
+use App\Models\PersetujuanRuangan;
 use App\Models\Ruangan;
 use App\Models\StatusPengaju;
 use App\Models\User;
@@ -147,6 +148,12 @@ class PengajuanRuanganRepository
         ]);
     }
 
+    public function updateTahapanPengajuan($idPengajuan, $idTahapan){
+        $dataPengajuan = PengajuanRuangan::find($idPengajuan);
+        $dataPengajuan->id_tahapan = $idTahapan;
+        $dataPengajuan->save();
+    }
+
     public function updatePengajuan($request){
         $id_pengajuan = $request->id_pengajuan;
         $idAkses = session('akses_default_id');
@@ -247,14 +254,15 @@ class PengajuanRuanganRepository
         $dataPengajuan->save();
     }
 
-    public function tambahPersetujuan($id_pengajuan, $id_akses, $id_statuspersetujuan, $keterangan){
-        $id_persetujuan = strtoupper(Uuid::uuid4()->toString());
+    public function tambahPersetujuan($idPengajuan, $idAkses, $idTahapan, $idStatusPersetujuan, $keterangan){
+        $idPersetujuan = strtoupper(Uuid::uuid4()->toString());
 
-        PersetujuanPersuratan::create([
-            'id_persetujuan' => $id_persetujuan,
-            'id_pengajuan' => $id_pengajuan,
-            'id_statuspersetujuan' => $id_statuspersetujuan,
-            'id_akses' => $id_akses,
+        PersetujuanRuangan::create([
+            'id_persetujuan' => $idPersetujuan,
+            'id_pengajuan' => $idPengajuan,
+            'id_tahapan' => $idTahapan,
+            'id_statuspersetujuan' => $idStatusPersetujuan,
+            'id_akses' => $idAkses,
             'penyetuju' => auth()->user()->id,
             'nama_penyetuju' => auth()->user()->name,
             'keterangan' => $keterangan,
