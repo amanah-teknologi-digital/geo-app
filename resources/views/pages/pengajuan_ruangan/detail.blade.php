@@ -492,7 +492,19 @@
                                 @if(!empty($dataPengajuan->pemeriksaawal))
                                     {{ $dataPengajuan->pemeriksaawal->name }}
                                 @else
-                                    <span class="fst-italic text-danger small">Belum Ditentukan</span>
+                                    @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $idPengajuan->id_tahapan == 2)
+                                        <div>
+                                            <label for="pemeriksa_awal" class="form-label">User Pemeriksa Awal <span class="text-danger">*</span></label>
+                                            <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
+                                            <div class="error-container" id="error-pemeriksa_awal"></div>
+                                        </div>
+                                    @else
+                                        <div>
+                                            <label for="pemeriksa_awal" class="form-label">User Pemeriksa Awal <span class="text-danger">*</span></label>
+                                            <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
+                                            <div class="error-container" id="error-pemeriksa_awal"></div>
+                                        </div>
+                                    @endif
                                 @endif
                             </div>
                         </div>
@@ -560,10 +572,14 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-sm-12">
-                            <div class="fw-semibold small text-secondary mb-3">Kondisi Ruangan dan Peralatan Sesudah Acara</div>
+                        @if(!empty($kadepSudahSetuju))
+                            @if($kadepSudahSetuju->id_statuspersetujuan == 1)
+                                <div class="col-sm-12">
+                                    <div class="fw-semibold small text-secondary mb-3">Kondisi Ruangan dan Peralatan Sesudah Acara</div>
 
-                        </div>
+                                </div>
+                            @endif
+                        @endif
                     </div>
                     <ul class="fa-ul ml-auto float-end mt-5">
                         <li>
@@ -841,15 +857,7 @@
 @endsection
 @section('page-script')
     <script>
-        const isEdit = {{ $isEdit ? 'true' : 'false' }};
-        const tglMulai = '{{ $dataPengajuan->tgl_mulai }}';
-        const tglSelesai = '{{ $dataPengajuan->tgl_selesai }}';
-        const jamMulai = '{{ $dataPengajuan->jam_mulai }}';
-        const jamSelesai = '{{ $dataPengajuan->jam_selesai }}';
-        const idRuangan = @json($dataPengajuan->pengajuanruangandetail->pluck('id_ruangan')->toArray());
-        const dataPeralatan = @json($dataPeralatan);
-        const urlGetData = '{{ route('pengajuanruangan.getdatajadwal') }}';
-        const urlCheckJadwalRuangan = '{{ route('pengajuanruangan.cekdatajadwal') }}';
+        const urlGetUser = '{{ route('pengajuanruangan.getuserpenyetuju') }}';
     </script>
     @vite('resources/views/script_view/pengajuan_ruangan/detail_pengajuan.js')
 @endsection

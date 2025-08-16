@@ -364,4 +364,12 @@ class PengajuanRuanganController extends Controller
     public function doUpdatePengajuan(Request $request){
         dd($request->input());
     }
+
+    public function getUserPenyetuju(Request $request){
+        $search = $request->q;
+
+        $users = $this->service->getUserPemeriksaRuangan($search);
+
+        return response()->json($users);
+    }
 }

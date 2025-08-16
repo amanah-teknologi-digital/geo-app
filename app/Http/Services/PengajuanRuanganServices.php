@@ -563,4 +563,10 @@ class PengajuanRuanganServices
 
         return $events;
     }
+
+    public function getUserPemeriksaRuangan($search){
+        $data = $this->repository->getUserPemeriksaRuangan($search);
+
+        return $data;
+    }
 }

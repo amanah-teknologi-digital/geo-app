@@ -98,6 +98,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pengajuan-ruangan/getdata', [PengajuanRuanganController::class, 'getData'])->name('pengajuanruangan.getdata');
         Route::get('/pengajuan-ruangan/detail/{id_pengajuan}', [PengajuanRuanganController::class, 'detailPengajuan'])->name('pengajuanruangan.detail');
         Route::middleware('role:1,8')->group(function () { //yang bisa mengajukan
+            Route::get('/pengajuan-ruangan/getuserpenyetuju', [PengajuanRuanganController::class, 'getUserPenyetuju'])->name('pengajuanruangan.getuserpenyetuju');
             Route::get('/pengajuan-ruangan/tambah', [PengajuanRuanganController::class, 'tambahPengajuan'])->name('pengajuanruangan.tambah');
             Route::post('/pengajuan-ruangan/dotambah', [PengajuanRuanganController::class, 'doTambahPengajuan'])->name('pengajuanruangan.dotambah');
             Route::post('/pengajuan-ruangan/doupdate', [PengajuanRuanganController::class, 'doUpdatePengajuan'])->name('pengajuanruangan.doupdate');

@@ -312,4 +312,14 @@ class PengajuanRuanganRepository
 
         return $data;
     }
+
+    public function getUserPemeriksaRuangan($search){
+        $availableUsers = User::whereHas('aksesuser', function($q){
+                $q->where('id_akses', 9); //jika sudah disetujui pada tahapan verifikasi kasubbag
+            })->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            ->limit(10)
+            ->get(['id', 'name']);
+
+        return $availableUsers;
+    }
 }
