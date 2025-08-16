@@ -384,4 +384,10 @@ class DashboardServices
 
         return $data;
     }
+
+    public function getSurveyKepuasanRuang(){
+        $data = $this->repository->getSurveyKepuasanRuang();
+
+        return $data;
+    }
 }

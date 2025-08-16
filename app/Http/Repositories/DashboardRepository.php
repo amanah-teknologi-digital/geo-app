@@ -5,6 +5,7 @@ namespace App\Http\Repositories;
 use App\Models\PengajuanPersuratan;
 use App\Models\PengajuanRuangan;
 use App\Models\SurveyKepuasanPersuratan;
+use App\Models\SurveyKepuasanRuangan;
 use Illuminate\Support\Facades\DB;
 
 class DashboardRepository
@@ -172,6 +173,19 @@ class DashboardRepository
 
     public function getSurveyKepuasan(){
         $data = SurveyKepuasanPersuratan::selectRaw('
+                COUNT(*) as total_responden,
+                AVG(rating) as average_rating,
+                SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END) as rating_1,
+                SUM(CASE WHEN rating = 2 THEN 1 ELSE 0 END) as rating_2,
+                SUM(CASE WHEN rating = 3 THEN 1 ELSE 0 END) as rating_3,
+                SUM(CASE WHEN rating = 4 THEN 1 ELSE 0 END) as rating_4,
+                SUM(CASE WHEN rating = 5 THEN 1 ELSE 0 END) as rating_5')->first();
+
+        return $data;
+    }
+
+    public function getSurveyKepuasanRuang(){
+        $data = SurveyKepuasanRuangan::selectRaw('
                 COUNT(*) as total_responden,
                 AVG(rating) as average_rating,
                 SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END) as rating_1,

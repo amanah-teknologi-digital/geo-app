@@ -9,45 +9,47 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller{
     private $service;
-    private $istilahPersuratan;
     private $idAkses;
 
     private $subtitleSurat;
     private $subtitleRuangan;
+
+    private $subtitlePeralatan;
     public function __construct()
     {
         $this->service = new DashboardServices(new DashboardRepository());
-        $this->istilahPersuratan = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
         $this->idAkses = session('akses_default_id');
         $this->subtitleSurat = (!empty(config('variables.namaLayananPersuratan')) ? config('variables.namaLayananPersuratan') : 'Persuratan');
         $this->subtitleRuangan = (!empty(config('variables.namaLayananSewaRuangan')) ? config('variables.namaLayananSewaRuangan') : 'Ruangan');
+        $this->subtitlePeralatan = (!empty(config('variables.namaLayananSewaPeralatan')) ? config('variables.namaLayananSewaPeralatan') : 'Peralatan');
     }
 
     public function pengguna(){
         $title = 'Dashboard Pengguna';
-        $istilahPersuratan = $this->istilahPersuratan;
+        $istilahPersuratan = $this->subtitleRuangan;
 
         return view('pages.dashboard.dashboard_pengguna', compact('title' ,'istilahPersuratan'));
     }
 
     public function surat(){
-        $title = 'Dashboard '.$this->istilahPersuratan;
-        $istilahPersuratan = $this->istilahPersuratan;
+        $title = 'Dashboard '.$this->subtitleRuangan;
+        $istilahPersuratan = $this->subtitleRuangan;
         $dataSurveyKepuasan = $this->service->getSurveyKepuasan();
 
         return view('pages.dashboard.dashboard_surat', compact('title','istilahPersuratan', 'dataSurveyKepuasan'));
     }
 
     public function ruangan(){
-        $title = 'Dashboard Ruangan';
-        $istilahPersuratan = $this->istilahPersuratan;
+        $title = 'Dashboard '.$this->subtitleRuangan;
+        $istilahRuangan = $this->subtitleRuangan;
+        $dataSurveyKepuasan = $this->service->getSurveyKepuasanRuang();
 
-        return view('pages.dashboard.dashboard_pengguna', compact('title','istilahPersuratan'));
+        return view('pages.dashboard.dashboard_ruangan', compact('title','istilahRuangan', 'dataSurveyKepuasan'));
     }
 
     public function peralatan(){
         $title = 'Dashboard Peralatan';
-        $istilahPersuratan = $this->istilahPersuratan;
+        $istilahPersuratan = $this->subtitleRuangan;
 
         return view('pages.dashboard.dashboard_pengguna', compact('title', 'istilahPersuratan'));
     }
@@ -60,6 +62,18 @@ class DashboardController extends Controller{
         $data = [
             'dataPersuratan' => $dataTotalPersuratan,
             'dataStatistikPersuratan' => $dataStatistikPersuratan
+        ];
+        return response()->json($data);
+    }
+
+    public function getDataRuang(Request $request){
+        $tahun = $request->tahun;
+        $dataTotalRuangan = $this->service->getDataTotalPengajuanRuangan($tahun);
+        $dataStatistikRuangan = $this->service->getDataStatistikRuangan($tahun);
+
+        $data = [
+            'dataRuangan' => $dataTotalRuangan,
+            'dataStatistikRuangan' => $dataStatistikRuangan
         ];
         return response()->json($data);
     }

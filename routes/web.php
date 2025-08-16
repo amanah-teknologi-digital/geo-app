@@ -32,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard-surat', [DashboardController::class, 'surat'])->middleware('halaman:dashboard.surat')->name('dashboard.surat');
     Route::get('/dashboard-surat/getdata', [DashboardController::class, 'getDataSurat'])->middleware('halaman:dashboard.surat')->name('dashboard.suratgetdata');
     Route::get('/dashboard-ruangan', [DashboardController::class, 'ruangan'])->middleware('halaman:dashboard.ruangan')->name('dashboard.ruangan');
+    Route::get('/dashboard-ruangan/getdata', [DashboardController::class, 'getDataRuang'])->middleware('halaman:dashboard.ruangan')->name('dashboard.ruanggetdata');
     Route::get('/dashboard-peralatan', [DashboardController::class, 'peralatan'])->middleware('halaman:dashboard.peralatan')->name('dashboard.peralatan');
     Route::get('/dashboard-pengguna', [DashboardController::class, 'pengguna'])->middleware('halaman:dashboard.pengguna')->name('dashboard.pengguna');
     Route::get('/dashboard-pengguna/getdata', [DashboardController::class, 'getDataSuratPengguna'])->middleware('halaman:dashboard.pengguna')->name('dashboard.suratgetdatapengguna');
