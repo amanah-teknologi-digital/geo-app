@@ -577,4 +577,24 @@ class PengajuanRuanganServices
 
         return $data;
     }
+
+    public function checkFormPemeriksaan($status, $idPengajuan, $input){
+        $dataPeralatan = $this->repository->getDataPeralatan($idPengajuan);
+
+        foreach ($dataPeralatan as $item) {
+            if (!$input->has('kondisi'.$status.$item->id_pengajuanperalatan_ruang)){
+                return false;
+                break;
+            }
+
+            if (!$input->has('keterangan'.$item->id_pengajuanperalatan_ruang)){
+                return false;
+                break;
+            }
+
+            $this->repository->updateStatusPemeriksaan($status, $item->id_pengajuanperalatan_ruang, $input->input('kondisi'.$status.$item->id_pengajuanperalatan_ruang), $input->input('keterangan'.$item->id_pengajuanperalatan_ruang));
+        }
+
+        return true;
+    }
 }

@@ -336,4 +336,20 @@ class PengajuanRuanganRepository
 
         return $availableUsers;
     }
+
+    public function getDataPeralatan($idPengajuan){
+        $data = PengajuanPeralatanRuangan::where('id_pengajuan', $idPengajuan)->get();
+
+        return $data;
+    }
+
+    public function updateStatusPemeriksaan($status, $id_pengajuanperalatan_ruang, $kondisi, $keterangan){
+        $dataPeralatan = PengajuanPeralatanRuangan::find($id_pengajuanperalatan_ruang);
+        if ($dataPeralatan){
+            $dataPeralatan->update([
+                'is_valid_'.$status => $kondisi,
+                'keterangan_'.$status => $keterangan
+            ]);
+        }
+    }
 }

@@ -493,7 +493,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Awal </div>
-                                <div class="fs-6 text-dark">
+                                <div class="fs-6 text-mute fst-italic">
                                     @if(!empty($dataPengajuan->pemeriksaawal))
                                         {{ $dataPengajuan->pemeriksaawal->name }}
                                     @else
@@ -510,11 +510,18 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Akhir </div>
-                                <div class="fs-6 text-dark">
+                                <div class="fs-6 text-mute fst-italic">
                                     @if(!empty($dataPengajuan->pemeriksaakhir))
                                         {{ $dataPengajuan->pemeriksaakhir->name }}
                                     @else
-                                        <span class="fst-italic text-danger small">Belum Ditentukan</span>
+                                        @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 7)
+                                            <div>
+                                                <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
+                                                <div class="error-container" id="error-pemeriksa_awal"></div>
+                                            </div>
+                                        @else
+                                            <span class="fst-italic text-danger small">Belum Ditentukan</span>
+                                        @endif
                                     @endif
                                 </div>
                             </div>
@@ -541,18 +548,37 @@
                                                 <td align="center">{{ $key+1 }}</td>
                                                 <td>{{ $peralatan->nama_sarana }}</td>
                                                 <td align="center">{{ $peralatan->jumlah }}</td>
-                                                <td align="center">
-                                                    @if(empty($peralatan->is_valid_awal))
-                                                        -
+                                                <td align="center" class="text-nowrap">
+                                                    @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 3)
+                                                        <div class="d-flex gap-3">
+                                                            <div class="form-check form-check-inline form-check-success">
+                                                                <input class="form-check-input" type="radio" name="kondisiawal{{ $peralatan->id_pengajuanperalatan_ruang }}" id="kondisiawalada{{ $peralatan->id_pengajuanperalatan_ruang }}" value="1" required>
+                                                                <label class="form-check-label" for="kondisiawalada{{ $peralatan->id_pengajuanperalatan_ruang }}">Ada</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline form-check-success">
+                                                                <input class="form-check-input" type="radio" name="kondisiawal{{ $peralatan->id_pengajuanperalatan_ruang }}" id="kondisiawaltidak{{ $peralatan->id_pengajuanperalatan_ruang }}" value="-1" required>
+                                                                <label class="form-check-label" for="kondisiawaltidak{{ $peralatan->id_pengajuanperalatan_ruang }}">Tidak</label>
+                                                            </div>
+                                                        </div>
                                                     @else
-                                                        @if($peralatan->is_valid_awal == 1)
-                                                            <span class="bx bx-check text-success"></span>
+                                                        @if(empty($peralatan->is_valid_awal))
+                                                            -
                                                         @else
-                                                            <span class="bx bx-x text-danger"></span>
+                                                            @if($peralatan->is_valid_awal == 1)
+                                                                <span class="bx bx-check text-success"></span>
+                                                            @else
+                                                                <span class="bx bx-x text-danger"></span>
+                                                            @endif
                                                         @endif
                                                     @endif
                                                 </td>
-                                                <td><span class="text-muted fst-italic small">{{ $peralatan->keterangan_awal }}</span></td>
+                                                <td>
+                                                    @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 3)
+                                                        <textarea name="keterangan{{ $peralatan->id_pengajuanperalatan_ruang }}" class="form-control" id="keterangan{{ $peralatan->id_pengajuanperalatan_ruang }}" rows="2" required></textarea>
+                                                    @else
+                                                        <span class="text-muted fst-italic small">{{ $peralatan->keterangan_awal }}</span>
+                                                    @endif
+                                                </td>
                                                 <td align="center">
                                                     @if(empty($peralatan->is_valid_akhir))
                                                         -

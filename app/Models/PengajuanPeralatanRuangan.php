@@ -15,6 +15,10 @@ class PengajuanPeralatanRuangan extends Model
         'id_pengajuanperalatan_ruang',
         'id_pengajuan',
         'nama_sarana',
-        'jumlah'
+        'jumlah',
+        'is_valid_awal',
+        'is_valid_akhir',
+        'keterangan_awal',
+        'keterangan_akhir'
     ];
 }

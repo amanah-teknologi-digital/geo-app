@@ -38,7 +38,10 @@ $(document).ready(function () {
         },
         errorPlacement: function(error, element) {
             // Menentukan lokasi error berdasarkan id atau atribut lain
-            if (element.attr("name") === "pemeriksa_awal") {
+            if (element.is(":radio")) {
+                // kalau radio, taruh pesan di container parent
+                error.insertAfter(element.closest(".d-flex"));
+            }else if (element.attr("name") === "pemeriksa_awal") {
                 error.appendTo("#error-pemeriksa_awal");
             } else {
                 // Default: tampilkan setelah elemen

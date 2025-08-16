@@ -443,6 +443,19 @@ class PengajuanRuanganController extends Controller
                 $this->service->updatePemeriksaAwal($idPengajuan, $userPemeriksaAwal);
                 $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
                 $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
+            }elseif ($dataPengajuan->id_tahapan == 3 && $mustVerif == 'VERIFIKASI'){
+                $cekForm = $this->service->checkFormPemeriksaan('awal', $idPengajuan, $request);
+                if (!$cekForm){
+                    return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('error', 'Form input errorr.');
+                }
+                $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
+            }elseif ($dataPengajuan->id_tahapan == 4 && $mustVerif == 'VERIFIKASI'){
+                $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
+            }elseif ($dataPengajuan->id_tahapan == 5 && $mustVerif == 'VERIFIKASI'){
+                $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
             }
 
             DB::commit();
