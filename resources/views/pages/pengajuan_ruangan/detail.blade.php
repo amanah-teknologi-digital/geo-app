@@ -53,7 +53,7 @@
                                     <i class="bx bx-collection me-2" style="font-size: 1.3rem;"></i>
                                     Surver Kepuasan Layanan Kami
                                 </h5>
-                                <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary">
+                                <a href="{{ route('pengajuanruangan') }}" class="btn btn-sm btn-secondary">
                                     <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                                 </a>
                             </div>
@@ -124,7 +124,7 @@
                                 Data Pemohon
                             </h5>
                             @if($dataPengajuan->id_tahapan != 10 )
-                                <a href="{{ route('pengajuansurat') }}" class="btn btn-sm btn-secondary">
+                                <a href="{{ route('pengajuanruangan') }}" class="btn btn-sm btn-secondary">
                                     <i class="bx bx-arrow-back"></i>&nbsp;Kembali
                                 </a>
                             @endif

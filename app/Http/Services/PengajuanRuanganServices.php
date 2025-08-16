@@ -139,28 +139,6 @@ class PengajuanRuanganServices
         return $isTambah;
     }
 
-    function getStatusPersetujuan($dataPersetujuan){
-        $adminSudahSetuju           = $dataPersetujuan->where('id_tahapan', 2)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $pemeriksaAwalSudahSetuju   = $dataPersetujuan->where('id_tahapan', 3)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $kasubbagSudahSetuju        = $dataPersetujuan->where('id_tahapan', 4)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $kadepSudahSetuju           = $dataPersetujuan->where('id_tahapan', 5)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $sudahPengembalian          = $dataPersetujuan->where('id_tahapan', 6)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $adminVerifikasiPengembalian= $dataPersetujuan->where('id_tahapan', 7)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $pemeriksaAkhirSudahSetuju  = $dataPersetujuan->where('id_tahapan', 8)->where('id_statuspersetujuan', 1)->isNotEmpty();
-        $sudahVerifikasiPengembalian= $dataPersetujuan->where('id_tahapan', 9)->where('id_statuspersetujuan', 1)->isNotEmpty();
-
-        return compact(
-            'adminSudahSetuju',
-            'pemeriksaAwalSudahSetuju',
-            'kasubbagSudahSetuju',
-            'kadepSudahSetuju',
-            'sudahPengembalian',
-            'adminVerifikasiPengembalian',
-            'pemeriksaAkhirSudahSetuju',
-            'sudahVerifikasiPengembalian'
-        );
-    }
-
     function getStatusPersetujuanTerakhir($dataPersetujuan){
         $adminSudahSetuju           = $dataPersetujuan->where('id_tahapan', 2)->sortByDesc('created_at')->first();
         $pemeriksaAwalSudahSetuju   = $dataPersetujuan->where('id_tahapan', 3)->sortByDesc('created_at')->first();
@@ -201,7 +179,7 @@ class PengajuanRuanganServices
         $userPemeriksaAwal = $dataPengajuan->pemeriksa_awal;
         $userPemeriksaAkhir = $dataPengajuan->pemeriksa_akhir;
         $dataPersetujuan = $dataPengajuan->persetujuan;
-        extract($this->getStatusPersetujuan($dataPersetujuan));
+        extract($this->getStatusPersetujuanTerakhir($dataPersetujuan));
 
         $must_aprove = '';
         $message = '';
@@ -211,11 +189,7 @@ class PengajuanRuanganServices
         $must_sebagai = '';
         $label_verifikasi = '';
 
-        if ($id_akses == 1){
-            $persetujuanTerakhir = $dataPersetujuan->sortByDesc('created_at')->first();
-        }else{
-            $persetujuanTerakhir = $dataPersetujuan->where('id_akses', $id_akses)->sortByDesc('created_at')->first();
-        }
+        $persetujuanTerakhir = $dataPersetujuan->sortByDesc('created_at')->first();
 
         if ($id_akses == 1){ //super admin
             if ($tahapan == 1){ //draft
@@ -491,6 +465,7 @@ class PengajuanRuanganServices
         $html = '';
         $dataVerifikasi = $this->getStatusVerifikasi($idPengajuan, $namaLayananRuang, $dataPengajuan);
         $mustApprove = $dataVerifikasi['must_aprove'];
+        $dataPersetujuan = $dataVerifikasi['data'];
         $message = $dataVerifikasi['message'];
 
         if ($mustApprove == 'AJUKAN'){
@@ -501,9 +476,12 @@ class PengajuanRuanganServices
             $html .= '<br><i class="text-danger small">(Belum Diverifikasi)</i>';
         }
 
-        if ($mustApprove == 'SUDAH DIREVISI'){
-            $html .= '<br><i class="text-danger small">(Pengajuan Direvisi)</i>';
+        if (!empty($dataPersetujuan)){
+            if ($dataPersetujuan->id_statuspersetujuan == 3){
+                $html .= '<br><i class="text-danger small">(Ditolak)</i>';
+            }
         }
+
 
         return $html;
     }
