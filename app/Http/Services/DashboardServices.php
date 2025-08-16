@@ -42,10 +42,10 @@ class DashboardServices
 
         $data = [
             'tahun' => $tahun,
-            'total_pengajuan' => $dataSurat['total_pengajuan'] + $dataRuang['total_pengajuan'],
-            'disetujui' => $dataSurat['disetujui'] + $dataRuang['disetujui'],
-            'ditolak' => $dataRuang['ditolak'] + $dataSurat['ditolak'],
-            'on_proses' => $dataSurat['on_proses'] + $dataRuang['on_proses']
+            'total_pengajuan' => $dataSurat->total_pengajuan + $dataRuang->total_pengajuan,
+            'disetujui' => $dataSurat->disetujui + $dataRuang->disetujui,
+            'ditolak' => $dataRuang->ditolak + $dataSurat->ditolak,
+            'on_proses' => $dataSurat->on_proses + $dataRuang->on_proses
         ];
 
         return $data;

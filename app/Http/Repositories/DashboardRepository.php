@@ -56,8 +56,6 @@ class DashboardRepository
             $data = $data->first();
         }
 
-        $data->on_proses = $data->total_pengajuan - ($data->disetujui + $data->ditolak);
-
         $data = $data ?? (object) [
             'tahun' => $tahun,
             'total_pengajuan' => 0,
@@ -65,6 +63,8 @@ class DashboardRepository
             'ditolak' => 0,
             'on_proses' => 0
         ];
+
+        $data->on_proses = ($data->total_pengajuan ?? 0) - (($data->disetujui ?? 0) + ($data->ditolak ?? 0));
 
         return $data;
     }
