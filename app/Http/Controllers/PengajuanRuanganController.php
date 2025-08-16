@@ -403,6 +403,7 @@ class PengajuanRuanganController extends Controller
     }
 
     public function doUpdatePengajuan(Request $request){
+        //dd($request->input());
         try {
             $request->validate([
                 'id_pengajuan' => ['required'],
@@ -422,7 +423,7 @@ class PengajuanRuanganController extends Controller
             $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
             $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan, $this->subtitle, $dataPengajuan, $idAkses);
             $idTahapanNext = $statusVerifikasi['tahapan_next'];
-            $mustVerif = $statusVerifikasi['must_approve'];
+            $mustVerif = $statusVerifikasi['must_aprove'];
 
             if ($idTahapan != $idTahapanNext){
                 return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('error', 'Form input errorr.');
@@ -431,6 +432,15 @@ class PengajuanRuanganController extends Controller
             DB::beginTransaction();
 
             if ($dataPengajuan->id_tahapan == 1 && $mustVerif == 'AJUKAN') {
+                $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
+            }elseif ($dataPengajuan->id_tahapan == 2 && $mustVerif == 'VERIFIKASI'){
+                if (!$request->pemeriksa_awal){
+                    return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('error', 'Pemeriksa awal harus ditentukan.');
+                }
+
+                $userPemeriksaAwal = $request->pemeriksa_awal;
+                $this->service->updatePemeriksaAwal($idPengajuan, $userPemeriksaAwal);
                 $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
                 $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
             }

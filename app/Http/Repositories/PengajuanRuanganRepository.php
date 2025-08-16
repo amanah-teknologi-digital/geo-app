@@ -154,6 +154,12 @@ class PengajuanRuanganRepository
         $dataPengajuan->save();
     }
 
+    public function updatePemeriksaAwal($idPengajuan, $userPemeriksaAwal){
+        $dataPengajuan = PengajuanRuangan::find($idPengajuan);
+        $dataPengajuan->pemeriksa_awal = $userPemeriksaAwal;
+        $dataPengajuan->save();
+    }
+
     public function updatePengajuan($request){
         $id_pengajuan = $request->id_pengajuan;
         $idAkses = session('akses_default_id');

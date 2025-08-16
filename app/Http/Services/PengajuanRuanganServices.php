@@ -92,6 +92,15 @@ class PengajuanRuanganServices
         }
     }
 
+    public function updatePemeriksaAwal($idPengajuan, $userPemeriksaAwal){
+        try {
+            $this->repository->updatePemeriksaAwal($idPengajuan, $userPemeriksaAwal);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function updatePengajuan($request){
         try {
             $this->repository->updatePengajuan($request);

@@ -214,7 +214,7 @@
                                                     <span class="timeline-point timeline-point-secondary"></span>
                                                 @else
                                                     @if($adminSudahSetuju->id_statuspersetujuan == 1)
-                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                        <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                     @else
                                                         <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
                                                     @endif
@@ -241,7 +241,7 @@
                                                     <span class="timeline-point timeline-point-secondary"></span>
                                                 @else
                                                     @if($pemeriksaAwalSudahSetuju->id_statuspersetujuan == 1)
-                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                        <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                     @else
                                                         <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
                                                     @endif
@@ -268,7 +268,7 @@
                                                     <span class="timeline-point timeline-point-secondary"></span>
                                                 @else
                                                     @if($kasubbagSudahSetuju->id_statuspersetujuan == 1)
-                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                        <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                     @else
                                                         <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
                                                     @endif
@@ -295,7 +295,7 @@
                                                     <span class="timeline-point timeline-point-secondary"></span>
                                                 @else
                                                     @if($kadepSudahSetuju->id_statuspersetujuan == 1)
-                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                        <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                     @else
                                                         <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
                                                     @endif
@@ -326,7 +326,7 @@
                                                     <span class="timeline-point timeline-point-secondary"></span>
                                                 @else
                                                     @if($sudahPengembalian->id_statuspersetujuan == 1)
-                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                        <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                     @else
                                                         <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
                                                     @endif
@@ -353,7 +353,7 @@
                                                     <span class="timeline-point timeline-point-secondary"></span>
                                                 @else
                                                     @if($adminVerifikasiPengembalian->id_statuspersetujuan == 1)
-                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                        <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                     @else
                                                         <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
                                                     @endif
@@ -380,7 +380,7 @@
                                                     <span class="timeline-point timeline-point-secondary"></span>
                                                 @else
                                                     @if($pemeriksaAkhirSudahSetuju->id_statuspersetujuan == 1)
-                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                        <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                     @else
                                                         <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
                                                     @endif
@@ -407,7 +407,7 @@
                                                     <span class="timeline-point timeline-point-secondary"></span>
                                                 @else
                                                     @if($sudahVerifikasiPengembalian->id_statuspersetujuan == 1)
-                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                        <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                     @else
                                                         <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
                                                     @endif
@@ -434,7 +434,7 @@
                                                     <span class="timeline-point timeline-point-secondary"></span>
                                                 @else
                                                     @if($sudahVerifikasiPengembalian->id_statuspersetujuan == 1)
-                                                        <span class="timeline-point"><i class="bx bx-x-circle text-success"></i></span>
+                                                        <span class="timeline-point"><i class="bx bx-check-circle text-success"></i></span>
                                                     @else
                                                         <span class="timeline-point"><i class="bx bx-x-circle text-danger"></i></span>
                                                     @endif
@@ -499,7 +499,6 @@
                                     @else
                                         @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 2)
                                             <div>
-                                                <label for="pemeriksa_awal" class="form-label">User Pemeriksa Awal <span class="text-danger">*</span></label>
                                                 <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
                                                 <div class="error-container" id="error-pemeriksa_awal"></div>
                                             </div>

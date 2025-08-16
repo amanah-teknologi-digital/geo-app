@@ -2,6 +2,7 @@ let formValidation;
 
 $(document).ready(function () {
     $('#pemeriksa_awal').select2({
+        theme: 'bootstrap-5',
         placeholder: 'Cari user...',
         width: '100%',
         ajax: {
