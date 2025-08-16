@@ -463,132 +463,136 @@
                     <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-building pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Pengajuan Ruangan</h5>
                 </div>
                 <div class="card-body pt-4">
-                    <div class="row g-6">
-                        <div class="col-sm-6">
-                            <div class="fw-semibold small text-secondary mb-3">Ruangan Dipinjam </div>
-                            <div class="fs-6 text-dark d-flex flex-wrap gap-1">
-                                {!! $dataPengajuan->pengajuanruangandetail->map(function($ruang) {
-                                    return '<span class="badge bg-primary rounded-pill">'
-                                        . $ruang->ruangan->kode_ruangan . ' - ' . $ruang->ruangan->nama .
-                                    '</span>';
-                                })->implode(' ') !!}
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="fw-semibold small text-secondary mb-3">Jadwal Peminjaman </div>
-                            <div class="fs-6 text-dark fst-italic">{!! $jadwalPeminjaman !!}</div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="fw-semibold small text-secondary mb-3">Nama Kegiatan </div>
-                            <div class="fs-6 text-dark">{{ $dataPengajuan->nama_kegiatan }}</div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="fw-semibold small text-secondary mb-3">Deskripsi Kegiatan </div>
-                            <textarea class="form-control" rows="5" disabled>{{ $dataPengajuan->deskripsi }}</textarea>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Awal </div>
-                            <div class="fs-6 text-dark">
-                                @if(!empty($dataPengajuan->pemeriksaawal))
-                                    {{ $dataPengajuan->pemeriksaawal->name }}
-                                @else
-                                    @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $idPengajuan->id_tahapan == 2)
-                                        <div>
-                                            <label for="pemeriksa_awal" class="form-label">User Pemeriksa Awal <span class="text-danger">*</span></label>
-                                            <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
-                                            <div class="error-container" id="error-pemeriksa_awal"></div>
-                                        </div>
-                                    @else
-                                        <div>
-                                            <label for="pemeriksa_awal" class="form-label">User Pemeriksa Awal <span class="text-danger">*</span></label>
-                                            <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
-                                            <div class="error-container" id="error-pemeriksa_awal"></div>
-                                        </div>
-                                    @endif
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Akhir </div>
-                            <div class="fs-6 text-dark">
-                                @if(!empty($dataPengajuan->pemeriksaakhir))
-                                    {{ $dataPengajuan->pemeriksaakhir->name }}
-                                @else
-                                    <span class="fst-italic text-danger small">Belum Ditentukan</span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12">
-                            <div class="fw-semibold small text-secondary mb-3">Data Rincian Peralatan </div>
-                            <div class="table-responsive" id="tabelPeminjaman">
-                                <table class="table table-bordered table-sm small">
-                                    <thead>
-                                    <tr style="background-color: rgba(8, 60, 132, 0.16) !important">
-                                        <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">No</td>
-                                        <td class="fw-bold" style="width: 30%; color: rgb(8, 60, 132)" align="center">Nama Peralatan</td>
-                                        <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">Jumlah</td>
-                                        <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">Status Awal</td>
-                                        <td class="fw-bold" nowrap="" style="width: 25%; color: rgb(8, 60, 132)" align="center">Keterangan Awal</td>
-                                        <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">Status Akhir</td>
-                                        <td class="fw-bold" nowrap="" style="width: 25%; color: rgb(8, 60, 132)" align="center">Keterangan Akhir</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tbodySarpras">
-
-                                    @foreach($dataPengajuan->pengajuanperalatandetail as $key => $peralatan)
-                                        <tr>
-                                            <td align="center">{{ $key+1 }}</td>
-                                            <td>{{ $peralatan->nama_sarana }}</td>
-                                            <td align="center">{{ $peralatan->jumlah }}</td>
-                                            <td align="center">
-                                                @if(empty($peralatan->is_valid_awal))
-                                                    -
-                                                @else
-                                                    @if($peralatan->is_valid_awal == 1)
-                                                        <span class="bx bx-check text-success"></span>
-                                                    @else
-                                                        <span class="bx bx-x text-danger"></span>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td><span class="text-muted fst-italic small">{{ $peralatan->keterangan_awal }}</span></td>
-                                            <td align="center">
-                                                @if(empty($peralatan->is_valid_akhir))
-                                                    -
-                                                @else
-                                                    @if($peralatan->is_valid_akhir == 1)
-                                                        <span class="bx bx-check text-success"></span>
-                                                    @else
-                                                        <span class="bx bx-x text-danger"></span>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td><span class="text-muted fst-italic small">{{ $peralatan->keterangan_akhir }}</span></td>
-                                        </tr>
-                                    @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        @if(!empty($kadepSudahSetuju))
-                            @if($kadepSudahSetuju->id_statuspersetujuan == 1)
-                                <div class="col-sm-12">
-                                    <div class="fw-semibold small text-secondary mb-3">Kondisi Ruangan dan Peralatan Sesudah Acara</div>
-
+                    <form id="frmPengajuanRuang" method="POST" action="{{ route('pengajuanruangan.doupdate') }}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}">
+                        <div class="row g-6">
+                            <div class="col-sm-6">
+                                <div class="fw-semibold small text-secondary mb-3">Ruangan Dipinjam </div>
+                                <div class="fs-6 text-dark d-flex flex-wrap gap-1">
+                                    {!! $dataPengajuan->pengajuanruangandetail->map(function($ruang) {
+                                        return '<span class="badge bg-primary rounded-pill">'
+                                            . $ruang->ruangan->kode_ruangan . ' - ' . $ruang->ruangan->nama .
+                                        '</span>';
+                                    })->implode(' ') !!}
                                 </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="fw-semibold small text-secondary mb-3">Jadwal Peminjaman </div>
+                                <div class="fs-6 text-dark fst-italic">{!! $jadwalPeminjaman !!}</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="fw-semibold small text-secondary mb-3">Nama Kegiatan </div>
+                                <div class="fs-6 text-dark">{{ $dataPengajuan->nama_kegiatan }}</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="fw-semibold small text-secondary mb-3">Deskripsi Kegiatan </div>
+                                <textarea class="form-control" rows="5" disabled>{{ $dataPengajuan->deskripsi }}</textarea>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Awal </div>
+                                <div class="fs-6 text-dark">
+                                    @if(!empty($dataPengajuan->pemeriksaawal))
+                                        {{ $dataPengajuan->pemeriksaawal->name }}
+                                    @else
+                                        @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $idPengajuan->id_tahapan == 2)
+                                            <div>
+                                                <label for="pemeriksa_awal" class="form-label">User Pemeriksa Awal <span class="text-danger">*</span></label>
+                                                <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
+                                                <div class="error-container" id="error-pemeriksa_awal"></div>
+                                            </div>
+                                        @else
+                                            <div>
+                                                <label for="pemeriksa_awal" class="form-label">User Pemeriksa Awal <span class="text-danger">*</span></label>
+                                                <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
+                                                <div class="error-container" id="error-pemeriksa_awal"></div>
+                                            </div>
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Akhir </div>
+                                <div class="fs-6 text-dark">
+                                    @if(!empty($dataPengajuan->pemeriksaakhir))
+                                        {{ $dataPengajuan->pemeriksaakhir->name }}
+                                    @else
+                                        <span class="fst-italic text-danger small">Belum Ditentukan</span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="fw-semibold small text-secondary mb-3">Data Rincian Peralatan </div>
+                                <div class="table-responsive" id="tabelPeminjaman">
+                                    <table class="table table-bordered table-sm small">
+                                        <thead>
+                                        <tr style="background-color: rgba(8, 60, 132, 0.16) !important">
+                                            <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">No</td>
+                                            <td class="fw-bold" style="width: 30%; color: rgb(8, 60, 132)" align="center">Nama Peralatan</td>
+                                            <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">Jumlah</td>
+                                            <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">Status Awal</td>
+                                            <td class="fw-bold" nowrap="" style="width: 25%; color: rgb(8, 60, 132)" align="center">Keterangan Awal</td>
+                                            <td class="fw-bold" nowrap="" style="width: 5%; color: rgb(8, 60, 132)" align="center">Status Akhir</td>
+                                            <td class="fw-bold" nowrap="" style="width: 25%; color: rgb(8, 60, 132)" align="center">Keterangan Akhir</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbodySarpras">
+
+                                        @foreach($dataPengajuan->pengajuanperalatandetail as $key => $peralatan)
+                                            <tr>
+                                                <td align="center">{{ $key+1 }}</td>
+                                                <td>{{ $peralatan->nama_sarana }}</td>
+                                                <td align="center">{{ $peralatan->jumlah }}</td>
+                                                <td align="center">
+                                                    @if(empty($peralatan->is_valid_awal))
+                                                        -
+                                                    @else
+                                                        @if($peralatan->is_valid_awal == 1)
+                                                            <span class="bx bx-check text-success"></span>
+                                                        @else
+                                                            <span class="bx bx-x text-danger"></span>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                                <td><span class="text-muted fst-italic small">{{ $peralatan->keterangan_awal }}</span></td>
+                                                <td align="center">
+                                                    @if(empty($peralatan->is_valid_akhir))
+                                                        -
+                                                    @else
+                                                        @if($peralatan->is_valid_akhir == 1)
+                                                            <span class="bx bx-check text-success"></span>
+                                                        @else
+                                                            <span class="bx bx-x text-danger"></span>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                                <td><span class="text-muted fst-italic small">{{ $peralatan->keterangan_akhir }}</span></td>
+                                            </tr>
+                                        @endforeach
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            @if(!empty($kadepSudahSetuju))
+                                @if($kadepSudahSetuju->id_statuspersetujuan == 1)
+                                    <div class="col-sm-12">
+                                        <div class="fw-semibold small text-secondary mb-3">Kondisi Ruangan dan Peralatan Sesudah Acara</div>
+
+                                    </div>
+                                @endif
                             @endif
-                        @endif
-                    </div>
-                    <ul class="fa-ul ml-auto float-end mt-5">
-                        <li>
-                            <small><em>Data tidak bisa diupdate, Silahkan <b>hapus pengajuan</b> dan input kembali data untuk memperbaiki selama pengajuan masih belum <b>Diajukan</b>.</em></small>
-                        </li>
-                    </ul>
+                        </div>
+                        <ul class="fa-ul ml-auto float-end mt-5">
+                            <li>
+                                <small><em>Data tidak bisa diupdate, Silahkan <b>hapus pengajuan</b> dan input kembali data untuk memperbaiki selama pengajuan masih belum <b>Diajukan</b>.</em></small>
+                            </li>
+                        </ul>
+                    </form>
                 </div>
             </div>
-            @if($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI')
+            @if($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'PENGEMBALIAN' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI')
                 <div class="position-fixed bottom-0 mb-10 pb-3" style="z-index: 1050;">
                     <div class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached" style="top: auto; bottom: 4.5rem; padding: 0;">
                         <div class="card rounded-3 w-100 bg-gray-500 border-gray-700" style="box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
@@ -598,16 +602,12 @@
                                     @if($statusVerifikasi['must_aprove'] == 'AJUKAN')
                                         <div class="bg-warning rounded me-3" style="width: 10px; height: 50px;"></div>
                                         <p class="mb-0 fw-medium">Pengajuan Belum Diajukan!</p>
-                                    @elseif($statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI')
+                                    @elseif($statusVerifikasi['must_aprove'] == 'PENGEMBALIAN')
                                         <div class="bg-warning rounded me-3" style="width: 10px; height: 50px;"></div>
-                                        <p class="mb-0 fw-medium">Pengajuan Direvisi!</p>
+                                        <p class="mb-0 fw-medium">Kembalikan Peminjaman Ruangan!</p>
                                     @elseif($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
                                         <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
-                                        @if($dataPengajuan->id_statuspengajuan == 5)
-                                            <p class="mb-0 fw-medium text-danger">Pengajuan sudah direvisi dan belum diverifikasi kembali!</p>
-                                        @else
-                                            <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi!</p>
-                                        @endif
+                                        <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi!</p>
                                     @else
                                         @if($statusVerifikasi['data'])
                                             <div class="bg-info rounded me-3" style="width: 10px; height: 50px;"></div>
@@ -620,25 +620,16 @@
                                 </div>
                                 <div class="d-flex align-items-center">
                                     @if($statusVerifikasi['must_aprove'] == 'AJUKAN')
-                                        <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-ajukan" class="btn btn-success btn-sm d-flex align-items-center">
-                                            <i class="bx bx-paper-plane"></i>&nbsp;Ajukan Pengajuan
-                                        </a>
-                                    @endif
-                                    @if($statusVerifikasi['must_aprove'] == 'SUDAH DIREVISI')
-                                        <a href="javascript:void(0)" data-id_akses_sudahrevisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-sudahrevisi" class="btn btn-info btn-sm d-flex align-items-center">
-                                            <i class="bx bx-paper-plane"></i>&nbsp;Sudah Direvisi
+                                        <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" data-bs-toggle="modal" data-bs-target="#modal-ajukan" class="btn btn-success btn-sm d-flex align-items-center">
+                                            <i class="bx bx-paper-plane"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
                                         </a>
                                     @endif
                                     @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
-                                        <a href="javascript:void(0)" data-id_pihakpenyetuju="{{ $statusVerifikasi['must_pihakpenyetuju'] }}" data-id_akses_setujui="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-setujui" class="btn btn-success btn-sm d-flex align-items-center">
-                                            <i class="bx bx-check-circle"></i>&nbsp;Setujui
+                                        <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" data-bs-toggle="modal" data-bs-target="#modal-setujui" class="btn btn-success btn-sm d-flex align-items-center">
+                                            <i class="bx bx-check-circle"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
                                         </a>
                                         &nbsp;&nbsp;
-                                        <a href="javascript:void(0)" data-id_pihakpenyetuju="{{ $statusVerifikasi['must_pihakpenyetuju'] }}" data-id_akses_revisi="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-revisi" class="btn btn-warning btn-sm d-flex align-items-center">
-                                            <i class="bx bx-revision"></i>&nbsp;Revisi
-                                        </a>
-                                        &nbsp;&nbsp;
-                                        <a href="javascript:void(0)" data-id_pihakpenyetuju="{{ $statusVerifikasi['must_pihakpenyetuju'] }}" data-id_akses_tolak="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
+                                        <a href="javascript:void(0)" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
                                             <i class="bx bx-x"></i>&nbsp;Tolak
                                         </a>
                                     @endif
