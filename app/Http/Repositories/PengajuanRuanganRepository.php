@@ -2,6 +2,7 @@
 
 namespace App\Http\Repositories;
 
+use App\Models\FilePengajuanRuangan;
 use App\Models\FilePengajuanSurat;
 use App\Models\Files;
 use App\Models\JadwalRuangan;
@@ -16,6 +17,7 @@ use App\Models\PersetujuanPersuratan;
 use App\Models\PersetujuanRuangan;
 use App\Models\Ruangan;
 use App\Models\StatusPengaju;
+use App\Models\SurveyKepuasanRuangan;
 use App\Models\User;
 use Carbon\Carbon;
 use Ramsey\Uuid\Nonstandard\Uuid;
@@ -23,7 +25,7 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 class PengajuanRuanganRepository
 {
     public function getDataPengajuan($id_pengajuan, $id_akses){
-        $data = PengajuanRuangan::with(['pihakpengaju','pihakupdater','statuspengaju','tahapanpengajuan','persetujuan','pengajuanruangandetail', 'pengajuanperalatandetail', 'pemeriksaawal', 'pemeriksaakhir', 'surveykepuasan']);
+        $data = PengajuanRuangan::with(['pihakpengaju','pihakupdater','statuspengaju','tahapanpengajuan','persetujuan','pengajuanruangandetail', 'pengajuanperalatandetail', 'pemeriksaawal', 'pemeriksaakhir', 'filepengajuanruangan', 'surveykepuasan']);
 
         $id_pengguna = auth()->user()->id;
 
@@ -164,6 +166,12 @@ class PengajuanRuanganRepository
     public function updatePemeriksaAwal($idPengajuan, $userPemeriksaAwal){
         $dataPengajuan = PengajuanRuangan::find($idPengajuan);
         $dataPengajuan->pemeriksa_awal = $userPemeriksaAwal;
+        $dataPengajuan->save();
+    }
+
+    public function updatePemeriksaAkhir($idPengajuan, $userPemeriksaAkhir){
+        $dataPengajuan = PengajuanRuangan::find($idPengajuan);
+        $dataPengajuan->pemeriksa_akhir = $userPemeriksaAkhir;
         $dataPengajuan->save();
     }
 
@@ -358,5 +366,39 @@ class PengajuanRuanganRepository
                 'keterangan_'.$status => $keterangan
             ]);
         }
+    }
+
+    public function tambahFile($id_file, $fileName, $filePath, $fileMime, $fileExt, $fileSize){
+        $file = Files::find($id_file);
+
+        if (!$file) {
+            Files::create([
+                'id_file' => $id_file,
+                'file_name' => $fileName,
+                'location' => $filePath,
+                'mime' => $fileMime,
+                'ext' => $fileExt,
+                'file_size' => $fileSize,
+                'created_at' => now(),
+                'is_private' => 0,
+                'updater' => auth()->user()->id
+            ]);
+        }
+    }
+
+    public function updateFileRuangan($idPengajuan, $idFile){
+        FilePengajuanRuangan::create([
+            'id_pengajuan' => $idPengajuan,
+            'id_file' => $idFile,
+        ]);
+    }
+
+    public function simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating){
+        SurveyKepuasanRuangan::create([
+            'id_kepuasan' => $idKepuasan,
+            'id_pengajuan' => $idPengajuan,
+            'rating' => $rating,
+            'keterangan' => $keterangan
+        ]);
     }
 }

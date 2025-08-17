@@ -143,4 +143,9 @@ class PengajuanRuangan extends Model
         return $this->belongsTo(User::class, 'pemeriksa_akhir', 'id');
     }
 
+    public function filepengajuanruangan()
+    {
+        return $this->hasMany(FilePengajuanRuangan::class, 'id_pengajuan', 'id_pengajuan');
+    }
+
 }

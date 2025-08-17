@@ -1,4 +1,3 @@
-@php use Illuminate\Support\Facades\Storage; @endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -79,12 +78,12 @@
 
 {{-- JUDUL --}}
 <div style="text-align: center; margin-bottom: 20px;">
-    <h3><u>BERITA ACARA PENGEMBALIAN RUANGAN</u></h3>
-    <p>Nomor: {{ $dataPengajuan->id_pengajuan }}/BA-2/GEO/{{ now()->year }}</p>
+    <h3><u>BERITA ACARA PEMINJAMAN RUANGAN</u></h3>
+    <p>Nomor: {{ $dataPengajuan->id_pengajuan }}/BA-1/GEO/{{ now()->year }}</p>
 </div>
 
 {{-- ISI --}}
-<p>Pada hari ini, telah dilakukan pengembalian ruangan dengan rincian berikut:</p>
+<p>Pada hari ini, telah dilakukan pemeriksaan ruangan dengan rincian berikut:</p>
 
 <table>
     <tr>
@@ -136,43 +135,14 @@
             <td>{{ $i+1 }}</td>
             <td>{{ $alat->nama_sarana }}</td>
             <td>{{ $alat->jumlah }}</td>
-            <td>{{ $alat->is_valid_akhir == 1 ? 'Ada' : 'Tidak' }}</td>
-            <td>{{ $alat->keterangan_akhir }}</td>
+            <td>{{ $alat->is_valid_awal == 1 ? 'Ada' : 'Tidak' }}</td>
+            <td>{{ $alat->keterangan_awal }}</td>
         </tr>
     @endforeach
     </tbody>
 </table>
 
 <p style="margin-top:20px;">Demikian berita acara ini dibuat untuk dipergunakan sebagaimana mestinya.</p>
-<h4 style="margin-top:20px;">Dokumentasi Kondisi Ruangan Sesudah Acara</h4>
-
-@if(!empty($imagesData))
-    <table style="width: 100%; border-collapse: collapse;">
-        @php $columnCounter = 0; @endphp
-
-        @foreach($imagesData as $imageData)
-            @if($columnCounter % 3 == 0)
-                {{-- Mulai baris baru (<tr>) setiap 3 kolom --}}
-                <tr>
-                    @endif
-
-                    <td style="width: 33.33%; padding: 5px; text-align: center; vertical-align: top;">
-                        <div style="border:1px solid #ddd; padding:4px;">
-                            <img src="{{ $imageData }}" alt="Foto Dokumentasi" style="width: 100%; height: 160px; object-fit: cover;">
-                        </div>
-                    </td>
-
-                    @php $columnCounter++; @endphp
-
-                    @if($columnCounter % 3 == 0 || $loop->last)
-                        {{-- Tutup baris (</tr>) setelah 3 kolom atau jika ini item terakhir --}}
-                </tr>
-            @endif
-        @endforeach
-    </table>
-@else
-    <p style="font-style: italic; color: #555;">Tidak ada foto dokumentasi yang diunggah.</p>
-@endif
 
 {{-- TANDA TANGAN --}}
 <table class="signature">

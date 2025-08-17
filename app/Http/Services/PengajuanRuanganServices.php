@@ -6,8 +6,10 @@ use App\Http\Repositories\PengajuanRuanganRepository;
 use App\Models\Files;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Nonstandard\Uuid;
 
 class PengajuanRuanganServices
 {
@@ -101,6 +103,15 @@ class PengajuanRuanganServices
     public function updatePemeriksaAwal($idPengajuan, $userPemeriksaAwal){
         try {
             $this->repository->updatePemeriksaAwal($idPengajuan, $userPemeriksaAwal);
+        }catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function updatePemeriksaAkhir($idPengajuan, $userPemeriksaAkhir){
+        try {
+            $this->repository->updatePemeriksaAkhir($idPengajuan, $userPemeriksaAkhir);
         }catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());
@@ -602,5 +613,48 @@ class PengajuanRuanganServices
         }
 
         return true;
+    }
+
+    public function tambahFile($file, $idFile){
+        try {
+            $fileName = $file->getClientOriginalName();
+            $fileMime = $file->getClientMimeType();
+            $fileExt = $file->getClientOriginalExtension();
+            $newFileName = $idFile.'.'.$fileExt;
+            $fileSize = $file->getSize();
+            $fileContents = file_get_contents($file->getRealPath());
+            $encryptedFileContents = Crypt::encrypt($fileContents);
+            $filePath = 'file_peminjamanruang/' . $newFileName;
+            Storage::disk('public')->put($filePath, $encryptedFileContents);
+
+
+            //save file data ke database
+            $this->repository->tambahFile($idFile, $fileName, $filePath, $fileMime, $fileExt, $fileSize);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function simpanFileSesudahAcara($idPengajuan, $requestFile){
+        try {
+            foreach ($requestFile as $item) {
+                $idFile = strtoupper(Uuid::uuid4()->toString());
+                $this->tambahFile($item, $idFile);
+                $this->repository->updateFileRuangan($idPengajuan, $idFile);
+            }
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating){
+        try {
+            $this->repository->simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
     }
 }

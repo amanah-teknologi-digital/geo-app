@@ -109,6 +109,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/pengajuan-ruangan/doupdate', [PengajuanRuanganController::class, 'doUpdatePengajuan'])->name('pengajuanruangan.doupdate');
         Route::post('/pengajuan-ruangan/dotolak', [PengajuanRuanganController::class, 'doTolakPengajuan'])->name('pengajuanruangan.tolak');
         Route::get('/pengajuan-ruangan/ba-peminjaman/{id_pengajuan}', [PengajuanRuanganController::class, 'generateBeritaAcaraPeminjaman'])->name('pengajuanruangan.bapeminjaman');
+        Route::get('/pengajuan-ruangan/ba-pengembalian/{id_pengajuan}', [PengajuanRuanganController::class, 'generateBeritaAcaraPengembalian'])->name('pengajuanruangan.bapengembalian');
+        Route::post('/pengajuan-ruangan/surveykepuasan', [PengajuanRuanganController::class, 'surveyKepuasan'])->name('pengajuanruangan.surveykepuasan');
     });
 
     Route::middleware('halaman:peralatan')->group(function () { //peralatan

@@ -8,8 +8,10 @@ use App\Rules\CekHariDalamRange;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Nonstandard\Uuid;
 use Yajra\DataTables\DataTables;
@@ -77,6 +79,23 @@ class PengajuanRuanganController extends Controller
                 ->addColumn('status', function ($data_pengajuan) use($id_akses) {
                     $html = '<span class="text-black" style="font-size: smaller;">'.$data_pengajuan->tahapanpengajuan->nama.'</span>';
                     $html .= $this->service->getHtmlStatusPengajuan($data_pengajuan->id_pengajuan, $this->subtitle, $data_pengajuan);
+
+                    if ($data_pengajuan->id_tahapan == 10){
+                        if (!empty($data_pengajuan->surveykepuasan)){
+                            $tmp_stars = '';
+                            for ($i = 1; $i <= 5; $i++){
+                                if ($i <= $data_pengajuan->surveykepuasan->rating){
+                                    $color = '#f5b301';
+                                }else{
+                                    $color = '#ddd';
+                                }
+                                $tmp_stars .= '<span style="color: '.$color.'">★</span>';
+                            }
+                        }else{
+                            $tmp_stars = '<span class="text-danger fst-italic small">Belum mengisi survey</span>';
+                        }
+                        $html .= '<br>'.$tmp_stars;
+                    }
 
                     return $html;
                 })
@@ -459,6 +478,39 @@ class PengajuanRuanganController extends Controller
             }elseif ($dataPengajuan->id_tahapan == 5 && $mustVerif == 'VERIFIKASI'){
                 $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
                 $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
+            }elseif ($dataPengajuan->id_tahapan == 6 && $mustVerif == 'PENGEMBALIAN'){
+                $request->validate([
+                    'filesesudahacara'   => 'required|array|min:5',
+                    'filesesudahacara.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+                ],[
+                    'filesesudahacara.required'   => 'Wajib upload foto sesudah acara.',
+                    'filesesudahacara.min'        => 'Minimal 5 foto harus diunggah.',
+                    'filesesudahacara.*.image'    => 'File harus berupa gambar.',
+                    'filesesudahacara.*.mimes'    => 'Format harus JPG, JPEG, PNG, atau WEBP.',
+                    'filesesudahacara.*.max'      => 'Ukuran maksimal tiap foto 5 MB.',
+                ]);
+                $this->service->simpanFileSesudahAcara($idPengajuan, $request->file('filesesudahacara'));
+                $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
+            }elseif ($dataPengajuan->id_tahapan == 7 && $mustVerif == 'VERIFIKASI'){
+                if (!$request->pemeriksa_akhir){
+                    return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('error', 'Pemeriksa akhir harus ditentukan.');
+                }
+
+                $userPemeriksaAkhir = $request->pemeriksa_akhir;
+                $this->service->updatePemeriksaAkhir($idPengajuan, $userPemeriksaAkhir);
+                $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
+            }elseif ($dataPengajuan->id_tahapan == 8 && $mustVerif == 'VERIFIKASI'){
+                $cekForm = $this->service->checkFormPemeriksaan('akhir', $idPengajuan, $request);
+                if (!$cekForm){
+                    return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('error', 'Form input errorr.');
+                }
+                $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
+            }elseif ($dataPengajuan->id_tahapan == 9 && $mustVerif == 'VERIFIKASI'){
+                $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
             }
 
             DB::commit();
@@ -492,7 +544,7 @@ class PengajuanRuanganController extends Controller
 
         if (!empty($sudahSetujuKadep)){
             if ($sudahSetujuKadep->id_statuspersetujuan == 1){
-                $pdf = PDF::loadView('pages.pengajuan_ruangan.ba_pengembalian', compact('dataPengajuan','dataPengaturan', 'fakultas'))
+                $pdf = PDF::loadView('pages.pengajuan_ruangan.ba_peminjaman', compact('dataPengajuan','dataPengaturan', 'fakultas'))
                     ->setPaper('a4', 'portrait');
 
                 return $pdf->download("berita_acara_{$dataPengajuan->id_pengajuan}.pdf");
@@ -501,6 +553,89 @@ class PengajuanRuanganController extends Controller
             }
         }else{
             abort(404);
+        }
+    }
+
+    public function generateBeritaAcaraPengembalian($idPengajuan){
+        $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
+        $dataPengaturan = $this->service->getDataPengaturan();
+        $fakultas = $this->fakultas;
+
+        if ($dataPengajuan->id_tahapan == 10){
+            $imagesData = [];
+
+            if ($dataPengajuan->filepengajuanruangan) {
+                // 3. Loop setiap file yang terkait dengan pengajuan
+                foreach ($dataPengajuan->filepengajuanruangan as $file) {
+                    $filePath = $file->file->location ?? null;
+
+                    if ($filePath && Storage::disk('public')->exists($filePath)) {
+                        try {
+                            // 4. Baca konten file yang masih terenkripsi
+                            $encryptedContent = Storage::disk('public')->get($filePath);
+
+                            // 5. Dekripsi konten file di memori
+                            $decryptedContent = Crypt::decrypt($encryptedContent);
+
+                            // 6. Tentukan MIME Type. Cara terbaik adalah menyimpannya di DB saat upload.
+                            //    Di sini kita gunakan Mime Type dari database.
+                            $mimeType = $file->file->mime ?? 'image/jpeg';
+
+                            // 7. Format data gambar menjadi string Base64 yang siap pakai di tag <img>
+                            $imagesData[] = 'data:' . $mimeType . ';base64,' . base64_encode($decryptedContent);
+
+                        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+                            // Jika dekripsi gagal, file bisa dilewati atau ditangani khusus
+                            // Contoh: log error
+                            Log::error('Gagal dekripsi file: ' . $filePath);
+                        }
+                    }
+                }
+            }
+
+            $pdf = PDF::loadView('pages.pengajuan_ruangan.ba_pengembalian', compact('dataPengajuan','dataPengaturan', 'fakultas', 'imagesData'))
+                ->setPaper('a4', 'portrait');
+
+            return $pdf->download("berita_acara_{$dataPengajuan->id_pengajuan}.pdf");
+        }else{
+            abort(404);
+        }
+    }
+
+    public function surveyKepuasan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+                'rating' => ['required', 'integer', 'between:1,5'],
+                'keterangan' => ['nullable', 'string'],
+            ]);
+
+            $idPengajuan = $request->id_pengajuan;
+            $keterangan = $request->keterangan;
+            $rating = $request->rating;
+
+            $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
+
+            if (!empty($dataPengajuan->surveykepuasan)){
+                return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('error', 'Anda sudah melakukan survey kepuasan.');
+            }
+
+            DB::beginTransaction();
+
+            $idKepuasan = strtoupper(Uuid::uuid4()->toString());
+            $this->service->simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating);
+
+            DB::commit();
+
+            return redirect(route('pengajuanruangan.detail', $idPengajuan))->with('success', 'Berhasil mengisi Survey Kepuasan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 }

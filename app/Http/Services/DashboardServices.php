@@ -136,7 +136,7 @@ class DashboardServices
             }
 
             $createdAtDisetujui = optional($value->persetujuan->first(function ($item) {
-                return $item->id_statuspersetujuan == 1 && $item->id_akses == 2;
+                return $item->id_statuspersetujuan == 1 && $item->id_tahapan == 9;
             }))->created_at;
 
             $createdAtDitolak = optional($value->persetujuan->first(function ($item) {

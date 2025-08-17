@@ -59,7 +59,7 @@
                             </div>
                             <div class="card-body pt-4">
                                 @if(empty($dataPengajuan->surveykepuasan))
-                                    <form id="FrmSurveyKepuasan" action="{{ route('pengajuansurat.surveykepuasan') }}" method="POST">
+                                    <form id="FrmSurveyKepuasan" action="{{ route('pengajuanruangan.surveykepuasan') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}">
 
@@ -455,16 +455,15 @@
                 </div>
             </div>
             <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'PENGEMBALIAN' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI') ? 'style="margin-bottom: 5.5rem !important;"':'style="margin-bottom: 1.5rem !important;"' ?> >
-                <div class="stage-bar bg-primary text-white">
-                    {{ $dataPengajuan->tahapanpengajuan->nama }}
-                </div>
-
                 <div class="card-header d-flex align-items-center pb-4 border-bottom">
                     <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-building pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Pengajuan Ruangan</h5>
                     @if(!empty($kadepSudahSetuju))
                         @if($kadepSudahSetuju->id_statuspersetujuan == 1)
-                            &nbsp;<a href="{{ route('pengajuanruangan.bapeminjaman', $idPengajuan) }}" target="_blank" class="btn btn-sm btn-success" style="margin-left: 1rem"><span class="bx bx-download me-2 "></span>Berita Acara Peminjaman</a>
+                            &nbsp;<a href="{{ route('pengajuanruangan.bapeminjaman', $idPengajuan) }}" target="_blank" class="btn btn-sm btn-outline-success" style="margin-left: 1rem"><span class="bx bx-download me-2 "></span>Berita Acara Peminjaman</a>
                         @endif
+                    @endif
+                    @if($dataPengajuan->id_tahapan == 10)
+                        &nbsp;<a href="{{ route('pengajuanruangan.bapengembalian', $idPengajuan) }}" target="_blank" class="btn btn-sm btn-outline-primary" style="margin-left: 1rem"><span class="bx bx-download me-2 "></span>Berita Acara Pengembalian</a>
                     @endif
                 </div>
                 <div class="card-body pt-4">
@@ -475,13 +474,9 @@
                         <input type="hidden" name="tahapan_next" id="tahapan_next">
                         <div class="row g-6">
                             <div class="col-sm-6">
-                                <div class="fw-semibold small text-secondary mb-3">Ruangan Dipinjam </div>
-                                <div class="fs-6 text-dark d-flex flex-wrap gap-1">
-                                    {!! $dataPengajuan->pengajuanruangandetail->map(function($ruang) {
-                                        return '<span class="badge bg-primary rounded-pill">'
-                                            . $ruang->ruangan->kode_ruangan . ' - ' . $ruang->ruangan->nama .
-                                        '</span>';
-                                    })->implode(' ') !!}
+                                <div class="fw-semibold small text-secondary mb-3">Status Pengajuan</div>
+                                <div class="fs-6 text-mute">
+                                    <span class="fw-bold small">{{ $dataPengajuan->tahapanpengajuan->nama }}</span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -490,17 +485,18 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="fw-semibold small text-secondary mb-3">Nama Kegiatan </div>
-                                <div class="fs-6 text-dark">{{ $dataPengajuan->nama_kegiatan }}</div>
+                                <div class="fs-6 text-dark"><span class="small text-dark">{{ $dataPengajuan->nama_kegiatan }}</span></div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="fw-semibold small text-secondary mb-3">Deskripsi Kegiatan </div>
-                                <textarea class="form-control" rows="5" disabled>{{ $dataPengajuan->deskripsi }}</textarea>
+                                <div class="fs-6 text-muted small fst-italic">{{ $dataPengajuan->deskripsi }}</div>
+{{--                                <textarea class="form-control" rows="5" disabled>{{ $dataPengajuan->deskripsi }}</textarea>--}}
                             </div>
                             <div class="col-sm-6">
                                 <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Awal </div>
-                                <div class="fs-6 text-mute fst-italic">
+                                <div class="fs-6">
                                     @if(!empty($dataPengajuan->pemeriksaawal))
-                                        {{ $dataPengajuan->pemeriksaawal->name }}
+                                        <span class="small text-dark">{{ $dataPengajuan->pemeriksaawal->name }}</span>
                                     @else
                                         @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 2)
                                             <div>
@@ -515,14 +511,14 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="fw-semibold small text-secondary mb-3">Petugas Pemeriksa Akhir </div>
-                                <div class="fs-6 text-mute fst-italic">
+                                <div class="fs-6">
                                     @if(!empty($dataPengajuan->pemeriksaakhir))
-                                        {{ $dataPengajuan->pemeriksaakhir->name }}
+                                        <span class="small text-dark">{{ $dataPengajuan->pemeriksaakhir->name }}</span>
                                     @else
                                         @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 7)
                                             <div>
-                                                <select name="pemeriksa_awal" id="pemeriksa_awal" class="form-control" required></select>
-                                                <div class="error-container" id="error-pemeriksa_awal"></div>
+                                                <select name="pemeriksa_akhir" id="pemeriksa_akhir" class="form-control" required></select>
+                                                <div class="error-container" id="error-pemeriksa_akhir"></div>
                                             </div>
                                         @else
                                             <span class="fst-italic text-danger small">Belum Ditentukan</span>
@@ -530,7 +526,16 @@
                                     @endif
                                 </div>
                             </div>
-
+                            <div class="col-sm-12">
+                                <div class="fw-semibold small text-secondary mb-3">Ruangan Dipinjam </div>
+                                <div class="fs-6 text-dark d-flex flex-wrap gap-1">
+                                    {!! $dataPengajuan->pengajuanruangandetail->map(function($ruang) {
+                                        return '<span class="badge bg-primary rounded-pill">'
+                                            . $ruang->ruangan->kode_ruangan . ' - ' . $ruang->ruangan->nama .
+                                        '</span>';
+                                    })->implode(' ') !!}
+                                </div>
+                            </div>
                             <div class="col-sm-12">
                                 <div class="fw-semibold small text-secondary mb-3">Data Rincian Peralatan </div>
                                 <div class="table-responsive" id="tabelPeminjaman">
@@ -551,7 +556,7 @@
                                         @foreach($dataPengajuan->pengajuanperalatandetail as $key => $peralatan)
                                             <tr>
                                                 <td align="center">{{ $key+1 }}</td>
-                                                <td>{{ $peralatan->nama_sarana }}</td>
+                                                <td class="text-dark">{{ $peralatan->nama_sarana }}</td>
                                                 <td align="center">{{ $peralatan->jumlah }}</td>
                                                 <td align="center" class="text-nowrap">
                                                     @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 3)
@@ -585,17 +590,36 @@
                                                     @endif
                                                 </td>
                                                 <td align="center">
-                                                    @if(empty($peralatan->is_valid_akhir))
-                                                        -
+                                                    @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 8)
+                                                        <div class="d-flex gap-3">
+                                                            <div class="form-check form-check-inline form-check-success">
+                                                                <input class="form-check-input" type="radio" name="kondisiakhir{{ $peralatan->id_pengajuanperalatan_ruang }}" id="kondisiakhirada{{ $peralatan->id_pengajuanperalatan_ruang }}" value="1" required>
+                                                                <label class="form-check-label" for="kondisiakhirada{{ $peralatan->id_pengajuanperalatan_ruang }}">Ada</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline form-check-success">
+                                                                <input class="form-check-input" type="radio" name="kondisiakhir{{ $peralatan->id_pengajuanperalatan_ruang }}" id="kondisiakhirtidak{{ $peralatan->id_pengajuanperalatan_ruang }}" value="-1" required>
+                                                                <label class="form-check-label" for="kondisiakhirtidak{{ $peralatan->id_pengajuanperalatan_ruang }}">Tidak</label>
+                                                            </div>
+                                                        </div>
                                                     @else
-                                                        @if($peralatan->is_valid_akhir == 1)
-                                                            <span class="bx bx-check text-success"></span>
+                                                        @if(empty($peralatan->is_valid_akhir))
+                                                            -
                                                         @else
-                                                            <span class="bx bx-x text-danger"></span>
+                                                            @if($peralatan->is_valid_akhir == 1)
+                                                                <span class="bx bx-check text-success"></span>
+                                                            @else
+                                                                <span class="bx bx-x text-danger"></span>
+                                                            @endif
                                                         @endif
                                                     @endif
                                                 </td>
-                                                <td><span class="text-muted fst-italic small">{{ $peralatan->keterangan_akhir }}</span></td>
+                                                <td>
+                                                    @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI' && $dataPengajuan->id_tahapan == 8)
+                                                        <textarea name="keterangan{{ $peralatan->id_pengajuanperalatan_ruang }}" class="form-control" id="keterangan{{ $peralatan->id_pengajuanperalatan_ruang }}" rows="2" required></textarea>
+                                                    @else
+                                                        <span class="text-muted fst-italic small">{{ $peralatan->keterangan_akhir }}</span>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
 
@@ -606,9 +630,39 @@
                             @if(!empty($kadepSudahSetuju))
                                 @if($kadepSudahSetuju->id_statuspersetujuan == 1)
                                     <div class="col-sm-12">
-                                        <div class="fw-semibold small text-secondary mb-3">Kondisi Ruangan dan Peralatan Sesudah Acara</div>
-
-                                    </div>
+                                        <div class="fw-semibold small text-secondary mb-3">Kondisi Ruangan dan Peralatan Sesudah Acara <i>(foto minimal 5, dan ukuran maksimal 5 mb)</i></div>
+                                            @if($dataPengajuan->id_tahapan == 6)
+                                                <input type="file" class="form-control" name="filesesudahacara[]" id="filesesudahacara" accept="image/*" multiple autofocus>
+                                            @else
+                                                @if($dataPengajuan->filepengajuanruangan && $dataPengajuan->filepengajuanruangan->count() > 0)
+                                                    <div class="row g-3">
+                                                        @foreach($dataPengajuan->filepengajuanruangan as $file)
+                                                            @php
+                                                                $filePath = $file->file->location ?? null;
+                                                                $imageUrl = $filePath && Storage::disk('public')->exists($filePath)
+                                                                    ? route('file.getpublicfile', $file->file->id_file)
+                                                                    : asset('assets/img/no_image.jpg');
+                                                            @endphp
+                                                            <div class="col-6 col-md-4 col-lg-3">
+                                                                <div class="card shadow-sm h-100">
+                                                                    <img src="{{ $imageUrl }}"
+                                                                         class="card-img-top img-fluid"
+                                                                         alt="Foto Sesudah Acara"
+                                                                         style="object-fit: cover; height: 180px;">
+                                                                    <div class="card-body p-2 text-center">
+                                                                        <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                                            Lihat
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                <div class="text-muted small mt-2">Belum ada foto yang diunggah.</div>
+                                            @endif
+                                        </div>
+                                    @endif
                                 @endif
                             @endif
                         </div>
@@ -652,6 +706,11 @@
                                             <i class="bx bx-paper-plane"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
                                         </a>
                                     @endif
+                                        @if($statusVerifikasi['must_aprove'] == 'PENGEMBALIAN')
+                                            <a href="javascript:void(0)" id="btn-setujui" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" class="btn btn-warning btn-sm d-flex align-items-center">
+                                                <i class="bx bx-paper-plane"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
+                                            </a>
+                                        @endif
                                     @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
                                         <a href="javascript:void(0)" id="btn-setujui" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" class="btn btn-success btn-sm d-flex align-items-center">
                                             <i class="bx bx-check-circle"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
@@ -760,11 +819,11 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel2">Setujui Pengajuan</h5>
+                    <h5 class="modal-title" id="exampleModalLabel2">Verifikasi Pengajuan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Apakah yakin menyetujui pengajuan ini?</p>
+                    <p>Apakah yakin verifikasi, pengajuan ini?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
