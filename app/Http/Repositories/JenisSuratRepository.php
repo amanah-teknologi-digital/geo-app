@@ -23,7 +23,7 @@ class JenisSuratRepository
     public function getUserPenyetujuSurat($search, $idJenisSurat){
         $usedUserIds = PihakPenyetujuSurat::where('id_jenissurat', $idJenisSurat)->pluck('id_penyetuju');
 
-        $availableUsers = User::whereNotIn('id', $usedUserIds)->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+        $availableUsers = User::whereNotIn('id', $usedUserIds)->when($search, fn($q) => $q->where('name', 'like', "%$search%"))->where('email_verified_at', '!=', null)
             ->limit(10)
             ->get(['id', 'name']);
 

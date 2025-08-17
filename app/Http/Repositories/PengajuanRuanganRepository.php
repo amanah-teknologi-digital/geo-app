@@ -345,7 +345,7 @@ class PengajuanRuanganRepository
     public function getUserPemeriksaRuangan($search){
         $availableUsers = User::whereHas('aksesuser', function($q){
                 $q->where('id_akses', 9); //jika sudah disetujui pada tahapan verifikasi kasubbag
-            })->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            })->when($search, fn($q) => $q->where('name', 'like', "%$search%"))->where('email_verified_at', '!=', null)
             ->limit(10)
             ->get(['id', 'name']);
 
