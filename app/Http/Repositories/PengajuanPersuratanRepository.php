@@ -4,6 +4,7 @@ namespace App\Http\Repositories;
 
 use App\Models\FilePengajuanSurat;
 use App\Models\Files;
+use App\Models\JadwalRuangan;
 use App\Models\JenisSurat;
 use App\Models\PengajuanPersuratan;
 use App\Models\Pengumuman;

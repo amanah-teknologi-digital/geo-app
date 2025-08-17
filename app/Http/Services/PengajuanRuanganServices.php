@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Http\Repositories\PengajuanRuanganRepository;
 use App\Models\Files;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
@@ -652,6 +653,47 @@ class PengajuanRuanganServices
     public function simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating){
         try {
             $this->repository->simpanSurveyKepuasan($idKepuasan, $idPengajuan, $keterangan, $rating);
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function simpanJadwalBookingRuangan($dataPengajuan){
+        try {
+            $periode = CarbonPeriod::create($dataPengajuan->tgl_mulai, $dataPengajuan->tgl_selesai);
+            $idPengajuan = $dataPengajuan->id_pengajuan;
+            $listRuangan = $dataPengajuan->pengajuanruangandetail;
+            $jadwalHarian = array_map(function ($date) {
+                // Return sebuah array, bukan lagi string
+                return [
+                    'tanggal'    => $date->toDateString(),
+                    'nomor_hari' => $date->dayOfWeek + 1, // Logika agar Senin = 2
+                    'hari'       => $date->isoFormat('dddd') // Tambahan: nama hari agar lebih jelas
+                ];
+            }, $periode->toArray());
+
+            foreach ($jadwalHarian as $tgl){
+                foreach ($listRuangan as $ruangan){
+                    $idJadwal = strtoupper(Uuid::uuid4()->toString());
+                    $record = [
+                        'id_jadwal' => $idJadwal,
+                        'id_ruangan' => $ruangan->id_ruangan,
+                        'ref_id_booking' => $idPengajuan,
+                        'keterangan' => $dataPengajuan->nama_kegiatan,
+                        'day_of_week' => $tgl['nomor_hari'],
+                        'jam_mulai' => $dataPengajuan->jam_mulai,
+                        'jam_selesai' => $dataPengajuan->jam_selesai,
+                        'tgl_mulai' => $tgl['tanggal'],
+                        'tgl_selesai' => $tgl['tanggal'],
+                        'tipe_jadwal' => 'booking',
+                        'created_at' => Carbon::now(),
+                        'updater' => auth()->user()->id
+                    ];
+
+                    $this->repository->simpanJadwalRuangan($record);
+                }
+            }
         }catch(Exception $e){
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

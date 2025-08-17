@@ -401,4 +401,8 @@ class PengajuanRuanganRepository
             'keterangan' => $keterangan
         ]);
     }
+
+    public function simpanJadwalRuangan($record){
+        JadwalRuangan::create($record);
+    }
 }

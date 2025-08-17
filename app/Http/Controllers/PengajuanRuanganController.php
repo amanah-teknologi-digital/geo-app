@@ -462,6 +462,7 @@ class PengajuanRuanganController extends Controller
                 }
 
                 $userPemeriksaAwal = $request->pemeriksa_awal;
+                $this->service->simpanJadwalBookingRuangan($dataPengajuan);
                 $this->service->updatePemeriksaAwal($idPengajuan, $userPemeriksaAwal);
                 $this->service->updateTahapanPengajuan($idPengajuan, $idTahapan);
                 $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 1, null);
