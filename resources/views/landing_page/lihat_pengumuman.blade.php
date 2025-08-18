@@ -25,6 +25,12 @@
 
     <!-- Main CSS File -->
     <link href="{{ asset('landing_page_rss/assets/css/main.css') }}" rel="stylesheet">
+    <style>
+        img{
+            width: 100%;
+            object-fit: cover;
+        }
+    </style>
 </head>
 
 <body>
