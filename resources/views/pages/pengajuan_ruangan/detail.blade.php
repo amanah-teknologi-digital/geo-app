@@ -630,39 +630,43 @@
                             @if(!empty($kadepSudahSetuju))
                                 @if($kadepSudahSetuju->id_statuspersetujuan == 1)
                                     <div class="col-sm-12">
-                                        <div class="fw-semibold small text-secondary mb-3">Kondisi Ruangan dan Peralatan Sesudah Acara <i>(foto minimal 5, dan ukuran maksimal 5 mb)</i></div>
-                                            @if($dataPengajuan->id_tahapan == 6)
-                                                <input type="file" class="form-control" name="filesesudahacara[]" id="filesesudahacara" accept="image/*" multiple autofocus>
-                                            @else
-                                                @if($dataPengajuan->filepengajuanruangan && $dataPengajuan->filepengajuanruangan->count() > 0)
-                                                    <div class="row g-3">
-                                                        @foreach($dataPengajuan->filepengajuanruangan as $file)
-                                                            @php
-                                                                $filePath = $file->file->location ?? null;
-                                                                $imageUrl = $filePath && Storage::disk('public')->exists($filePath)
-                                                                    ? route('file.getpublicfile', $file->file->id_file)
-                                                                    : asset('assets/img/no_image.jpg');
-                                                            @endphp
-                                                            <div class="col-6 col-md-4 col-lg-3">
-                                                                <div class="card shadow-sm h-100">
-                                                                    <img src="{{ $imageUrl }}"
-                                                                         class="card-img-top img-fluid"
-                                                                         alt="Foto Sesudah Acara"
-                                                                         style="object-fit: cover; height: 180px;">
-                                                                    <div class="card-body p-2 text-center">
-                                                                        <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                                                            Lihat
-                                                                        </a>
-                                                                    </div>
+                                        <div class="fw-semibold small text-secondary mb-3">
+                                            Kondisi Ruangan dan Peralatan Sesudah Acara
+                                            <i>(foto minimal 5, dan ukuran maksimal 5 mb)</i>
+                                        </div>
+
+                                        @if($dataPengajuan->id_tahapan == 6)
+                                            <input type="file" class="form-control" name="filesesudahacara[]" id="filesesudahacara" accept="image/*" multiple autofocus>
+                                        @else
+                                            @if($dataPengajuan->filepengajuanruangan && $dataPengajuan->filepengajuanruangan->count() > 0)
+                                                <div class="row g-3">
+                                                    @foreach($dataPengajuan->filepengajuanruangan as $file)
+                                                        @php
+                                                            $filePath = $file->file->location ?? null;
+                                                            $imageUrl = $filePath && Storage::disk('public')->exists($filePath)
+                                                                ? route('file.getpublicfile', $file->file->id_file)
+                                                                : asset('assets/img/no_image.jpg');
+                                                        @endphp
+                                                        <div class="col-6 col-md-4 col-lg-3">
+                                                            <div class="card shadow-sm h-100">
+                                                                <img src="{{ $imageUrl }}"
+                                                                     class="card-img-top img-fluid"
+                                                                     alt="Foto Sesudah Acara"
+                                                                     style="object-fit: cover; height: 180px;">
+                                                                <div class="card-body p-2 text-center">
+                                                                    <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                                        Lihat
+                                                                    </a>
                                                                 </div>
                                                             </div>
-                                                        @endforeach
-                                                    </div>
-                                                @else
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @else
                                                 <div class="text-muted small mt-2">Belum ada foto yang diunggah.</div>
                                             @endif
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </div>
                                 @endif
                             @endif
                         </div>
