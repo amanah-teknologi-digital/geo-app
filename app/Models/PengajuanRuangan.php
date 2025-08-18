@@ -11,6 +11,7 @@ class PengajuanRuangan extends Model
     public $timestamps = false;
     protected $primaryKey = 'id_pengajuan';
     public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'id_pengajuan',
         'pengaju',
