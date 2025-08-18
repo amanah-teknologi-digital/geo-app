@@ -94,7 +94,7 @@ class PengajuanRuanganRepository
     }
 
     public function getDataRuanganAktif($idRuangan, $isEdit){
-        $data = Ruangan::select('id_ruangan', 'nama');
+        $data = Ruangan::select('id_ruangan', 'nama', 'kode_ruangan');
         if (!empty($idRuangan)) {
             $data = $data->where('id', $idRuangan)->first();
         }else{
