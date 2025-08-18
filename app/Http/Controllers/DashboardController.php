@@ -32,8 +32,8 @@ class DashboardController extends Controller{
     }
 
     public function surat(){
-        $title = 'Dashboard '.$this->subtitleRuangan;
-        $istilahPersuratan = $this->subtitleRuangan;
+        $title = 'Dashboard '.$this->subtitleSurat;
+        $istilahPersuratan = $this->subtitleSurat;
         $dataSurveyKepuasan = $this->service->getSurveyKepuasan();
 
         return view('pages.dashboard.dashboard_surat', compact('title','istilahPersuratan', 'dataSurveyKepuasan'));
