@@ -12,6 +12,7 @@ class JadwalRuangan extends Model
     protected $fillable = [
         'id_jadwal',
         'id_ruangan',
+        'ref_id_booking',
         'keterangan',
         'day_of_week',
         'jam_mulai',
