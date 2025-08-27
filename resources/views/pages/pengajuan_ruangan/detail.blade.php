@@ -635,7 +635,7 @@
                                             <i>(foto minimal 5, dan ukuran maksimal 5 mb)</i>
                                         </div>
 
-                                        @if($dataPengajuan->id_tahapan == 6)
+                                        @if($dataPengajuan->id_tahapan == 6 && $idAkses == 8)
                                             <input type="file" class="form-control" name="filesesudahacara[]" id="filesesudahacara" accept="image/*" multiple autofocus>
                                         @else
                                             @if($dataPengajuan->filepengajuanruangan && $dataPengajuan->filepengajuanruangan->count() > 0)
@@ -663,7 +663,7 @@
                                                     @endforeach
                                                 </div>
                                             @else
-                                                <div class="text-muted small mt-2">Belum ada foto yang diunggah.</div>
+                                                <div class="small mt-2 text-center text-danger">Belum ada foto yang diunggah.</div>
                                             @endif
                                         @endif
                                     </div>

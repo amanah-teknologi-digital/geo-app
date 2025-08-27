@@ -343,8 +343,9 @@ class PengajuanRuanganController extends Controller
             }
         }
         $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan, $this->subtitle, $dataPengajuan);
+        $idAkses = $this->idAkses;
 
-        return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'title', 'jadwalPeminjaman',
+        return view('pages.pengajuan_ruangan.detail', compact('dataPengajuan', 'idPengajuan', 'isEdit', 'statusVerifikasi', 'title', 'jadwalPeminjaman', 'idAkses',
             'adminSudahSetuju',
             'pemeriksaAwalSudahSetuju',
             'kasubbagSudahSetuju',
