@@ -454,7 +454,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'PENGEMBALIAN' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI') ? 'style="margin-bottom: 5.5rem !important;"':'style="margin-bottom: 1.5rem !important;"' ?> >
+            <div class="card" <?= ($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'PENGEMBALIAN' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI' || $statusVerifikasi['must_aprove'] == 'VOID') ? 'style="margin-bottom: 5.5rem !important;"':'style="margin-bottom: 1.5rem !important;"' ?> >
                 <div class="card-header d-flex align-items-center pb-4 border-bottom">
                     <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-building pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Pengajuan Ruangan</h5>
                     @if(!empty($kadepSudahSetuju))
@@ -629,6 +629,19 @@
                             </div>
                             @if(!empty($kadepSudahSetuju))
                                 @if($kadepSudahSetuju->id_statuspersetujuan == 1)
+                                    @if($dataPengajuan->id_tahapan == 6 && $idAkses == 8)
+                                        <div class="col-sm-12">
+                                            <div class="fw-semibold small text-secondary mb-3">Petugas Penerima Ruangan</div>
+                                            <input type="text" class="form-control" name="penerima_ruangan" id="penerima_ruangan" placeholder="Nama Petugas Penerima Ruangan">
+                                        </div>
+                                    @else
+                                        <div class="col-sm-6">
+                                            <div class="fw-semibold small text-secondary mb-3">Petugas Penerima Ruangan</div>
+                                            <div class="fs-6 text-mute">
+                                                <span class="fw-bold small">{{ $dataPengajuan->penerima_ruangan }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="col-sm-12">
                                         <div class="fw-semibold small text-secondary mb-3">
                                             Kondisi Ruangan dan Peralatan Sesudah Acara
@@ -678,7 +691,7 @@
                     </form>
                 </div>
             </div>
-            @if($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'PENGEMBALIAN' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI')
+            @if($statusVerifikasi['must_aprove'] == 'AJUKAN' || $statusVerifikasi['must_aprove'] == 'PENGEMBALIAN' || $statusVerifikasi['must_aprove'] == 'VERIFIKASI' || $statusVerifikasi['must_aprove'] == 'VOID')
                 <div class="position-fixed bottom-0 mb-10 pb-3" style="z-index: 1050;">
                     <div class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached" style="top: auto; bottom: 4.5rem; padding: 0;">
                         <div class="card rounded-3 w-100 bg-gray-500 border-gray-700" style="box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);">
@@ -694,6 +707,9 @@
                                     @elseif($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
                                         <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
                                         <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi!</p>
+                                    @elseif($statusVerifikasi['must_aprove'] == 'VOID')
+                                        <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
+                                        <p class="mb-0 fw-medium text-danger">Batalkan Pengajuan!</p>
                                     @else
                                         @if($statusVerifikasi['data'])
                                             <div class="bg-info rounded me-3" style="width: 10px; height: 50px;"></div>
@@ -722,6 +738,11 @@
                                         &nbsp;&nbsp;
                                         <a href="javascript:void(0)" data-id_akses_tolak="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-tolak" class="btn btn-danger btn-sm d-flex align-items-center">
                                             <i class="bx bx-x"></i>&nbsp;Tolak
+                                        </a>
+                                    @endif
+                                    @if($statusVerifikasi['must_aprove'] == 'VOID')
+                                        <a href="javascript:void(0)" data-id_akses_void="{{ $statusVerifikasi['must_akses'] }}" data-bs-toggle="modal" data-bs-target="#modal-void" class="btn btn-danger btn-sm d-flex align-items-center">
+                                            <i class="bx bx-x"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
                                         </a>
                                     @endif
                                     @if(!empty($statusVerifikasi['must_sebagai']))
@@ -856,6 +877,31 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-danger">Tolak Pengajuan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-void" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form action="{{ route('pengajuanruangan.void') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}" >
+                <input type="hidden" name="id_akses" id="id_akses_void" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Batalkan Pengajuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="keteranganvoid" class="form-label">Keterangan <span class="text-danger">*</span></label>
+                            <textarea name="keteranganvoid" id="keteranganvoid" class="form-control" cols="10" rows="5" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Batalkan Pengajuan</button>
                     </div>
                 </div>
             </form>

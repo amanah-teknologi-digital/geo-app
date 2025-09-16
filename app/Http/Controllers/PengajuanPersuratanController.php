@@ -128,7 +128,7 @@ class PengajuanPersuratanController extends Controller
                     if ($dataSurat->is_datapendukung == 1 && !$request->hasFile('data_pendukung')) {
                         $fail('Data Pendukung wajib diisi.');
                     }
-                }]
+                }, 'file', 'mimes:pdf,doc,docx', 'mimetypes:application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document']
             ],[
                 'jenis_surat.required' => 'Jenis Surat wajib diisi.',
                 'editor_surat.required' => 'Surat wajib diisi.',
@@ -368,7 +368,7 @@ class PengajuanPersuratanController extends Controller
                             }
                         }
                     }
-                }]
+                }, 'file', 'mimes:pdf,doc,docx', 'mimetypes:application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document']
             ],[
                 'id_pengajuan.required' => 'Id Pengajuan wajib diisi.',
                 'jenis_surat.required' => 'Jenis Surat wajib diisi.',

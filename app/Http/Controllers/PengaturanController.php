@@ -42,7 +42,7 @@ class PengaturanController extends Controller
                 'link_fb' => ['required'],
                 'link_ig' => ['required'],
                 'link_linkedin' => ['required'],
-                'file_sop_geoletter' => ['file', 'mimes:jpeg,png,jpg,pdf', 'max:10240']
+//                'file_sop_geoletter' => ['file', 'mimes:jpeg,png,jpg,pdf', 'max:10240']
             ],[
                 'alamat.required' => 'Alamat wajib diisi.',
                 'admin_geoletter.required' => 'Admin Geoletter wajib diisi.',
@@ -52,9 +52,9 @@ class PengaturanController extends Controller
                 'link_fb.required' => 'Link Facebook wajib diisi.',
                 'link_ig.required' => 'Link Instagram wajib diisi.',
                 'link_linkedin.required' => 'Link LinkedIn wajib diisi.',
-                'file.file' => 'File yang diunggah tidak valid.',
-                'file.mimes' => 'File harus berupa gambar (JPEG, PNG, JPG) atau PDF.',
-                'file.max' => 'Ukuran file tidak boleh lebih dari 10 MB.',
+//                'file.file' => 'File yang diunggah tidak valid.',
+//                'file.mimes' => 'File harus berupa gambar (JPEG, PNG, JPG) atau PDF.',
+//                'file.max' => 'Ukuran file tidak boleh lebih dari 10 MB.',
             ]);
 
             DB::beginTransaction();

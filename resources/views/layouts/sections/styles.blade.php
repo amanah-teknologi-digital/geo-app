@@ -17,7 +17,6 @@
 @vite([
     'resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.scss',
     'resources/assets/vendor/libs/datatable/datatable.scss',
-    'resources/assets/vendor/libs/select2/select2.css',
     'resources/assets/vendor/libs/tinymce/tinymce.scss',
     'resources/assets/vendor/libs/fullcalendar/fullcalendar.scss',
     'resources/assets/vendor/libs/flatpickr/flatpickr.scss',
@@ -27,3 +26,5 @@
 
 <!-- Page Styles -->
 @yield('page-style')
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />

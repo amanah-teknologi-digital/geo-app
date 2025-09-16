@@ -288,7 +288,7 @@
                                         @endif
                                     </div>
                                 @else
-                                    <input type="file" class="form-control" name="data_pendukung" id="data_pendukung" accept="application/pdf" {{ !empty($dataPengajuan->nama_pendukung) ? 'required':'' }}>
+                                    <input type="file" class="form-control" name="data_pendukung" id="data_pendukung" accept=".pdf, .doc, .docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" {{ !empty($dataPengajuan->nama_pendukung) ? 'required':'' }}>
                                 @endif
                             </div>
                             @if($dataPengajuan->filesurat->isNotEmpty())

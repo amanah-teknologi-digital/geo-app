@@ -20,11 +20,11 @@
             position: absolute;
             left: 0;
             top: 0;
-            width: 80px;
+            width: 100px;
             height: auto;
         }
         .kop .text {
-            margin-left: 95px;
+            margin-left: 120px;
             text-align: center;
         }
         .kop h2, .kop h3, .kop p {
@@ -43,7 +43,7 @@
         }
         table thead th,
         table tr th:first-child{
-            background-color: rgb(200, 215, 235) !important; /* biru soft, aman diprint */
+            /*background-color: rgba(168, 255, 168, 0.5) !important; !* biru soft, aman diprint *!*/
             color: #000; /* tetap terbaca */
             text-align: left;
         }
@@ -62,6 +62,21 @@
             border: none;
             font-size: 14px;
         }
+
+        .kop {
+            display: flex;
+            align-items: center; /* sejajarkan vertikal tengah */
+            gap: 10px; /* jarak antara logo dan teks */
+        }
+
+        .kop img {
+            width: 100px; /* atur sesuai kebutuhan */
+            height: auto;
+        }
+
+        .kop .text {
+            line-height: 1.2;
+        }
     </style>
 </head>
 <body>
@@ -69,17 +84,17 @@
 <div class="kop">
     <img src="{{ public_path('landing_page_rss/teknikgeo.png') }}" alt="Logo">
     <div class="text">
-        <h2>INSTITUT TEKNOLOGI SEPULUH NOPEMBER</h2>
-        <h3>{{ $fakultas }}</h3>
-        <span>{{ $dataPengaturan->alamat }}</span>
-        <p>Telp. (031) 5953476, Email: tgeofisika@its.ac.id</p>
+        <h3 style="color: #0dcaf0; line-height: 1.2;">KEMENTERIAN PENDIDIKAN TINGGI, SAINS, DAN TEKNOLOGI</h3>
+        <h3 style="color: rgb(8, 60, 132); line-height: 1.2;">INSTITUT TEKNOLOGI SEPULUH NOPEMBER <br>{{ $fakultas }}</h3>
+        <p style="line-height: 1.2;">Kampus ITS Sukolilo, Surabaya 60111</p>
+        <p style="line-height: 1.2;">Telp. (031) 5953476, Email: tgeofisika@its.ac.id</p>
     </div>
 </div>
 
 {{-- JUDUL --}}
-<div style="text-align: center; margin-bottom: 20px;">
-    <h3><u>BERITA ACARA PEMINJAMAN RUANGAN</u></h3>
-    <p>Nomor: {{ $dataPengajuan->id_pengajuan }}/BA-1/GEO/{{ now()->year }}</p>
+<div style="text-align: center; margin-bottom: 20px;line-height: 1.2;">
+    <h3 style="line-height: 1.2;"><u>BERITA ACARA PEMINJAMAN RUANGAN</u></h3>
+    <p style="line-height: 1.2;">Nomor: P/{{ $dataPengajuan->urutan_surat }}/{{ $dataPengajuan->nomor_surat }}/{{ $dataPengajuan->created_at->format('Y') }}</p>
 </div>
 
 {{-- ISI --}}
@@ -101,6 +116,10 @@
     <tr>
         <th>Pengaju</th>
         <td>{{ $dataPengajuan->nama_pengaju }}</td>
+    </tr>
+    <tr>
+        <th>No Handphone</th>
+        <td>{{ $dataPengajuan->no_hp }}</td>
     </tr>
     <tr>
         <th>Ruangan Dipinjam</th>
@@ -150,8 +169,8 @@
         <td>
             Mengetahui,<br>
             <br><br><br><br>
-            <u>_________________</u><br>
-            Pihak Penyetuju
+            <u>{{ $dataPengajuan->nama_penyetuju }}</u><br>
+            {{ $dataPengajuan->pihak_penyetuju }}
         </td>
         <td>
             Surabaya, {{ now()->translatedFormat('d F Y') }}<br>

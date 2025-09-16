@@ -77,7 +77,7 @@
                 <div class="hero-buttons d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start" data-aos="fade-right" data-aos-delay="200">
                     <a href="{{ route('pengajuansurat') }}" class="btn btn-ajukan"><i class="bi bi-envelope-fill"></i>Ajukan Surat</a>
                     <a href="{{ route('pengajuanruangan') }}" class="btn btn-outline-primary"><i class="bi bi-calendar2-check-fill"></i>Booking Ruangan</a>
-                    <a href="{{ route('pengajuanperalatan') }}" class="btn btn-outline-primary"><i class="bi bi-projector-fill"></i>Booking Peralatan</a>
+{{--                    <a href="{{ route('pengajuanperalatan') }}" class="btn btn-outline-primary"><i class="bi bi-projector-fill"></i>Booking Peralatan</a>--}}
                 </div>
             </div>
             <div class="col-lg-6" data-aos="fade-left">
@@ -272,27 +272,28 @@
                     <div class="card-custom" data-aos="fade-up" data-aos-delay="300">
                         <div class="card-header-custom"><i class="bi bi-display-fill me-2"></i>Peralatan Tersedia</div>
                         <div class="card-body p-4">
-                            <div class="sidebar-item">
-                                <img src="{{ asset('landing_page_rss/assets/img/events-1.jpg') }}" alt="Proyektor">
-                                <div class="sidebar-item-details">
-                                    <h6>Proyektor InFocus</h6>
-                                </div>
-                            </div>
-                            <div class="sidebar-item">
-                                <img src="{{ asset('landing_page_rss/assets/img/events-2.jpg') }}" alt="Sound System">
-                                <div class="sidebar-item-details">
-                                    <h6>Sound System Portable</h6>
-                                </div>
-                            </div>
-                            <div class="sidebar-item">
-                                <img src="{{ asset('landing_page_rss/assets/img/events-3.jpg') }}" alt="Webcam">
-                                <div class="sidebar-item-details">
-                                    <h6>Webcam Logitech</h6>
-                                </div>
-                            </div>
-                            <div class="d-grid mt-4">
-                                <a href="{{ route('listperalatan') }}" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Alat <i class="bi bi-arrow-right-short"></i></a>
-                            </div>
+                            <div class="alert alert-warning" ><i class="text-muted">(Coming Soon)</i></div>
+{{--                            <div class="sidebar-item">--}}
+{{--                                <img src="{{ asset('landing_page_rss/assets/img/events-1.jpg') }}" alt="Proyektor">--}}
+{{--                                <div class="sidebar-item-details">--}}
+{{--                                    <h6>Proyektor InFocus</h6>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="sidebar-item">--}}
+{{--                                <img src="{{ asset('landing_page_rss/assets/img/events-2.jpg') }}" alt="Sound System">--}}
+{{--                                <div class="sidebar-item-details">--}}
+{{--                                    <h6>Sound System Portable</h6>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="sidebar-item">--}}
+{{--                                <img src="{{ asset('landing_page_rss/assets/img/events-3.jpg') }}" alt="Webcam">--}}
+{{--                                <div class="sidebar-item-details">--}}
+{{--                                    <h6>Webcam Logitech</h6>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="d-grid mt-4">--}}
+{{--                                <a href="{{ route('listperalatan') }}" class="btn btn-primary rounded-pill btn-sm btn-lihat-semua">Lihat Semua Alat <i class="bi bi-arrow-right-short"></i></a>--}}
+{{--                            </div>--}}
                         </div>
                     </div>
                 </div>

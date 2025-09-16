@@ -115,6 +115,8 @@ class PengajuanRuanganRepository
     }
 
     public function tambahDataPengajuan($idPengajuan, $tglMulai, $tglSelesai, $jamMulai, $jamSelesai, $statusPengaju, $deskripsiKegiatan, $namaKegiatan){
+        $pengaturan = Pengaturan::first();
+
         PengajuanRuangan::create([
             'id_pengajuan' => $idPengajuan,
             'pengaju' => auth()->user()->id,
@@ -131,6 +133,9 @@ class PengajuanRuanganRepository
             'email' => auth()->user()->email,
             'email_its' => auth()->user()->email_its,
             'kartu_id' => auth()->user()->kartu_id,
+            'nama_penyetuju' => $pengaturan->nama_penyetuju,
+            'pihak_penyetuju' => $pengaturan->pihak_penyetuju,
+            'nomor_surat' => $pengaturan->nomor_surat,
             'created_at' => now(),
             'updater' => auth()->user()->id
         ]);
@@ -404,5 +409,9 @@ class PengajuanRuanganRepository
 
     public function simpanJadwalRuangan($record){
         JadwalRuangan::create($record);
+    }
+
+    public function hapusJadwalBooking($idPengajuan){
+        JadwalRuangan::where('ref_id_booking', $idPengajuan)->delete();
     }
 }

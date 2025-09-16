@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Pengaturan extends Model
 {
     protected $table = 'pengaturan';
-    protected $primaryKey = 'updater';
-    public $incrementing = false;
+    protected $primaryKey = 'id_pengaturan';
+    public $incrementing = true;
     protected $fillable = [
         'alamat',
         'admin_geoletter',
@@ -18,6 +18,9 @@ class Pengaturan extends Model
         'link_fb',
         'link_ig',
         'link_linkedin',
+        'pihak_penyetuju',
+        'nama_penyetuju',
+        'nomor_surat',
         'updater'
     ];
 

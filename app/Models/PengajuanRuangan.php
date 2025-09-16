@@ -30,6 +30,10 @@ class PengajuanRuangan extends Model
         'email',
         'email_its',
         'kartu_id',
+        'penerima_ruangan',
+        'nama_penyetuju',
+        'pihak_penyetuju',
+        'nomor_surat',
         'created_at',
         'updated_at',
         'updater'

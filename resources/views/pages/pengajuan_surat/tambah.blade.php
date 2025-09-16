@@ -144,7 +144,7 @@
                             </div>
                             <div id="div_datapendukung" style="display: none">
                                 <label for="data_pendukung" class="form-label">Data Pendukung <span id="nama_datapendukung" class="text-muted fst-italic"></span> <span class="text-danger">*</span></label>
-                                <input type="file" class="form-control" name="data_pendukung" id="data_pendukung" accept="application/pdf">
+                                <input type="file" class="form-control" name="data_pendukung" id="data_pendukung" accept=".pdf, .doc, .docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                             </div>
                         </div>
                         <div class="mt-6">

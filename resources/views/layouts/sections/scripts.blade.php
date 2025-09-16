@@ -8,7 +8,6 @@
   'resources/assets/vendor/js/menu.js',
   'resources/assets/vendor/libs/jquery-validation/jquery-validation.js',
   'resources/assets/vendor/libs/datatable/datatable.js',
-  'resources/assets/vendor/libs/select2/select2.js',
   'resources/assets/vendor/libs/tinymce/tinymce.js',
   'resources/assets/vendor/libs/fullcalendar/fullcalendar.js',
   'resources/assets/vendor/libs/flatpickr/flatpickr.js',
@@ -31,3 +30,5 @@
     let routeGetDataNotifikasi = "{{ route('dashboard.getdatanotifikasi') }}";
 </script>
 @vite(['resources/views/script_view/notifikasi/script.js'])
+
+<script defer src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

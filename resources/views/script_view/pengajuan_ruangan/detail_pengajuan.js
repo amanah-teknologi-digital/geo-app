@@ -84,6 +84,9 @@ $(document).ready(function () {
                 filesize: 5 * 1024 * 1024, // 5MB
                 minfiles: 5,
             },
+            penerima_ruangan: {
+                required: true
+            },
             pemeriksa_akhir: {
                 required: true
             }
@@ -95,6 +98,9 @@ $(document).ready(function () {
             "filesesudahacara[]": {
                 extension: "Hanya file JPG, JPEG, PNG, atau WEBP yang diperbolehkan.",
                 minfiles: "Silakan unggah minimal 5 foto sesudah acara."
+            },
+            penerima_ruangan: {
+                required: "Petugas penerima ruangan harus diisi!"
             },
             pemeriksa_akhir: {
                 required: "Pemeriksa akhir harus ditentukan!"
@@ -208,5 +214,13 @@ $(document).ready(function () {
         var dataId = button.data('id_akses_tolak'); // Ambil nilai data-id
 
         $('#id_akses_tolak').val(dataId); // Masukkan ke modal
+    });
+
+    $('#modal-void').on('show.bs.modal', function(event) {
+        $('#keteranganvoid').html("");
+        var button = $(event.relatedTarget); // Ambil tombol yang diklik
+        var dataId = button.data('id_akses_void'); // Ambil nilai data-id
+
+        $('#id_akses_void').val(dataId); // Masukkan ke modal
     });
 });

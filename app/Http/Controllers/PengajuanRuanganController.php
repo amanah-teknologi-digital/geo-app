@@ -409,11 +409,57 @@ class PengajuanRuanganController extends Controller
 
             if ($mustVerif == 'VERIFIKASI'){
                 $this->service->tambahPersetujuan($idPengajuan, $idAkses, $dataPengajuan->id_tahapan, 3, $keterangan);
+                if ($idAkses == 6) { //khusus kasubag
+                    $this->service->hapusJadwalBooking($idPengajuan);
+                }
             }
 
             DB::commit();
 
             return redirect()->back()->with('success', 'Berhasil Hapus Pengajuan.');
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->errors();
+            return redirect()->back()->withErrors($errors);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function doVoidPengajuan(Request $request){
+        try {
+            $request->validate([
+                'id_pengajuan' => ['required'],
+                'keteranganvoid' => ['required'],
+            ],[
+                'id_pengajuan.required' => 'Id Pengajuan tidak ada.',
+                'keteranganvoid.required' => 'Keterangan tidak ada.',
+            ]);
+
+            $idPengajuan = $request->id_pengajuan;
+            $idAkses = $request->id_akses;
+            if (empty($idAkses)){
+                $idAkses = $this->idAkses;
+            }
+            $keterangan = $request->keteranganvoid;
+
+            $dataPengajuan = $this->service->getDataPengajuan($idPengajuan);
+            $statusVerifikasi = $this->service->getStatusVerifikasi($idPengajuan, $this->subtitle, $dataPengajuan, $idAkses);
+            $mustVerif = $statusVerifikasi['must_aprove'];
+
+            DB::beginTransaction();
+
+            if ($mustVerif == 'VOID'){
+                $this->service->updateTahapanPengajuan($idPengajuan, $statusVerifikasi['tahapan_next']);
+                $this->service->tambahPersetujuan($idPengajuan, $idAkses, $statusVerifikasi['tahapan_next'], 3, $keterangan);
+                $this->service->hapusJadwalBooking($idPengajuan);
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Berhasil Void Pengajuan.');
         } catch (ValidationException $e) {
             DB::rollBack();
             $errors = $e->errors();

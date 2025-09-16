@@ -248,6 +248,14 @@ class PengajuanRuanganServices
                     $tahapan_next = 5;
                     $must_sebagai = 'Kasubbag';
                     $label_verifikasi = 'Setujui';
+                }else{
+                    if ($tahapan != 11) {
+                        $must_aprove = 'VOID';
+                        $must_akses = 6;
+                        $tahapan_next = 11;
+                        $must_sebagai = 'Kasubbag';
+                        $label_verifikasi = 'Void';
+                    }
                 }
             }else if ($tahapan == 5) { // Verifikasi Kadep
                 if (!$kadepSudahSetuju) {
@@ -389,7 +397,13 @@ class PengajuanRuanganServices
                 if (empty($persetujuanTerakhir)){
                     $message = 'Persetujuan Kosong!';
                 }else{
-                    $data = $persetujuanTerakhir;
+                    if ($tahapan != 11){
+                        $must_aprove = 'VOID';
+                        $tahapan_next = 11;
+                        $label_verifikasi = 'Void';
+                    }else {
+                        $data = $persetujuanTerakhir;
+                    }
                 }
             }
         }else if ($id_akses == 7){ //kadep
@@ -517,6 +531,16 @@ class PengajuanRuanganServices
     {
         try {
             $this->repository->tambahPersetujuan($idPengajuan, $idAkses, $idTahapan, $idStatusPersetujuan, $keterangan);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function hapusJadwalBooking($idPengajuan)
+    {
+        try {
+            $this->repository->hapusJadwalBooking($idPengajuan);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());

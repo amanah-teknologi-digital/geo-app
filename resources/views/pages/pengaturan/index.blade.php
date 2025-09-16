@@ -73,74 +73,86 @@
                                 <input type="text" class="form-control" id="link_linkedin" name="link_linkedin" placeholder="link linkedin" value="{{ $dataPengaturan->link_linkedin }}" required autocomplete="off">
                             </div>
                             <div>
-                                <label for="file_sop_geoletter" class="form-label">Unggah SOP GEO Letter <span class="text-muted"><i><b>(File gambar atau pdf max 10 mb)</b></i></span></label>
-                                @php
-                                    $filePath = optional($dataPengaturan->files_geoletter)->location ?? 'no-exist';
-                                    $fileId = optional($dataPengaturan->files_geoletter)->id_file ?? -1;
-                                    $imageUrl = Storage::disk('public')->exists($filePath)
-                                        ? route('file.getpublicfile', $fileId)
-                                        : false;
-                                @endphp
-                                <div class="d-flex align-items-center gap-2">
-                                    @if(!$imageUrl)
-                                        <p class="text-warning"><i>File belum ada!</i></p>
-                                    @else
-                                        <span class="text-success">{{ $dataPengaturan->files_geoletter->file_name. ' ('.formatBytes($dataPengaturan->files_geoletter->file_size).')' }}</span>
-                                        <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                            Lihat file
-                                        </a>
-                                    @endif
-                                </div>
-
-                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
-                                <input type="file" class="form-control" id="file_sop_geoletter" name="file_sop_geoletter" accept="image/*,.pdf">
+                                <label for="nama_penyetuju" class="form-label">Nama Penyetuju Berita Acara <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nama_penyetuju" name="nama_penyetuju" placeholder="Nama Penyetuju Berita Acara" value="{{ $dataPengaturan->nama_penyetuju }}" required autocomplete="off">
                             </div>
                             <div>
-                                <label for="file_sop_georoom" class="form-label">Unggah SOP GEO Room <span class="text-muted"><i><b>(File gambar atau pdf max 10 mb)</b></i></span></label>
-                                @php
-                                    $filePath = optional($dataPengaturan->files_georoom)->location ?? 'no-exist';
-                                    $fileId = optional($dataPengaturan->files_georoom)->id_file ?? -1;
-                                    $imageUrl = Storage::disk('public')->exists($filePath)
-                                        ? route('file.getpublicfile', $fileId)
-                                        : false;
-                                @endphp
-                                <div class="d-flex align-items-center gap-2">
-                                    @if(!$imageUrl)
-                                        <p class="text-warning"><i>File belum ada!</i></p>
-                                    @else
-                                        <span class="text-success">{{ $dataPengaturan->files_georoom->file_name. ' ('.formatBytes($dataPengaturan->files_georoom->file_size).')' }}</span>
-                                        <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                            Lihat file
-                                        </a>
-                                    @endif
-                                </div>
-
-                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
-                                <input type="file" class="form-control" id="file_sop_georoom" name="file_sop_georoom" accept="image/*,.pdf">
+                                <label for="pihak_penyetuju" class="form-label">Jabatan Penyetuju Berita Acara <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="pihak_penyetuju" name="pihak_penyetuju" placeholder="Jabatan Penyetuju Berita Acara" value="{{ $dataPengaturan->pihak_penyetuju }}" required autocomplete="off">
                             </div>
                             <div>
-                                <label for="file_sop_geofacility" class="form-label">Unggah SOP GEO Facility <span class="text-muted"><i><b>(File gambar atau pdf max 10 mb)</b></i></span></label>
-                                @php
-                                    $filePath = optional($dataPengaturan->files_geofacility)->location ?? 'no-exist';
-                                    $fileId = optional($dataPengaturan->files_geofacility)->id_file ?? -1;
-                                    $imageUrl = Storage::disk('public')->exists($filePath)
-                                        ? route('file.getpublicfile', $fileId)
-                                        : false;
-                                @endphp
-                                <div class="d-flex align-items-center gap-2">
-                                    @if(!$imageUrl)
-                                        <p class="text-warning"><i>File belum ada!</i></p>
-                                    @else
-                                        <span class="text-success">{{ $dataPengaturan->files_geofacility->file_name. ' ('.formatBytes($dataPengaturan->files_geofacility->file_size).')' }}</span>
-                                        <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                            Lihat file
-                                        </a>
-                                    @endif
-                                </div>
-
-                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>
-                                <input type="file" class="form-control" id="file_sop_geofacility" name="file_sop_geofacility" accept="image/*,.pdf">
+                                <label for="nomor_surat" class="form-label">Nomor Surat Berita Acara <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nomor_surat" name="nomor_surat" placeholder="Template Nomor Surat" value="{{ $dataPengaturan->nomor_surat }}" required autocomplete="off">
                             </div>
+{{--                            <div>--}}
+{{--                                <label for="file_sop_geoletter" class="form-label">Unggah SOP GEO Letter <span class="text-muted"><i><b>(File gambar atau pdf max 10 mb)</b></i></span></label>--}}
+{{--                                @php--}}
+{{--                                    $filePath = optional($dataPengaturan->files_geoletter)->location ?? 'no-exist';--}}
+{{--                                    $fileId = optional($dataPengaturan->files_geoletter)->id_file ?? -1;--}}
+{{--                                    $imageUrl = Storage::disk('public')->exists($filePath)--}}
+{{--                                        ? route('file.getpublicfile', $fileId)--}}
+{{--                                        : false;--}}
+{{--                                @endphp--}}
+{{--                                <div class="d-flex align-items-center gap-2">--}}
+{{--                                    @if(!$imageUrl)--}}
+{{--                                        <p class="text-warning"><i>File belum ada!</i></p>--}}
+{{--                                    @else--}}
+{{--                                        <span class="text-success">{{ $dataPengaturan->files_geoletter->file_name. ' ('.formatBytes($dataPengaturan->files_geoletter->file_size).')' }}</span>--}}
+{{--                                        <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">--}}
+{{--                                            Lihat file--}}
+{{--                                        </a>--}}
+{{--                                    @endif--}}
+{{--                                </div>--}}
+
+{{--                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>--}}
+{{--                                <input type="file" class="form-control" id="file_sop_geoletter" name="file_sop_geoletter" accept="image/*,.pdf">--}}
+{{--                            </div>--}}
+{{--                            <div>--}}
+{{--                                <label for="file_sop_georoom" class="form-label">Unggah SOP GEO Room <span class="text-muted"><i><b>(File gambar atau pdf max 10 mb)</b></i></span></label>--}}
+{{--                                @php--}}
+{{--                                    $filePath = optional($dataPengaturan->files_georoom)->location ?? 'no-exist';--}}
+{{--                                    $fileId = optional($dataPengaturan->files_georoom)->id_file ?? -1;--}}
+{{--                                    $imageUrl = Storage::disk('public')->exists($filePath)--}}
+{{--                                        ? route('file.getpublicfile', $fileId)--}}
+{{--                                        : false;--}}
+{{--                                @endphp--}}
+{{--                                <div class="d-flex align-items-center gap-2">--}}
+{{--                                    @if(!$imageUrl)--}}
+{{--                                        <p class="text-warning"><i>File belum ada!</i></p>--}}
+{{--                                    @else--}}
+{{--                                        <span class="text-success">{{ $dataPengaturan->files_georoom->file_name. ' ('.formatBytes($dataPengaturan->files_georoom->file_size).')' }}</span>--}}
+{{--                                        <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">--}}
+{{--                                            Lihat file--}}
+{{--                                        </a>--}}
+{{--                                    @endif--}}
+{{--                                </div>--}}
+
+{{--                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>--}}
+{{--                                <input type="file" class="form-control" id="file_sop_georoom" name="file_sop_georoom" accept="image/*,.pdf">--}}
+{{--                            </div>--}}
+{{--                            <div>--}}
+{{--                                <label for="file_sop_geofacility" class="form-label">Unggah SOP GEO Facility <span class="text-muted"><i><b>(File gambar atau pdf max 10 mb)</b></i></span></label>--}}
+{{--                                @php--}}
+{{--                                    $filePath = optional($dataPengaturan->files_geofacility)->location ?? 'no-exist';--}}
+{{--                                    $fileId = optional($dataPengaturan->files_geofacility)->id_file ?? -1;--}}
+{{--                                    $imageUrl = Storage::disk('public')->exists($filePath)--}}
+{{--                                        ? route('file.getpublicfile', $fileId)--}}
+{{--                                        : false;--}}
+{{--                                @endphp--}}
+{{--                                <div class="d-flex align-items-center gap-2">--}}
+{{--                                    @if(!$imageUrl)--}}
+{{--                                        <p class="text-warning"><i>File belum ada!</i></p>--}}
+{{--                                    @else--}}
+{{--                                        <span class="text-success">{{ $dataPengaturan->files_geofacility->file_name. ' ('.formatBytes($dataPengaturan->files_geofacility->file_size).')' }}</span>--}}
+{{--                                        <a href="{{ $imageUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">--}}
+{{--                                            Lihat file--}}
+{{--                                        </a>--}}
+{{--                                    @endif--}}
+{{--                                </div>--}}
+
+{{--                                <p class="text-muted mt-4" style="font-style: italic; font-size: smaller">klik tombol dibawah untuk mengubah file!</p>--}}
+{{--                                <input type="file" class="form-control" id="file_sop_geofacility" name="file_sop_geofacility" accept="image/*,.pdf">--}}
+{{--                            </div>--}}
                         </div>
                         <div class="mt-6">
                             <button type="submit" class="btn btn-primary me-3">Simpan Perubahan</button>
