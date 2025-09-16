@@ -458,7 +458,7 @@
                 <div class="card-header d-flex align-items-center pb-4 border-bottom">
                     <h5 class="card-title mb-0 fw-bold d-flex align-items-center"><i class="bx bx-building pb-0" style="font-size: 1.3rem;"></i>&nbsp;Data Pengajuan Ruangan</h5>
                     @if(!empty($kadepSudahSetuju))
-                        @if($kadepSudahSetuju->id_statuspersetujuan == 1)
+                        @if($kadepSudahSetuju->id_statuspersetujuan == 1 && $dataPengajuan->id_tahapan != 11)
                             &nbsp;<a href="{{ route('pengajuanruangan.bapeminjaman', $idPengajuan) }}" target="_blank" class="btn btn-sm btn-outline-success" style="margin-left: 1rem"><span class="bx bx-download me-2 "></span>Berita Acara Peminjaman</a>
                         @endif
                     @endif
