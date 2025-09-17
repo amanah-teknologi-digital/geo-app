@@ -44,76 +44,78 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            @if($dataPengajuan->id_tahapan == '10')
-                <div class="row align-items-stretch mb-5">
-                    <div class="col-md-12">
-                        <div class="card mb-4 shadow-sm h-100 border-0">
-                            <div class="card-header d-flex justify-content-between align-items-center pb-3 border-bottom">
-                                <h5 class="card-title mb-0 fw-bold d-flex align-items-center">
-                                    <i class="bx bx-collection me-2" style="font-size: 1.3rem;"></i>
-                                    Surver Kepuasan Layanan Kami
-                                </h5>
-                                <a href="{{ route('pengajuanruangan') }}" class="btn btn-sm btn-secondary">
-                                    <i class="bx bx-arrow-back"></i>&nbsp;Kembali
-                                </a>
-                            </div>
-                            <div class="card-body pt-4">
-                                @if(empty($dataPengajuan->surveykepuasan))
-                                    <form id="FrmSurveyKepuasan" action="{{ route('pengajuanruangan.surveykepuasan') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}">
+            @if(!empty($kadepSudahSetuju))
+                @if(($kadepSudahSetuju->id_statuspersetujuan == 1 && ($idAkses == 8 OR $idAkses == 1)) OR !empty($dataPengajuan->surveykepuasan))
+                    <div class="row align-items-stretch mb-5">
+                        <div class="col-md-12">
+                            <div class="card mb-4 shadow-sm h-100 border-0">
+                                <div class="card-header d-flex justify-content-between align-items-center pb-3 border-bottom">
+                                    <h5 class="card-title mb-0 fw-bold d-flex align-items-center">
+                                        <i class="bx bx-collection me-2" style="font-size: 1.3rem;"></i>
+                                        Surver Kepuasan Layanan Kami
+                                    </h5>
+                                    <a href="{{ route('pengajuanruangan') }}" class="btn btn-sm btn-secondary">
+                                        <i class="bx bx-arrow-back"></i>&nbsp;Kembali
+                                    </a>
+                                </div>
+                                <div class="card-body pt-4">
+                                    @if(empty($dataPengajuan->surveykepuasan))
+                                        <form id="FrmSurveyKepuasan" action="{{ route('pengajuanruangan.surveykepuasan') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="id_pengajuan" value="{{ $idPengajuan }}">
 
-                                        <p>Terima kasih telah menggunakan layanan kami. Mohon luangkan waktu sejenak untuk mengisi survei kepuasan berikut agar kami bisa terus meningkatkan kualitas layanan.</p>
+                                            <p>Terima kasih telah menggunakan layanan kami. Mohon luangkan waktu sejenak untuk mengisi survei kepuasan berikut agar kami bisa terus meningkatkan kualitas layanan.</p>
 
-                                        <div class="mb-3">
-                                            <label class="form-label">Beri Rating Kepuasan Anda:</label>
-                                            <div class="rating">
-                                                <input type="radio" id="star5" name="rating" value="5" />
-                                                <label for="star5" title="5 stars">★</label>
+                                            <div class="mb-3">
+                                                <label class="form-label">Beri Rating Kepuasan Anda:</label>
+                                                <div class="rating">
+                                                    <input type="radio" id="star5" name="rating" value="5" />
+                                                    <label for="star5" title="5 stars">★</label>
 
-                                                <input type="radio" id="star4" name="rating" value="4" />
-                                                <label for="star4" title="4 stars">★</label>
+                                                    <input type="radio" id="star4" name="rating" value="4" />
+                                                    <label for="star4" title="4 stars">★</label>
 
-                                                <input type="radio" id="star3" name="rating" value="3" />
-                                                <label for="star3" title="3 stars">★</label>
+                                                    <input type="radio" id="star3" name="rating" value="3" />
+                                                    <label for="star3" title="3 stars">★</label>
 
-                                                <input type="radio" id="star2" name="rating" value="2" />
-                                                <label for="star2" title="2 stars">★</label>
+                                                    <input type="radio" id="star2" name="rating" value="2" />
+                                                    <label for="star2" title="2 stars">★</label>
 
-                                                <input type="radio" id="star1" name="rating" value="1" />
-                                                <label for="star1" title="1 star">★</label>
+                                                    <input type="radio" id="star1" name="rating" value="1" />
+                                                    <label for="star1" title="1 star">★</label>
+                                                </div>
+                                                <div id="error-rating" style="color:red; margin-top: 5px;"></div>
+                                                <small class="text-muted">Pilih bintang 1 - 5 sesuai dengan tingkat kepuasan Anda.</small>
                                             </div>
-                                            <div id="error-rating" style="color:red; margin-top: 5px;"></div>
-                                            <small class="text-muted">Pilih bintang 1 - 5 sesuai dengan tingkat kepuasan Anda.</small>
-                                        </div>
 
-                                        <div class="mb-3">
-                                            <label for="keterangan" class="form-label">Saran atau Perbaikan (opsional):</label>
-                                            <textarea class="form-control" name="keterangan" rows="3" placeholder="Tulis komentar atau saran Anda agar kami dapat memperbaiki layanan...">{{ old('keterangan') }}</textarea>
-                                            <small class="text-muted float-end">Kami sangat menghargai masukan Anda.</small>
-                                        </div>
+                                            <div class="mb-3">
+                                                <label for="keterangan" class="form-label">Saran atau Perbaikan (opsional):</label>
+                                                <textarea class="form-control" name="keterangan" rows="3" placeholder="Tulis komentar atau saran Anda agar kami dapat memperbaiki layanan...">{{ old('keterangan') }}</textarea>
+                                                <small class="text-muted float-end">Kami sangat menghargai masukan Anda.</small>
+                                            </div>
 
-                                        <button type="submit" class="btn btn-primary"><i class="bx bx-paper-plane me-2" style="font-size: 1.3rem;"></i>Kirim Penilaian</button>
-                                    </form>
-                                @else
-                                    <h5>Riwayat Penilaian:</h5>
-                                    <p>Terima kasih telah menggunakan layanan kami. Kami sangat menghargai masukan Anda.</p>
-                                    <ul class="list-group mb-3">
-                                        <li class="list-group-item">
-                                            <label class="form-label">Rating Kepuasan Anda:</label>
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                <span style="color: {{ $i <= $dataPengajuan->surveykepuasan->rating ? '#f5b301' : '#ddd' }};">★</span>
-                                            @endfor
-                                            <br>
-                                            <small><em>{{ $dataPengajuan->surveykepuasan->keterangan ?? '-' }}</em></small><br>
-                                            <small class="text-muted">Dikirim pada: {{ $dataPengajuan->surveykepuasan->created_at->format('d M Y H:i') }}</small>
-                                        </li>
-                                    </ul>
-                                @endif
+                                            <button type="submit" class="btn btn-primary"><i class="bx bx-paper-plane me-2" style="font-size: 1.3rem;"></i>Kirim Penilaian</button>
+                                        </form>
+                                    @else
+                                        <h5>Riwayat Penilaian:</h5>
+                                        <p>Terima kasih telah menggunakan layanan kami. Kami sangat menghargai masukan Anda.</p>
+                                        <ul class="list-group mb-3">
+                                            <li class="list-group-item">
+                                                <label class="form-label">Rating Kepuasan Anda:</label>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <span style="color: {{ $i <= $dataPengajuan->surveykepuasan->rating ? '#f5b301' : '#ddd' }};">★</span>
+                                                @endfor
+                                                <br>
+                                                <small><em>{{ $dataPengajuan->surveykepuasan->keterangan ?? '-' }}</em></small><br>
+                                                <small class="text-muted">Dikirim pada: {{ $dataPengajuan->surveykepuasan->created_at->format('d M Y H:i') }}</small>
+                                            </li>
+                                        </ul>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
             @endif
             <div class="row align-items-stretch mb-5">
                 <div class="col-md-7">
@@ -123,10 +125,24 @@
                                 <i class="bx bx-user me-2" style="font-size: 1.3rem;"></i>
                                 Data Pemohon
                             </h5>
-                            @if($dataPengajuan->id_tahapan != 10 )
-                                <a href="{{ route('pengajuanruangan') }}" class="btn btn-sm btn-secondary">
-                                    <i class="bx bx-arrow-back"></i>&nbsp;Kembali
-                                </a>
+                            @if($idAkses == 8 OR $idAkses == 1)
+                                @if(empty($kadepSudahSetuju))
+                                    <a href="{{ route('pengajuanruangan') }}" class="btn btn-sm btn-secondary">
+                                        <i class="bx bx-arrow-back"></i>&nbsp;Kembali
+                                    </a>
+                                @else
+                                    @if(($kadepSudahSetuju->id_statuspersetujuan != 1))
+                                        <a href="{{ route('pengajuanruangan') }}" class="btn btn-sm btn-secondary">
+                                            <i class="bx bx-arrow-back"></i>&nbsp;Kembali
+                                        </a>
+                                    @endif
+                                @endif
+                            @else
+                                @if(empty($dataPengajuan->surveykepuasan))
+                                    <a href="{{ route('pengajuanruangan') }}" class="btn btn-sm btn-secondary">
+                                        <i class="bx bx-arrow-back"></i>&nbsp;Kembali
+                                    </a>
+                                @endif
                             @endif
                         </div>
                         <div class="card-body pt-4">
@@ -632,7 +648,7 @@
                                     @if($dataPengajuan->id_tahapan == 6 && $idAkses == 8)
                                         <div class="col-sm-12">
                                             <div class="fw-semibold small text-secondary mb-3">Petugas Penerima Ruangan</div>
-                                            <input type="text" class="form-control" name="penerima_ruangan" id="penerima_ruangan" placeholder="Nama Petugas Penerima Ruangan">
+                                            <input type="text" class="form-control" name="penerima_ruangan" id="penerima_ruangan" placeholder="Nama Petugas Penerima Ruangan" {{ empty($dataPengajuan->surveykepuasan)? 'disabled':'' }}>
                                         </div>
                                     @else
                                         <div class="col-sm-6">
@@ -649,7 +665,7 @@
                                         </div>
 
                                         @if($dataPengajuan->id_tahapan == 6 && $idAkses == 8)
-                                            <input type="file" class="form-control" name="filesesudahacara[]" id="filesesudahacara" accept="image/*" multiple autofocus>
+                                            <input type="file" class="form-control" name="filesesudahacara[]" id="filesesudahacara" accept="image/*" multiple autofocus {{ empty($dataPengajuan->surveykepuasan)? 'disabled':'' }}>
                                         @else
                                             @if($dataPengajuan->filepengajuanruangan && $dataPengajuan->filepengajuanruangan->count() > 0)
                                                 <div class="row g-3">
@@ -703,7 +719,7 @@
                                         <p class="mb-0 fw-medium">Pengajuan Belum Diajukan!</p>
                                     @elseif($statusVerifikasi['must_aprove'] == 'PENGEMBALIAN')
                                         <div class="bg-warning rounded me-3" style="width: 10px; height: 50px;"></div>
-                                        <p class="mb-0 fw-medium">Kembalikan Peminjaman Ruangan!</p>
+                                        <p class="mb-0 fw-medium">Kembalikan Peminjaman Ruangan!</p>&nbsp;<span class="text-muted"><i>(untuk mengembalikan ruangan diharapkan untuk mengisi survey terlebih dahulu!)</i></span>
                                     @elseif($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
                                         <div class="bg-danger rounded me-3" style="width: 10px; height: 50px;"></div>
                                         <p class="mb-0 fw-medium text-danger">Pengajuan Belum Diverifikasi!</p>
@@ -727,9 +743,13 @@
                                         </a>
                                     @endif
                                         @if($statusVerifikasi['must_aprove'] == 'PENGEMBALIAN')
-                                            <a href="javascript:void(0)" id="btn-setujui" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" class="btn btn-warning btn-sm d-flex align-items-center">
-                                                <i class="bx bx-paper-plane"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
-                                            </a>
+                                            @if(empty($dataPengajuan->surveykepuasan))
+                                                <span class="text-danger">Mohon mengisi survey terlebih dahulu!</span>
+                                            @else
+                                                <a href="javascript:void(0)" id="btn-setujui" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" class="btn btn-warning btn-sm d-flex align-items-center">
+                                                    <i class="bx bx-paper-plane"></i>&nbsp;{{ $statusVerifikasi['label_verifikasi'] }}
+                                                </a>
+                                            @endif
                                         @endif
                                     @if($statusVerifikasi['must_aprove'] == 'VERIFIKASI')
                                         <a href="javascript:void(0)" id="btn-setujui" data-id_akses_ajukan="{{ $statusVerifikasi['must_akses'] }}" data-tahapan_next="{{ $statusVerifikasi['tahapan_next'] }}" class="btn btn-success btn-sm d-flex align-items-center">

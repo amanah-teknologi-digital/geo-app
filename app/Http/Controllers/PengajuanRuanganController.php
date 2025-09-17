@@ -80,7 +80,7 @@ class PengajuanRuanganController extends Controller
                     $html = '<span class="text-black" style="font-size: smaller;">'.$data_pengajuan->tahapanpengajuan->nama.'</span>';
                     $html .= $this->service->getHtmlStatusPengajuan($data_pengajuan->id_pengajuan, $this->subtitle, $data_pengajuan);
 
-                    if ($data_pengajuan->id_tahapan == 10){
+                    if ($data_pengajuan->id_tahapan > 6){
                         if (!empty($data_pengajuan->surveykepuasan)){
                             $tmp_stars = '';
                             for ($i = 1; $i <= 5; $i++){
